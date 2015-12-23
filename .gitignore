@@ -60,5 +60,13 @@ nb-configuration.xml
 gradle-app.setting
 build/
 
+# Robovm
+ios/robovm-build
+
 ## OS Specific
 .DS_Store
+
+## Game Specific
+android/assets/animations
+android/assets/sprites
+
