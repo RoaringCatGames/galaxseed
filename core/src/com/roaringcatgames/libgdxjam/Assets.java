@@ -37,6 +37,10 @@ public class Assets {
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("moon");
     }
 
+    public static TextureAtlas.AtlasRegion getBgTile(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("SpaceBG");
+    }
+
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
     private static Class<Music> MUSIC = Music.class;
     private static Class<BitmapFont> BITMAP_FONT = BitmapFont.class;

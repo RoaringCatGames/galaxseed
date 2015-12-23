@@ -15,23 +15,21 @@ import com.roaringcatgames.kitten2d.ashley.systems.*;
 /**
  * Created by barry on 12/22/15 @ 5:51 PM.
  */
-public class MenuScreen extends LazyInitScreen{
+public class MenuScreen extends LazyInitScreen {
 
     private IScreenDispatcher dispatcher;
     private SpriteBatch batch;
 
     public MenuScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
         super();
-        batch = batch;
-        dispatcher = dispatcher;
+        this.batch = batch;
+        this.dispatcher = dispatcher;
     }
-
 
     PooledEngine engine;
     Entity testEntity;
     @Override
     void init() {
-        batch = new SpriteBatch();
         engine = new PooledEngine();
 
         RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
@@ -52,9 +50,23 @@ public class MenuScreen extends LazyInitScreen{
         testEntity.add(VelocityComponent.create()
                 .setSpeed(-0.5f, 10f));
         testEntity.add(BoundsComponent.create()
-                .setBounds(position.x - 5f, position.y-5f, 10f, 10f));
+                .setBounds(position.x - 5f, position.y - 5f, 10f, 10f));
         engine.addEntity(testEntity);
 
+        //TOTAL HACK
+        for(int i = 0;i<20;i++){
+            for(int j = 0; j<20;j++){
+                float x = 8f + i*16f;
+                float y = 8f + j*16f;
+                Entity e = engine.createEntity();
+                e.add(TextureComponent.create()
+                    .setRegion(Assets.getBgTile()));
+                e.add(TransformComponent.create()
+                    .setPosition(x, y, 1f)
+                    .setScale(1f, 1f));
+                engine.addEntity(e);
+            }
+        }
     }
 
     @Override
