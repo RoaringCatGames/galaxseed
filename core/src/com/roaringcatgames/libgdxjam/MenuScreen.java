@@ -3,13 +3,11 @@ package com.roaringcatgames.libgdxjam;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
-import com.roaringcatgames.kitten2d.ashley.components.VelocityComponent;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 
 /**
@@ -34,12 +32,13 @@ public class MenuScreen extends LazyInitScreen {
 
         RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
         engine.addSystem(new MovementSystem());
+        engine.addSystem(new RotationSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new GravitySystem(new Vector2(0.2f, -9.8f)));
         engine.addSystem(renderingSystem);
-        engine.addSystem(new DebugSystem(batch, engine, renderingSystem.getCamera()));
+        engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK));
 
-        Vector3 position = new Vector3(1f, 1f, 0f);
+        Vector3 position = new Vector3(5f, 5f, 0f);
         testEntity = engine.createEntity();
         testEntity.add(TransformComponent.create()
                 .setPosition(position.x, position.y, position.z)
@@ -50,7 +49,12 @@ public class MenuScreen extends LazyInitScreen {
         testEntity.add(VelocityComponent.create()
                 .setSpeed(-0.5f, 10f));
         testEntity.add(BoundsComponent.create()
-                .setBounds(position.x - 5f, position.y - 5f, 10f, 10f));
+                .setBounds(position.x - 5f, position.y - 5f, 1f, 1f)
+                .setOffset(3f, 3f));
+        testEntity.add(RotationComponent.create()
+                .setRotationSpeed(200f)
+                .setTargetRotation(4000f)
+                .setHasTargetRotation(true));
         engine.addEntity(testEntity);
 
         //TOTAL HACK
