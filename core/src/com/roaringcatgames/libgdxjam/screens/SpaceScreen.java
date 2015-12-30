@@ -1,4 +1,4 @@
-package com.roaringcatgames.libgdxjam;
+package com.roaringcatgames.libgdxjam.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -9,25 +9,28 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
+import com.roaringcatgames.libgdxjam.App;
+import com.roaringcatgames.libgdxjam.Assets;
 
 /**
  * Created by barry on 12/22/15 @ 5:51 PM.
  */
-public class MenuScreen extends LazyInitScreen {
+public class SpaceScreen extends LazyInitScreen {
 
     private IScreenDispatcher dispatcher;
     private SpriteBatch batch;
+    private PooledEngine engine;
+    private Entity testEntity;
 
-    public MenuScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
+    public SpaceScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
         super();
         this.batch = batch;
         this.dispatcher = dispatcher;
     }
 
-    PooledEngine engine;
-    Entity testEntity;
+
     @Override
-    void init() {
+    protected void init() {
         engine = new PooledEngine();
 
         RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
@@ -64,17 +67,17 @@ public class MenuScreen extends LazyInitScreen {
                 float y = 8f + j*16f;
                 Entity e = engine.createEntity();
                 e.add(TextureComponent.create()
-                    .setRegion(Assets.getBgTile()));
+                        .setRegion(Assets.getBgTile()));
                 e.add(TransformComponent.create()
-                    .setPosition(x, y, 1f)
-                    .setScale(1f, 1f));
+                        .setPosition(x, y, 1f)
+                        .setScale(1f, 1f));
                 engine.addEntity(e);
             }
         }
     }
 
     @Override
-    void update(float deltaChange) {
+    protected void update(float deltaChange) {
         engine.update(Gdx.graphics.getDeltaTime());
         if(testEntity.getComponent(TransformComponent.class).position.y <= 0f){
             testEntity.getComponent(VelocityComponent.class).setSpeed(0f, 15f);

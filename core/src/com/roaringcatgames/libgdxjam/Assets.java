@@ -32,13 +32,36 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getLoadingFrames(){
         return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegions("loading");
     }
-
+    /***
+     * SAFE IMMEDIATELY after am.load() is called
+     * @return AtlasRegion for the moon sprite.
+     */
     public static TextureAtlas.AtlasRegion getMoon(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("moon");
     }
 
+    /***
+     * SAFE IMMEDIATELY after am.load() is called
+     * @return AtlasRegion for the bg Tile sprite.
+     */
     public static TextureAtlas.AtlasRegion getBgTile(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("SpaceBG");
+    }
+
+    /****
+     * ONLY SAFE AFTER am.update() is finished.
+     * @return AtlasRegions for spaceship idle animation.
+     */
+    public static Array<TextureAtlas.AtlasRegion> getShipIdleFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-idle");
+    }
+
+    /****
+     * ONLY SAFE AFTER am.update() is finished.
+     * @return AtlasRegions for spaceship flying animation.
+     */
+    public static Array<TextureAtlas.AtlasRegion> getShipFlyingFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-fly");
     }
 
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;

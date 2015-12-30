@@ -1,6 +1,7 @@
 package com.roaringcatgames.libgdxjam;
 
 import com.badlogic.gdx.Screen;
+import com.roaringcatgames.libgdxjam.screens.IScreenDispatcher;
 
 import java.util.ArrayList;
 

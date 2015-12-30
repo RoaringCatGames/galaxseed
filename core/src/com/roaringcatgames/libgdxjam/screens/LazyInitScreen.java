@@ -1,4 +1,4 @@
-package com.roaringcatgames.libgdxjam;
+package com.roaringcatgames.libgdxjam.screens;
 
 /**
  * Created by barry on 12/22/15 @ 5:55 PM.
@@ -16,8 +16,8 @@ public abstract class LazyInitScreen extends ScreenAdapter {
 
     protected boolean isInitialized = false;
 
-    abstract void init();
-    abstract void update(float deltaChange);
+    protected abstract void init();
+    protected abstract void update(float deltaChange);
 
     @Override
     public void render(float delta) {

@@ -1,4 +1,4 @@
-package com.roaringcatgames.libgdxjam;
+package com.roaringcatgames.libgdxjam.screens;
 
 import com.badlogic.gdx.Screen;
 
