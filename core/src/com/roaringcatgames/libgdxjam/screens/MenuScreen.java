@@ -10,9 +10,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
+import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.systems.CleanUpSystem;
 import com.roaringcatgames.libgdxjam.systems.FiringSystem;
 import com.roaringcatgames.libgdxjam.systems.PlayerSystem;
 
@@ -26,6 +28,8 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
     private PooledEngine engine;
     private OrthographicCamera cam;
     private Vector3 touchPoint;
+
+    private Entity ball;
 
     public MenuScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
         super();
@@ -44,19 +48,24 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
 
         Vector3 playerPosition = new Vector3(
                 cam.position.x,
-                cam.position.y,
+                5f,
                 0f);
 
         Gdx.app.log("Menu Screen", "Cam Pos: " + cam.position.x + " | " +
                 cam.position.y + " Cam W/H: " + cam.viewportWidth + "/" + cam.viewportHeight);
 
+        //Custom Systems
+        engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
+        engine.addSystem(new FiringSystem());
+        engine.addSystem(new CleanUpSystem(new Vector2(0f, 0f), new Vector2(cam.viewportWidth, cam.viewportHeight)));
+
+        //AshleyExtensions Systems
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RotationSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new AnimationSystem());
-        engine.addSystem(new PlayerSystem(playerPosition, 1f));
-        engine.addSystem(new FiringSystem());
         engine.addSystem(renderingSystem);
+        //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
         App.game.multiplexer.addProcessor(this);
     }
@@ -64,6 +73,10 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
     @Override
     protected void update(float deltaChange) {
         engine.update(deltaChange);
+
+//        if(ball.getComponent(TransformComponent.class).position.y <= 1f){
+//            ball.getComponent(VelocityComponent.class).setSpeed(0f, 20f);
+//        }
     }
 
 
