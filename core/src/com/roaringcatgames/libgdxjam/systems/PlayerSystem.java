@@ -44,6 +44,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                 player = new Entity();
             }
 
+            player.add(PlayerComponent.create());
             player.add(TransformComponent.create()
                     .setPosition(initialPosition.x, initialPosition.y, initialPosition.z)
                     .setScale(initialScale, initialScale));

@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
+import com.roaringcatgames.libgdxjam.systems.FiringSystem;
 import com.roaringcatgames.libgdxjam.systems.PlayerSystem;
 
 /**
@@ -54,6 +55,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new PlayerSystem(playerPosition, 1f));
+        engine.addSystem(new FiringSystem());
         engine.addSystem(renderingSystem);
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
         App.game.multiplexer.addProcessor(this);

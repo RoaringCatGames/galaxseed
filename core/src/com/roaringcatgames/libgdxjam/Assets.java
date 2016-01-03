@@ -63,6 +63,13 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getShipFlyingFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-fly");
     }
+    /****
+     * ONLY SAFE AFTER am.update() is finished.
+     * @return AtlasRegions for seed bullet animation
+     */
+    public static Array<TextureAtlas.AtlasRegion> getBulletFrames() {
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/seed");
+    }
 
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
     private static Class<Music> MUSIC = Music.class;
