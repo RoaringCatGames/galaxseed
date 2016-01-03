@@ -21,13 +21,19 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private Vector3 initialPosition;
     private float initialScale;
 
+    private float decel = 1f;
+    private float maxVelocity = 5f;
+    private float acceleration = 0f;
+
     private ComponentMapper<VelocityComponent> vm;
+    private ComponentMapper<StateComponent> sm;
 
     public PlayerSystem(Vector3 initialPosition, float initialScale){
         super(Family.all(PlayerComponent.class).get());
         this.initialPosition = initialPosition;
         this.initialScale = initialScale;
         this.vm = ComponentMapper.getFor(VelocityComponent.class);
+        this.sm = ComponentMapper.getFor(StateComponent.class);
     }
 
     private void init(){
@@ -80,12 +86,34 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             Gdx.app.log("PlayerSystem", "Player Initializing!");
             init();
         }
-        //Update Player Here
+
+
         VelocityComponent vc = vm.get(player);
-        vc.setSpeed(0f, acceleration*deltaTime + vc.speed.y);
+        StateComponent sc = sm.get(player);
+        if(acceleration != 0f && Math.abs(vc.speed.x) < maxVelocity){
+
+            if(sc.get() != "FLYING") {
+                sc.set("FLYING").setLooping(true);
+            }
+            float adjust = acceleration*deltaTime;
+            float newXSpeed = vc.speed.x + adjust;
+            newXSpeed = newXSpeed > 0 ? Math.min(maxVelocity, newXSpeed) : Math.max(-maxVelocity, newXSpeed);
+            vc.speed.set(newXSpeed, vc.speed.y);
+
+        }else if(vc.speed.x != 0f){
+            boolean isLeft = vc.speed.x < 0f;
+            //Decelerate
+            float adjust = !isLeft ?  -decel*deltaTime : decel*deltaTime;
+            float newSpeed = vc.speed.x + adjust;
+            newSpeed =  isLeft ? Math.min(0f, newSpeed) : Math.max(0f, newSpeed);
+            vc.speed.set(newSpeed, vc.speed.y);
+        }
+
+        if(vc.speed.x == 0f){
+            sc.set("DEFAULT");
+        }
     }
 
-    float acceleration = 20f;
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
@@ -108,11 +136,17 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(screenX < Gdx.graphics.getWidth()/2f) {
+            acceleration = -20f;
+        }else {
+            acceleration = 20f;
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        acceleration = 0f;
         return false;
     }
 
