@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
@@ -34,12 +33,10 @@ public class FiringSystem extends IteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
         if(player != null) {
-            Gdx.app.log("Firing System", "Player checking for fire");
             timeBetweenFiring = 1f / firingRate;
             timeElapsed += deltaTime;
 
             if (timeElapsed - lastFireTime >= timeBetweenFiring) {
-                Gdx.app.log("Firing System", "Adding a Bullet!");
                 TransformComponent playerPos = tm.get(player);
                 lastFireTime = timeElapsed;
                 //Generate Bullets here
@@ -71,7 +68,6 @@ public class FiringSystem extends IteratingSystem {
         if(player != null) {
             throw new IllegalStateException("Cannot handle Two Players right now!");
         }
-        Gdx.app.log("FiringSystem", "Processing Player Entity");
         player = entity;
     }
 }
