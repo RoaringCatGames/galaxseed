@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
@@ -28,6 +31,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
     private PooledEngine engine;
     private OrthographicCamera cam;
     private Vector3 touchPoint;
+    private Viewport viewport;
 
     private Entity ball;
 
@@ -45,6 +49,10 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
 
         RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
         cam = renderingSystem.getCamera();
+        viewport = new ExtendViewport(20f, 30f, 40f, 60f, cam);// FitViewport(20f, 30f, cam);
+        viewport.apply();
+        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
 
         Vector3 playerPosition = new Vector3(
                 cam.position.x,
@@ -129,5 +137,14 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        if(viewport != null) {
+            viewport.update(width, height);
+            cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
+        }
     }
 }
