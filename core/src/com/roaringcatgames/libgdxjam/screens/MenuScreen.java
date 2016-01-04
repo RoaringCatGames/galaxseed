@@ -78,6 +78,9 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         App.game.multiplexer.addProcessor(this);
     }
 
+    /**************************
+     * Screen Adapter Methods
+     **************************/
     @Override
     protected void update(float deltaChange) {
         engine.update(deltaChange);
@@ -87,7 +90,14 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
 //        }
     }
 
-
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        if(viewport != null) {
+            viewport.update(width, height);
+            cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
+        }
+    }
     /**************************
      * Input Processor Methods
      **************************/
@@ -139,12 +149,5 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         return false;
     }
 
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        if(viewport != null) {
-            viewport.update(width, height);
-            cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
-        }
-    }
+
 }
