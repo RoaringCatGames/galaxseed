@@ -14,10 +14,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
-import com.roaringcatgames.libgdxjam.systems.CleanUpSystem;
-import com.roaringcatgames.libgdxjam.systems.FiringSystem;
-import com.roaringcatgames.libgdxjam.systems.PlayerSystem;
-import com.roaringcatgames.libgdxjam.systems.RemainInBoundsSystem;
+import com.roaringcatgames.libgdxjam.systems.*;
 
 /**
  * Created by barry on 12/22/15 @ 5:51 PM.
@@ -74,6 +71,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new FiringSystem());
         engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
         engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
+        engine.addSystem(new BulletSystem());
         //Extension Systems
         engine.addSystem(renderingSystem);
         //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));

@@ -72,8 +72,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getShipIdleFrames()))
                     .addAnimation("FLYING", new Animation(1f / 12f, Assets.getShipFlyingFrames()))
-                    .addAnimation("FLYING_LEFT", new Animation(1f / 12f, Assets.getShipFlyingLeftFrames()))
-                    .addAnimation("FLYING_RIGHT", new Animation(1f / 12f, Assets.getShipFlyingRightFrames())));
+                    .addAnimation("FLYING_LEFT", new Animation(1f / 6f, Assets.getShipFlyingLeftFrames()))
+                    .addAnimation("FLYING_RIGHT", new Animation(1f / 6f, Assets.getShipFlyingRightFrames())));
             player.add(RemainInBoundsComponent.create()
                 .setMode(BoundMode.EDGE));
 
@@ -132,17 +132,20 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
          * Set Animation State
          **********************/
         String state = "DEFAULT";
+        boolean isLooping = true;
         //right
         if(accelerationY != 0f){
             state = "FLYING";
         }else if(accelerationX > 0f){
             state = "FLYING_RIGHT";
+            isLooping = false;
         }else if(accelerationX < 0f){
             state = "FLYING_LEFT";
+            isLooping = false;
         }
 
         if(sc.get() != state) {
-            sc.set(state).setLooping(true);
+            sc.set(state).setLooping(isLooping);
         }
 
 

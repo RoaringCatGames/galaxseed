@@ -92,6 +92,14 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/seed");
     }
 
+    /****
+     * ONLY SAFE AFTER am.update() is finished.
+     * @return AtlasRegions for seed bullet animation
+     */
+    public static Array<TextureAtlas.AtlasRegion> getBulletFlyingFrames() {
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/SeedFly");
+    }
+
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
     private static Class<Music> MUSIC = Music.class;
     private static Class<BitmapFont> BITMAP_FONT = BitmapFont.class;
