@@ -62,16 +62,19 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         Gdx.app.log("Menu Screen", "Cam Pos: " + cam.position.x + " | " +
                 cam.position.y + " Cam W/H: " + cam.viewportWidth + "/" + cam.viewportHeight);
 
-        //Custom Systems
-        engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
-        engine.addSystem(new FiringSystem());
-        engine.addSystem(new CleanUpSystem(new Vector2(0f, 0f), new Vector2(cam.viewportWidth, cam.viewportHeight)));
 
         //AshleyExtensions Systems
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RotationSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new AnimationSystem());
+
+        //Custom Systems
+        engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
+        engine.addSystem(new FiringSystem());
+        engine.addSystem(new CleanUpSystem(new Vector2(0f, 0f), new Vector2(cam.viewportWidth, cam.viewportHeight)));
+
+        //Extension Systems
         engine.addSystem(renderingSystem);
         //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
@@ -83,7 +86,10 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
      **************************/
     @Override
     protected void update(float deltaChange) {
-        engine.update(deltaChange);
+
+
+
+        engine.update(Math.min(deltaChange, App.MAX_DELTA_TICK));
 
 //        if(ball.getComponent(TransformComponent.class).position.y <= 1f){
 //            ball.getComponent(VelocityComponent.class).setSpeed(0f, 20f);

@@ -56,6 +56,9 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-idle");
     }
 
+    ////////////
+    //SHIP FLIGHT
+    ////////////
     /****
      * ONLY SAFE AFTER am.update() is finished.
      * @return AtlasRegions for spaceship flying animation.
@@ -63,6 +66,24 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getShipFlyingFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-fly");
     }
+    /****
+     * ONLY SAFE AFTER am.update() is finished.
+     * @return AtlasRegions for spaceship flying left animation.
+     */
+    public static Array<TextureAtlas.AtlasRegion> getShipFlyingLeftFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-fly-left");
+    }
+    /****
+     * ONLY SAFE AFTER am.update() is finished.
+     * @return AtlasRegions for spaceship flying right animation.
+     */
+    public static Array<TextureAtlas.AtlasRegion> getShipFlyingRightFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-fly-right");
+    }
+
+    /////////////
+    //Bullets
+    /////////////
     /****
      * ONLY SAFE AFTER am.update() is finished.
      * @return AtlasRegions for seed bullet animation

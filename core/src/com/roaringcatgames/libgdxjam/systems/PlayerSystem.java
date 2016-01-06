@@ -23,8 +23,9 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private Vector3 initialPosition;
     private float initialScale;
 
-    private float deceleration = 2f;
-    private float maxVelocity = 4f;
+    private float deceleration = 4f;
+    private float maxVelocity = 8f;
+    private float ACCEL_RATE = 10f;
     private float accelerationX = 0f;
     private float accelerationY = 0f;
 
@@ -32,6 +33,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private ComponentMapper<VelocityComponent> vm;
     private ComponentMapper<StateComponent> sm;
+    private ComponentMapper<BoundsComponent> bm;
 
     private OrthographicCamera cam;
 
@@ -41,6 +43,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         this.initialScale = initialScale;
         this.vm = ComponentMapper.getFor(VelocityComponent.class);
         this.sm = ComponentMapper.getFor(StateComponent.class);
+        this.bm = ComponentMapper.getFor(BoundsComponent.class);
         this.cam = cam;
 
         this.controlOrigin = new Vector2();
@@ -66,7 +69,10 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(TextureComponent.create());
             player.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getShipIdleFrames()))
-                    .addAnimation("FLYING", new Animation(1f / 12f, Assets.getShipFlyingFrames())));
+                    .addAnimation("FLYING", new Animation(1f / 12f, Assets.getShipFlyingFrames()))
+                    .addAnimation("FLYING_LEFT", new Animation(1f / 12f, Assets.getShipFlyingLeftFrames()))
+                    .addAnimation("FLYING_RIGHT", new Animation(1f / 12f, Assets.getShipFlyingRightFrames())));
+
             player.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
@@ -118,14 +124,29 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
         vc.speed.set(newX, newY);
 
-        //Swap to Flying if animation if Moving
-        if(sc.get() != "FLYING" && (newX != 0f || newY != 0f)) {
-            sc.set("FLYING").setLooping(true);
+        /**********************
+         * Set Animation State
+         **********************/
+        String state = "DEFAULT";
+        //right
+        if(accelerationY != 0f){
+            state = "FLYING";
+        }else if(accelerationX > 0f){
+            state = "FLYING_RIGHT";
+        }else if(accelerationX < 0f){
+            state = "FLYING_LEFT";
         }
 
-        if(newX == 0f && newY == 0f){
-            sc.set("DEFAULT");
+        if(sc.get() != state) {
+            sc.set(state).setLooping(true);
         }
+
+
+
+//
+//        if(newX == 0f && newY == 0f){
+//            sc.set("DEFAULT");
+//        }
     }
 
     @Override
@@ -136,15 +157,15 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.RIGHT || keycode == Input.Keys.D){
-            accelerationX = 20f;
+            accelerationX = ACCEL_RATE;
         }else if(keycode == Input.Keys.LEFT || keycode == Input.Keys.A){
-            accelerationX = -20f;
+            accelerationX = -ACCEL_RATE;
         }
 
         if(keycode == Input.Keys.UP || keycode == Input.Keys.W){
-            accelerationY = 20f;
+            accelerationY = ACCEL_RATE;
         }else if(keycode == Input.Keys.DOWN || keycode == Input.Keys.S){
-            accelerationY = -20f;
+            accelerationY = -ACCEL_RATE;
         }
         return false;
     }
@@ -195,15 +216,15 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         dragPoint = cam.unproject(dragPoint);
 
         if(dragPoint.x > controlOrigin.x){
-            accelerationX = 20f;
+            accelerationX = ACCEL_RATE;
         }else if(dragPoint.x < controlOrigin.x){
-            accelerationX = -20f;
+            accelerationX = -ACCEL_RATE;
         }
 
         if(dragPoint.y > controlOrigin.y){
-            accelerationY = 20f;
+            accelerationY = ACCEL_RATE;
         }else if(dragPoint.y < controlOrigin.y){
-            accelerationY = -20f;
+            accelerationY = -ACCEL_RATE;
         }
 
         return false;
