@@ -9,7 +9,7 @@ public class RemainInBoundsComponent implements Component {
 
     public BoundMode mode = BoundMode.CONTAINED;
 
-    public RemainInBoundsComponent create(){
+    public static RemainInBoundsComponent create(){
         return new RemainInBoundsComponent();
     }
 

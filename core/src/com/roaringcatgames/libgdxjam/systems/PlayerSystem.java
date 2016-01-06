@@ -11,7 +11,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.BoundMode;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
+import com.roaringcatgames.libgdxjam.components.RemainInBoundsComponent;
 
 /**
  * Created by barry on 12/29/15 @ 8:07 PM.
@@ -23,7 +25,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private Vector3 initialPosition;
     private float initialScale;
 
-    private float deceleration = 4f;
+    private float deceleration = 8f;
     private float maxVelocity = 8f;
     private float ACCEL_RATE = 10f;
     private float accelerationX = 0f;
@@ -72,6 +74,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .addAnimation("FLYING", new Animation(1f / 12f, Assets.getShipFlyingFrames()))
                     .addAnimation("FLYING_LEFT", new Animation(1f / 12f, Assets.getShipFlyingLeftFrames()))
                     .addAnimation("FLYING_RIGHT", new Animation(1f / 12f, Assets.getShipFlyingRightFrames())));
+            player.add(RemainInBoundsComponent.create()
+                .setMode(BoundMode.EDGE));
 
             player.add(StateComponent.create()
                 .set("DEFAULT")

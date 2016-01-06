@@ -43,35 +43,75 @@ public class RemainInBoundsSystem extends IteratingSystem {
         for(Entity e:queue){
             RemainInBoundsComponent rc = ribm.get(e);
             TransformComponent tc = tm.get(e);
+            BoundsComponent bc = bm.get(e);
 
             float left = bounds.x;
             float bottom = bounds.y;
             float right = bounds.x + bounds.width;
             float top = bounds.y + bounds.height;
 
+            float xAdjust = 0f, yAdjust = 0f;
             switch(rc.mode){
                 case CONTAINED:
                     if(!bm.has(e)){
                         Gdx.app.log("RemainInBoundsSystem", "CONTAINED entity does not have Bounds cannot calculate");
                         break;
                     }
-                    BoundsComponent bc = bm.get(e);
-                    float xAdjust = 0f;
-                    if(bc.bounds.x < bounds.x){
-                        xAdjust = bounds.x - bc.bounds.x;
-                    }else if(bc.bounds.x > (bounds.x + bounds.width)){
-                       // xAdjust = -(bc.bounds.x
+                    if(bc.bounds.x < left){
+                        xAdjust = left - bc.bounds.x;
+                    }else if(bc.bounds.x + bc.bounds.width > right){
+                       xAdjust = -((bc.bounds.x+bc.bounds.width) - right);
+                    }
+
+                    if(bc.bounds.y < bottom){
+                        yAdjust = bottom - bc.bounds.y;
+                    }else if(bc.bounds.y + bc.bounds.height > top){
+                        yAdjust = -((bc.bounds.y + bc.bounds.height) - top);
                     }
                     break;
+
                 case CENTER:
 
-                    break;
-                case EDGE:
+                    if(tc.position.x < left){
+                        xAdjust = left - tc.position.x;
+                    }else if(tc.position.x > right){
+                        xAdjust = -(tc.position.x - right);
+                    }
 
+                    if(tc.position.y < bottom){
+                        yAdjust = bottom - tc.position.y;
+                    }else if(tc.position.y > top){
+                        yAdjust = -(tc.position.y - top);
+                    }
                     break;
+
+                case EDGE:
+                    if(!bm.has(e)){
+                        Gdx.app.log("RemainInBoundsSystem", "EDGE entity does not have Bounds cannot calculate");
+                        break;
+                    }
+
+                    if(bc.bounds.x + bc.bounds.width < left){
+                        xAdjust = left - (bc.bounds.x + bc.bounds.width);
+                    }else if(bc.bounds.x > right){
+                        xAdjust = -(bc.bounds.x - right);
+                    }
+
+                    if(bc.bounds.y + bc.bounds.height < bottom){
+                        yAdjust = bottom - (bc.bounds.y + bc.bounds.height);
+                    }else if(bc.bounds.y > top){
+                        yAdjust = -(bc.bounds.y - top);
+                    }
+                    break;
+
                 default:
                     break;
             }
+
+            tc.position.set(
+                    tc.position.x + xAdjust,
+                    tc.position.y + yAdjust,
+                    tc.position.z);
         }
         queue.clear();
     }

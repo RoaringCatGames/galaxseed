@@ -11,15 +11,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
-import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.systems.CleanUpSystem;
 import com.roaringcatgames.libgdxjam.systems.FiringSystem;
 import com.roaringcatgames.libgdxjam.systems.PlayerSystem;
+import com.roaringcatgames.libgdxjam.systems.RemainInBoundsSystem;
 
 /**
  * Created by barry on 12/22/15 @ 5:51 PM.
@@ -70,10 +68,12 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new AnimationSystem());
 
         //Custom Systems
+        Vector2 minBounds = new Vector2(0f, 0f);
+        Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
         engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
         engine.addSystem(new FiringSystem());
-        engine.addSystem(new CleanUpSystem(new Vector2(0f, 0f), new Vector2(cam.viewportWidth, cam.viewportHeight)));
-
+        engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
+        engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
         //Extension Systems
         engine.addSystem(renderingSystem);
         //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
@@ -125,13 +125,6 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        touchPoint.set(screenX, screenY, 0f);
-        Vector3 cameraPoints = cam.unproject(touchPoint);
-
-        Entity e = engine.createEntity();
-        e.add(BoundsComponent.create()
-            .setBounds(cameraPoints.x - 0.5f, cameraPoints.y-0.5f, 1f, 1f));
-        engine.addEntity(e);
         return false;
     }
 

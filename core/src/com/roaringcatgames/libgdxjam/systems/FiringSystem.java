@@ -71,7 +71,7 @@ public class FiringSystem extends IteratingSystem {
                 .setPosition(playerPos.position.x, playerPos.position.y, playerPos.position.z + 1f)
                 .setScale(1f, 1f));
         bullet.add(BoundsComponent.create()
-                .setBounds(0f, 0f, 0.5f, 0.5f));
+                .setBounds(playerPos.position.x - 0.25f, playerPos.position.y - 0.25f, 0.5f, 0.5f));
         bullet.add(TextureComponent.create());
         bullet.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getBulletFrames())));
