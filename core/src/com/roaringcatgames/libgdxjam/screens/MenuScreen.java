@@ -72,6 +72,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
         engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
         engine.addSystem(new BulletSystem());
+        engine.addSystem(new FollowerSystem());
         //Extension Systems
         engine.addSystem(renderingSystem);
         //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));

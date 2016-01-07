@@ -80,6 +80,15 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getShipFlyingRightFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-fly-right");
     }
+    /****
+     * ONLY SAFE AFTER am.update() is finished.
+     * @return AtlasRegions for ship flames.
+     */
+    public static Array<TextureAtlas.AtlasRegion> getFlamesFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/flames");
+    }
+
+
 
     /////////////
     //Bullets

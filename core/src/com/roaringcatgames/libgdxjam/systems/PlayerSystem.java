@@ -11,9 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.components.BoundMode;
-import com.roaringcatgames.libgdxjam.components.PlayerComponent;
-import com.roaringcatgames.libgdxjam.components.RemainInBoundsComponent;
+import com.roaringcatgames.libgdxjam.components.*;
 
 /**
  * Created by barry on 12/29/15 @ 8:07 PM.
@@ -22,6 +20,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private boolean isInitialized = false;
     private Entity player;
+    private Entity flames;
     private Vector3 initialPosition;
     private float initialScale;
 
@@ -53,10 +52,13 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private void init(){
         if(player == null) {
+
             if (getEngine() instanceof PooledEngine) {
                 player = ((PooledEngine) getEngine()).createEntity();
+                flames = ((PooledEngine) getEngine()).createEntity();
             } else {
                 player = new Entity();
+                flames = new Entity();
             }
 
             player.add(KinematicComponent.create());
@@ -76,7 +78,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .addAnimation("FLYING_RIGHT", new Animation(1f / 6f, Assets.getShipFlyingRightFrames())));
             player.add(RemainInBoundsComponent.create()
                 .setMode(BoundMode.EDGE));
-
             player.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
@@ -84,6 +85,21 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .setSpeed(0f, 0f));
 
             getEngine().addEntity(player);
+
+            flames.add(FollowerComponent.create()
+                    .setOffset(0f, -3.25f)
+                    .setTarget(player)
+                    .setMode(FollowMode.STICKY));
+            flames.add(TextureComponent.create());
+            flames.add(TransformComponent.create()
+                .setPosition(initialPosition.x, initialPosition.y - 3.25f, initialPosition.z)
+                .setScale(1f, 1f));
+            flames.add(AnimationComponent.create()
+                    .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getFlamesFrames())));
+            flames.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(true));
+            getEngine().addEntity(flames);
         }
         isInitialized = true;
     }
@@ -146,6 +162,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
         if(sc.get() != state) {
             sc.set(state).setLooping(isLooping);
+            flames.getComponent(TransformComponent.class).isHidden = state == "DEFAULT";
         }
 
 
