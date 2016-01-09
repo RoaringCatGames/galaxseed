@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.components.PlayerComponent;
+import com.roaringcatgames.libgdxjam.components.*;
 
 /**
  * Created by barry on 12/29/15 @ 8:07 PM.
@@ -20,10 +20,11 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private boolean isInitialized = false;
     private Entity player;
+    private Entity flames;
     private Vector3 initialPosition;
     private float initialScale;
 
-    private float deceleration = 4f;
+    private float deceleration = 8f;
     private float maxVelocity = 8f;
     private float ACCEL_RATE = 10f;
     private float accelerationX = 0f;
@@ -51,10 +52,13 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private void init(){
         if(player == null) {
+
             if (getEngine() instanceof PooledEngine) {
                 player = ((PooledEngine) getEngine()).createEntity();
+                flames = ((PooledEngine) getEngine()).createEntity();
             } else {
                 player = new Entity();
+                flames = new Entity();
             }
 
             player.add(KinematicComponent.create());
@@ -70,9 +74,10 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getShipIdleFrames()))
                     .addAnimation("FLYING", new Animation(1f / 12f, Assets.getShipFlyingFrames()))
-                    .addAnimation("FLYING_LEFT", new Animation(1f / 12f, Assets.getShipFlyingLeftFrames()))
-                    .addAnimation("FLYING_RIGHT", new Animation(1f / 12f, Assets.getShipFlyingRightFrames())));
-
+                    .addAnimation("FLYING_LEFT", new Animation(1f / 6f, Assets.getShipFlyingLeftFrames()))
+                    .addAnimation("FLYING_RIGHT", new Animation(1f / 6f, Assets.getShipFlyingRightFrames())));
+            player.add(RemainInBoundsComponent.create()
+                .setMode(BoundMode.EDGE));
             player.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
@@ -80,6 +85,21 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .setSpeed(0f, 0f));
 
             getEngine().addEntity(player);
+
+            flames.add(FollowerComponent.create()
+                    .setOffset(0f, -3.25f)
+                    .setTarget(player)
+                    .setMode(FollowMode.STICKY));
+            flames.add(TextureComponent.create());
+            flames.add(TransformComponent.create()
+                .setPosition(initialPosition.x, initialPosition.y - 3.25f, initialPosition.z)
+                .setScale(1f, 1f));
+            flames.add(AnimationComponent.create()
+                    .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getFlamesFrames())));
+            flames.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(true));
+            getEngine().addEntity(flames);
         }
         isInitialized = true;
     }
@@ -128,17 +148,21 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
          * Set Animation State
          **********************/
         String state = "DEFAULT";
+        boolean isLooping = true;
         //right
         if(accelerationY != 0f){
             state = "FLYING";
         }else if(accelerationX > 0f){
             state = "FLYING_RIGHT";
+            isLooping = false;
         }else if(accelerationX < 0f){
             state = "FLYING_LEFT";
+            isLooping = false;
         }
 
         if(sc.get() != state) {
-            sc.set(state).setLooping(true);
+            sc.set(state).setLooping(isLooping);
+            flames.getComponent(TransformComponent.class).isHidden = state == "DEFAULT";
         }
 
 

@@ -68,16 +68,18 @@ public class FiringSystem extends IteratingSystem {
         bullet.add(WhenOffScreenComponent.create());
         bullet.add(KinematicComponent.create());
         bullet.add(TransformComponent.create()
-                .setPosition(playerPos.position.x, playerPos.position.y, playerPos.position.z + 1f)
+                .setPosition(playerPos.position.x, playerPos.position.y, playerPos.position.z - 1f)
                 .setScale(1f, 1f));
         bullet.add(BoundsComponent.create()
-                .setBounds(0f, 0f, 0.5f, 0.5f));
+                .setBounds(playerPos.position.x - 0.25f, playerPos.position.y - 0.25f, 0.5f, 0.5f)
+                .setOffset(0f, 0.5f));
         bullet.add(TextureComponent.create());
         bullet.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getBulletFrames())));
+                .addAnimation("DEFAULT", new Animation(1f/2f, Assets.getBulletFrames(), Animation.PlayMode.NORMAL))
+                .addAnimation("FLYING", new Animation(1f / 3f, Assets.getBulletFlyingFrames(), Animation.PlayMode.NORMAL)));
         bullet.add(StateComponent.create()
                 .set("DEFAULT")
-                .setLooping(true));
+                .setLooping(false));
         bullet.add(BulletComponent.create());
         bullet.add(VelocityComponent.create()
                 .setSpeed(xVel, yVel));

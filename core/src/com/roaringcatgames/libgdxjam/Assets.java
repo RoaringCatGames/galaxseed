@@ -80,6 +80,15 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getShipFlyingRightFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-fly-right");
     }
+    /****
+     * ONLY SAFE AFTER am.update() is finished.
+     * @return AtlasRegions for ship flames.
+     */
+    public static Array<TextureAtlas.AtlasRegion> getFlamesFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/flames");
+    }
+
+
 
     /////////////
     //Bullets
@@ -90,6 +99,14 @@ public class Assets {
      */
     public static Array<TextureAtlas.AtlasRegion> getBulletFrames() {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/seed");
+    }
+
+    /****
+     * ONLY SAFE AFTER am.update() is finished.
+     * @return AtlasRegions for seed bullet animation
+     */
+    public static Array<TextureAtlas.AtlasRegion> getBulletFlyingFrames() {
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/SeedFly");
     }
 
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
