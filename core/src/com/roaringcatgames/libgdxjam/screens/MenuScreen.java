@@ -55,7 +55,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         viewport = new ExtendViewport(20f, 30f, 40f, 60f, cam);// FitViewport(20f, 30f, cam);
         viewport.apply();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
+        cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
 
         Vector3 playerPosition = new Vector3(
                 cam.position.x,
@@ -76,6 +76,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
+        engine.addSystem(new BackgroundSystem(minBounds, maxBounds));
 //        engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
 //        engine.addSystem(new FiringSystem());
 //        engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
@@ -93,68 +94,8 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
                 .setBounds(9.25f, 22f, 4f, 4f));
         engine.addEntity(startGameButton);
 
-              testBackgrounds();
 
         App.game.multiplexer.addProcessor(this);
-    }
-
-    private void testBackgrounds(){
-        float speed = 10f;
-        Entity bg = engine.createEntity();
-        bg.add(TextureComponent.create()
-                .setRegion(Assets.getBgTile()));
-        bg.add(BoundsComponent.create()
-                .setBounds(0f, 0f, 16f, 16f));
-        bg.add(VelocityComponent.create()
-                .setSpeed(speed, 0f));
-        bg.add(ScreenWrapComponent.create()
-                .setMode(ScreenWrapMode.HORIZONTAL)
-                .setReversed(false));
-        bg.add(TransformComponent.create()
-                .setPosition(8f, 8f));
-        engine.addEntity(bg);
-
-        Entity bg2 = engine.createEntity();
-        bg2.add(TextureComponent.create()
-                .setRegion(Assets.getBgTile()));
-        bg2.add(BoundsComponent.create()
-                .setBounds(0f, 0f, 16f, 16f));
-        bg2.add(VelocityComponent.create()
-                .setSpeed(-speed, 0f));
-        bg2.add(ScreenWrapComponent.create()
-                .setMode(ScreenWrapMode.HORIZONTAL)
-                .setReversed(true));
-        bg2.add(TransformComponent.create()
-                .setPosition(16f, 8f));
-        engine.addEntity(bg2);
-
-        Entity bg3 = engine.createEntity();
-        bg3.add(TextureComponent.create()
-                .setRegion(Assets.getBgTile()));
-        bg3.add(BoundsComponent.create()
-                .setBounds(0f, 0f, 16f, 16f));
-        bg3.add(VelocityComponent.create()
-                .setSpeed(0f, speed));
-        bg3.add(ScreenWrapComponent.create()
-                .setMode(ScreenWrapMode.VERTICAL)
-                .setReversed(false));
-        bg3.add(TransformComponent.create()
-                .setPosition(10f, 16f));
-        engine.addEntity(bg3);
-
-        Entity bg4 = engine.createEntity();
-        bg4.add(TextureComponent.create()
-                .setRegion(Assets.getBgTile()));
-        bg4.add(BoundsComponent.create()
-                .setBounds(0f, 0f, 16f, 16f));
-        bg4.add(VelocityComponent.create()
-                .setSpeed(0f, -speed));
-        bg4.add(ScreenWrapComponent.create()
-                .setMode(ScreenWrapMode.VERTICAL)
-                .setReversed(true));
-        bg4.add(TransformComponent.create()
-                .setPosition(16f, 16f));
-        engine.addEntity(bg4);
     }
 
     /**************************
@@ -168,6 +109,9 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
+        if(viewport != null) {
+            viewport.update(width, height);
+        }
     }
     /**************************
      * Input Processor Methods
@@ -216,6 +160,8 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
+
+        cam.zoom += amount * 0.5f;
         return false;
     }
 

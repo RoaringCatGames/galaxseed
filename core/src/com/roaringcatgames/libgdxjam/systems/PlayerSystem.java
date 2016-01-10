@@ -77,7 +77,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .addAnimation("FLYING_LEFT", new Animation(1f / 6f, Assets.getShipFlyingLeftFrames()))
                     .addAnimation("FLYING_RIGHT", new Animation(1f / 6f, Assets.getShipFlyingRightFrames())));
             player.add(RemainInBoundsComponent.create()
-                .setMode(BoundMode.EDGE));
+                .setMode(BoundMode.CONTAINED));
             player.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));

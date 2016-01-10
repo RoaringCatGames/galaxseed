@@ -17,7 +17,7 @@ import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
  */
 public class FiringSystem extends IteratingSystem {
 
-    private float firingRate = 5f;
+    private float firingRate = 2f;
     private float timeBetweenFiring = 1f/firingRate;
     private float lastFireTime = 0f;
     private float timeElapsed = 0f;
@@ -40,11 +40,11 @@ public class FiringSystem extends IteratingSystem {
             if (timeElapsed - lastFireTime >= timeBetweenFiring) {
 
                 lastFireTime = timeElapsed;
-                generateBullet(0f, 6f);
-                generateBullet(1f, 5f);
-                generateBullet(-1f, 5f);
-                generateBullet(2.5f, 4f);
-                generateBullet(-2.5f, 4f);
+                generateBullet(0f, 3f);
+//                generateBullet(1f, 5f);
+//                generateBullet(-1f, 5f);
+                generateBullet(1.5f, 2f);
+                generateBullet(-1.5f, 2f);
 
             }
         }
