@@ -1,0 +1,107 @@
+package com.roaringcatgames.libgdxjam.systems;
+
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.Vector2;
+import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
+import com.roaringcatgames.kitten2d.ashley.components.VelocityComponent;
+import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.PlayerComponent;
+import com.roaringcatgames.libgdxjam.components.ScreenWrapComponent;
+import com.roaringcatgames.libgdxjam.components.ScreenWrapMode;
+
+import java.util.Random;
+
+/**
+ * Created by barry on 1/9/16 @ 6:35 PM.
+ */
+public class BackgroundSystem extends IteratingSystem {
+
+    private float left;
+    private float bottom;
+    private float right;
+    private float top;
+
+    private boolean isInitialized = false;
+
+    public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds){
+        //No components will be modified here, just need a limited class to
+        //create a family
+        super(Family.all(PlayerComponent.class).get());
+        this.left = minBounds.x;
+        this.bottom = minBounds.y;
+        this.right = maxBounds.x;
+        this.top = maxBounds.y;
+    }
+
+    private void init(){
+        PooledEngine engine = ((PooledEngine)getEngine());
+
+        Entity vp = engine.createEntity();
+        vp.add(BoundsComponent.create()
+            .setBounds(left, bottom, (right-left), (top-bottom)));
+        engine.addEntity(vp);
+        float tileSize = 16f;
+        float tileHalfPoint = 8f;
+
+        float startX = left-tileHalfPoint;
+        float startY = bottom-tileHalfPoint;
+        float xTileCoverage = (right + tileHalfPoint) - (startX);
+        float yTileCoverage = (top + tileHalfPoint) - (startY);
+
+        int columns = (int)Math.ceil(xTileCoverage/tileSize);
+        int rows = (int)Math.ceil(yTileCoverage/tileSize);
+
+        float offset = (rows*tileSize) - ((top + tileHalfPoint) - (startY));
+
+
+        Random rnd = new Random();
+        for(int i = 0;i<columns; i++){
+            float x = startX + i*tileSize;
+            for(int j=0;j<rows;j++){
+                float y = startY + j*tileSize;
+                float seed = rnd.nextFloat();
+                float rotation = seed < 0.25f ? 0f:
+                                 seed < 0.50f ? 90f:
+                                 seed  < 0.75f ? 180f:
+                                                 270f;
+
+                Entity e = engine.createEntity();
+                e.add(TextureComponent.create()
+                    .setRegion(Assets.getBgTile()));
+                e.add(TransformComponent.create()
+                    .setPosition(x, y, 1f)
+                    .setRotation(rotation));
+                e.add(BoundsComponent.create()
+                    .setBounds(x-tileHalfPoint, y-tileHalfPoint, tileSize, tileSize));
+                e.add(ScreenWrapComponent.create()
+                    .setMode(ScreenWrapMode.VERTICAL)
+                    .setReversed(true)
+                    .setWrapOffset(offset));
+                e.add(VelocityComponent.create()
+                    .setSpeed(0f, -0.5f));
+                engine.addEntity(e);
+            }
+        }
+
+        isInitialized = true;
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+
+        if(!isInitialized){
+            init();
+        }
+    }
+
+    @Override
+    protected void processEntity(Entity entity, float deltaTime) {
+
+    }
+}

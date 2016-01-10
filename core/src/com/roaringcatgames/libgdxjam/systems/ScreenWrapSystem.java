@@ -67,33 +67,33 @@ public class ScreenWrapSystem extends IteratingSystem {
                 boolean isOffLeft = (regionWidthInMeters / 2f) + tc.position.x < left;
 
                 if (!swc.isReversed && isOffRight){
-                    tc.position.set(left - regionWidthInMeters / 2f, tc.position.y, tc.position.z);
+                    tc.position.set(left-(regionWidthInMeters/2f) - swc.wrapOffset, tc.position.y, tc.position.z);
                 } else if (swc.isReversed && isOffLeft) {
-                    tc.position.set(right + regionWidthInMeters / 2f, tc.position.y, tc.position.z);
+                    tc.position.set(right + (regionWidthInMeters / 2f) + swc.wrapOffset, tc.position.y, tc.position.z);
                 }
             }else{
                 float regionHeightInUnits = txc.region.getRegionHeight() / ppm;
                 boolean isAboveTop = tc.position.y - (regionHeightInUnits / 2f) > top;
                 boolean isBelowBottom = tc.position.y - (regionHeightInUnits / 2f) < bottom;
                 if (!swc.isReversed && isAboveTop) {
-                    tc.position.set(tc.position.x, top - regionHeightInUnits / 2f, tc.position.z);
+                    tc.position.set(tc.position.x, top - (regionHeightInUnits / 2f) - swc.wrapOffset, tc.position.z);
 
                 } else if (swc.isReversed && isBelowBottom) {
-                    tc.position.set(tc.position.x, top + regionHeightInUnits / 2f, tc.position.z);
+                    tc.position.set(tc.position.x, top + (regionHeightInUnits / 2f) + swc.wrapOffset, tc.position.z);
                 }
             }
         }else {
             if(swc.mode == ScreenWrapMode.HORIZONTAL) {
                 if (bc.bounds.x > right && !swc.isReversed) {
-                    tc.position.set(left - (bc.bounds.width / 2f), tc.position.y, tc.position.z);
+                    tc.position.set(left - (bc.bounds.width / 2f) - swc.wrapOffset, tc.position.y, tc.position.z);
                 } else if (bc.bounds.x + bc.bounds.width < left && swc.isReversed) {
-                    tc.position.set(right + (bc.bounds.width / 2f), tc.position.y, tc.position.z);
+                    tc.position.set(right + (bc.bounds.width / 2f) + swc.wrapOffset, tc.position.y, tc.position.z);
                 }
             }else{
                 if (bc.bounds.y > top && !swc.isReversed) {
-                    tc.position.set(tc.position.x,bottom - (bc.bounds.width / 2f), tc.position.z);
+                    tc.position.set(tc.position.x,bottom - (bc.bounds.width / 2f) - swc.wrapOffset, tc.position.z);
                 } else if (bc.bounds.y + bc.bounds.height < bottom && swc.isReversed) {
-                    tc.position.set(tc.position.x, top + (bc.bounds.height / 2f), tc.position.z);
+                    tc.position.set(tc.position.x, top + (bc.bounds.height / 2f) + swc.wrapOffset, tc.position.z);
                 }
             }
         }

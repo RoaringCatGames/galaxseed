@@ -9,6 +9,7 @@ public class ScreenWrapComponent implements Component {
 
     public ScreenWrapMode mode = ScreenWrapMode.HORIZONTAL;
     public boolean isReversed = false;
+    public float wrapOffset = 0f;
 
     public static ScreenWrapComponent create(){
         return new ScreenWrapComponent();
@@ -21,6 +22,11 @@ public class ScreenWrapComponent implements Component {
 
     public ScreenWrapComponent setReversed(boolean isReversed){
         this.isReversed = isReversed;
+        return this;
+    }
+
+    public ScreenWrapComponent setWrapOffset(float offset){
+        this.wrapOffset = offset;
         return this;
     }
 }
