@@ -103,13 +103,19 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getBulletFrames() {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/seed");
     }
-
     /****
      * ONLY SAFE AFTER am.update() is finished.
      * @return AtlasRegions for seed bullet animation
      */
     public static Array<TextureAtlas.AtlasRegion> getBulletFlyingFrames() {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/SeedFly");
+    }
+
+    /////////////
+    //Bullets
+    /////////////
+    public static Array<TextureAtlas.AtlasRegion> getCometFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet");
     }
 
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;

@@ -10,6 +10,7 @@ import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.kitten2d.ashley.components.VelocityComponent;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.Z;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.ScreenWrapComponent;
 import com.roaringcatgames.libgdxjam.components.ScreenWrapMode;
@@ -74,7 +75,7 @@ public class BackgroundSystem extends IteratingSystem {
                 e.add(TextureComponent.create()
                     .setRegion(Assets.getBgTile()));
                 e.add(TransformComponent.create()
-                    .setPosition(x, y, 1f)
+                    .setPosition(x, y, Z.bg)
                     .setRotation(rotation));
                 e.add(BoundsComponent.create()
                     .setBounds(x-tileHalfPoint, y-tileHalfPoint, tileSize, tileSize));

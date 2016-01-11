@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
 /**
@@ -95,7 +96,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .setMode(FollowMode.STICKY));
             flames.add(TextureComponent.create());
             flames.add(TransformComponent.create()
-                .setPosition(initialPosition.x, initialPosition.y - 3.25f, initialPosition.z)
+                .setPosition(initialPosition.x, initialPosition.y - 3.25f, Z.flames)
                 .setScale(1f, 1f));
             flames.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getIdleFlamesFrames()))
