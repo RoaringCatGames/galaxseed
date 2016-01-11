@@ -32,6 +32,9 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private Vector2 controlOrigin;
 
+    private Vector2 idleFlameOffset = new Vector2(0f, -2f);
+    private Vector2 flyingFlameOffset = new Vector2(0f, -3.25f);
+
     private ComponentMapper<VelocityComponent> vm;
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<BoundsComponent> bm;
@@ -87,7 +90,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             getEngine().addEntity(player);
 
             flames.add(FollowerComponent.create()
-                    .setOffset(0f, -3.25f)
+                    .setOffset(idleFlameOffset.x, idleFlameOffset.y)
                     .setTarget(player)
                     .setMode(FollowMode.STICKY));
             flames.add(TextureComponent.create());
@@ -95,7 +98,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                 .setPosition(initialPosition.x, initialPosition.y - 3.25f, initialPosition.z)
                 .setScale(1f, 1f));
             flames.add(AnimationComponent.create()
-                    .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getFlamesFrames())));
+                    .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getIdleFlamesFrames()))
+                    .addAnimation("FLYING", new Animation(1f/9f, Assets.getFlamesFrames())));
             flames.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
@@ -148,6 +152,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
          * Set Animation State
          **********************/
         String state = "DEFAULT";
+        String flameState;
         boolean isLooping = true;
         //right
         if(accelerationY != 0f){
@@ -160,9 +165,22 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             isLooping = false;
         }
 
+        FollowerComponent fc = flames.getComponent(FollowerComponent.class);
+
+        if(state != "DEFAULT"){
+            flameState = "FLYING";
+            fc.setOffset(flyingFlameOffset.x, flyingFlameOffset.y);
+        }else{
+            flameState = "DEFAULT";
+            fc.setOffset(idleFlameOffset.x, idleFlameOffset.y);
+        }
+
         if(sc.get() != state) {
             sc.set(state).setLooping(isLooping);
-            flames.getComponent(TransformComponent.class).isHidden = state == "DEFAULT";
+            StateComponent fsc = sm.get(flames);
+            if(fsc.get() != flameState){
+                fsc.set(flameState);
+            }
         }
 
 
