@@ -85,7 +85,7 @@ public class BackgroundSystem extends IteratingSystem {
                                 .setRegion(Assets.getGalaxyB()));
                     }
                     galaxy.add(TransformComponent.create()
-                            .setPosition(x, y, Z.bg)
+                            .setPosition(x, y, Z.bg_galaxy)
                             .setRotation(rotation));
                     galaxy.add(BoundsComponent.create()
                             .setBounds(x - 4.6875f, y - 4.6875f, 9.375f, 9.375f));

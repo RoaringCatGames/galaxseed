@@ -10,4 +10,5 @@ public class Z {
     public static final float player = 50f;
     public static final float seed = 48f;
     public static final float enemy = 49f;
+    public static final float bg_galaxy = 99f;
 }

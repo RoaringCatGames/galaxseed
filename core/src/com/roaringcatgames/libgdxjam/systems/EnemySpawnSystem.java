@@ -40,7 +40,6 @@ public class EnemySpawnSystem extends IteratingSystem {
             lastSpawnTime = timeElapsed;
             generateEnemy(-5f, 30f, 5f, -8f);
             generateEnemy(25f, 30f, -5f, -8f);
-            Gdx.app.log("EnemySpawnerSystem", "Spawning Enemy");
         }
     }
 
