@@ -12,13 +12,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
-import com.roaringcatgames.kitten2d.ashley.components.VelocityComponent;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.Z;
 import com.roaringcatgames.libgdxjam.components.ScreenWrapComponent;
 import com.roaringcatgames.libgdxjam.components.ScreenWrapMode;
 import com.roaringcatgames.libgdxjam.systems.*;
@@ -93,6 +91,63 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         startGameButton.add(BoundsComponent.create()
                 .setBounds(9.25f, 22f, 4f, 4f));
         engine.addEntity(startGameButton);
+
+
+
+        Entity planetA = engine.createEntity();
+        planetA.add(TextureComponent.create()
+                .setRegion(Assets.getPlanetA()));
+        planetA.add(TransformComponent.create()
+                .setPosition(4f, 20f, Z.enemy));
+        planetA.add(RotationComponent.create()
+                .setRotationSpeed(180f));
+        engine.addEntity(planetA);
+
+        Entity planetB = engine.createEntity();
+        planetB.add(TextureComponent.create()
+                .setRegion(Assets.getPlanetB()));
+        planetB.add(TransformComponent.create()
+                .setPosition(18f, 20f, Z.enemy));
+        planetB.add(RotationComponent.create()
+                .setRotationSpeed(180f));
+        engine.addEntity(planetB);
+
+        Entity planetC = engine.createEntity();
+        planetC.add(TextureComponent.create()
+                .setRegion(Assets.getPlanetC()));
+        planetC.add(TransformComponent.create()
+                .setPosition(11f, 20f, Z.enemy));
+        planetC.add(RotationComponent.create()
+                .setRotationSpeed(180f));
+        engine.addEntity(planetC);
+
+
+        Entity asteroidA = engine.createEntity();
+        asteroidA.add(TextureComponent.create()
+                .setRegion(Assets.getAsteroidA()));
+        asteroidA.add(TransformComponent.create()
+                .setPosition(4f, 10f, Z.enemy));
+        asteroidA.add(RotationComponent.create()
+                .setRotationSpeed(180f));
+        engine.addEntity(asteroidA);
+
+        Entity asteroidB = engine.createEntity();
+        asteroidB.add(TextureComponent.create()
+                .setRegion(Assets.getAsteroidB()));
+        asteroidB.add(TransformComponent.create()
+                .setPosition(18f, 10f, Z.enemy));
+        asteroidB.add(RotationComponent.create()
+                .setRotationSpeed(180f));
+        engine.addEntity(asteroidB);
+
+        Entity asteroidC = engine.createEntity();
+        asteroidC.add(TextureComponent.create()
+                .setRegion(Assets.getAsteroidC()));
+        asteroidC.add(TransformComponent.create()
+                .setPosition(11f, 5f, Z.enemy));
+        asteroidC.add(RotationComponent.create()
+                .setRotationSpeed(180f));
+        engine.addEntity(asteroidC);
 
 
         App.game.multiplexer.addProcessor(this);

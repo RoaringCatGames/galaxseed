@@ -40,11 +40,11 @@ public class FiringSystem extends IteratingSystem {
             if (timeElapsed - lastFireTime >= timeBetweenFiring) {
 
                 lastFireTime = timeElapsed;
-                generateBullet(0f, 3f);
+                generateBullet(0f, 0f, 10f);
 //                generateBullet(1f, 5f);
 //                generateBullet(-1f, 5f);
-                generateBullet(1.5f, 2f);
-                generateBullet(-1.5f, 2f);
+                generateBullet(-0.5f, 0f, 9f);
+                generateBullet(0.5f, 0f, 9f);
 
             }
         }
@@ -61,17 +61,17 @@ public class FiringSystem extends IteratingSystem {
     }
 
 
-    private void generateBullet(float xVel, float yVel){
+    private void generateBullet(float xOffset, float xVel, float yVel){
         TransformComponent playerPos = tm.get(player);
         //Generate Bullets here
         Entity bullet = ((PooledEngine) getEngine()).createEntity();
         bullet.add(WhenOffScreenComponent.create());
         bullet.add(KinematicComponent.create());
         bullet.add(TransformComponent.create()
-                .setPosition(playerPos.position.x, playerPos.position.y, playerPos.position.z - 1f)
+                .setPosition(playerPos.position.x + xOffset, playerPos.position.y, playerPos.position.z - 1f)
                 .setScale(1f, 1f));
         bullet.add(BoundsComponent.create()
-                .setBounds(playerPos.position.x - 0.25f, playerPos.position.y - 0.25f, 0.5f, 0.5f)
+                .setBounds(playerPos.position.x + xOffset - 0.25f, playerPos.position.y - 0.25f, 0.5f, 0.5f)
                 .setOffset(0f, 0.5f));
         bullet.add(TextureComponent.create());
         bullet.add(AnimationComponent.create()

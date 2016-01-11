@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
@@ -65,15 +66,41 @@ public class BackgroundSystem extends IteratingSystem {
             float x = startX + i*tileSize;
             for(int j=0;j<rows;j++){
                 float y = startY + j*tileSize;
-                float seed = rnd.nextFloat();
-                float rotation = seed < 0.25f ? 0f:
-                                 seed < 0.50f ? 90f:
-                                 seed  < 0.75f ? 180f:
+                float rVal = rnd.nextFloat();
+                float rotation = rVal < 0.25f ? 0f:
+                                 rVal < 0.50f ? 90f:
+                                 rVal  < 0.75f ? 180f:
                                                  270f;
+                float textVal = rnd.nextFloat();
+                TextureRegion texture = textVal < 0.5f ? Assets.getBgATile() : Assets.getBgBTile();
+
+                //Sometimes add a galaxy
+                if(textVal < 0.5f){
+                    Entity galaxy = engine.createEntity();
+                    if(textVal < 0.25f) {
+                        galaxy.add(TextureComponent.create()
+                                .setRegion(Assets.getGalaxyA()));
+                    }else{
+                        galaxy.add(TextureComponent.create()
+                                .setRegion(Assets.getGalaxyB()));
+                    }
+                    galaxy.add(TransformComponent.create()
+                            .setPosition(x, y, Z.bg)
+                            .setRotation(rotation));
+                    galaxy.add(BoundsComponent.create()
+                            .setBounds(x - 4.6875f, y - 4.6875f, 9.375f, 9.375f));
+                    galaxy.add(ScreenWrapComponent.create()
+                            .setMode(ScreenWrapMode.VERTICAL)
+                            .setReversed(true)
+                            .setWrapOffset(offset));
+                    galaxy.add(VelocityComponent.create()
+                            .setSpeed(0f, -0.5f));
+                    engine.addEntity(galaxy);
+                }
 
                 Entity e = engine.createEntity();
                 e.add(TextureComponent.create()
-                    .setRegion(Assets.getBgTile()));
+                    .setRegion(texture));
                 e.add(TransformComponent.create()
                     .setPosition(x, y, Z.bg)
                     .setRotation(rotation));
