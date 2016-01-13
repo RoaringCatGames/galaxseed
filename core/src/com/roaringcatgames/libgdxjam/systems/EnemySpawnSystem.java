@@ -57,6 +57,7 @@ public class EnemySpawnSystem extends IteratingSystem {
             Entity enemy = ((PooledEngine) getEngine()).createEntity();
             enemy.add(WhenOffScreenComponent.create());
             enemy.add(KinematicComponent.create());
+            enemy.add(EnemyComponent.create());
             float rot = xVel > 0f ? 45f : -45f;
             enemy.add(TransformComponent.create()
                 .setPosition(xPos, yPos, Z.enemy)
@@ -64,8 +65,8 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setRotation(rot));
 
             enemy.add(BoundsComponent.create()
-                .setBounds(xPos - 2f, yPos - 2f, 4f, 4f)
-                .setOffset(0f, 0));
+                .setBounds(xPos - 0.5f, yPos - 0.5f, 1f, 1f)
+                .setOffset(0f, -1f));
             enemy.add(TextureComponent.create());
             enemy.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f / 3f, Assets.getCometFrames(), Animation.PlayMode.LOOP_PINGPONG)));

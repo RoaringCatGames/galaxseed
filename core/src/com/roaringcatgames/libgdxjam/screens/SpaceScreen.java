@@ -78,6 +78,7 @@ public class SpaceScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds));
         engine.addSystem(new BulletSystem());
         engine.addSystem(new FollowerSystem());
+        engine.addSystem(new EnemyDamageSystem());
         //Extension Systems
         engine.addSystem(renderingSystem);
         //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
