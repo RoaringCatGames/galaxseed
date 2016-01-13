@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
@@ -45,7 +46,7 @@ public class SpaceScreen extends LazyInitScreen implements InputProcessor {
 
         RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
         cam = renderingSystem.getCamera();
-        viewport = new ExtendViewport(20f, 30f, 40f, 60f, cam);// FitViewport(20f, 30f, cam);
+        viewport = new FitViewport(20f, 30f, cam);// FitViewport(20f, 30f, cam);
         viewport.apply();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);

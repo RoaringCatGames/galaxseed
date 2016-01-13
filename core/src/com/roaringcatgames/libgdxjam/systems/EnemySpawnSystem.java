@@ -20,7 +20,7 @@ import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 public class EnemySpawnSystem extends IteratingSystem {
 
     private boolean isInitialized = false;
-    private float spawnRate = 0.25f;
+    private float spawnRate = 0.25f;  //comets/second
     private float lastSpawnTime = 0f;
     private float timeElapsed = 0f;
 
@@ -68,7 +68,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setOffset(0f, 0));
             enemy.add(TextureComponent.create());
             enemy.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getCometFrames(), Animation.PlayMode.LOOP_PINGPONG)));
+                .addAnimation("DEFAULT", new Animation(1f / 3f, Assets.getCometFrames(), Animation.PlayMode.LOOP_PINGPONG)));
 
             enemy.add(StateComponent.create()
                 .set("DEFAULT")

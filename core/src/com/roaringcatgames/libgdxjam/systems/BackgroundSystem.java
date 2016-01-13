@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
@@ -23,12 +24,26 @@ import java.util.Random;
  */
 public class BackgroundSystem extends IteratingSystem {
 
+    public float bgSpeed = -1f;
     private float left;
     private float bottom;
     private float right;
     private float top;
 
     private boolean isInitialized = false;
+
+    protected class BackgroundTile{
+        private float x, y, rotation;
+        private TextureRegion tile, galaxy;
+        protected  BackgroundTile(float x, float y, float rot, TextureRegion tile, TextureRegion galaxy){
+            this.x = x;
+            this.y = y;
+            this.rotation = rot;
+            this.tile = tile;
+            this.galaxy = galaxy;
+        }
+    }
+
 
     public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds){
         //No components will be modified here, just need a limited class to
@@ -50,7 +65,7 @@ public class BackgroundSystem extends IteratingSystem {
         float tileSize = 16f;
         float tileHalfPoint = 8f;
 
-        float startX = left-tileHalfPoint;
+        float startX = left;
         float startY = bottom-tileHalfPoint;
         float xTileCoverage = (right + tileHalfPoint) - (startX);
         float yTileCoverage = (top + tileHalfPoint) - (startY);
@@ -58,9 +73,11 @@ public class BackgroundSystem extends IteratingSystem {
         int columns = (int)Math.ceil(xTileCoverage/tileSize);
         int rows = (int)Math.ceil(yTileCoverage/tileSize);
 
-        float offset = (rows*tileSize) - ((top + tileHalfPoint) - (startY));
 
 
+
+        float topY = 0f;
+        Array<BackgroundTile> tiles = new Array<>();
         Random rnd = new Random();
         for(int i = 0;i<columns; i++){
             float x = startX + i*tileSize;
@@ -73,47 +90,65 @@ public class BackgroundSystem extends IteratingSystem {
                                                  270f;
                 float textVal = rnd.nextFloat();
                 TextureRegion texture = textVal < 0.5f ? Assets.getBgATile() : Assets.getBgBTile();
-
-                //Sometimes add a galaxy
-                if(textVal < 0.5f){
-                    Entity galaxy = engine.createEntity();
-                    if(textVal < 0.25f) {
-                        galaxy.add(TextureComponent.create()
-                                .setRegion(Assets.getGalaxyA()));
+                TextureRegion galaxy = null;
+                float galaxyFloat = rnd.nextFloat();
+                if(galaxyFloat < 0.5f){
+                    if(galaxyFloat < 0.25f){
+                        galaxy = Assets.getGalaxyA();
                     }else{
-                        galaxy.add(TextureComponent.create()
-                                .setRegion(Assets.getGalaxyB()));
+                        galaxy = Assets.getGalaxyB();
                     }
-                    galaxy.add(TransformComponent.create()
-                            .setPosition(x, y, Z.bg_galaxy)
-                            .setRotation(rotation));
-                    galaxy.add(BoundsComponent.create()
-                            .setBounds(x - 4.6875f, y - 4.6875f, 9.375f, 9.375f));
-                    galaxy.add(ScreenWrapComponent.create()
-                            .setMode(ScreenWrapMode.VERTICAL)
-                            .setReversed(true)
-                            .setWrapOffset(offset));
-                    galaxy.add(VelocityComponent.create()
-                            .setSpeed(0f, -0.5f));
-                    engine.addEntity(galaxy);
                 }
 
-                Entity e = engine.createEntity();
-                e.add(TextureComponent.create()
-                    .setRegion(texture));
-                e.add(TransformComponent.create()
-                    .setPosition(x, y, Z.bg)
-                    .setRotation(rotation));
-                e.add(BoundsComponent.create()
-                    .setBounds(x-tileHalfPoint, y-tileHalfPoint, tileSize, tileSize));
-                e.add(ScreenWrapComponent.create()
+                tiles.add(new BackgroundTile(x, y, rotation, texture, galaxy));
+                topY = y;
+            }
+        }
+
+        //We have to take off an extra pixel here, because of
+        //  a weird issue that ALWAYS causes a 1ish pixel width
+        //  flickering gap between tiles on the first wrap.
+        //  likely a floating point issue.
+        float offset = (topY+tileHalfPoint) - top - (1f/32f);
+
+        for(BackgroundTile bg:tiles){
+            //Sometimes add a galaxy
+            if(bg.galaxy != null){
+                Entity galaxy = engine.createEntity();
+                galaxy.add(TextureComponent.create()
+                        .setRegion(bg.galaxy));
+
+                galaxy.add(TransformComponent.create()
+                        .setPosition(bg.x, bg.y, Z.bg_galaxy)
+                        .setRotation(bg.rotation)
+                        .setScale(1f, 1f));
+                galaxy.add(BoundsComponent.create()
+                        .setBounds(bg.x - 4.6875f, bg.y - 4.6875f, 9.375f, 9.375f));
+                galaxy.add(ScreenWrapComponent.create()
+                        .setMode(ScreenWrapMode.VERTICAL)
+                        .setReversed(true)
+                        .setWrapOffset(offset));
+                galaxy.add(VelocityComponent.create()
+                        .setSpeed(0f, bgSpeed));
+                engine.addEntity(galaxy);
+            }
+
+            Entity e = engine.createEntity();
+            e.add(TextureComponent.create()
+                    .setRegion(bg.tile));
+            e.add(TransformComponent.create()
+                    .setPosition(bg.x, bg.y, Z.bg)
+                    .setRotation(bg.rotation)
+                    .setScale(1f, 1f));
+            e.add(BoundsComponent.create()
+                    .setBounds(bg.x - tileHalfPoint, bg.y - tileHalfPoint, tileSize, tileSize));
+            e.add(ScreenWrapComponent.create()
                     .setMode(ScreenWrapMode.VERTICAL)
                     .setReversed(true)
                     .setWrapOffset(offset));
-                e.add(VelocityComponent.create()
-                    .setSpeed(0f, -0.5f));
-                engine.addEntity(e);
-            }
+            e.add(VelocityComponent.create()
+                    .setSpeed(0f, bgSpeed));
+            engine.addEntity(e);
         }
 
         isInitialized = true;
