@@ -7,7 +7,14 @@ import com.badlogic.ashley.core.Component;
  */
 public class EnemyComponent implements Component {
 
+    public EnemyType enemyType = EnemyType.COMET;
+
     public static EnemyComponent create(){
         return new EnemyComponent();
+    }
+
+    public EnemyComponent setEnemyType(EnemyType eType){
+        this.enemyType = eType;
+        return this;
     }
 }

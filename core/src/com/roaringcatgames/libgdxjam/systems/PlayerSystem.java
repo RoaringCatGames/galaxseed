@@ -26,9 +26,9 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private Vector3 initialPosition;
     private float initialScale;
 
-    private float deceleration = 8f;
+    private float deceleration = 100f;
     private float maxVelocity = 8f;
-    private float ACCEL_RATE = 10f;
+    private float ACCEL_RATE = 20f;
     private float accelerationX = 0f;
     private float accelerationY = 0f;
 

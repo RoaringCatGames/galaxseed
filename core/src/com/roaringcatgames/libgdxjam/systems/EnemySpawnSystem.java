@@ -7,14 +7,14 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.DMG;
 import com.roaringcatgames.libgdxjam.Z;
-import com.roaringcatgames.libgdxjam.components.BulletComponent;
-import com.roaringcatgames.libgdxjam.components.EnemyComponent;
-import com.roaringcatgames.libgdxjam.components.ProjectileComponent;
-import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
+import com.roaringcatgames.libgdxjam.components.*;
+
+import java.util.Random;
 
 /**
  * Created by barry on 1/10/16 @ 7:35 PM.
@@ -26,6 +26,9 @@ public class EnemySpawnSystem extends IteratingSystem {
     private float lastSpawnTime = 0f;
     private float timeElapsed = 0f;
 
+    private float asteroidX = -5f;
+    private Random r;
+
     public EnemySpawnSystem() {
         super(Family.all(EnemyComponent.class).get());
     }
@@ -34,6 +37,7 @@ public class EnemySpawnSystem extends IteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
+        r = new Random();
         float timeBetweenSpawn = 1f / spawnRate;
         timeElapsed += deltaTime;
 
@@ -42,6 +46,10 @@ public class EnemySpawnSystem extends IteratingSystem {
             lastSpawnTime = timeElapsed;
             generateEnemy(-5f, 30f, 5f, -8f);
             generateEnemy(25f, 30f, -5f, -8f);
+
+
+            generateAsteroid(asteroidX, 25f, 3f, -4f);
+            asteroidX = asteroidX < 0f ? 30f : -5f;
         }
     }
 
@@ -53,6 +61,54 @@ public class EnemySpawnSystem extends IteratingSystem {
     /*******************
      * Private Methods
      *******************/
+    private void generateAsteroid(float xPos, float yPos, float xVel, float yVel){
+        //Generate Bullets here
+        Entity enemy = ((PooledEngine) getEngine()).createEntity();
+        enemy.add(WhenOffScreenComponent.create());
+        enemy.add(KinematicComponent.create());
+        enemy.add(ProjectileComponent.create()
+                .setDamage(DMG.asteroid));
+
+
+
+        enemy.add(TransformComponent.create()
+                .setPosition(xPos, yPos, Z.enemy)
+                .setScale(1f, 1f));
+        float rotSpeed = xVel > 0f ? 180f : -180f;
+        enemy.add(RotationComponent.create()
+            .setRotationSpeed(rotSpeed));
+
+
+
+        float cnt = r.nextFloat();
+        float size;
+        TextureRegion tr;
+        EnemyType eType;
+        if(cnt < 0.33f) {
+            tr = Assets.getAsteroidA();
+            eType = EnemyType.ASTEROID_A;
+            size = 2.5f;
+        }else if(cnt < 0.66f){
+            tr = Assets.getAsteroidB();
+            eType = EnemyType.ASTEROID_B;
+            size = 3.75f;
+        }else{
+            tr = Assets.getAsteroidC();
+            eType = EnemyType.ASTEROID_C;
+            size = 5f;
+        }
+        enemy.add(BoundsComponent.create()
+                .setBounds(xPos - (size/2f), yPos - (size/2f), size, size)
+                .setOffset(0f, -1.25f));
+        enemy.add(TextureComponent.create()
+            .setRegion(tr));
+        enemy.add(EnemyComponent.create()
+                .setEnemyType(eType));
+        enemy.add(VelocityComponent.create()
+                .setSpeed(xVel, yVel));
+        getEngine().addEntity(enemy);
+    }
+
     private void generateEnemy(float xPos, float yPos, float xVel, float yVel){
 
             //Generate Bullets here

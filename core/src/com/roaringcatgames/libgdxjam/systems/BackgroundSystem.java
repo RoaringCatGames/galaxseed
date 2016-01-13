@@ -73,9 +73,6 @@ public class BackgroundSystem extends IteratingSystem {
         int columns = (int)Math.ceil(xTileCoverage/tileSize);
         int rows = (int)Math.ceil(yTileCoverage/tileSize);
 
-
-
-
         float topY = 0f;
         Array<BackgroundTile> tiles = new Array<>();
         Random rnd = new Random();

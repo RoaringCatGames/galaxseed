@@ -70,15 +70,46 @@ public class Assets {
     }
 
     public static TextureAtlas.AtlasRegion getAsteroidA(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a");
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a");
     }
-    public static TextureAtlas.AtlasRegion getAsteroidB(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b");
-    }
-    public static TextureAtlas.AtlasRegion getAsteroidC(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c");
+    private static Array<TextureAtlas.AtlasRegion> fragsA = new Array<>();
+    public static Array<TextureAtlas.AtlasRegion> getAsteroidAFrags(){
+        if(fragsA.size == 0){
+            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a-frag-a"));
+            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a-frag-b"));
+            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a-frag-c"));
+        }
+
+        return fragsA;
     }
 
+    public static TextureAtlas.AtlasRegion getAsteroidB(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b");
+    }
+    private static Array<TextureAtlas.AtlasRegion> fragsB = new Array<>();
+    public static Array<TextureAtlas.AtlasRegion> getAsteroidBFrags(){
+        if(fragsB.size == 0){
+            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-a"));
+            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-b"));
+            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-c"));
+        }
+
+        return fragsB;
+    }
+
+    public static TextureAtlas.AtlasRegion getAsteroidC(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c");
+    }
+    private static Array<TextureAtlas.AtlasRegion> fragsC = new Array<>();
+    public static Array<TextureAtlas.AtlasRegion> getAsteroidCFrags(){
+        if(fragsC.size == 0){
+            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-a"));
+            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-b"));
+            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-c"));
+        }
+
+        return fragsC;
+    }
 
 
     /****
