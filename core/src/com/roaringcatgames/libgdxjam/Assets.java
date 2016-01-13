@@ -44,9 +44,42 @@ public class Assets {
      * SAFE IMMEDIATELY after am.load() is called
      * @return AtlasRegion for the bg Tile sprite.
      */
-    public static TextureAtlas.AtlasRegion getBgTile(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("SpaceBG");
+    public static TextureAtlas.AtlasRegion getBgATile(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("SpaceBG-a");
     }
+    public static TextureAtlas.AtlasRegion getBgBTile(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("SpaceBG-b");
+    }
+    public static TextureAtlas.AtlasRegion getGalaxyA(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("galaxy-a");
+    }
+    public static TextureAtlas.AtlasRegion getGalaxyB(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("galaxy-b");
+    }
+
+
+
+    public static TextureAtlas.AtlasRegion getPlanetA(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planet-a");
+    }
+    public static TextureAtlas.AtlasRegion getPlanetB(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planet-b");
+    }
+    public static TextureAtlas.AtlasRegion getPlanetC(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planet-c");
+    }
+
+    public static TextureAtlas.AtlasRegion getAsteroidA(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a");
+    }
+    public static TextureAtlas.AtlasRegion getAsteroidB(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b");
+    }
+    public static TextureAtlas.AtlasRegion getAsteroidC(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c");
+    }
+
+
 
     /****
      * ONLY SAFE AFTER am.update() is finished.
@@ -87,6 +120,9 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getFlamesFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/flames");
     }
+    public static Array<TextureAtlas.AtlasRegion> getIdleFlamesFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/propel");
+    }
 
 
 
@@ -100,13 +136,19 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getBulletFrames() {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/seed");
     }
-
     /****
      * ONLY SAFE AFTER am.update() is finished.
      * @return AtlasRegions for seed bullet animation
      */
     public static Array<TextureAtlas.AtlasRegion> getBulletFlyingFrames() {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/SeedFly");
+    }
+
+    /////////////
+    //Comets
+    /////////////
+    public static Array<TextureAtlas.AtlasRegion> getCometFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet");
     }
 
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;

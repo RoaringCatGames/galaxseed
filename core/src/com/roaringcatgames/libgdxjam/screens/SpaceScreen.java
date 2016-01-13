@@ -11,9 +11,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
+import com.roaringcatgames.libgdxjam.Z;
 import com.roaringcatgames.libgdxjam.systems.*;
 
 /**
@@ -44,7 +46,7 @@ public class SpaceScreen extends LazyInitScreen implements InputProcessor {
 
         RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
         cam = renderingSystem.getCamera();
-        viewport = new ExtendViewport(20f, 30f, 40f, 60f, cam);// FitViewport(20f, 30f, cam);
+        viewport = new FitViewport(20f, 30f, cam);// FitViewport(20f, 30f, cam);
         viewport.apply();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
@@ -52,7 +54,7 @@ public class SpaceScreen extends LazyInitScreen implements InputProcessor {
         Vector3 playerPosition = new Vector3(
                 cam.position.x,
                 5f,
-                0f);
+                Z.player);
 
         Gdx.app.log("Menu Screen", "Cam Pos: " + cam.position.x + " | " +
                 cam.position.y + " Cam W/H: " + cam.viewportWidth + "/" + cam.viewportHeight);
@@ -69,6 +71,7 @@ public class SpaceScreen extends LazyInitScreen implements InputProcessor {
         Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
         engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
         engine.addSystem(new FiringSystem());
+        engine.addSystem(new EnemySpawnSystem());
         engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
         engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
@@ -140,6 +143,7 @@ public class SpaceScreen extends LazyInitScreen implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
+        cam.zoom += amount * 0.5f;
         return false;
     }
 

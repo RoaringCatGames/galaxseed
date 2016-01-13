@@ -7,7 +7,14 @@ import com.badlogic.ashley.core.Component;
  */
 public class WhenOffScreenComponent implements Component {
 
+    public boolean hasBeenOnScreen = false;
+
     public static WhenOffScreenComponent create(){
         return new WhenOffScreenComponent();
+    }
+
+    public WhenOffScreenComponent setHasBeenOnScreen(boolean beenOnScreen){
+        this.hasBeenOnScreen = beenOnScreen;
+        return this;
     }
 }

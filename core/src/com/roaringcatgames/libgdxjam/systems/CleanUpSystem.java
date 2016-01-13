@@ -19,6 +19,7 @@ public class CleanUpSystem extends IteratingSystem {
 
     public Array<Entity> queue;
 
+    private ComponentMapper<WhenOffScreenComponent> wosm;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<BoundsComponent> bm;
     private Entity bounds;
@@ -28,6 +29,7 @@ public class CleanUpSystem extends IteratingSystem {
         super(Family.all(WhenOffScreenComponent.class)
                 .one(TransformComponent.class, BoundsComponent.class).get());
 
+        wosm = ComponentMapper.getFor(WhenOffScreenComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         bm = ComponentMapper.getFor(BoundsComponent.class);
 
@@ -56,16 +58,34 @@ public class CleanUpSystem extends IteratingSystem {
 
 
         BoundsComponent screenBounds = bm.get(bounds);
+
         for(Entity e:queue){
-            if(bm.has(e)){
-                BoundsComponent bc = bm.get(e);
-                if(!bc.bounds.overlaps(screenBounds.bounds)){
-                    getEngine().removeEntity(e);
+            WhenOffScreenComponent wc = wosm.get(e);
+            //Allows things to be spawned offscreen, and cleaned up
+            // only after EXITING the bounds.
+            if(!wc.hasBeenOnScreen){
+                if (bm.has(e)) {
+                    BoundsComponent bc = bm.get(e);
+                    if (bc.bounds.overlaps(screenBounds.bounds)) {
+                        wc.setHasBeenOnScreen(true);
+                    }
+                } else {
+                    TransformComponent tc = tm.get(e);
+                    if (screenBounds.bounds.contains(tc.position.x, tc.position.y)) {
+                        wc.setHasBeenOnScreen(true);
+                    }
                 }
-            }else{
-                TransformComponent tc = tm.get(e);
-                if(!screenBounds.bounds.contains(tc.position.x, tc.position.y)){
-                    getEngine().removeEntity(e);
+            }else {
+                if (bm.has(e)) {
+                    BoundsComponent bc = bm.get(e);
+                    if (!bc.bounds.overlaps(screenBounds.bounds)) {
+                        getEngine().removeEntity(e);
+                    }
+                } else {
+                    TransformComponent tc = tm.get(e);
+                    if (!screenBounds.bounds.contains(tc.position.x, tc.position.y)) {
+                        getEngine().removeEntity(e);
+                    }
                 }
             }
 
