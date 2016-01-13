@@ -2,6 +2,7 @@ package com.roaringcatgames.libgdxjam.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -67,6 +68,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
             player.add(KinematicComponent.create());
             player.add(PlayerComponent.create());
+            player.add(HealthComponent.create()
+                .setHealth(App.getPlayerHealth()));
             player.add(TransformComponent.create()
                     .setPosition(initialPosition.x, initialPosition.y, initialPosition.z)
                     .setScale(initialScale, initialScale));
@@ -183,13 +186,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                 fsc.set(flameState);
             }
         }
-
-
-
-//
-//        if(newX == 0f && newY == 0f){
-//            sc.set("DEFAULT");
-//        }
     }
 
     @Override

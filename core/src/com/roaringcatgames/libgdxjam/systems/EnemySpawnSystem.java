@@ -9,9 +9,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.DMG;
 import com.roaringcatgames.libgdxjam.Z;
 import com.roaringcatgames.libgdxjam.components.BulletComponent;
 import com.roaringcatgames.libgdxjam.components.EnemyComponent;
+import com.roaringcatgames.libgdxjam.components.ProjectileComponent;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 
 /**
@@ -57,6 +59,8 @@ public class EnemySpawnSystem extends IteratingSystem {
             Entity enemy = ((PooledEngine) getEngine()).createEntity();
             enemy.add(WhenOffScreenComponent.create());
             enemy.add(KinematicComponent.create());
+            enemy.add(ProjectileComponent.create()
+                .setDamage(DMG.comet));
             enemy.add(EnemyComponent.create());
             float rot = xVel > 0f ? 45f : -45f;
             enemy.add(TransformComponent.create()
@@ -65,8 +69,8 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setRotation(rot));
 
             enemy.add(BoundsComponent.create()
-                .setBounds(xPos - 0.5f, yPos - 0.5f, 1f, 1f)
-                .setOffset(0f, -1f));
+                .setBounds(xPos - 0.25f, yPos - 0.25f, 0.5f, 0.5f)
+                .setOffset(0f, -1.25f));
             enemy.add(TextureComponent.create());
             enemy.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f / 3f, Assets.getCometFrames(), Animation.PlayMode.LOOP_PINGPONG)));
