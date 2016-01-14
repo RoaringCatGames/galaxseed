@@ -17,10 +17,11 @@ import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
  */
 public class FiringSystem extends IteratingSystem {
 
-    private float firingRate = 2f;
+    private float firingRate = 6f;
     private float timeBetweenFiring = 1f/firingRate;
     private float lastFireTime = 0f;
     private float timeElapsed = 0f;
+    private float bulletSpeed = 15f;
     private ComponentMapper<TransformComponent> tm;
 
     Entity player;
@@ -34,18 +35,25 @@ public class FiringSystem extends IteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
         if(player != null) {
-            timeBetweenFiring = 1f / firingRate;
-            timeElapsed += deltaTime;
+            VelocityComponent pv = player.getComponent(VelocityComponent.class);
+            if(pv.speed.x != 0f || pv.speed.y != 0f) {
+                timeBetweenFiring = 1f / firingRate;
+                timeElapsed += deltaTime;
 
-            if (timeElapsed - lastFireTime >= timeBetweenFiring) {
+                if (timeElapsed - lastFireTime >= timeBetweenFiring) {
 
-                lastFireTime = timeElapsed;
-                generateBullet(0f, 0f, 10f);
-//                generateBullet(1f, 5f);
-//                generateBullet(-1f, 5f);
-                generateBullet(-0.5f, 0f, 9f);
-                generateBullet(0.5f, 0f, 9f);
+                    lastFireTime = timeElapsed;
+                    //generateBullet(0f, 0f, 10f);
+                    generateBullet(-0.5f, 0.6f, 0f, bulletSpeed);
+                    generateBullet(0.5f, 0.6f, 0f, bulletSpeed);
 
+                    generateBullet(-0.906f, -0.181f, 0f, bulletSpeed);
+                    generateBullet(0.906f, -0.181f, 0f, bulletSpeed);
+
+                    generateBullet(-1.312f, -0.8f, 0f, bulletSpeed);
+                    generateBullet(1.312f, -0.8f, 0f, bulletSpeed);
+
+                }
             }
         }
 
@@ -61,14 +69,14 @@ public class FiringSystem extends IteratingSystem {
     }
 
 
-    private void generateBullet(float xOffset, float xVel, float yVel){
+    private void generateBullet(float xOffset, float yOffset, float xVel, float yVel){
         TransformComponent playerPos = tm.get(player);
         //Generate Bullets here
         Entity bullet = ((PooledEngine) getEngine()).createEntity();
         bullet.add(WhenOffScreenComponent.create());
         bullet.add(KinematicComponent.create());
         bullet.add(TransformComponent.create()
-                .setPosition(playerPos.position.x + xOffset, playerPos.position.y, playerPos.position.z - 1f)
+                .setPosition(playerPos.position.x + xOffset, playerPos.position.y + yOffset, playerPos.position.z - 1f)
                 .setScale(1f, 1f));
         bullet.add(BoundsComponent.create()
                 .setBounds(playerPos.position.x + xOffset - 0.25f, playerPos.position.y - 0.25f, 0.5f, 0.5f)

@@ -37,9 +37,12 @@ public class Assets {
      * @return AtlasRegion for the moon sprite.
      */
     public static TextureAtlas.AtlasRegion getMoon(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("moon");
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/moon");
     }
 
+    public static TextureAtlas.AtlasRegion getTouchPoint(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("touch-point");
+    }
     /***
      * SAFE IMMEDIATELY after am.load() is called
      * @return AtlasRegion for the bg Tile sprite.
@@ -59,16 +62,46 @@ public class Assets {
 
 
 
+
     public static TextureAtlas.AtlasRegion getPlanetA(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planet-a");
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-a");
     }
     public static TextureAtlas.AtlasRegion getPlanetB(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planet-b");
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-b");
     }
     public static TextureAtlas.AtlasRegion getPlanetC(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planet-c");
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-c");
+    }
+    public static TextureAtlas.AtlasRegion getPlanetD(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-d");
+    }
+    public static TextureAtlas.AtlasRegion getPlanetE(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-e");
+    }
+    public static TextureAtlas.AtlasRegion getPlanetF(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-f");
+    }
+    private static Array<TextureAtlas.AtlasRegion> planets;
+    public static Array<TextureAtlas.AtlasRegion> getPlanets(){
+        if(planets == null){
+            planets = new Array<>();
+            planets.add(getPlanetA());
+            planets.add(getPlanetB());
+            planets.add(getPlanetC());
+            planets.add(getPlanetD());
+            planets.add(getPlanetE());
+            planets.add(getPlanetF());
+            planets.add(getMoon());
+        }
+
+        return planets;
     }
 
+
+
+    /////////////
+    //Enemies
+    /////////////
     public static TextureAtlas.AtlasRegion getAsteroidA(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a");
     }

@@ -74,7 +74,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
-        engine.addSystem(new BackgroundSystem(minBounds, maxBounds));
+        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false));
 //        engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
 //        engine.addSystem(new FiringSystem());
 //        engine.addSystem(new CleanUpSystem(minBounds, maxBounds));

@@ -7,15 +7,14 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
-import com.roaringcatgames.kitten2d.ashley.components.VelocityComponent;
+import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.Z;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.ScreenWrapComponent;
 import com.roaringcatgames.libgdxjam.components.ScreenWrapMode;
+import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 
 import java.util.Random;
 
@@ -30,22 +29,35 @@ public class BackgroundSystem extends IteratingSystem {
     private float right;
     private float top;
 
+    private boolean isUsingStickers;
     private boolean isInitialized = false;
 
-    protected class BackgroundTile{
-        private float x, y, rotation;
-        private TextureRegion tile, galaxy;
+    protected class BackgroundTile extends BackgroundSticker{
+        protected TextureRegion galaxy;
         protected  BackgroundTile(float x, float y, float rot, TextureRegion tile, TextureRegion galaxy){
+            super(x, y, rot, tile);
             this.x = x;
             this.y = y;
             this.rotation = rot;
-            this.tile = tile;
+            this.image = tile;
             this.galaxy = galaxy;
         }
     }
 
+    protected class BackgroundSticker{
+        protected float x, y, rotation;
+        protected TextureRegion image;
 
-    public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds){
+        protected BackgroundSticker(float x, float y, float rot, TextureRegion img) {
+            this.x = x;
+            this.y = y;
+            this.rotation = rot;
+            this.image = img;
+        }
+    }
+
+
+    public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds, boolean shouldProduceStickers){
         //No components will be modified here, just need a limited class to
         //create a family
         super(Family.all(PlayerComponent.class).get());
@@ -53,6 +65,7 @@ public class BackgroundSystem extends IteratingSystem {
         this.bottom = minBounds.y;
         this.right = maxBounds.x;
         this.top = maxBounds.y;
+        this.isUsingStickers = shouldProduceStickers;
     }
 
     private void init(){
@@ -106,7 +119,7 @@ public class BackgroundSystem extends IteratingSystem {
         //  a weird issue that ALWAYS causes a 1ish pixel width
         //  flickering gap between tiles on the first wrap.
         //  likely a floating point issue.
-        float offset = (topY+tileHalfPoint) - top - (1f/32f);
+        float offset = (topY+tileHalfPoint) - top - (4f/32f);
 
         for(BackgroundTile bg:tiles){
             //Sometimes add a galaxy
@@ -132,7 +145,7 @@ public class BackgroundSystem extends IteratingSystem {
 
             Entity e = engine.createEntity();
             e.add(TextureComponent.create()
-                    .setRegion(bg.tile));
+                    .setRegion(bg.image));
             e.add(TransformComponent.create()
                     .setPosition(bg.x, bg.y, Z.bg)
                     .setRotation(bg.rotation)
@@ -147,6 +160,36 @@ public class BackgroundSystem extends IteratingSystem {
                     .setSpeed(0f, bgSpeed));
             engine.addEntity(e);
         }
+
+
+        if(isUsingStickers) {
+            int yStep = 35;
+            int yIndex = 1;
+            for (TextureRegion reg : Assets.getPlanets()) {
+                int position = rnd.nextInt(10) + 5;
+                float rot = rnd.nextFloat() * 360f;
+                float width = (reg.getRegionWidth()/ App.PPM);
+                float height = (reg.getRegionHeight()/App.PPM);
+
+                Entity sticker = engine.createEntity();
+                sticker.add(TransformComponent.create()
+                        .setPosition(position, yIndex * yStep, Z.bgSticker)
+                        .setRotation(rot));
+                sticker.add(RotationComponent.create()
+                    .setRotationSpeed(0.25f));
+                sticker.add(TextureComponent.create()
+                        .setRegion(reg));
+                sticker.add(VelocityComponent.create()
+                        .setSpeed(0f, bgSpeed));
+                sticker.add(KinematicComponent.create());
+                sticker.add(BoundsComponent.create()
+                    .setBounds(position - (width/2f), (yIndex * yStep) - (height/2f), width, height));
+                sticker.add(WhenOffScreenComponent.create());
+                engine.addEntity(sticker);
+                yIndex++;
+            }
+        }
+
 
         isInitialized = true;
     }

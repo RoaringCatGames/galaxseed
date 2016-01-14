@@ -23,12 +23,13 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private boolean isInitialized = false;
     private Entity player;
     private Entity flames;
+    private Entity touchIndicator;
     private Vector3 initialPosition;
     private float initialScale;
 
     private float deceleration = 100f;
-    private float maxVelocity = 8f;
-    private float ACCEL_RATE = 20f;
+    private float maxVelocity = 15f;
+    private float ACCEL_RATE = 40f;
     private float accelerationX = 0f;
     private float accelerationY = 0f;
 
@@ -61,9 +62,11 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             if (getEngine() instanceof PooledEngine) {
                 player = ((PooledEngine) getEngine()).createEntity();
                 flames = ((PooledEngine) getEngine()).createEntity();
+                touchIndicator = ((PooledEngine) getEngine()).createEntity();
             } else {
                 player = new Entity();
                 flames = new Entity();
+                touchIndicator = new Entity();
             }
 
             player.add(KinematicComponent.create());
@@ -103,11 +106,20 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                 .setScale(1f, 1f));
             flames.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getIdleFlamesFrames()))
-                    .addAnimation("FLYING", new Animation(1f/9f, Assets.getFlamesFrames())));
+                    .addAnimation("FLYING", new Animation(1f / 9f, Assets.getFlamesFrames())));
             flames.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
             getEngine().addEntity(flames);
+
+            touchIndicator.add(TextureComponent.create()
+                    .setRegion(Assets.getTouchPoint()));
+            touchIndicator.add(TransformComponent.create()
+                .setPosition(0f, 0f, Z.touchIndicator)
+                .setHidden(true));
+            getEngine().addEntity(touchIndicator);
+
+
         }
         isInitialized = true;
     }
@@ -159,14 +171,14 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         String flameState;
         boolean isLooping = true;
         //right
-        if(accelerationY != 0f){
-            state = "FLYING";
-        }else if(accelerationX > 0f){
+        if(accelerationX > 0f){
             state = "FLYING_RIGHT";
             isLooping = false;
         }else if(accelerationX < 0f){
             state = "FLYING_LEFT";
             isLooping = false;
+        }else if(accelerationY != 0f){
+            state = "FLYING";
         }
 
         FollowerComponent fc = flames.getComponent(FollowerComponent.class);
@@ -238,6 +250,9 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         touchPoint.set(screenX, screenY, 0f);
         touchPoint = cam.unproject(touchPoint);
         controlOrigin.set(touchPoint.x, touchPoint.y);
+        touchIndicator.getComponent(TransformComponent.class)
+            .setPosition(touchPoint.x, touchPoint.y)
+            .setHidden(false);
         return false;
     }
 
@@ -245,6 +260,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         accelerationX = 0f;
         accelerationY = 0f;
+        touchIndicator.getComponent(TransformComponent.class).isHidden = true;
         return false;
     }
 
@@ -284,6 +300,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
      * Private Methods
      ************************/
     private float applyDeceleration(float deltaTime, float inputSpeed) {
+        //return 0f;
         float newSpeed;
         boolean isReverse = inputSpeed < 0f;
         float adjust = !isReverse ?  -deceleration *deltaTime : deceleration *deltaTime;
@@ -293,6 +310,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     }
 
     private float applyAcceleration(float deltaTime, float inputSpeed, float acceleration) {
+        //return acceleration > 0f ? maxVelocity : -maxVelocity;
+
         float newSpeed;
         float adjust = acceleration *deltaTime;
         newSpeed = inputSpeed + adjust;
