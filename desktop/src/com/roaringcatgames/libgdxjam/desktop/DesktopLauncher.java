@@ -2,6 +2,7 @@ package com.roaringcatgames.libgdxjam.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.LifeInSpace;
 
 public class DesktopLauncher {
@@ -10,7 +11,7 @@ public class DesktopLauncher {
 
 		config.title = "Life In Space";
 		config.height = 960;
-		config.width = 1280;
-		new LwjglApplication(new LifeInSpace(), config);
+		config.width = 640;
+		new LwjglApplication(App.Initialize(), config);
 	}
 }

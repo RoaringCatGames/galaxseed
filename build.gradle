@@ -23,7 +23,7 @@ allprojects {
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.7.0'
-        ashleyExtensionsVersion = '0.0.1'
+        ashleyExtensionsVersion = '0.0.4'
     }
 
     repositories {
@@ -97,6 +97,7 @@ project(":html") {
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion:sources"
         compile "com.roaringcatgames.kitten2d.ashley:ashley-extensions:$ashleyExtensionsVersion:sources"
+        //compile files("../../kitten2d-systems/ashley-extensions/build/libs/ashley-extensions-${ashleyExtensionsVersion}-sources.jar")
     }
 }
 
@@ -111,6 +112,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
         compile "com.roaringcatgames.kitten2d.ashley:ashley-extensions:$ashleyExtensionsVersion"
+        //compile files("../../kitten2d-systems/ashley-extensions/build/libs/ashley-extensions-${ashleyExtensionsVersion}.jar")
     }
 }
 

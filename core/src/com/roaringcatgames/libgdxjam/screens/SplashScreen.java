@@ -1,4 +1,4 @@
-package com.roaringcatgames.libgdxjam;
+package com.roaringcatgames.libgdxjam.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -14,6 +14,8 @@ import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.kitten2d.ashley.systems.AnimationSystem;
 import com.roaringcatgames.kitten2d.ashley.systems.RenderingSystem;
+import com.roaringcatgames.libgdxjam.App;
+import com.roaringcatgames.libgdxjam.Assets;
 
 /**
  * Created by barry on 12/22/15 @ 7:27 PM.
@@ -34,7 +36,7 @@ public class SplashScreen extends LazyInitScreen {
     }
 
     @Override
-    void init() {
+    protected void init() {
         this.shapeRenderer = new ShapeRenderer();
 
         engine = new PooledEngine();
@@ -66,7 +68,7 @@ public class SplashScreen extends LazyInitScreen {
     }
 
     @Override
-    void update(float delta) {
+    protected void update(float delta) {
         elapsedTime += delta;
 
         if(Assets.am.update() && elapsedTime >= minSpalshSeconds){
@@ -80,7 +82,7 @@ public class SplashScreen extends LazyInitScreen {
             shapeRenderer.setProjectionMatrix(cam.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.CYAN);
-            shapeRenderer.rect(0, 0, cam.viewportWidth * Assets.am.getProgress(), cam.viewportHeight / 5f);
+            shapeRenderer.rect(0, 0, cam.viewportWidth * Assets.am.getProgress(), cam.viewportHeight / 10f);
             shapeRenderer.end();
         }
     }

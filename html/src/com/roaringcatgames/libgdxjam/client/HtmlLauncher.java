@@ -3,6 +3,7 @@ package com.roaringcatgames.libgdxjam.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
+import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.LifeInSpace;
 
 public class HtmlLauncher extends GwtApplication {
@@ -14,6 +15,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new LifeInSpace();
+                return App.Initialize();
         }
 }
