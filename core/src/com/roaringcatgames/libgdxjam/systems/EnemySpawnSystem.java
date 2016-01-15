@@ -8,6 +8,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.DMG;
@@ -47,8 +48,8 @@ public class EnemySpawnSystem extends IteratingSystem {
             generateEnemy(-5f, 30f, 5f, -8f);
             generateEnemy(25f, 30f, -5f, -8f);
 
-
-            generateAsteroid(asteroidX, 25f, 3f, -4f);
+            float xVel = asteroidX < 0f ? 3f : -3f;
+            generateAsteroid(asteroidX, 25f, xVel, -4f);
             asteroidX = asteroidX < 0f ? 30f : -5f;
         }
     }
@@ -70,14 +71,16 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setDamage(DMG.asteroid));
 
 
-
         enemy.add(TransformComponent.create()
                 .setPosition(xPos, yPos, Z.enemy)
                 .setScale(1f, 1f));
         float rotSpeed = xVel > 0f ? 180f : -180f;
         enemy.add(RotationComponent.create()
-            .setRotationSpeed(rotSpeed));
+                .setRotationSpeed(rotSpeed));
 
+
+
+        SpawnerComponent spawner = SpawnerComponent.create();
 
 
         float cnt = r.nextFloat();
@@ -88,15 +91,29 @@ public class EnemySpawnSystem extends IteratingSystem {
             tr = Assets.getAsteroidA();
             eType = EnemyType.ASTEROID_A;
             size = 2.5f;
+
+            spawner.setParticleSpeed(20f)
+                .setParticleTextures(Assets.getAsteroidAFrags())
+                .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                .setSpawnRate(2f);
         }else if(cnt < 0.66f){
             tr = Assets.getAsteroidB();
             eType = EnemyType.ASTEROID_B;
             size = 3.75f;
+            spawner.setParticleSpeed(25f)
+                .setParticleTextures(Assets.getAsteroidBFrags())
+                .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                .setSpawnRate(2.5f);
         }else{
             tr = Assets.getAsteroidC();
             eType = EnemyType.ASTEROID_C;
             size = 5f;
+            spawner.setParticleSpeed(30f)
+                .setParticleTextures(Assets.getAsteroidCFrags())
+                .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                .setSpawnRate(3f);
         }
+        enemy.add(spawner);
         enemy.add(BoundsComponent.create()
                 .setBounds(xPos - (size/2f), yPos - (size/2f), size, size)
                 .setOffset(0f, -1.25f));

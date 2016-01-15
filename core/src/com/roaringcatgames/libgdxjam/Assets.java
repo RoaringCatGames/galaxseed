@@ -122,9 +122,9 @@ public class Assets {
     private static Array<TextureAtlas.AtlasRegion> fragsB = new Array<>();
     public static Array<TextureAtlas.AtlasRegion> getAsteroidBFrags(){
         if(fragsB.size == 0){
-            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-a"));
-            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-b"));
-            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-c"));
+            fragsB.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-a"));
+            fragsB.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-b"));
+            fragsB.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-c"));
         }
 
         return fragsB;
@@ -136,9 +136,9 @@ public class Assets {
     private static Array<TextureAtlas.AtlasRegion> fragsC = new Array<>();
     public static Array<TextureAtlas.AtlasRegion> getAsteroidCFrags(){
         if(fragsC.size == 0){
-            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-a"));
-            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-b"));
-            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-c"));
+            fragsC.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-a"));
+            fragsC.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-b"));
+            fragsC.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-c"));
         }
 
         return fragsC;
