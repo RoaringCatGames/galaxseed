@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.DMG;
+import com.roaringcatgames.libgdxjam.Timer;
 import com.roaringcatgames.libgdxjam.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
@@ -23,34 +24,38 @@ import java.util.Random;
 public class EnemySpawnSystem extends IteratingSystem {
 
     private boolean isInitialized = false;
-    private float spawnRate = 0.25f;  //comets/second
-    private float lastSpawnTime = 0f;
-    private float timeElapsed = 0f;
+    private Timer cometTimer = new Timer(0.5f);
+//    private float spawnRate = 0.25f;  //comets/second
+//    private float lastSpawnTime = 0f;
+//    private float timeElapsed = 0f;
+
+    private Timer asteroidTimer = new Timer(0.25f);
 
     private float asteroidX = -5f;
     private Random r;
 
     public EnemySpawnSystem() {
         super(Family.all(EnemyComponent.class).get());
+        r = new Random();
     }
 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        r = new Random();
-        float timeBetweenSpawn = 1f / spawnRate;
-        timeElapsed += deltaTime;
+        //Spawn Comets
+        if(cometTimer.doesTriggerThisStep(deltaTime)){
+            float leftPosition = (-10f * r.nextFloat()) -5f;
+            generateEnemy(leftPosition, 40f, 5f, -8f);
+            float rightPosition = (10f * r.nextFloat()) + 25f;
+            generateEnemy(rightPosition, 40f, -5f, -8f);
+        }
 
-        if (timeElapsed - lastSpawnTime >= timeBetweenSpawn) {
-
-            lastSpawnTime = timeElapsed;
-            generateEnemy(-5f, 30f, 5f, -8f);
-            generateEnemy(25f, 30f, -5f, -8f);
-
+        //Spawn Asteroids
+        if(asteroidTimer.doesTriggerThisStep(deltaTime)){
             float xVel = asteroidX < 0f ? 3f : -3f;
-            generateAsteroid(asteroidX, 25f, xVel, -4f);
-            asteroidX = asteroidX < 0f ? 30f : -5f;
+            generateAsteroid(asteroidX, 35f, xVel, -2f);
+            asteroidX = asteroidX < 0f ? 33f : -8f;
         }
     }
 
@@ -92,7 +97,7 @@ public class EnemySpawnSystem extends IteratingSystem {
             eType = EnemyType.ASTEROID_A;
             size = 2.5f;
 
-            spawner.setParticleSpeed(20f)
+            spawner.setParticleSpeed(15f)
                 .setParticleTextures(Assets.getAsteroidAFrags())
                 .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                 .setSpawnRate(2f);
@@ -100,7 +105,7 @@ public class EnemySpawnSystem extends IteratingSystem {
             tr = Assets.getAsteroidB();
             eType = EnemyType.ASTEROID_B;
             size = 3.75f;
-            spawner.setParticleSpeed(25f)
+            spawner.setParticleSpeed(18f)
                 .setParticleTextures(Assets.getAsteroidBFrags())
                 .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                 .setSpawnRate(2.5f);
@@ -108,15 +113,14 @@ public class EnemySpawnSystem extends IteratingSystem {
             tr = Assets.getAsteroidC();
             eType = EnemyType.ASTEROID_C;
             size = 5f;
-            spawner.setParticleSpeed(30f)
+            spawner.setParticleSpeed(20f)
                 .setParticleTextures(Assets.getAsteroidCFrags())
                 .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                 .setSpawnRate(3f);
         }
         enemy.add(spawner);
-        enemy.add(BoundsComponent.create()
-                .setBounds(xPos - (size/2f), yPos - (size/2f), size, size)
-                .setOffset(0f, -1.25f));
+        enemy.add(CircleBoundsComponent.create()
+                .setCircle(xPos, yPos, size/2f));
         enemy.add(TextureComponent.create()
             .setRegion(tr));
         enemy.add(EnemyComponent.create()
