@@ -6,11 +6,13 @@ package com.roaringcatgames.libgdxjam;
 public class Z {
 
     public static final float bg = 100f;
-    public static final float bgSticker = 99f;
+    public static final float bg_galaxy = 99f;
+    public static final float bgSticker = 95f;
     public static final float flames = 51f;
     public static final float player = 50f;
-    public static final float seed = 48f;
-    public static final float enemy = 49f;
-    public static final float bg_galaxy = 99f;
+    public static final float enemyParticle = 46f;
+    public static final float enemy = 45f;
+    public static final float seed = 40;
     public static final float touchIndicator = 1f;
+
 }

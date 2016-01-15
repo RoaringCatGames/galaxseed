@@ -8,6 +8,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.Z;
 import com.roaringcatgames.libgdxjam.components.BulletComponent;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
@@ -76,7 +77,7 @@ public class FiringSystem extends IteratingSystem {
         bullet.add(WhenOffScreenComponent.create());
         bullet.add(KinematicComponent.create());
         bullet.add(TransformComponent.create()
-                .setPosition(playerPos.position.x + xOffset, playerPos.position.y + yOffset, playerPos.position.z - 1f)
+                .setPosition(playerPos.position.x + xOffset, playerPos.position.y + yOffset, Z.seed)
                 .setScale(1f, 1f));
         bullet.add(BoundsComponent.create()
                 .setBounds(playerPos.position.x + xOffset - 0.25f, playerPos.position.y - 0.25f, 0.5f, 0.5f)
