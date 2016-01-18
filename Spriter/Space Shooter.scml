@@ -298,7 +298,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="2" name="PINK" length="3000" interval="100" looping="false">
+        <animation id="2" name="Cherry" length="3000" interval="100" looping="false">
             <mainline>
                 <key id="0">
                     <object_ref id="0" timeline="26" key="0" z_index="0"/>
