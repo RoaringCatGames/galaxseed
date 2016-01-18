@@ -799,7 +799,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="3" name="Cherty Title" length="3000" interval="100" looping="false">
+        <animation id="3" name="Cherty Title" length="4000" interval="100" looping="false">
             <mainline>
                 <key id="0">
                     <object_ref id="0" timeline="27" key="0" z_index="0"/>
