@@ -16,9 +16,7 @@ import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.Z;
-import com.roaringcatgames.libgdxjam.components.BulletComponent;
-import com.roaringcatgames.libgdxjam.components.EnemyComponent;
-import com.roaringcatgames.libgdxjam.components.FollowerComponent;
+import com.roaringcatgames.libgdxjam.components.*;
 
 import java.util.Random;
 
@@ -35,6 +33,9 @@ public class EnemyDamageSystem extends IteratingSystem {
     private ComponentMapper<EnemyComponent> em;
     private ComponentMapper<CircleBoundsComponent> cm;
     private ComponentMapper<TransformComponent> tm;
+    private ComponentMapper<HealthComponent> hm;
+    private ComponentMapper<DamageComponent> dm;
+    private ComponentMapper<SpawnerComponent> sm;
 
     Random r = new Random();
 
@@ -45,6 +46,9 @@ public class EnemyDamageSystem extends IteratingSystem {
         bndm = ComponentMapper.getFor(BoundsComponent.class);
         cm = ComponentMapper.getFor(CircleBoundsComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
+        hm = ComponentMapper.getFor(HealthComponent.class);
+        dm = ComponentMapper.getFor(DamageComponent.class);
+        sm = ComponentMapper.getFor(SpawnerComponent.class);
     }
 
 
@@ -80,10 +84,12 @@ public class EnemyDamageSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
-        if(bm.has(entity)){
-            bullets.add(entity);
-        }else{
-            enemies.add(entity);
+        if(!entity.isScheduledForRemoval()) {
+            if (bm.has(entity)) {
+                bullets.add(entity);
+            } else {
+               enemies.add(entity);
+            }
         }
     }
 
@@ -91,44 +97,88 @@ public class EnemyDamageSystem extends IteratingSystem {
     private Vector2 bulletPos = new Vector2();
     private Vector2 enemyPos = new Vector2();
     private void processCollision(Entity bullet, Entity enemy){
-        CircleBoundsComponent bb = cm.get(bullet);
-        CircleBoundsComponent eb = cm.get(enemy);
-        TransformComponent et = tm.get(enemy);
-        bulletPos.set(bb.circle.x, bb.circle.y);
-        enemyPos.set(eb.circle.x, eb.circle.y);
 
-        Vector2 outVec = bulletPos.sub(enemyPos).nor();
-        outVec = outVec.scl(eb.circle.radius);
+        EnemyComponent ec = em.get(enemy);
+        switch(ec.enemyType) {
+            case ASTEROID_FRAG:
+                getEngine().removeEntity(bullet);
+                getEngine().removeEntity(enemy);
+                break;
 
-        Vector2 offsetVec = VectorUtils.rotateVector(outVec.cpy(), -et.rotation);
-        float baseRotation = offsetVec.angle() - 90f;
+            default:
+                CircleBoundsComponent bb = cm.get(bullet);
+                CircleBoundsComponent eb = cm.get(enemy);
+                TransformComponent et = tm.get(enemy);
+                bulletPos.set(bb.circle.x, bb.circle.y);
+                enemyPos.set(eb.circle.x, eb.circle.y);
 
-        final Entity plant = ((PooledEngine)getEngine()).createEntity();
-        plant.add(TransformComponent.create()
-            .setPosition(outVec.x, outVec.y, Z.plant)
-            .setRotation(et.rotation + baseRotation));
-        plant.add(TextureComponent.create());
-        plant.add(StateComponent.create()
-            .set("DEFAULT")
-            .setLooping(false));
-        Array<TextureAtlas.AtlasRegion> trees = r.nextFloat() < 0.5f ?
-                Assets.getGreenTreeFrames() :
-                Assets.getPinkTreeFrames();
-        plant.add(AnimationComponent.create()
-            .addAnimation("DEFAULT", new Animation(1f / 9f, trees)));
-        plant.add(FollowerComponent.create()
-            .setOffset(offsetVec.x, offsetVec.y)
-            .setTarget(enemy)
-            .setBaseRotation(baseRotation));
+                Vector2 outVec = bulletPos.sub(enemyPos).nor();
+                outVec = outVec.scl(eb.circle.radius);
 
-        enemy.componentRemoved.add(new Listener<Entity>() {
-            @Override
-            public void receive(Signal<Entity> signal, Entity object) {
-                getEngine().removeEntity(plant);
-            }
-        });
+                Vector2 offsetVec = VectorUtils.rotateVector(outVec.cpy(), -et.rotation).add(eb.offset);
+                float baseRotation = offsetVec.angle() - 90f;
 
-        getEngine().addEntity(plant);
-        getEngine().removeEntity(bullet);
+                final Entity plant = ((PooledEngine) getEngine()).createEntity();
+                plant.add(TransformComponent.create()
+                        .setPosition(outVec.x, outVec.y, Z.plant)
+                        .setRotation(et.rotation + baseRotation));
+                plant.add(TextureComponent.create());
+                plant.add(StateComponent.create()
+                        .set("DEFAULT")
+                        .setLooping(false));
+                float rnd = r.nextFloat();
+                Array<TextureAtlas.AtlasRegion> trees = rnd < 0.3f ?
+                        Assets.getGreenTreeFrames() :
+                        rnd < 0.6f ?
+                                Assets.getPinkTreeFrames() :
+                                Assets.getPineTreeFrames();
+                plant.add(AnimationComponent.create()
+                        .addAnimation("DEFAULT", new Animation(1f / 9f, trees)));
+                plant.add(FollowerComponent.create()
+                        .setOffset(offsetVec.x, offsetVec.y)
+                        .setTarget(enemy)
+                        .setBaseRotation(baseRotation));
+
+                enemy.componentRemoved.add(new Listener<Entity>() {
+                    @Override
+                    public void receive(Signal<Entity> signal, Entity object) {
+                        getEngine().removeEntity(plant);
+                    }
+                });
+
+                getEngine().addEntity(plant);
+
+
+                HealthComponent hc = hm.get(enemy);
+                DamageComponent dmg = dm.get(bullet);
+                hc.health = Math.max(0f, (hc.health - dmg.dps));
+
+                if(hc.health <= 0f) {
+                    switch(ec.enemyType){
+                        case ASTEROID_A:
+                            enemy.add(AnimationComponent.create()
+                                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAsteroidAFrames())));
+                            break;
+                        case ASTEROID_B:
+                            enemy.add(AnimationComponent.create()
+                                    .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAsteroidBFrames())));
+                            break;
+                        case ASTEROID_C:
+                            enemy.add(AnimationComponent.create()
+                                    .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAsteroidCFrames())));
+                            break;
+                        case COMET:
+
+                            break;
+                    }
+                    enemy.add(StateComponent.create().set("DEFAULT").setLooping(false));
+                    if(sm.has(enemy)){
+                        sm.get(enemy).setPaused(true);
+                    }
+                }
+                getEngine().removeEntity(bullet);
+
+                break;
+        }
     }
 }

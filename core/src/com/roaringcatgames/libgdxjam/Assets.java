@@ -105,6 +105,9 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getAsteroidA(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a");
     }
+    public static Array<TextureAtlas.AtlasRegion> getAsteroidAFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("asteroid-treed/asterroid-a");
+    }
     private static Array<TextureAtlas.AtlasRegion> fragsA = new Array<>();
     public static Array<TextureAtlas.AtlasRegion> getAsteroidAFrags(){
         if(fragsA.size == 0){
@@ -119,6 +122,9 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getAsteroidB(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b");
     }
+    public static Array<TextureAtlas.AtlasRegion> getAsteroidBFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("asteroid-treed/asterroid-b");
+    }
     private static Array<TextureAtlas.AtlasRegion> fragsB = new Array<>();
     public static Array<TextureAtlas.AtlasRegion> getAsteroidBFrags(){
         if(fragsB.size == 0){
@@ -132,6 +138,9 @@ public class Assets {
 
     public static TextureAtlas.AtlasRegion getAsteroidC(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getAsteroidCFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("asteroid-treed/asterroid-c");
     }
     private static Array<TextureAtlas.AtlasRegion> fragsC = new Array<>();
     public static Array<TextureAtlas.AtlasRegion> getAsteroidCFrags(){
@@ -214,9 +223,11 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getGreenTreeFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/green");
     }
-
     public static Array<TextureAtlas.AtlasRegion> getPinkTreeFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/pink");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getPineTreeFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/pine");
     }
 
     /////////////

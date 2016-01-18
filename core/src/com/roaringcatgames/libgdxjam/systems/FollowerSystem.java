@@ -37,6 +37,7 @@ public class FollowerSystem extends IteratingSystem {
             if(fc.target != null){
                 if(fc.target.isScheduledForRemoval()){
                     fc.target = null;
+                    getEngine().removeEntity(e);
                     continue;
                 }
 

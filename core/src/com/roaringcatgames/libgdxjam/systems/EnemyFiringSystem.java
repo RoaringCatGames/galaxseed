@@ -53,6 +53,9 @@ public class EnemyFiringSystem extends IteratingSystem {
 
         for(Entity spawner:spawners){
             SpawnerComponent sc = sm.get(spawner);
+            if(sc.isPaused){
+                continue;
+            }
             TransformComponent tc = tm.get(spawner);
             float secsBetweenSpawns = 1f/sc.spawnRate;
             sc.elapsedTime += deltaTime;
@@ -78,10 +81,10 @@ public class EnemyFiringSystem extends IteratingSystem {
                                     .setSpeed(spawnVel.x, spawnVel.y));
                             particle.add(RotationComponent.create()
                                     .setRotationSpeed(sc.particleSpeed * 10f));
-                            particle.add(BoundsComponent.create()
-                                    .setBounds(tc.position.x - 0.375f,
-                                            tc.position.y - 0.375f,
-                                            0.75f, 0.75f));
+                            particle.add(CircleBoundsComponent.create()
+                                    .setCircle(tc.position.x,
+                                            tc.position.y,
+                                            0.375f));
                             particle.add(ProjectileComponent.create()
                                     .setDamage(DMG.asteroidRock));
                             particle.add(KinematicComponent.create());
