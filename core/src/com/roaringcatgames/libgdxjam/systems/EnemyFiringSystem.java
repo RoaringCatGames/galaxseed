@@ -11,9 +11,7 @@ import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.DMG;
 import com.roaringcatgames.libgdxjam.Z;
-import com.roaringcatgames.libgdxjam.components.ProjectileComponent;
-import com.roaringcatgames.libgdxjam.components.SpawnerComponent;
-import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
+import com.roaringcatgames.libgdxjam.components.*;
 
 import java.util.Random;
 
@@ -68,6 +66,8 @@ public class EnemyFiringSystem extends IteratingSystem {
                             int target = r.nextInt(sc.particleTextures.size);
 
                             Entity particle = engine.createEntity();
+                            particle.add(EnemyComponent.create()
+                                .setEnemyType(EnemyType.ASTEROID_FRAG));
                             particle.add(WhenOffScreenComponent.create()
                                 .setHasBeenOnScreen(true));
                             particle.add(TextureComponent.create()
@@ -79,9 +79,9 @@ public class EnemyFiringSystem extends IteratingSystem {
                             particle.add(RotationComponent.create()
                                     .setRotationSpeed(sc.particleSpeed * 10f));
                             particle.add(BoundsComponent.create()
-                                    .setBounds(tc.position.x - 0.75f,
-                                            tc.position.y - 0.75f,
-                                            1.5f, 1.5f));
+                                    .setBounds(tc.position.x - 0.375f,
+                                            tc.position.y - 0.375f,
+                                            0.75f, 0.75f));
                             particle.add(ProjectileComponent.create()
                                     .setDamage(DMG.asteroidRock));
                             particle.add(KinematicComponent.create());

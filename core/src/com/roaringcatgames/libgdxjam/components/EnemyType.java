@@ -7,5 +7,6 @@ public enum EnemyType {
     COMET,
     ASTEROID_A,
     ASTEROID_B,
-    ASTEROID_C
+    ASTEROID_C,
+    ASTEROID_FRAG
 }

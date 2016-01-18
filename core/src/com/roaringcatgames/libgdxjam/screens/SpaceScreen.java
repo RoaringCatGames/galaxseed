@@ -66,6 +66,7 @@
             engine.addSystem(new BoundsSystem());
             engine.addSystem(new AnimationSystem());
 
+            engine.addSystem(new CircleBoundsSystem());
             //Custom Systems
             Vector2 minBounds = new Vector2(0f, 0f);
             Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
