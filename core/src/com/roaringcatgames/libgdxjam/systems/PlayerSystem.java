@@ -91,6 +91,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
+
             player.add(VelocityComponent.create()
                     .setSpeed(0f, 0f));
 

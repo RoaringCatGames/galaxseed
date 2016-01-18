@@ -5,10 +5,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
+import com.roaringcatgames.kitten2d.ashley.components.CircleBoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 
@@ -22,6 +24,7 @@ public class CleanUpSystem extends IteratingSystem {
     private ComponentMapper<WhenOffScreenComponent> wosm;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<BoundsComponent> bm;
+    private ComponentMapper<CircleBoundsComponent> cm;
     private Entity bounds;
     private Rectangle targetBounds;
 
@@ -32,6 +35,7 @@ public class CleanUpSystem extends IteratingSystem {
         wosm = ComponentMapper.getFor(WhenOffScreenComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         bm = ComponentMapper.getFor(BoundsComponent.class);
+        cm = ComponentMapper.getFor(CircleBoundsComponent.class);
 
         targetBounds = new Rectangle(
                 minBounds.x,
@@ -69,7 +73,12 @@ public class CleanUpSystem extends IteratingSystem {
                     if (bc.bounds.overlaps(screenBounds.bounds)) {
                         wc.setHasBeenOnScreen(true);
                     }
-                } else {
+                } else if(cm.has(e)) {
+                    CircleBoundsComponent cc = cm.get(e);
+                    if (Intersector.overlaps(cc.circle, screenBounds.bounds)){
+                        wc.setHasBeenOnScreen(true);
+                    }
+                }else{
                     TransformComponent tc = tm.get(e);
                     if (screenBounds.bounds.contains(tc.position.x, tc.position.y)) {
                         wc.setHasBeenOnScreen(true);
@@ -79,6 +88,11 @@ public class CleanUpSystem extends IteratingSystem {
                 if (bm.has(e)) {
                     BoundsComponent bc = bm.get(e);
                     if (!bc.bounds.overlaps(screenBounds.bounds)) {
+                        getEngine().removeEntity(e);
+                    }
+                }else if(cm.has(e)) {
+                    CircleBoundsComponent cc = cm.get(e);
+                    if (!Intersector.overlaps(cc.circle, screenBounds.bounds)){
                         getEngine().removeEntity(e);
                     }
                 } else {

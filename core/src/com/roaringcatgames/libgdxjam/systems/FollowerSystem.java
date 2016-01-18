@@ -41,17 +41,20 @@ public class FollowerSystem extends IteratingSystem {
                 }
 
                 TransformComponent targetPos = tm.get(fc.target);
-                switch(fc.followMode){
-                    case STICKY:
-                        TransformComponent tc = tm.get(e);
-                        Vector2 offset = VectorUtils.rotateVector(fc.offset, targetPos.rotation);
-                        tc.position.set(targetPos.position.x + offset.x, targetPos.position.y + offset.y, targetPos.position.z);
-                        break;
-                    case MOVETO:
+                if(targetPos != null) {
+                    switch (fc.followMode) {
+                        case STICKY:
+                            TransformComponent tc = tm.get(e);
+                            Vector2 offset = VectorUtils.rotateVector(fc.offset, targetPos.rotation);
+                            tc.position.set(targetPos.position.x + offset.x, targetPos.position.y + offset.y, targetPos.position.z);
+                            tc.setRotation(fc.baseRotation + targetPos.rotation);
+                            break;
+                        case MOVETO:
 
-                        break;
-                    default:
-                        break;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 
