@@ -53,6 +53,9 @@ public class EnemyFiringSystem extends IteratingSystem {
 
         for(Entity spawner:spawners){
             SpawnerComponent sc = sm.get(spawner);
+            if(sc.isPaused){
+                continue;
+            }
             TransformComponent tc = tm.get(spawner);
             float secsBetweenSpawns = 1f/sc.spawnRate;
             sc.elapsedTime += deltaTime;

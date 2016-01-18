@@ -16,9 +16,7 @@ import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.Z;
-import com.roaringcatgames.libgdxjam.components.BulletComponent;
-import com.roaringcatgames.libgdxjam.components.EnemyComponent;
-import com.roaringcatgames.libgdxjam.components.FollowerComponent;
+import com.roaringcatgames.libgdxjam.components.*;
 
 import java.util.Random;
 
@@ -35,6 +33,9 @@ public class EnemyDamageSystem extends IteratingSystem {
     private ComponentMapper<EnemyComponent> em;
     private ComponentMapper<CircleBoundsComponent> cm;
     private ComponentMapper<TransformComponent> tm;
+    private ComponentMapper<HealthComponent> hm;
+    private ComponentMapper<DamageComponent> dm;
+    private ComponentMapper<SpawnerComponent> sm;
 
     Random r = new Random();
 
@@ -45,6 +46,9 @@ public class EnemyDamageSystem extends IteratingSystem {
         bndm = ComponentMapper.getFor(BoundsComponent.class);
         cm = ComponentMapper.getFor(CircleBoundsComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
+        hm = ComponentMapper.getFor(HealthComponent.class);
+        dm = ComponentMapper.getFor(DamageComponent.class);
+        sm = ComponentMapper.getFor(SpawnerComponent.class);
     }
 
 
@@ -80,10 +84,12 @@ public class EnemyDamageSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
-        if(bm.has(entity)){
-            bullets.add(entity);
-        }else{
-            enemies.add(entity);
+        if(!entity.isScheduledForRemoval()) {
+            if (bm.has(entity)) {
+                bullets.add(entity);
+            } else {
+               enemies.add(entity);
+            }
         }
     }
 
@@ -100,7 +106,6 @@ public class EnemyDamageSystem extends IteratingSystem {
                 break;
 
             default:
-
                 CircleBoundsComponent bb = cm.get(bullet);
                 CircleBoundsComponent eb = cm.get(enemy);
                 TransformComponent et = tm.get(enemy);
@@ -142,7 +147,37 @@ public class EnemyDamageSystem extends IteratingSystem {
                 });
 
                 getEngine().addEntity(plant);
+
+
+                HealthComponent hc = hm.get(enemy);
+                DamageComponent dmg = dm.get(bullet);
+                hc.health = Math.max(0f, (hc.health - dmg.dps));
+
+                if(hc.health <= 0f) {
+                    switch(ec.enemyType){
+                        case ASTEROID_A:
+                            enemy.add(AnimationComponent.create()
+                                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAsteroidAFrames())));
+                            break;
+                        case ASTEROID_B:
+                            enemy.add(AnimationComponent.create()
+                                    .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAsteroidBFrames())));
+                            break;
+                        case ASTEROID_C:
+                            enemy.add(AnimationComponent.create()
+                                    .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAsteroidCFrames())));
+                            break;
+                        case COMET:
+
+                            break;
+                    }
+                    enemy.add(StateComponent.create().set("DEFAULT").setLooping(false));
+                    if(sm.has(enemy)){
+                        sm.get(enemy).setPaused(true);
+                    }
+                }
                 getEngine().removeEntity(bullet);
+
                 break;
         }
     }

@@ -90,12 +90,14 @@ public class EnemySpawnSystem extends IteratingSystem {
 
         float cnt = r.nextFloat();
         float size;
+        float health;
         TextureRegion tr;
         EnemyType eType;
         if(cnt < 0.33f) {
             tr = Assets.getAsteroidA();
             eType = EnemyType.ASTEROID_A;
             size = 2.5f;
+            health = 50f;
 
             spawner.setParticleSpeed(15f)
                 .setParticleTextures(Assets.getAsteroidAFrags())
@@ -105,6 +107,8 @@ public class EnemySpawnSystem extends IteratingSystem {
             tr = Assets.getAsteroidB();
             eType = EnemyType.ASTEROID_B;
             size = 3.75f;
+            health = 80f;
+
             spawner.setParticleSpeed(18f)
                 .setParticleTextures(Assets.getAsteroidBFrags())
                 .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
@@ -113,14 +117,19 @@ public class EnemySpawnSystem extends IteratingSystem {
             tr = Assets.getAsteroidC();
             eType = EnemyType.ASTEROID_C;
             size = 5f;
+            health = 110f;
+
             spawner.setParticleSpeed(20f)
                 .setParticleTextures(Assets.getAsteroidCFrags())
                 .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                 .setSpawnRate(3f);
         }
         enemy.add(spawner);
+        enemy.add(HealthComponent.create()
+            .setHealth(health)
+            .setMaxHealth(health));
         enemy.add(CircleBoundsComponent.create()
-                .setCircle(xPos, yPos, size/2f));
+                .setCircle(xPos, yPos, size / 2f));
         enemy.add(TextureComponent.create()
             .setRegion(tr));
         enemy.add(EnemyComponent.create()
@@ -144,6 +153,10 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setPosition(xPos, yPos, Z.enemy)
                 .setScale(1f, 1f)
                 .setRotation(rot));
+
+            enemy.add(HealthComponent.create()
+                .setMaxHealth(10f)
+                .setMaxHealth(10f));
 
             enemy.add(CircleBoundsComponent.create()
                 .setCircle(xPos, yPos, 0.25f)

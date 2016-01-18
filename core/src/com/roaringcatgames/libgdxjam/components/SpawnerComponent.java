@@ -14,6 +14,7 @@ public class SpawnerComponent implements Component {
     public float spawnRate = 1f;
     public float lastSpawnTime = 0f;
     public float elapsedTime = 0f;
+    public boolean isPaused = false;
     public SpawnStrategy strategy = SpawnStrategy.ALL_DIRECTIONS;
 
     public static SpawnerComponent create(){
@@ -38,6 +39,11 @@ public class SpawnerComponent implements Component {
 
     public SpawnerComponent setParticleSpeed(float speed){
         this.particleSpeed = speed;
+        return this;
+    }
+
+    public SpawnerComponent setPaused(boolean pause){
+        this.isPaused = pause;
         return this;
     }
 }

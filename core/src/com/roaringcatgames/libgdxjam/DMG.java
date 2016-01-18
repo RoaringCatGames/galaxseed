@@ -8,4 +8,6 @@ public class DMG {
     public static final int comet = 5;
     public static final int asteroidRock = 2;
     public static final int asteroid = 10;
+
+    public static final int seed = 5;
 }

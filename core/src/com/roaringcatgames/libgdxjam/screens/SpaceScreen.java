@@ -71,18 +71,19 @@
             //Custom Systems
             Vector2 minBounds = new Vector2(0f, 0f);
             Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
+            engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-1f), maxBounds.cpy().scl(2f)));
             engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
             engine.addSystem(new FiringSystem());
             engine.addSystem(new EnemySpawnSystem());
             engine.addSystem(new EnemyFiringSystem());
-            engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-1f), maxBounds.cpy().scl(2f)));
             engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
             engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
             engine.addSystem(new BackgroundSystem(minBounds, maxBounds, true));
             engine.addSystem(new BulletSystem());
-            engine.addSystem(new FollowerSystem());
             engine.addSystem(new EnemyDamageSystem());
             engine.addSystem(new PlayerDamageSystem());
+            engine.addSystem(new FollowerSystem());
+
 
             //Extension Systems
             engine.addSystem(renderingSystem);
