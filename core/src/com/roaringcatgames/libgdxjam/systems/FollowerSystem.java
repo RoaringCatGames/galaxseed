@@ -34,27 +34,27 @@ public class FollowerSystem extends IteratingSystem {
 
         for(Entity e:queue){
             FollowerComponent fc = fm.get(e);
-            if(fc.target != null){
+            if(fc.target != null) {
                 if(fc.target.isScheduledForRemoval()){
                     fc.target = null;
                     getEngine().removeEntity(e);
-                    continue;
-                }
+                }else {
 
-                TransformComponent targetPos = tm.get(fc.target);
-                if(targetPos != null) {
-                    switch (fc.followMode) {
-                        case STICKY:
-                            TransformComponent tc = tm.get(e);
-                            Vector2 offset = VectorUtils.rotateVector(fc.offset, targetPos.rotation);
-                            tc.position.set(targetPos.position.x + offset.x, targetPos.position.y + offset.y, targetPos.position.z);
-                            tc.setRotation(fc.baseRotation + targetPos.rotation);
-                            break;
-                        case MOVETO:
+                    TransformComponent targetPos = tm.get(fc.target);
+                    if (targetPos != null) {
+                        switch (fc.followMode) {
+                            case STICKY:
+                                TransformComponent tc = tm.get(e);
+                                Vector2 offset = VectorUtils.rotateVector(fc.offset, targetPos.rotation);
+                                tc.position.set(targetPos.position.x + offset.x, targetPos.position.y + offset.y, targetPos.position.z);
+                                tc.setRotation(fc.baseRotation + targetPos.rotation);
+                                break;
+                            case MOVETO:
 
-                            break;
-                        default:
-                            break;
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }

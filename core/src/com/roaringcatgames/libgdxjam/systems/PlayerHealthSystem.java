@@ -28,6 +28,7 @@ public class PlayerHealthSystem extends IteratingSystem {
     private OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
     private Entity player;
+    private Color healthColor;
     private boolean isInitialized = false;
 
     public PlayerHealthSystem(OrthographicCamera cam){
@@ -37,6 +38,8 @@ public class PlayerHealthSystem extends IteratingSystem {
         tm = ComponentMapper.getFor(TransformComponent.class);
         this.cam = cam;
         shapeRenderer = new ShapeRenderer();
+
+        healthColor = new Color(0f, 200f, 50f, 0.8f);
     }
 
     @Override
@@ -59,14 +62,12 @@ public class PlayerHealthSystem extends IteratingSystem {
 
         Gdx.gl20.glLineWidth(1f);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.GREEN);
+
+        shapeRenderer.setColor(healthColor);
         //InnerBar
         float width = bc.bounds.width * (hc.health/hc.maxHealth);
         shapeRenderer.rect(bc.bounds.x, bc.bounds.y, width, bc.bounds.height);
         shapeRenderer.end();
-
-
-
     }
 
     private void init(){
@@ -76,6 +77,7 @@ public class PlayerHealthSystem extends IteratingSystem {
         healthBar.add(BoundsComponent.create()
             .setBounds(0.1f, 0.1f, 19.8f, 1f));
         getEngine().addEntity(healthBar);
+        isInitialized = true;
     }
 
     @Override

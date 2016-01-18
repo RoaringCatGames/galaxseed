@@ -36,6 +36,7 @@ public class EnemyDamageSystem extends IteratingSystem {
     private ComponentMapper<HealthComponent> hm;
     private ComponentMapper<DamageComponent> dm;
     private ComponentMapper<SpawnerComponent> sm;
+    private ComponentMapper<StateComponent> stm;
 
     Random r = new Random();
 
@@ -49,6 +50,7 @@ public class EnemyDamageSystem extends IteratingSystem {
         hm = ComponentMapper.getFor(HealthComponent.class);
         dm = ComponentMapper.getFor(DamageComponent.class);
         sm = ComponentMapper.getFor(SpawnerComponent.class);
+        stm = ComponentMapper.getFor(StateComponent.class);
     }
 
 
@@ -99,59 +101,21 @@ public class EnemyDamageSystem extends IteratingSystem {
     private void processCollision(Entity bullet, Entity enemy){
 
         EnemyComponent ec = em.get(enemy);
+        HealthComponent hc;
         switch(ec.enemyType) {
             case ASTEROID_FRAG:
                 getEngine().removeEntity(bullet);
                 getEngine().removeEntity(enemy);
                 break;
 
+            case COMET:
+                attachPlant(bullet, enemy);
+                hc = applyHealthChange(bullet, enemy);
             default:
-                CircleBoundsComponent bb = cm.get(bullet);
-                CircleBoundsComponent eb = cm.get(enemy);
-                TransformComponent et = tm.get(enemy);
-                bulletPos.set(bb.circle.x, bb.circle.y);
-                enemyPos.set(eb.circle.x, eb.circle.y);
+                attachPlant(bullet, enemy);
 
-                Vector2 outVec = bulletPos.sub(enemyPos).nor();
-                outVec = outVec.scl(eb.circle.radius);
+                hc = applyHealthChange(bullet, enemy);
 
-                Vector2 offsetVec = VectorUtils.rotateVector(outVec.cpy(), -et.rotation).add(eb.offset);
-                float baseRotation = offsetVec.angle() - 90f;
-
-                final Entity plant = ((PooledEngine) getEngine()).createEntity();
-                plant.add(TransformComponent.create()
-                        .setPosition(outVec.x, outVec.y, Z.plant)
-                        .setRotation(et.rotation + baseRotation));
-                plant.add(TextureComponent.create());
-                plant.add(StateComponent.create()
-                        .set("DEFAULT")
-                        .setLooping(false));
-                float rnd = r.nextFloat();
-                Array<TextureAtlas.AtlasRegion> trees = rnd < 0.3f ?
-                        Assets.getGreenTreeFrames() :
-                        rnd < 0.6f ?
-                                Assets.getPinkTreeFrames() :
-                                Assets.getPineTreeFrames();
-                plant.add(AnimationComponent.create()
-                        .addAnimation("DEFAULT", new Animation(1f / 9f, trees)));
-                plant.add(FollowerComponent.create()
-                        .setOffset(offsetVec.x, offsetVec.y)
-                        .setTarget(enemy)
-                        .setBaseRotation(baseRotation));
-
-                enemy.componentRemoved.add(new Listener<Entity>() {
-                    @Override
-                    public void receive(Signal<Entity> signal, Entity object) {
-                        getEngine().removeEntity(plant);
-                    }
-                });
-
-                getEngine().addEntity(plant);
-
-
-                HealthComponent hc = hm.get(enemy);
-                DamageComponent dmg = dm.get(bullet);
-                hc.health = Math.max(0f, (hc.health - dmg.dps));
 
                 if(hc.health <= 0f) {
                     switch(ec.enemyType){
@@ -172,13 +136,68 @@ public class EnemyDamageSystem extends IteratingSystem {
                             break;
                     }
                     enemy.add(StateComponent.create().set("DEFAULT").setLooping(false));
+
                     if(sm.has(enemy)){
                         sm.get(enemy).setPaused(true);
                     }
                 }
+
+
                 getEngine().removeEntity(bullet);
 
                 break;
         }
+    }
+
+    private HealthComponent applyHealthChange(Entity bullet, Entity enemy) {
+        HealthComponent hc = hm.get(enemy);
+        DamageComponent dmg = dm.get(bullet);
+        hc.health = Math.max(0f, (hc.health - dmg.dps));
+        return hc;
+    }
+
+    private void attachPlant(Entity bullet, Entity enemy) {
+        CircleBoundsComponent bb = cm.get(bullet);
+        CircleBoundsComponent eb = cm.get(enemy);
+        TransformComponent et = tm.get(enemy);
+        bulletPos.set(bb.circle.x, bb.circle.y);
+        enemyPos.set(eb.circle.x, eb.circle.y);
+
+        Vector2 outVec = bulletPos.sub(enemyPos).nor();
+        outVec = outVec.scl(eb.circle.radius);
+
+        Vector2 offsetVec = VectorUtils.rotateVector(outVec.cpy(), -et.rotation).add(eb.offset);
+        float baseRotation = offsetVec.angle() - 90f;
+
+        final Entity plant = ((PooledEngine) getEngine()).createEntity();
+        plant.add(TransformComponent.create()
+                .setPosition(outVec.x, outVec.y, Z.plant)
+                .setRotation(et.rotation + baseRotation));
+        plant.add(TextureComponent.create());
+        plant.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(false));
+        float rnd = r.nextFloat();
+        Array<TextureAtlas.AtlasRegion> trees = rnd < 0.3f ?
+                Assets.getGreenTreeFrames() :
+                rnd < 0.6f ?
+                        Assets.getPinkTreeFrames() :
+                        Assets.getPineTreeFrames();
+        plant.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(1f / 9f, trees)));
+        plant.add(FollowerComponent.create()
+                .setOffset(offsetVec.x, offsetVec.y)
+                .setTarget(enemy)
+                .setBaseRotation(baseRotation));
+
+        enemy.componentRemoved.add(new Listener<Entity>() {
+            @Override
+            public void receive(Signal<Entity> signal, Entity object) {
+                getEngine().removeEntity(plant);
+            }
+        });
+
+        getEngine().addEntity(plant);
+
     }
 }

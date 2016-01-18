@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -35,6 +36,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
 
 
     private Entity startGameButton;
+    private Entity plant;
 
     public MenuScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
         super();
@@ -76,10 +78,10 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false));
         engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
-//        engine.addSystem(new FiringSystem());
-//        engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
-//        engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
-//        engine.addSystem(new BulletSystem());
+        engine.addSystem(new FiringSystem());
+        engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
+        engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
+        engine.addSystem(new BulletSystem());
         engine.addSystem(new FollowerSystem());
         //Extension Systems
         engine.addSystem(renderingSystem);
@@ -88,19 +90,54 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
 
 
         startGameButton = engine.createEntity();
+        startGameButton.add(TextureComponent.create()
+            .setRegion(Assets.getStartButtonImage()));
+        startGameButton.add(TransformComponent.create()
+                .setPosition(10f, 20f));
         startGameButton.add(BoundsComponent.create()
-                .setBounds(9.25f, 22f, 4f, 4f));
+                .setBounds(9.25f, 22f, 10f, 4f));
         engine.addEntity(startGameButton);
+
+        Entity title = engine.createEntity();
+        title.add(TextureComponent.create()
+                .setRegion(Assets.getTitleImage()));
+        title.add(TransformComponent.create()
+                .setPosition(10.8f, 25f));
+        engine.addEntity(title);
+
+        plant = engine.createEntity();
+        plant.add(StateComponent.create()
+            .setLooping(false).set("DEFAULT"));
+        plant.add(TextureComponent.create());
+        plant.add(AnimationComponent.create()
+            .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getTitleTreeFrames()))
+            .addAnimation("LEAF", new Animation(1f/12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP)));
+        plant.add(TransformComponent.create()
+            .setPosition(1.7f, 24f));
+        engine.addEntity(plant);
+
 
         App.game.multiplexer.addProcessor(this);
     }
 
+    boolean treeLeafing = false;
     /**************************
      * Screen Adapter Methods
      **************************/
     @Override
     protected void update(float deltaChange) {
         engine.update(Math.min(deltaChange, App.MAX_DELTA_TICK));
+
+        if(!treeLeafing) {
+            StateComponent sc = plant.getComponent(StateComponent.class);
+            AnimationComponent ac = plant.getComponent(AnimationComponent.class);
+            if (ac.animations.get(sc.get()).isAnimationFinished(sc.time)) {
+                sc.set("LEAF").setLooping(true);
+                treeLeafing = true;
+            }
+
+        }
+
     }
 
     @Override

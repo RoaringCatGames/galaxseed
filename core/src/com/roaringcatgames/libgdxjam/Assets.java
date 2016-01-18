@@ -43,6 +43,20 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getTouchPoint(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("touch-point");
     }
+
+    public static TextureAtlas.AtlasRegion getTitleImage(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/Title");
+    }
+    public static TextureAtlas.AtlasRegion getStartButtonImage(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/start");
+    }
+
+    public static Array<TextureAtlas.AtlasRegion> getTitleTreeFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("cherry title/cherry-title");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getTitleTreeLeafFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("cherry title/cherry-title-leaf");
+    }
     /***
      * SAFE IMMEDIATELY after am.load() is called
      * @return AtlasRegion for the bg Tile sprite.
@@ -59,8 +73,6 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getGalaxyB(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("galaxy-b");
     }
-
-
 
 
     public static TextureAtlas.AtlasRegion getPlanetA(){
