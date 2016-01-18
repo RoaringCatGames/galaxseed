@@ -209,6 +209,17 @@ public class Assets {
     }
 
     /////////////
+    //Life
+    /////////////
+    public static Array<TextureAtlas.AtlasRegion> getGreenTreeFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/green");
+    }
+
+    public static Array<TextureAtlas.AtlasRegion> getPinkTreeFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/pink");
+    }
+
+    /////////////
     //Comets
     /////////////
     public static Array<TextureAtlas.AtlasRegion> getCometFrames(){

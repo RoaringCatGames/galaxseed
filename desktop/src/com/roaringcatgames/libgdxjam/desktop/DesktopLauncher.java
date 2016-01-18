@@ -12,6 +12,7 @@ public class DesktopLauncher {
 		config.title = "Life In Space";
 		config.height = 960;
 		config.width = 640;
+		config.samples = 4;
 		new LwjglApplication(App.Initialize(), config);
 	}
 }

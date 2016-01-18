@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 public class FollowerComponent implements Component{
     public Entity target = null;
     public Vector2 offset = new Vector2(0f, 0f);
+    public float baseRotation = 0f;
+
     public FollowMode followMode = FollowMode.STICKY;
 
     public static FollowerComponent create(){
@@ -28,6 +30,11 @@ public class FollowerComponent implements Component{
 
     public FollowerComponent setMode(FollowMode mode){
         this.followMode = mode;
+        return this;
+    }
+
+    public FollowerComponent setBaseRotation(float rot){
+        this.baseRotation = rot;
         return this;
     }
 

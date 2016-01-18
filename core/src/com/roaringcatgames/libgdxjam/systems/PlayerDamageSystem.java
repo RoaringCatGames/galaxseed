@@ -7,8 +7,8 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
+import com.roaringcatgames.kitten2d.ashley.components.CircleBoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.HealthComponent;
-import com.roaringcatgames.libgdxjam.components.CircleBoundsComponent;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.ProjectileComponent;
 
