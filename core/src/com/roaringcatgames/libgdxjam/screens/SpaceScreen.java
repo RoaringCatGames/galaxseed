@@ -89,7 +89,7 @@
             engine.addSystem(renderingSystem);
             engine.addSystem(new PlayerHealthSystem(cam));
             //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
-            engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
+            //engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
             App.game.multiplexer.addProcessor(this);
         }
 
@@ -117,15 +117,15 @@
         @Override
         public boolean keyDown(int keycode) {
 
-            if(keycode == Input.Keys.ESCAPE){
-                for(EntitySystem s:engine.getSystems()){
-                    if(!(s instanceof RenderingSystem) &&
-                            !(s instanceof DebugSystem) &&
-                            !(s instanceof PlayerHealthSystem)) {
-                        s.setProcessing(!s.checkProcessing());
-                    }
-                }
-            }
+//            if(keycode == Input.Keys.ESCAPE){
+//                for(EntitySystem s:engine.getSystems()){
+//                    if(!(s instanceof RenderingSystem) &&
+//                            !(s instanceof DebugSystem) &&
+//                            !(s instanceof PlayerHealthSystem)) {
+//                        s.setProcessing(!s.checkProcessing());
+//                    }
+//                }
+//            }
 
             return false;
         }
@@ -162,7 +162,7 @@
 
         @Override
         public boolean scrolled(int amount) {
-            cam.zoom += amount * 0.5f;
+            //cam.zoom += amount * 0.5f;
             return false;
         }
 

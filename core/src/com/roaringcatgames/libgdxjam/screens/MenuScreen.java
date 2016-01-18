@@ -166,13 +166,18 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         return false;
     }
 
+    boolean isMenu = true;
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        touchPoint.set(screenX, screenY, 0f);
-        touchPoint = cam.unproject(touchPoint);
+        if(isMenu) {
+            touchPoint.set(screenX, screenY, 0f);
+            touchPoint = cam.unproject(touchPoint);
 
-        if(startGameButton.getComponent(BoundsComponent.class).bounds.contains(touchPoint.x, touchPoint.y)){
-            dispatcher.endCurrentScreen();
+            if (startGameButton.getComponent(BoundsComponent.class).bounds.contains(touchPoint.x, touchPoint.y)) {
+                dispatcher.endCurrentScreen();
+                isMenu = false;
+            }
         }
         return false;
     }
@@ -195,7 +200,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
 
-        cam.zoom += amount * 0.5f;
+        //cam.zoom += amount * 0.5f;
         return false;
     }
 
