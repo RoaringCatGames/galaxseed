@@ -72,7 +72,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(KinematicComponent.create());
             player.add(PlayerComponent.create());
             player.add(HealthComponent.create()
-                .setHealth(App.getPlayerHealth()));
+                .setHealth(App.getPlayerHealth())
+                .setMaxHealth(App.getPlayerHealth()));
             player.add(TransformComponent.create()
                     .setPosition(initialPosition.x, initialPosition.y, initialPosition.z)
                     .setScale(initialScale, initialScale));
