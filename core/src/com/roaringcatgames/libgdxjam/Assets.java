@@ -214,9 +214,11 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getGreenTreeFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/green");
     }
-
     public static Array<TextureAtlas.AtlasRegion> getPinkTreeFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/pink");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getPineTreeFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/pine");
     }
 
     /////////////

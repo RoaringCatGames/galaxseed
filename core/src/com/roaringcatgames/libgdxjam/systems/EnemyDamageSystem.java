@@ -91,44 +91,59 @@ public class EnemyDamageSystem extends IteratingSystem {
     private Vector2 bulletPos = new Vector2();
     private Vector2 enemyPos = new Vector2();
     private void processCollision(Entity bullet, Entity enemy){
-        CircleBoundsComponent bb = cm.get(bullet);
-        CircleBoundsComponent eb = cm.get(enemy);
-        TransformComponent et = tm.get(enemy);
-        bulletPos.set(bb.circle.x, bb.circle.y);
-        enemyPos.set(eb.circle.x, eb.circle.y);
 
-        Vector2 outVec = bulletPos.sub(enemyPos).nor();
-        outVec = outVec.scl(eb.circle.radius);
+        EnemyComponent ec = em.get(enemy);
+        switch(ec.enemyType) {
+            case ASTEROID_FRAG:
+                getEngine().removeEntity(bullet);
+                getEngine().removeEntity(enemy);
+                break;
 
-        Vector2 offsetVec = VectorUtils.rotateVector(outVec.cpy(), -et.rotation);
-        float baseRotation = offsetVec.angle() - 90f;
+            default:
 
-        final Entity plant = ((PooledEngine)getEngine()).createEntity();
-        plant.add(TransformComponent.create()
-            .setPosition(outVec.x, outVec.y, Z.plant)
-            .setRotation(et.rotation + baseRotation));
-        plant.add(TextureComponent.create());
-        plant.add(StateComponent.create()
-            .set("DEFAULT")
-            .setLooping(false));
-        Array<TextureAtlas.AtlasRegion> trees = r.nextFloat() < 0.5f ?
-                Assets.getGreenTreeFrames() :
-                Assets.getPinkTreeFrames();
-        plant.add(AnimationComponent.create()
-            .addAnimation("DEFAULT", new Animation(1f / 9f, trees)));
-        plant.add(FollowerComponent.create()
-            .setOffset(offsetVec.x, offsetVec.y)
-            .setTarget(enemy)
-            .setBaseRotation(baseRotation));
+                CircleBoundsComponent bb = cm.get(bullet);
+                CircleBoundsComponent eb = cm.get(enemy);
+                TransformComponent et = tm.get(enemy);
+                bulletPos.set(bb.circle.x, bb.circle.y);
+                enemyPos.set(eb.circle.x, eb.circle.y);
 
-        enemy.componentRemoved.add(new Listener<Entity>() {
-            @Override
-            public void receive(Signal<Entity> signal, Entity object) {
-                getEngine().removeEntity(plant);
-            }
-        });
+                Vector2 outVec = bulletPos.sub(enemyPos).nor();
+                outVec = outVec.scl(eb.circle.radius);
 
-        getEngine().addEntity(plant);
-        getEngine().removeEntity(bullet);
+                Vector2 offsetVec = VectorUtils.rotateVector(outVec.cpy(), -et.rotation).add(eb.offset);
+                float baseRotation = offsetVec.angle() - 90f;
+
+                final Entity plant = ((PooledEngine) getEngine()).createEntity();
+                plant.add(TransformComponent.create()
+                        .setPosition(outVec.x, outVec.y, Z.plant)
+                        .setRotation(et.rotation + baseRotation));
+                plant.add(TextureComponent.create());
+                plant.add(StateComponent.create()
+                        .set("DEFAULT")
+                        .setLooping(false));
+                float rnd = r.nextFloat();
+                Array<TextureAtlas.AtlasRegion> trees = rnd < 0.3f ?
+                        Assets.getGreenTreeFrames() :
+                        rnd < 0.6f ?
+                                Assets.getPinkTreeFrames() :
+                                Assets.getPineTreeFrames();
+                plant.add(AnimationComponent.create()
+                        .addAnimation("DEFAULT", new Animation(1f / 9f, trees)));
+                plant.add(FollowerComponent.create()
+                        .setOffset(offsetVec.x, offsetVec.y)
+                        .setTarget(enemy)
+                        .setBaseRotation(baseRotation));
+
+                enemy.componentRemoved.add(new Listener<Entity>() {
+                    @Override
+                    public void receive(Signal<Entity> signal, Entity object) {
+                        getEngine().removeEntity(plant);
+                    }
+                });
+
+                getEngine().addEntity(plant);
+                getEngine().removeEntity(bullet);
+                break;
+        }
     }
 }

@@ -46,9 +46,9 @@ public class EnemySpawnSystem extends IteratingSystem {
         //Spawn Comets
         if(cometTimer.doesTriggerThisStep(deltaTime)){
             float leftPosition = (-10f * r.nextFloat()) -5f;
-            generateEnemy(leftPosition, 40f, 5f, -8f);
+            generateEnemy(leftPosition, 40f, 4f, -6f);
             float rightPosition = (10f * r.nextFloat()) + 25f;
-            generateEnemy(rightPosition, 40f, -5f, -8f);
+            generateEnemy(rightPosition, 40f, -4f, -6f);
         }
 
         //Spawn Asteroids
@@ -145,8 +145,8 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setScale(1f, 1f)
                 .setRotation(rot));
 
-            enemy.add(BoundsComponent.create()
-                .setBounds(xPos - 0.25f, yPos - 0.25f, 0.5f, 0.5f)
+            enemy.add(CircleBoundsComponent.create()
+                .setCircle(xPos, yPos, 0.25f)
                 .setOffset(0f, -1.25f));
             enemy.add(TextureComponent.create());
             enemy.add(AnimationComponent.create()
