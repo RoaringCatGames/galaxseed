@@ -28,7 +28,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private float initialScale;
 
     private float deceleration = 100f;
-    private float maxVelocity = 15f;
+    private float maxVelocity = 25f;
     private float ACCEL_RATE = 40f;
     private float accelerationX = 0f;
     private float accelerationY = 0f;
@@ -41,6 +41,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private ComponentMapper<VelocityComponent> vm;
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<BoundsComponent> bm;
+    private ComponentMapper<TransformComponent> tm;
 
     private OrthographicCamera cam;
 
@@ -51,6 +52,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         this.vm = ComponentMapper.getFor(VelocityComponent.class);
         this.sm = ComponentMapper.getFor(StateComponent.class);
         this.bm = ComponentMapper.getFor(BoundsComponent.class);
+        this.tm = ComponentMapper.getFor(TransformComponent.class);
         this.cam = cam;
 
         this.controlOrigin = new Vector2();
@@ -146,26 +148,29 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             init();
         }
 
-        VelocityComponent vc = vm.get(player);
         StateComponent sc = sm.get(player);
+        TransformComponent tc = tm.get(player);
+        tc.position.add(currentPositionChange);
+//        VelocityComponent vc = vm.get(player);
 
-        float newX = vc.speed.x;
-        float newY = vc.speed.y;
-        if(accelerationX != 0f && Math.abs(newX) < maxVelocity){
-            newX = applyAcceleration(deltaTime, newX, accelerationX);
-        }else if(newX != 0f){
-            newX = applyDeceleration(deltaTime, newX);
-        }
-
-        //Y Accel
-        if(accelerationY != 0f && Math.abs(newY) < maxVelocity){
-            newY = applyAcceleration(deltaTime, newY, accelerationY);
-        }else if(newY != 0f){
-            newY = applyDeceleration(deltaTime, newY);
-        }
-
-        vc.speed.set(newX, newY);
-
+//
+//        float newX = vc.speed.x;
+//        float newY = vc.speed.y;
+//        if(accelerationX != 0f && Math.abs(newX) < maxVelocity){
+//            newX = applyAcceleration(deltaTime, newX, accelerationX);
+//        }else if(newX != 0f){
+//            newX = applyDeceleration(deltaTime, newX);
+//        }
+//
+//        //Y Accel
+//        if(accelerationY != 0f && Math.abs(newY) < maxVelocity){
+//            newY = applyAcceleration(deltaTime, newY, accelerationY);
+//        }else if(newY != 0f){
+//            newY = applyDeceleration(deltaTime, newY);
+//        }
+//
+//        vc.speed.set(newX, newY);
+//
         /**********************
          * Set Animation State
          **********************/
@@ -173,13 +178,16 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         String flameState;
         boolean isLooping = true;
         //right
-        if(accelerationX > 0f){
+        if(currentPositionChange.x > 0f) {
+            //if(accelerationX > 0f){
             state = "FLYING_RIGHT";
             isLooping = false;
-        }else if(accelerationX < 0f){
+        }else if(currentPositionChange.x < 0f) {
+            //}else if(accelerationX < 0f){
             state = "FLYING_LEFT";
             isLooping = false;
-        }else if(accelerationY != 0f){
+        }else if(currentPositionChange.y != 0f){
+        //}else if(accelerationY != 0f){
             state = "FLYING";
         }
 
@@ -263,26 +271,37 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         accelerationX = 0f;
         accelerationY = 0f;
         touchIndicator.getComponent(TransformComponent.class).isHidden = true;
+        currentPositionChange.set(0f, 0f, 0f);
         return false;
     }
 
+    Vector3 currentPositionChange = new Vector3();
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
-        dragPoint.set(screenX, screenY, 0f);
-        dragPoint = cam.unproject(dragPoint);
+        currentPositionChange.set(screenX, screenY, 0f);
+        currentPositionChange = cam.unproject(currentPositionChange);
+        Vector3 newTouchPosition = currentPositionChange.cpy();
 
-        if(dragPoint.x > controlOrigin.x){
-            accelerationX = ACCEL_RATE;
-        }else if(dragPoint.x < controlOrigin.x){
-            accelerationX = -ACCEL_RATE;
-        }
+        currentPositionChange.sub(touchPoint);
+        touchPoint.set(newTouchPosition);
 
-        if(dragPoint.y > controlOrigin.y){
-            accelerationY = ACCEL_RATE;
-        }else if(dragPoint.y < controlOrigin.y){
-            accelerationY = -ACCEL_RATE;
-        }
+
+
+//        dragPoint.set(screenX, screenY, 0f);
+//        dragPoint = cam.unproject(dragPoint);
+//
+//        if(dragPoint.x > controlOrigin.x){
+//            accelerationX = ACCEL_RATE;
+//        }else if(dragPoint.x < controlOrigin.x){
+//            accelerationX = -ACCEL_RATE;
+//        }
+//
+//        if(dragPoint.y > controlOrigin.y){
+//            accelerationY = ACCEL_RATE;
+//        }else if(dragPoint.y < controlOrigin.y){
+//            accelerationY = -ACCEL_RATE;
+//        }
 
         return false;
     }
@@ -302,22 +321,22 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
      * Private Methods
      ************************/
     private float applyDeceleration(float deltaTime, float inputSpeed) {
-        //return 0f;
-        float newSpeed;
-        boolean isReverse = inputSpeed < 0f;
-        float adjust = !isReverse ?  -deceleration *deltaTime : deceleration *deltaTime;
-        newSpeed = inputSpeed + adjust;
-        newSpeed =  isReverse ? Math.min(0f, newSpeed) : Math.max(0f, newSpeed);
-        return newSpeed;
+        return 0f;
+//        float newSpeed;
+//        boolean isReverse = inputSpeed < 0f;
+//        float adjust = !isReverse ?  -deceleration *deltaTime : deceleration *deltaTime;
+//        newSpeed = inputSpeed + adjust;
+//        newSpeed =  isReverse ? Math.min(0f, newSpeed) : Math.max(0f, newSpeed);
+//        return newSpeed;
     }
 
     private float applyAcceleration(float deltaTime, float inputSpeed, float acceleration) {
-        //return acceleration > 0f ? maxVelocity : -maxVelocity;
+        return acceleration > 0f ? maxVelocity : -maxVelocity;
 
-        float newSpeed;
-        float adjust = acceleration *deltaTime;
-        newSpeed = inputSpeed + adjust;
-        newSpeed = newSpeed > 0 ? Math.min(maxVelocity, newSpeed) : Math.max(-maxVelocity, newSpeed);
-        return newSpeed;
+//        float newSpeed;
+//        float adjust = acceleration *deltaTime;
+//        newSpeed = inputSpeed + adjust;
+//        newSpeed = newSpeed > 0 ? Math.min(maxVelocity, newSpeed) : Math.max(-maxVelocity, newSpeed);
+//        return newSpeed;
     }
 }

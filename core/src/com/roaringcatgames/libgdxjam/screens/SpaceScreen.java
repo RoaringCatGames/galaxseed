@@ -162,7 +162,7 @@
 
         @Override
         public boolean scrolled(int amount) {
-            //cam.zoom += amount * 0.5f;
+            cam.zoom += amount * 0.5f;
             return false;
         }
 

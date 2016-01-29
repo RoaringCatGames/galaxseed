@@ -38,7 +38,7 @@ public class FiringSystem extends IteratingSystem {
         super.update(deltaTime);
         if(player != null) {
             VelocityComponent pv = player.getComponent(VelocityComponent.class);
-            if(pv.speed.x != 0f || pv.speed.y != 0f) {
+            //if(pv.speed.x != 0f || pv.speed.y != 0f) {
                 timeBetweenFiring = 1f / firingRate;
                 timeElapsed += deltaTime;
 
@@ -56,7 +56,7 @@ public class FiringSystem extends IteratingSystem {
                     generateBullet(1.312f, -0.8f, 0f, bulletSpeed);
 
                 }
-            }
+            //}
         }
 
         player = null;
