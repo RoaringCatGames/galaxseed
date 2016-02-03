@@ -8,8 +8,8 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.DMG;
-import com.roaringcatgames.libgdxjam.Z;
+import com.roaringcatgames.libgdxjam.values.Damage;
+import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.BulletComponent;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
@@ -23,7 +23,7 @@ public class FiringSystem extends IteratingSystem {
     private float timeBetweenFiring = 1f/firingRate;
     private float lastFireTime = 0f;
     private float timeElapsed = 0f;
-    private float bulletSpeed = 15f;
+    private float bulletSpeed = 30f;
     private ComponentMapper<TransformComponent> tm;
 
     Entity player;
@@ -38,14 +38,15 @@ public class FiringSystem extends IteratingSystem {
         super.update(deltaTime);
         if(player != null) {
             VelocityComponent pv = player.getComponent(VelocityComponent.class);
-            //if(pv.speed.x != 0f || pv.speed.y != 0f) {
+            StateComponent sc = player.getComponent(StateComponent.class);
+
+            if(sc.get() != "DEFAULT") {
                 timeBetweenFiring = 1f / firingRate;
                 timeElapsed += deltaTime;
 
                 if (timeElapsed - lastFireTime >= timeBetweenFiring) {
 
                     lastFireTime = timeElapsed;
-                    //generateBullet(0f, 0f, 10f);
                     generateBullet(-0.5f, 0.6f, 0f, bulletSpeed);
                     generateBullet(0.5f, 0.6f, 0f, bulletSpeed);
 
@@ -56,7 +57,7 @@ public class FiringSystem extends IteratingSystem {
                     generateBullet(1.312f, -0.8f, 0f, bulletSpeed);
 
                 }
-            //}
+            }
         }
 
         player = null;
@@ -88,7 +89,7 @@ public class FiringSystem extends IteratingSystem {
 //                .setOffset(0f, 0.5f));
         bullet.add(TextureComponent.create());
         bullet.add(DamageComponent.create()
-            .setDPS(DMG.seed));
+            .setDPS(Damage.seed));
         bullet.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f/2f, Assets.getBulletFrames(), Animation.PlayMode.NORMAL))
                 .addAnimation("FLYING", new Animation(1f / 3f, Assets.getBulletFlyingFrames(), Animation.PlayMode.NORMAL)));

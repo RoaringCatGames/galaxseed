@@ -1,23 +1,24 @@
     package com.roaringcatgames.libgdxjam.screens;
 
     import com.badlogic.ashley.core.Entity;
-    import com.badlogic.ashley.core.EntitySystem;
     import com.badlogic.ashley.core.PooledEngine;
     import com.badlogic.gdx.Gdx;
     import com.badlogic.gdx.Input;
     import com.badlogic.gdx.InputProcessor;
+    import com.badlogic.gdx.audio.Music;
     import com.badlogic.gdx.graphics.Color;
     import com.badlogic.gdx.graphics.OrthographicCamera;
     import com.badlogic.gdx.graphics.g2d.SpriteBatch;
     import com.badlogic.gdx.math.Vector2;
     import com.badlogic.gdx.math.Vector3;
-    import com.badlogic.gdx.utils.viewport.ExtendViewport;
     import com.badlogic.gdx.utils.viewport.FitViewport;
     import com.badlogic.gdx.utils.viewport.Viewport;
     import com.roaringcatgames.kitten2d.ashley.systems.*;
     import com.roaringcatgames.libgdxjam.App;
-    import com.roaringcatgames.libgdxjam.Z;
+    import com.roaringcatgames.libgdxjam.Assets;
+    import com.roaringcatgames.libgdxjam.values.Z;
     import com.roaringcatgames.libgdxjam.systems.*;
+    import com.roaringcatgames.libgdxjam.values.Volume;
 
     /**
      * Created by barry on 12/22/15 @ 5:51 PM.
@@ -30,6 +31,7 @@
         private OrthographicCamera cam;
         private Vector3 touchPoint;
         private Viewport viewport;
+        private Music music;
 
         private Entity ball;
 
@@ -47,7 +49,7 @@
 
             RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
             cam = renderingSystem.getCamera();
-            viewport = new FitViewport(20f, 30f, cam);// FitViewport(20f, 30f, cam);
+            viewport = new FitViewport(20f, 30f, cam);
             viewport.apply();
             viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
@@ -72,7 +74,7 @@
             Vector2 minBounds = new Vector2(0f, 0f);
             Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
             engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-1f), maxBounds.cpy().scl(2f)));
-            engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
+            engine.addSystem(new PlayerSystem(playerPosition, 0.5f, cam));
             engine.addSystem(new FiringSystem());
             engine.addSystem(new EnemySpawnSystem());
             engine.addSystem(new EnemyFiringSystem());
@@ -89,8 +91,13 @@
             engine.addSystem(renderingSystem);
             engine.addSystem(new PlayerHealthSystem(cam));
             //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
-            //engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
+            engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
             App.game.multiplexer.addProcessor(this);
+
+            music = Assets.getBackgroundMusic();
+            music.setVolume(Volume.BG_MUSIC);
+            music.setLooping(true);
+            music.play();
         }
 
         /**************************

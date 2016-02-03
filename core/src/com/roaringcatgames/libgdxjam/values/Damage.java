@@ -1,9 +1,9 @@
-package com.roaringcatgames.libgdxjam;
+package com.roaringcatgames.libgdxjam.values;
 
 /**
  * Created by barry on 1/12/16 @ 8:03 PM.
  */
-public class DMG {
+public class Damage {
 
     public static final int comet = 5;
     public static final int asteroidRock = 2;

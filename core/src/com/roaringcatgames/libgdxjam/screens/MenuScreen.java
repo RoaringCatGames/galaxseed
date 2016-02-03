@@ -17,9 +17,6 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.Z;
-import com.roaringcatgames.libgdxjam.components.ScreenWrapComponent;
-import com.roaringcatgames.libgdxjam.components.ScreenWrapMode;
 import com.roaringcatgames.libgdxjam.systems.*;
 
 /**

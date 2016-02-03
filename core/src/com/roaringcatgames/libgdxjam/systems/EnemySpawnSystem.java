@@ -1,19 +1,18 @@
 package com.roaringcatgames.libgdxjam.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.DMG;
+import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.Timer;
-import com.roaringcatgames.libgdxjam.Z;
+import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
 import java.util.Random;
@@ -73,7 +72,7 @@ public class EnemySpawnSystem extends IteratingSystem {
         enemy.add(WhenOffScreenComponent.create());
         enemy.add(KinematicComponent.create());
         enemy.add(ProjectileComponent.create()
-                .setDamage(DMG.asteroid));
+                .setDamage(Damage.asteroid));
 
 
         enemy.add(TransformComponent.create()
@@ -146,7 +145,7 @@ public class EnemySpawnSystem extends IteratingSystem {
             enemy.add(WhenOffScreenComponent.create());
             enemy.add(KinematicComponent.create());
             enemy.add(ProjectileComponent.create()
-                .setDamage(DMG.comet));
+                .setDamage(Damage.comet));
             enemy.add(EnemyComponent.create());
             float rot = xVel > 0f ? 45f : -45f;
             enemy.add(TransformComponent.create()
@@ -161,9 +160,11 @@ public class EnemySpawnSystem extends IteratingSystem {
             enemy.add(CircleBoundsComponent.create()
                 .setCircle(xPos, yPos, 0.25f)
                 .setOffset(0f, -1.25f));
+
+            Array<TextureAtlas.AtlasRegion> frames = r.nextFloat() > 0.5f ? Assets.getRedCometFrames() : Assets.getBlueCometFrames();
             enemy.add(TextureComponent.create());
             enemy.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 3f, Assets.getCometFrames(), Animation.PlayMode.LOOP_PINGPONG)));
+                .addAnimation("DEFAULT", new Animation(1f / 3f, frames, Animation.PlayMode.LOOP_PINGPONG)));
 
             enemy.add(StateComponent.create()
                 .set("DEFAULT")

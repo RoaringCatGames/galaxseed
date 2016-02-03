@@ -1,4 +1,4 @@
-package com.roaringcatgames.libgdxjam;
+package com.roaringcatgames.libgdxjam.values;
 
 /**
  * Created by barry on 1/10/16 @ 7:50 PM.

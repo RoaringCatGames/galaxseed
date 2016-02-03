@@ -21,6 +21,7 @@ public class Assets {
         am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
         am.finishLoading();
         am.load(ANI_ATLAS, TEXTURE_ATLAS);
+        am.load(BG_MUSIC, MUSIC);
 
         return am;
     }
@@ -245,8 +246,19 @@ public class Assets {
     /////////////
     //Comets
     /////////////
-    public static Array<TextureAtlas.AtlasRegion> getCometFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet");
+    public static Array<TextureAtlas.AtlasRegion> getRedCometFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet-b");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBlueCometFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet-a");
+    }
+
+
+    /////////////
+    //Music
+    /////////////
+    public static Music getBackgroundMusic(){
+        return am.get(BG_MUSIC, MUSIC);
     }
 
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
@@ -258,5 +270,6 @@ public class Assets {
     private static final String LOADING_ATLAS = "animations/loading.atlas";
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
+    private static final String BG_MUSIC = "music/metamorphosis-oga.mp3";
 
 }

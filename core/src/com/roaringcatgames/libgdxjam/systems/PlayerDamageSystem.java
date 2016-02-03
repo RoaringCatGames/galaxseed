@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.CircleBoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.HealthComponent;
+import com.roaringcatgames.libgdxjam.components.EnemyComponent;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.ProjectileComponent;
 
@@ -24,6 +25,7 @@ public class PlayerDamageSystem extends IteratingSystem {
     private ComponentMapper<HealthComponent> hm;
     private ComponentMapper<ProjectileComponent> pm;
     private ComponentMapper<CircleBoundsComponent> cm;
+    private ComponentMapper<EnemyComponent> em;
 
     public PlayerDamageSystem(){
         super(Family.one(PlayerComponent.class, ProjectileComponent.class).get());
@@ -31,6 +33,7 @@ public class PlayerDamageSystem extends IteratingSystem {
         hm = ComponentMapper.getFor(HealthComponent.class);
         pm = ComponentMapper.getFor(ProjectileComponent.class);
         cm = ComponentMapper.getFor(CircleBoundsComponent.class);
+        em = ComponentMapper.getFor(EnemyComponent.class);
     }
 
     @Override
@@ -42,23 +45,33 @@ public class PlayerDamageSystem extends IteratingSystem {
 
         for(Entity proj:projectiles){
             ProjectileComponent pp = pm.get(proj);
+            if(em.has(proj)){
+                EnemyComponent ec = em.get(proj);
+                if(!ec.isDamaging){
+                    continue;
+                }
+            }
+
             if(bm.has(proj)) {
                 BoundsComponent pjb = bm.get(proj);
                 if (pb.bounds.overlaps(pjb.bounds)) {
                     //TODO: Do Projectile Explosion stuff
-                    ph.health = Math.max(0f, ph.health - pp.damage);
-                    getEngine().removeEntity(proj);
+                    processCollision(ph, proj, pp);
                 }
             }else if(cm.has(proj)){
                 CircleBoundsComponent cb = cm.get(proj);
                 if(Intersector.overlaps(cb.circle, pb.bounds)){
                     //TODO: Do Projectile Explosion stuff
-                    ph.health = Math.max(0f, ph.health - pp.damage);
-                    getEngine().removeEntity(proj);
+                    processCollision(ph, proj, pp);
                 }
             }
         }
         projectiles.clear();
+    }
+
+    private void processCollision(HealthComponent ph, Entity proj, ProjectileComponent pp) {
+        ph.health = Math.max(0f, ph.health - pp.damage);
+        getEngine().removeEntity(proj);
     }
 
     @Override

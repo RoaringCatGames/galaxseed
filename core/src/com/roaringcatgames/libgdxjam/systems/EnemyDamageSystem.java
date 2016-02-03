@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.Z;
+import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
 import java.util.Random;
@@ -102,22 +102,20 @@ public class EnemyDamageSystem extends IteratingSystem {
 
         EnemyComponent ec = em.get(enemy);
         HealthComponent hc;
+
         switch(ec.enemyType) {
             case ASTEROID_FRAG:
                 getEngine().removeEntity(bullet);
                 getEngine().removeEntity(enemy);
                 break;
 
-            case COMET:
-                attachPlant(bullet, enemy);
-                hc = applyHealthChange(bullet, enemy);
             default:
                 attachPlant(bullet, enemy);
+                hc = hm.get(enemy);
+                float startHealth = hc.health;
+                applyHealthChange(bullet, hc);
 
-                hc = applyHealthChange(bullet, enemy);
-
-
-                if(hc.health <= 0f) {
+                if(startHealth > 0f && hc.health <= 0f) {
                     switch(ec.enemyType){
                         case ASTEROID_A:
                             enemy.add(AnimationComponent.create()
@@ -136,12 +134,11 @@ public class EnemyDamageSystem extends IteratingSystem {
                             break;
                     }
                     enemy.add(StateComponent.create().set("DEFAULT").setLooping(false));
-
+                    ec.setDamaging(false);
                     if(sm.has(enemy)){
                         sm.get(enemy).setPaused(true);
                     }
                 }
-
 
                 getEngine().removeEntity(bullet);
 
@@ -149,11 +146,9 @@ public class EnemyDamageSystem extends IteratingSystem {
         }
     }
 
-    private HealthComponent applyHealthChange(Entity bullet, Entity enemy) {
-        HealthComponent hc = hm.get(enemy);
+    private void applyHealthChange(Entity bullet, HealthComponent hc) {
         DamageComponent dmg = dm.get(bullet);
         hc.health = Math.max(0f, (hc.health - dmg.dps));
-        return hc;
     }
 
     private void attachPlant(Entity bullet, Entity enemy) {

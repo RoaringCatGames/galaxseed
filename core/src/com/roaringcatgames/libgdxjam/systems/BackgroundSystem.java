@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.Z;
+import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.ScreenWrapComponent;
 import com.roaringcatgames.libgdxjam.components.ScreenWrapMode;
@@ -183,7 +183,7 @@ public class BackgroundSystem extends IteratingSystem {
                         .setSpeed(0f, bgSpeed));
                 sticker.add(KinematicComponent.create());
                 sticker.add(BoundsComponent.create()
-                    .setBounds(position - (width/2f), (yIndex * yStep) - (height/2f), width, height));
+                    .setBounds(position - (width / 2f), (yIndex * yStep) - (height / 2f), width, height));
                 sticker.add(WhenOffScreenComponent.create());
                 engine.addEntity(sticker);
                 yIndex++;

@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
-import com.roaringcatgames.libgdxjam.DMG;
-import com.roaringcatgames.libgdxjam.Z;
+import com.roaringcatgames.libgdxjam.values.Damage;
+import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
 import java.util.Random;
@@ -86,7 +86,7 @@ public class EnemyFiringSystem extends IteratingSystem {
                                             tc.position.y,
                                             0.375f));
                             particle.add(ProjectileComponent.create()
-                                    .setDamage(DMG.asteroidRock));
+                                    .setDamage(Damage.asteroidRock));
                             particle.add(KinematicComponent.create());
                             engine.addEntity(particle);
                         }

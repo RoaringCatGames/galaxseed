@@ -2,7 +2,6 @@ package com.roaringcatgames.libgdxjam.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,7 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.Z;
+import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
 /**
@@ -35,13 +34,14 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private Vector2 controlOrigin;
 
-    private Vector2 idleFlameOffset = new Vector2(0f, -2f);
+    private Vector2 idleFlameOffset = new Vector2(0f, -2.6f);
     private Vector2 flyingFlameOffset = new Vector2(0f, -3.25f);
 
     private ComponentMapper<VelocityComponent> vm;
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<BoundsComponent> bm;
     private ComponentMapper<TransformComponent> tm;
+    private ComponentMapper<PlayerComponent> pm;
 
     private OrthographicCamera cam;
 
@@ -53,6 +53,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         this.sm = ComponentMapper.getFor(StateComponent.class);
         this.bm = ComponentMapper.getFor(BoundsComponent.class);
         this.tm = ComponentMapper.getFor(TransformComponent.class);
+        this.pm = ComponentMapper.getFor(PlayerComponent.class);
         this.cam = cam;
 
         this.controlOrigin = new Vector2();
@@ -101,13 +102,13 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             getEngine().addEntity(player);
 
             flames.add(FollowerComponent.create()
-                    .setOffset(idleFlameOffset.x, idleFlameOffset.y)
+                    .setOffset(idleFlameOffset.x * initialScale, idleFlameOffset.y * initialScale)
                     .setTarget(player)
                     .setMode(FollowMode.STICKY));
             flames.add(TextureComponent.create());
             flames.add(TransformComponent.create()
-                .setPosition(initialPosition.x, initialPosition.y - 3.25f, Z.flames)
-                .setScale(1f, 1f));
+                .setPosition(initialPosition.x, initialPosition.y - ((3.25f*initialScale) * initialScale), Z.flames)
+                .setScale(initialScale, initialScale));
             flames.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getIdleFlamesFrames()))
                     .addAnimation("FLYING", new Animation(1f / 9f, Assets.getFlamesFrames())));
@@ -192,13 +193,12 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         }
 
         FollowerComponent fc = flames.getComponent(FollowerComponent.class);
-
         if(state != "DEFAULT"){
             flameState = "FLYING";
-            fc.setOffset(flyingFlameOffset.x, flyingFlameOffset.y);
+            fc.setOffset(flyingFlameOffset.x*initialScale, flyingFlameOffset.y * initialScale);
         }else{
             flameState = "DEFAULT";
-            fc.setOffset(idleFlameOffset.x, idleFlameOffset.y);
+            fc.setOffset(idleFlameOffset.x * initialScale, idleFlameOffset.y * initialScale);
         }
 
         if(sc.get() != state) {
