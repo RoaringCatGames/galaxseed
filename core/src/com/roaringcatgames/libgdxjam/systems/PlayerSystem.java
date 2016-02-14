@@ -2,6 +2,7 @@ package com.roaringcatgames.libgdxjam.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -107,8 +108,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .setMode(FollowMode.STICKY));
             flames.add(TextureComponent.create());
             flames.add(TransformComponent.create()
-                .setPosition(initialPosition.x, initialPosition.y - ((3.25f*initialScale) * initialScale), Z.flames)
-                .setScale(initialScale, initialScale));
+                    .setPosition(initialPosition.x, initialPosition.y - ((3.25f * initialScale) * initialScale), Z.flames)
+                    .setScale(initialScale, initialScale));
             flames.add(AnimationComponent.create()
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getIdleFlamesFrames()))
                     .addAnimation("FLYING", new Animation(1f / 9f, Assets.getFlamesFrames())));
@@ -218,15 +219,15 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.RIGHT || keycode == Input.Keys.D){
-            accelerationX = ACCEL_RATE;
+            currentPositionChange.add(0.5f, 0f, 0f);
         }else if(keycode == Input.Keys.LEFT || keycode == Input.Keys.A){
-            accelerationX = -ACCEL_RATE;
+            currentPositionChange.add(-0.5f, 0f, 0f);
         }
 
         if(keycode == Input.Keys.UP || keycode == Input.Keys.W){
-            accelerationY = ACCEL_RATE;
+            currentPositionChange.add(0f, 0.5f, 0f);
         }else if(keycode == Input.Keys.DOWN || keycode == Input.Keys.S){
-            accelerationY = -ACCEL_RATE;
+            currentPositionChange.add(0f, -0.5f, 0f);
         }
         return false;
     }
@@ -235,13 +236,25 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.RIGHT || keycode == Input.Keys.D ||
-           keycode == Input.Keys.LEFT || keycode == Input.Keys.A){
-            accelerationX = 0f;
+        if(!Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
+            !Gdx.input.isKeyPressed(Input.Keys.D) ||
+            !Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
+            !Gdx.input.isKeyPressed(Input.Keys.A)
+         ) {
+            if (keycode == Input.Keys.RIGHT || keycode == Input.Keys.D ||
+                    keycode == Input.Keys.LEFT || keycode == Input.Keys.A) {
+                currentPositionChange.set(0f, currentPositionChange.y, currentPositionChange.z);
+            }
         }
-        if(keycode == Input.Keys.UP || keycode == Input.Keys.W ||
-           keycode == Input.Keys.DOWN || keycode == Input.Keys.S){
-            accelerationY = 0f;
+
+        if(!Gdx.input.isKeyPressed(Input.Keys.DOWN) ||
+           !Gdx.input.isKeyPressed(Input.Keys.S) ||
+           !Gdx.input.isKeyPressed(Input.Keys.UP) ||
+           !Gdx.input.isKeyPressed(Input.Keys.W)) {
+            if (keycode == Input.Keys.UP || keycode == Input.Keys.W ||
+                    keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
+                currentPositionChange.set(currentPositionChange.x, 0f, currentPositionChange.z);
+            }
         }
         return false;
     }

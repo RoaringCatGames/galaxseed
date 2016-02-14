@@ -5,6 +5,11 @@ canvas {
 
 body {
     background-color: #222222;
+    color: #EFEFEF;
+}
+
+a {
+    color: #00ffff;
 }
 
 .superdev {

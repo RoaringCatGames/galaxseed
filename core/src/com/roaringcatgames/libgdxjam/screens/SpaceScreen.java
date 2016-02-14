@@ -1,6 +1,7 @@
     package com.roaringcatgames.libgdxjam.screens;
 
     import com.badlogic.ashley.core.Entity;
+    import com.badlogic.ashley.core.EntitySystem;
     import com.badlogic.ashley.core.PooledEngine;
     import com.badlogic.gdx.Gdx;
     import com.badlogic.gdx.Input;
@@ -87,9 +88,11 @@
             engine.addSystem(new FollowerSystem());
 
 
+
             //Extension Systems
             engine.addSystem(renderingSystem);
             engine.addSystem(new PlayerHealthSystem(cam));
+            engine.addSystem(new PathSystem(cam));
             //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
             App.game.multiplexer.addProcessor(this);
@@ -124,6 +127,13 @@
         @Override
         public boolean keyDown(int keycode) {
 
+            if(keycode == Input.Keys.E){
+                for(EntitySystem s:engine.getSystems()){
+                    if(s instanceof EnemySpawnSystem) {
+                        s.setProcessing(!s.checkProcessing());
+                    }
+                }
+            }
 //            if(keycode == Input.Keys.ESCAPE){
 //                for(EntitySystem s:engine.getSystems()){
 //                    if(!(s instanceof RenderingSystem) &&
