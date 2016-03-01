@@ -7,6 +7,8 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Bezier;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
@@ -169,8 +171,17 @@ public class EnemySpawnSystem extends IteratingSystem {
             enemy.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
-            enemy.add(VelocityComponent.create()
-                .setSpeed(xVel, yVel));
+
+            Vector2 p0 = new Vector2(xPos, yPos);
+            Vector2 p1 = new Vector2(xPos, 0f);
+            float p2x = xVel > 0f? 40f : -40f;
+            Vector2 p2 = new Vector2(p2x, 5f);
+            enemy.add(PathFollowComponent.create()
+                .setFacingPath(true)
+                .setTotalPathTime(3f)
+                .setPath(new Bezier<Vector2>(p0, p1, p2)));
+//            enemy.add(VelocityComponent.create()
+//                .setSpeed(xVel, yVel));
             getEngine().addEntity(enemy);
     }
 }
