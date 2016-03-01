@@ -10,12 +10,10 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Bezier;
-import com.badlogic.gdx.math.Path;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.*;
+import com.roaringcatgames.kitten2d.ashley.components.PathFollowComponent;
 import com.roaringcatgames.libgdxjam.App;
-import com.roaringcatgames.libgdxjam.components.PathFollowComponent;
+
 
 /**
  * Created by barry on 2/13/16 @ 10:35 PM.

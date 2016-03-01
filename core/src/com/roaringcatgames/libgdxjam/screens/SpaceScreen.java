@@ -87,12 +87,11 @@
             engine.addSystem(new PlayerDamageSystem());
             engine.addSystem(new FollowerSystem());
 
-
-
             //Extension Systems
             engine.addSystem(renderingSystem);
             engine.addSystem(new PlayerHealthSystem(cam));
-            engine.addSystem(new PathSystem(cam));
+            //engine.addSystem(new PathSystem(cam));
+            engine.addSystem(new PathFollowSystem());
             //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
             App.game.multiplexer.addProcessor(this);

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.components.*;
@@ -82,6 +83,15 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .setPosition(initialPosition.x, initialPosition.y, initialPosition.z)
                     .setScale(initialScale, initialScale));
 
+            Vector2 p0 = new Vector2(0f, 0f);
+            Vector2 p1 = new Vector2(0f, 25f);
+            Vector2 p2 = new Vector2(20f, 30f);
+
+            player.add(PathFollowComponent.create()
+                .setFacingPath(true)
+                .setTotalPathTime(10f)
+                .setPath(new Bezier<>(p0, p1, p2)));
+
             player.add(BoundsComponent.create()
                     .setBounds(0f, 0f, 2f, 3f));
 
@@ -114,8 +124,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getIdleFlamesFrames()))
                     .addAnimation("FLYING", new Animation(1f / 9f, Assets.getFlamesFrames())));
             flames.add(StateComponent.create()
-                .set("DEFAULT")
-                .setLooping(true));
+                    .set("DEFAULT")
+                    .setLooping(true));
             getEngine().addEntity(flames);
 
             touchIndicator.add(TextureComponent.create()
@@ -123,6 +133,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             touchIndicator.add(TransformComponent.create()
                 .setPosition(0f, 0f, Z.touchIndicator)
                 .setHidden(true));
+
             getEngine().addEntity(touchIndicator);
 
 
