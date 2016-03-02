@@ -3,6 +3,7 @@ package com.roaringcatgames.libgdxjam.systems;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -12,7 +13,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.*;
 import com.roaringcatgames.kitten2d.ashley.components.PathFollowComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.libgdxjam.App;
+import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.TextComponent;
 
 
 /**
@@ -22,6 +26,7 @@ public class PathSystem extends IteratingSystem implements InputProcessor {
 
     private OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
+    private Entity curvePoints;
 
     private Vector2 v1, v2, p0, p1, p2, tmp;
 
@@ -50,6 +55,15 @@ public class PathSystem extends IteratingSystem implements InputProcessor {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
+        if(curvePoints == null){
+            curvePoints = ((PooledEngine)getEngine()).createEntity();
+            curvePoints.add(TextComponent.create()
+                .setText("p0:(" + p0.x + "," + p0.y + ") p1:(" + p1.x + "," + p1.y + ") p2:(" + p2.x + "," + p2.y + ")")
+                .setFont(Assets.get32Font()));
+            curvePoints.add(TransformComponent.create()
+                .setPosition(2f, 28f, 0f));
+            getEngine().addEntity(curvePoints);
+        }
 
         switch(currentPointType){
             case P0:
@@ -64,6 +78,9 @@ public class PathSystem extends IteratingSystem implements InputProcessor {
             default:
                 break;
         }
+
+        curvePoints.getComponent(TextComponent.class)
+                .setText("p0:(" + p0.x + "," + p0.y + ") p1:(" + p1.x + "," + p1.y + ") p2:(" + p2.x + "," + p2.y + ")");
 
         float k = 100f;
         Gdx.gl20.glLineWidth(3f);

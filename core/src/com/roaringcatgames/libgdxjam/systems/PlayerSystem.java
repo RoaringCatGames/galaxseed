@@ -83,14 +83,15 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .setPosition(initialPosition.x, initialPosition.y, initialPosition.z)
                     .setScale(initialScale, initialScale));
 
-            Vector2 p0 = new Vector2(0f, 0f);
-            Vector2 p1 = new Vector2(0f, 25f);
-            Vector2 p2 = new Vector2(20f, 30f);
-
+//            Vector2 p0 = new Vector2(0f, 0f);
+//            Vector2 p1 = new Vector2(0f, 25f);
+//            Vector2 p2 = new Vector2(20f, 30f);
+//
 //            player.add(PathFollowComponent.create()
 //                .setFacingPath(true)
 //                .setTotalPathTime(10f)
-//                .setPath(new Bezier<>(p0, p1, p2)));
+//                //.setBaseRotation(90f)
+//                .setPath(new Bezier<>(p2, p1, p0)));
 
             player.add(BoundsComponent.create()
                     .setBounds(0f, 0f, 2f, 3f));

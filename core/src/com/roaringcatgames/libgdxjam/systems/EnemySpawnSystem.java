@@ -46,10 +46,10 @@ public class EnemySpawnSystem extends IteratingSystem {
 
         //Spawn Comets
         if(cometTimer.doesTriggerThisStep(deltaTime)){
-            float leftPosition = (-10f * r.nextFloat()) -5f;
-            generateEnemy(leftPosition, 40f, 4f, -6f);
-            float rightPosition = (10f * r.nextFloat()) + 25f;
-            generateEnemy(rightPosition, 40f, -4f, -6f);
+            float leftPosition = (4f * r.nextFloat());
+            generateEnemy(leftPosition, 50f);
+            float rightPosition = (4f * r.nextFloat()) + 16f;  //16-20f
+            generateEnemy(rightPosition, 50f);
         }
 
         //Spawn Asteroids
@@ -140,8 +140,9 @@ public class EnemySpawnSystem extends IteratingSystem {
         getEngine().addEntity(enemy);
     }
 
-    private void generateEnemy(float xPos, float yPos, float xVel, float yVel){
+    private void generateEnemy(float xPos, float yPos){
 
+            boolean isGoingRight = xPos < 10f;
             //Generate Bullets here
             Entity enemy = ((PooledEngine) getEngine()).createEntity();
             enemy.add(WhenOffScreenComponent.create());
@@ -149,11 +150,10 @@ public class EnemySpawnSystem extends IteratingSystem {
             enemy.add(ProjectileComponent.create()
                 .setDamage(Damage.comet));
             enemy.add(EnemyComponent.create());
-            float rot = xVel > 0f ? 45f : -45f;
+
             enemy.add(TransformComponent.create()
                 .setPosition(xPos, yPos, Z.enemy)
-                .setScale(1f, 1f)
-                .setRotation(rot));
+                .setScale(1f, 1f));
 
             enemy.add(HealthComponent.create()
                 .setMaxHealth(10f)
@@ -166,22 +166,23 @@ public class EnemySpawnSystem extends IteratingSystem {
             Array<TextureAtlas.AtlasRegion> frames = r.nextFloat() > 0.5f ? Assets.getRedCometFrames() : Assets.getBlueCometFrames();
             enemy.add(TextureComponent.create());
             enemy.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 3f, frames, Animation.PlayMode.LOOP_PINGPONG)));
+                .addAnimation("DEFAULT", new Animation(1f / 12f, frames, Animation.PlayMode.LOOP_PINGPONG)));
 
             enemy.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
 
             Vector2 p0 = new Vector2(xPos, yPos);
-            Vector2 p1 = new Vector2(xPos, 0f);
-            float p2x = xVel > 0f? 40f : -40f;
-            Vector2 p2 = new Vector2(p2x, 5f);
+            float p1x = isGoingRight ? -4.22f : 24.22f;
+            Vector2 p1 = new Vector2(p1x, 0f);
+            float p2x = isGoingRight ? 42.25f : -22.25f;
+            Vector2 p2 = new Vector2(p2x, -32f);
             enemy.add(PathFollowComponent.create()
                 .setFacingPath(true)
-                .setTotalPathTime(3f)
-                .setPath(new Bezier<Vector2>(p0, p1, p2)));
-//            enemy.add(VelocityComponent.create()
-//                .setSpeed(xVel, yVel));
+                .setBaseRotation(180f)
+                .setTotalPathTime(6f)
+                .setPath(new Bezier<>(p0, p1, p2)));
+
             getEngine().addEntity(enemy);
     }
 }

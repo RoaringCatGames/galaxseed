@@ -55,6 +55,13 @@
             viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
 
+            //Normally we would use a different camera, but our main camera
+            //  never moves, so we're safe to use a single one here
+            OrthographicCamera guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            guiCam.position.set(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, 0f);
+
+            TextRenderingSystem textRenderingSystem = new TextRenderingSystem(batch, guiCam, cam);
+
             Vector3 playerPosition = new Vector3(
                     cam.position.x,
                     5f,
@@ -89,8 +96,9 @@
 
             //Extension Systems
             engine.addSystem(renderingSystem);
+            engine.addSystem(textRenderingSystem);
             engine.addSystem(new PlayerHealthSystem(cam));
-            //engine.addSystem(new PathSystem(cam));
+            //\engine.addSystem(new PathSystem(cam));
             engine.addSystem(new PathFollowSystem());
             //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));

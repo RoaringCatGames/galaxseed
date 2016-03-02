@@ -57,14 +57,16 @@ public class PlayerHealthSystem extends IteratingSystem {
             init();
         }
 
+        HealthComponent hc = hm.get(player);
+        TransformComponent tc = tm.get(healthBar);
+        BoundsComponent bc = bm.get(healthBar);
+
         Gdx.gl20.glLineWidth(3f);
         shapeRenderer.setProjectionMatrix(cam.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.WHITE);
         //OuterBar
-        HealthComponent hc = hm.get(player);
-        TransformComponent tc = tm.get(healthBar);
-        BoundsComponent bc = bm.get(healthBar);
+
         shapeRenderer.rect(bc.bounds.x, bc.bounds.y, bc.bounds.width, bc.bounds.height);
         shapeRenderer.end();
 
