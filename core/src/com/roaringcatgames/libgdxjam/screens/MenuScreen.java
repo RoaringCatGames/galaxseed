@@ -18,6 +18,7 @@ import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.systems.*;
+import com.roaringcatgames.libgdxjam.values.GameState;
 
 /**
  * Created by barry on 12/22/15 @ 5:51 PM.
@@ -49,7 +50,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
 
         RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
         cam = renderingSystem.getCamera();
-        viewport = new ExtendViewport(20f, 30f, 40f, 60f, cam);// FitViewport(20f, 30f, cam);
+        viewport = new ExtendViewport(App.W, App.H, App.W*2f, App.H*2f, cam);
         viewport.apply();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
@@ -163,17 +164,15 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         return false;
     }
 
-    boolean isMenu = true;
-
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(isMenu) {
+        if(App.getState() == GameState.MENU) {
             touchPoint.set(screenX, screenY, 0f);
             touchPoint = cam.unproject(touchPoint);
 
             if (startGameButton.getComponent(BoundsComponent.class).bounds.contains(touchPoint.x, touchPoint.y)) {
                 dispatcher.endCurrentScreen();
-                isMenu = false;
+                App.setState(GameState.PLAYING);
             }
         }
         return false;
@@ -196,8 +195,6 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
-
-        //cam.zoom += amount * 0.5f;
         return false;
     }
 

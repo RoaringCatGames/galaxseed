@@ -12,11 +12,13 @@
     import com.badlogic.gdx.graphics.g2d.SpriteBatch;
     import com.badlogic.gdx.math.Vector2;
     import com.badlogic.gdx.math.Vector3;
+    import com.badlogic.gdx.utils.Array;
     import com.badlogic.gdx.utils.viewport.FitViewport;
     import com.badlogic.gdx.utils.viewport.Viewport;
     import com.roaringcatgames.kitten2d.ashley.systems.*;
     import com.roaringcatgames.libgdxjam.App;
     import com.roaringcatgames.libgdxjam.Assets;
+    import com.roaringcatgames.libgdxjam.values.GameState;
     import com.roaringcatgames.libgdxjam.values.Z;
     import com.roaringcatgames.libgdxjam.systems.*;
     import com.roaringcatgames.libgdxjam.values.Volume;
@@ -36,11 +38,14 @@
 
         private Entity ball;
 
+        private Array<EntitySystem> playingOnlySystems;
+
         public SpaceScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
             super();
             this.batch = batch;
             this.dispatcher = dispatcher;
             this.touchPoint = new Vector3();
+            this.playingOnlySystems = new Array<>();
         }
 
 
@@ -83,16 +88,25 @@
             Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
             engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-1f), maxBounds.cpy().scl(2f)));
             engine.addSystem(new PlayerSystem(playerPosition, 0.5f, cam));
-            engine.addSystem(new FiringSystem());
-            engine.addSystem(new EnemySpawnSystem());
+            FiringSystem firingSystem = new FiringSystem();
+            engine.addSystem(firingSystem);
+            EnemySpawnSystem enemySpawnSystem = new EnemySpawnSystem();
+            engine.addSystem(enemySpawnSystem);
             engine.addSystem(new EnemyFiringSystem());
             engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
             engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
             engine.addSystem(new BackgroundSystem(minBounds, maxBounds, true));
             engine.addSystem(new BulletSystem());
-            engine.addSystem(new EnemyDamageSystem());
-            engine.addSystem(new PlayerDamageSystem());
+
+            EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
+            PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();
+            engine.addSystem(enemyDmgSystem);
+            engine.addSystem(playerDmgSystem);
             engine.addSystem(new FollowerSystem());
+
+            GameOverSystem gameOverSystem = new GameOverSystem();
+            gameOverSystem.setProcessing(false);
+            engine.addSystem(gameOverSystem);
 
             //Extension Systems
             engine.addSystem(renderingSystem);
@@ -104,6 +118,11 @@
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
             App.game.multiplexer.addProcessor(this);
 
+            playingOnlySystems.add(firingSystem);
+            playingOnlySystems.add(enemySpawnSystem);
+            playingOnlySystems.add(enemyDmgSystem);
+            playingOnlySystems.add(playerDmgSystem);
+
             music = Assets.getBackgroundMusic();
             music.setVolume(Volume.BG_MUSIC);
             music.setLooping(true);
@@ -113,9 +132,30 @@
         /**************************
          * Screen Adapter Methods
          **************************/
+        GameState lastState;
         @Override
         protected void update(float deltaChange) {
+
             engine.update(Math.min(deltaChange, App.MAX_DELTA_TICK));
+
+            if(App.getState() != lastState){
+                lastState = App.getState();
+                if(lastState == GameState.GAME_OVER) {
+                    engine.getSystem(GameOverSystem.class).setProcessing(true);
+                    for (EntitySystem es : playingOnlySystems) {
+                        if(es.checkProcessing()) {
+                            es.setProcessing(false);
+                        }
+                    }
+                }else if(lastState == GameState.PLAYING){
+                    engine.getSystem(GameOverSystem.class).setProcessing(false);
+                    for (EntitySystem es : playingOnlySystems) {
+                        if(!es.checkProcessing()) {
+                            es.setProcessing(true);
+                        }
+                    }
+                }
+            }
         }
 
         @Override

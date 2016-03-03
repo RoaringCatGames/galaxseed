@@ -50,8 +50,8 @@ public class TextRenderingSystem extends QueuedIteratingSystem {
 
             if (text.text != null && !transform.isHidden) {
                 GlyphLayout textData = new GlyphLayout(text.font, text.text);
-
-                float xTranslatedPosition = guiCam.position.x-(worldCam.position.x-transform.position.x)*rateW;//(transform.position.x - textData.width/2f);
+                float targetX = (transform.position.x - ((textData.width/2f)/rateW));
+                float xTranslatedPosition = guiCam.position.x-(worldCam.position.x-targetX)*rateW;//(transform.position.x - textData.width/2f);
                 float yTranslatedPosition = guiCam.position.y-(worldCam.position.y-transform.position.y)*rateH;//(transform.position.y - textData.height/2f);
                 text.font.draw(batch, text.text, xTranslatedPosition, yTranslatedPosition);
             }

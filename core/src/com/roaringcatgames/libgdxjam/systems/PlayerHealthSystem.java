@@ -15,6 +15,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.HealthComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
+import com.roaringcatgames.libgdxjam.App;
+import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 
@@ -61,12 +63,16 @@ public class PlayerHealthSystem extends IteratingSystem {
         TransformComponent tc = tm.get(healthBar);
         BoundsComponent bc = bm.get(healthBar);
 
+        if(hc.health <= 0f){
+            App.setState(GameState.GAME_OVER);
+        }
+
         Gdx.gl20.glLineWidth(3f);
         shapeRenderer.setProjectionMatrix(cam.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.WHITE);
-        //OuterBar
 
+        //OuterBar
         shapeRenderer.rect(bc.bounds.x, bc.bounds.y, bc.bounds.width, bc.bounds.height);
         shapeRenderer.end();
 
