@@ -1,8 +1,6 @@
     package com.roaringcatgames.libgdxjam.screens;
 
-    import com.badlogic.ashley.core.Entity;
-    import com.badlogic.ashley.core.EntitySystem;
-    import com.badlogic.ashley.core.PooledEngine;
+    import com.badlogic.ashley.core.*;
     import com.badlogic.gdx.Gdx;
     import com.badlogic.gdx.Input;
     import com.badlogic.gdx.InputProcessor;
@@ -18,6 +16,8 @@
     import com.roaringcatgames.kitten2d.ashley.systems.*;
     import com.roaringcatgames.libgdxjam.App;
     import com.roaringcatgames.libgdxjam.Assets;
+    import com.roaringcatgames.libgdxjam.components.EnemyComponent;
+    import com.roaringcatgames.libgdxjam.components.FollowerComponent;
     import com.roaringcatgames.libgdxjam.values.GameState;
     import com.roaringcatgames.libgdxjam.values.Z;
     import com.roaringcatgames.libgdxjam.systems.*;
@@ -141,6 +141,7 @@
             if(App.getState() != lastState){
                 lastState = App.getState();
                 if(lastState == GameState.GAME_OVER) {
+                    music.stop();
                     engine.getSystem(GameOverSystem.class).setProcessing(true);
                     for (EntitySystem es : playingOnlySystems) {
                         if(es.checkProcessing()) {
@@ -148,6 +149,7 @@
                         }
                     }
                 }else if(lastState == GameState.PLAYING){
+                    music.play();
                     engine.getSystem(GameOverSystem.class).setProcessing(false);
                     for (EntitySystem es : playingOnlySystems) {
                         if(!es.checkProcessing()) {
