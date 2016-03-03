@@ -22,6 +22,7 @@ public class Assets {
         am.finishLoading();
         am.load(ANI_ATLAS, TEXTURE_ATLAS);
         am.load(BG_MUSIC, MUSIC);
+        am.load(GAME_OVER_MUSIC, MUSIC);
         am.load(FONT_32, BITMAP_FONT);
         am.load(FONT_48, BITMAP_FONT);
         am.load(FONT_64, BITMAP_FONT);
@@ -263,6 +264,9 @@ public class Assets {
     public static Music getBackgroundMusic(){
         return am.get(BG_MUSIC, MUSIC);
     }
+    public static Music getGameOverMusic(){
+        return am.get(GAME_OVER_MUSIC, MUSIC);
+    }
 
 
     /////////////
@@ -270,6 +274,12 @@ public class Assets {
     /////////////
     public static BitmapFont get32Font(){
         return am.get(FONT_32, BITMAP_FONT);
+    }
+    public static BitmapFont get48Font(){
+        return am.get(FONT_48, BITMAP_FONT);
+    }
+    public static BitmapFont get64Font(){
+        return am.get(FONT_64, BITMAP_FONT);
     }
 
     private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
@@ -284,5 +294,6 @@ public class Assets {
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
     private static final String BG_MUSIC = "music/metamorphosis-oga.mp3";
+    private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
 
 }
