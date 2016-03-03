@@ -65,8 +65,8 @@ public class PlayerHealthSystem extends IteratingSystem {
         shapeRenderer.setProjectionMatrix(cam.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.WHITE);
-        //OuterBar
 
+        //OuterBar
         shapeRenderer.rect(bc.bounds.x, bc.bounds.y, bc.bounds.width, bc.bounds.height);
         shapeRenderer.end();
 

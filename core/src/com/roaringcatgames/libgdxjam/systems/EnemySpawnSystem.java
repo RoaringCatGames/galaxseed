@@ -11,9 +11,11 @@ import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.Timer;
+import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
@@ -24,20 +26,29 @@ import java.util.Random;
  */
 public class EnemySpawnSystem extends IteratingSystem {
 
-    private boolean isInitialized = false;
-    private Timer cometTimer = new Timer(0.5f);
-//    private float spawnRate = 0.25f;  //comets/second
-//    private float lastSpawnTime = 0f;
-//    private float timeElapsed = 0f;
+    private static float LeftCometSpawnFrequency = 0.4f;
+    private static float RightCometSpawnFrequency = 0.5f;
+    private static float CometY = 50f;
+    private static float CometXRange = 7f;
 
-    private Timer asteroidTimer = new Timer(0.25f);
+    private static float AsteroidSpawnFrequency = 0.25f;
+    private static float AsteroidLeftX = -8f;
+    private static float AsteroidRightX = 33f;
+    private static float AsteroidXVelocity = 3f;
+    private static float AsteroidYVelocity = -2f;
+    private static float AsteroidY = 35f;
+    private static float AsteroidRotationSpeed = 180f;
+    private static float AsteroidFragSpeed = 15f;
 
-    private float asteroidX = -5f;
-    private Random r;
+    private Random r = new Random();
+    private Timer leftTimer = new Timer(LeftCometSpawnFrequency);
+    private Timer rightTimer = new Timer(RightCometSpawnFrequency);
+    private Timer asteroidTimer = new Timer(AsteroidSpawnFrequency);
+    private float asteroidX = AsteroidLeftX;
 
     public EnemySpawnSystem() {
         super(Family.all(EnemyComponent.class).get());
-        r = new Random();
+        leftTimer.elapsedTime += RightCometSpawnFrequency/2f;
     }
 
     @Override
@@ -45,18 +56,21 @@ public class EnemySpawnSystem extends IteratingSystem {
         super.update(deltaTime);
 
         //Spawn Comets
-        if(cometTimer.doesTriggerThisStep(deltaTime)){
-            float leftPosition = (4f * r.nextFloat());
-            generateEnemy(leftPosition, 50f);
-            float rightPosition = (4f * r.nextFloat()) + 16f;  //16-20f
-            generateEnemy(rightPosition, 50f);
+        if(leftTimer.doesTriggerThisStep(deltaTime)) {
+            float leftPosition = (CometXRange * r.nextFloat());
+            generateEnemy(leftPosition, CometY);
+        }
+
+        if(rightTimer.doesTriggerThisStep(deltaTime)){
+            float rightPosition = (CometXRange * r.nextFloat()) + (App.W - CometXRange);
+            generateEnemy(rightPosition, CometY);
         }
 
         //Spawn Asteroids
         if(asteroidTimer.doesTriggerThisStep(deltaTime)){
-            float xVel = asteroidX < 0f ? 3f : -3f;
-            generateAsteroid(asteroidX, 35f, xVel, -2f);
-            asteroidX = asteroidX < 0f ? 33f : -8f;
+            float xVel = asteroidX < 0f ? AsteroidXVelocity : -AsteroidXVelocity;
+            generateAsteroid(asteroidX, AsteroidY, xVel, AsteroidYVelocity);
+            asteroidX = asteroidX < 0f ? AsteroidRightX : AsteroidLeftX;
         }
     }
 
@@ -80,15 +94,13 @@ public class EnemySpawnSystem extends IteratingSystem {
         enemy.add(TransformComponent.create()
                 .setPosition(xPos, yPos, Z.enemy)
                 .setScale(1f, 1f));
-        float rotSpeed = xVel > 0f ? 180f : -180f;
+        float rotSpeed = xVel > 0f ? AsteroidRotationSpeed : -AsteroidRotationSpeed;
         enemy.add(RotationComponent.create()
                 .setRotationSpeed(rotSpeed));
 
 
 
         SpawnerComponent spawner = SpawnerComponent.create();
-
-
         float cnt = r.nextFloat();
         float size;
         float health;
@@ -98,9 +110,9 @@ public class EnemySpawnSystem extends IteratingSystem {
             tr = Assets.getAsteroidA();
             eType = EnemyType.ASTEROID_A;
             size = 2.5f;
-            health = 50f;
+            health = Health.AsteroidA;
 
-            spawner.setParticleSpeed(15f)
+            spawner.setParticleSpeed(AsteroidFragSpeed)
                 .setParticleTextures(Assets.getAsteroidAFrags())
                 .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                 .setSpawnRate(2f);
@@ -108,9 +120,9 @@ public class EnemySpawnSystem extends IteratingSystem {
             tr = Assets.getAsteroidB();
             eType = EnemyType.ASTEROID_B;
             size = 3.75f;
-            health = 80f;
+            health = Health.AsteroidB;
 
-            spawner.setParticleSpeed(18f)
+            spawner.setParticleSpeed(AsteroidFragSpeed + 3f)
                 .setParticleTextures(Assets.getAsteroidBFrags())
                 .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                 .setSpawnRate(2.5f);
@@ -118,9 +130,9 @@ public class EnemySpawnSystem extends IteratingSystem {
             tr = Assets.getAsteroidC();
             eType = EnemyType.ASTEROID_C;
             size = 5f;
-            health = 110f;
+            health = Health.AsteroidC;
 
-            spawner.setParticleSpeed(20f)
+            spawner.setParticleSpeed(AsteroidFragSpeed + 5f)
                 .setParticleTextures(Assets.getAsteroidCFrags())
                 .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                 .setSpawnRate(3f);
@@ -137,12 +149,13 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setEnemyType(eType));
         enemy.add(VelocityComponent.create()
                 .setSpeed(xVel, yVel));
+
         getEngine().addEntity(enemy);
     }
 
     private void generateEnemy(float xPos, float yPos){
 
-            boolean isGoingRight = xPos < 10f;
+            boolean isGoingRight = xPos < App.W/2f;
             //Generate Bullets here
             Entity enemy = ((PooledEngine) getEngine()).createEntity();
             enemy.add(WhenOffScreenComponent.create());
@@ -156,8 +169,8 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setScale(1f, 1f));
 
             enemy.add(HealthComponent.create()
-                .setMaxHealth(10f)
-                .setMaxHealth(10f));
+                .setMaxHealth(Health.Comet)
+                .setMaxHealth(Health.Comet));
 
             enemy.add(CircleBoundsComponent.create()
                 .setCircle(xPos, yPos, 0.25f)
@@ -178,10 +191,10 @@ public class EnemySpawnSystem extends IteratingSystem {
             float p2x = isGoingRight ? 42.25f : -22.25f;
             Vector2 p2 = new Vector2(p2x, -32f);
             enemy.add(PathFollowComponent.create()
-                .setFacingPath(true)
-                .setBaseRotation(180f)
-                .setTotalPathTime(6f)
-                .setPath(new Bezier<>(p0, p1, p2)));
+                    .setFacingPath(true)
+                    .setBaseRotation(180f)
+                    .setTotalPathTime(8f)
+                    .setPath(new Bezier<>(p0, p1, p2)));
 
             getEngine().addEntity(enemy);
     }

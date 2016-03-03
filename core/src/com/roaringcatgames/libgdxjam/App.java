@@ -15,6 +15,8 @@ public class App {
 
     public static final float MAX_DELTA_TICK = 1f/30f;
     public static final float PPM = 32.0f;
+    public static final float W = 20f;
+    public static final float H = 30f;
 
     public static int getPlayerHealth() {
         return 100;
