@@ -5,10 +5,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.values.Damage;
+import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.BulletComponent;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
@@ -24,6 +26,7 @@ public class FiringSystem extends IteratingSystem {
     private float lastFireTime = 0f;
     private float timeElapsed = 0f;
     private float bulletSpeed = 30f;
+    private Music firingMusic;
     private ComponentMapper<TransformComponent> tm;
 
     Entity player;
@@ -31,14 +34,19 @@ public class FiringSystem extends IteratingSystem {
     public FiringSystem(){
         super(Family.all(PlayerComponent.class).get());
         tm = ComponentMapper.getFor(TransformComponent.class);
+        firingMusic = Assets.getFiringMusic();
     }
 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
         if(player != null) {
-            VelocityComponent pv = player.getComponent(VelocityComponent.class);
             StateComponent sc = player.getComponent(StateComponent.class);
+            if(!firingMusic.isPlaying()){
+                firingMusic.setVolume(Volume.FIRING_MUSIC);
+                firingMusic.setLooping(true);
+                firingMusic.play();
+            }
 
             if(sc.get() != "DEFAULT") {
                 timeBetweenFiring = 1f / firingRate;
@@ -57,6 +65,8 @@ public class FiringSystem extends IteratingSystem {
                     generateBullet(1.312f, -0.8f, 0f, bulletSpeed);
 
                 }
+            }else{
+                firingMusic.stop();
             }
         }
 

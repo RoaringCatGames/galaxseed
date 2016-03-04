@@ -4,14 +4,18 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.CircleBoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.HealthComponent;
+import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.EnemyComponent;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.ProjectileComponent;
+import com.roaringcatgames.libgdxjam.values.Damage;
+import com.roaringcatgames.libgdxjam.values.Volume;
 
 /**
  * Created by barry on 1/12/16 @ 7:59 PM.
@@ -27,6 +31,8 @@ public class PlayerDamageSystem extends IteratingSystem {
     private ComponentMapper<CircleBoundsComponent> cm;
     private ComponentMapper<EnemyComponent> em;
 
+    private Sound lightHitSfx, mediumHitSfx, heavyHitSfx;
+
     public PlayerDamageSystem(){
         super(Family.one(PlayerComponent.class, ProjectileComponent.class).get());
         bm = ComponentMapper.getFor(BoundsComponent.class);
@@ -34,6 +40,10 @@ public class PlayerDamageSystem extends IteratingSystem {
         pm = ComponentMapper.getFor(ProjectileComponent.class);
         cm = ComponentMapper.getFor(CircleBoundsComponent.class);
         em = ComponentMapper.getFor(EnemyComponent.class);
+
+        lightHitSfx = Assets.getPlayerHitLight();
+        mediumHitSfx = Assets.getPlayerHitMedium();
+        heavyHitSfx = Assets.getPlayerHitHeavy();
     }
 
     @Override
@@ -69,7 +79,17 @@ public class PlayerDamageSystem extends IteratingSystem {
         projectiles.clear();
     }
 
+
     private void processCollision(HealthComponent ph, Entity proj, ProjectileComponent pp) {
+        if(pp.damage == Damage.asteroidRock) {
+            mediumHitSfx.play(Volume.PLAYER_HIT_M);
+        }else if(pp.damage == Damage.comet){
+            mediumHitSfx.play(Volume.PLAYER_HIT_M);
+        }else if(pp.damage == Damage.asteroid){
+            heavyHitSfx.play(Volume.PLAYER_HIT_H);
+        }
+
+
         ph.health = Math.max(0f, ph.health - pp.damage);
         getEngine().removeEntity(proj);
     }

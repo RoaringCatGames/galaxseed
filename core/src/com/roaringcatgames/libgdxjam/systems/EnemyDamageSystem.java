@@ -9,6 +9,7 @@ import com.badlogic.ashley.signals.Signal;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
@@ -43,6 +45,10 @@ public class EnemyDamageSystem extends IteratingSystem {
 
     private ScoreComponent scoreCard;
 
+    private Sound popSfx;
+//    private Sound hitSfx;
+//    private Sound plantSfx;
+
     Random r = new Random();
 
     public EnemyDamageSystem(){
@@ -57,6 +63,10 @@ public class EnemyDamageSystem extends IteratingSystem {
         sm = ComponentMapper.getFor(SpawnerComponent.class);
         stm = ComponentMapper.getFor(StateComponent.class);
         vm = ComponentMapper.getFor(VelocityComponent.class);
+
+        popSfx = Assets.getPlanetPopSfx();
+//        hitSfx = Assets.getSeedHitSfx();
+//        plantSfx = Assets.getSeedPlantSfx();
     }
 
 
@@ -150,6 +160,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                     ec.setDamaging(false);
                     if(sm.has(enemy)){
                         sm.get(enemy).setPaused(true);
+                        popSfx.play(Volume.POP_SFX);
                     }
 
                     if(vm.has(enemy)){

@@ -23,6 +23,13 @@ public class Assets {
         am.load(ANI_ATLAS, TEXTURE_ATLAS);
         am.load(BG_MUSIC, MUSIC);
         am.load(GAME_OVER_MUSIC, MUSIC);
+        am.load(FIRING_MUSIC, MUSIC);
+        am.load(PLAYER_HIT_LIGHT_SFX, SOUND);
+        am.load(PLAYER_HIT_MEDIUM_SFX, SOUND);
+        am.load(PLAYER_HIT_HEAVY_SFX, SOUND);
+        am.load(PLANET_POP_SFX, SOUND);
+//        am.load(SEED_PLANT_SFX, SOUND);
+//        am.load(SEED_HIT_SFX, SOUND);
         am.load(FONT_32, BITMAP_FONT);
         am.load(FONT_48, BITMAP_FONT);
         am.load(FONT_64, BITMAP_FONT);
@@ -287,7 +294,28 @@ public class Assets {
     public static Music getGameOverMusic(){
         return am.get(GAME_OVER_MUSIC, MUSIC);
     }
+    public static Music getFiringMusic(){
+        return am.get(FIRING_MUSIC, MUSIC);
+    }
 
+    /////////////
+    //SFX
+    /////////////
+    public static Sound getPlanetPopSfx(){
+        return am.get(PLANET_POP_SFX, SOUND);
+    }
+
+    public static Sound getPlayerHitLight(){
+        return am.get(PLAYER_HIT_LIGHT_SFX, SOUND);
+    }
+
+    public static Sound getPlayerHitMedium(){
+        return am.get(PLAYER_HIT_MEDIUM_SFX, SOUND);
+    }
+
+    public static Sound getPlayerHitHeavy(){
+        return am.get(PLAYER_HIT_HEAVY_SFX, SOUND);
+    }
 
     /////////////
     //Fonts
@@ -315,5 +343,11 @@ public class Assets {
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
     private static final String BG_MUSIC = "music/metamorphosis-oga.mp3";
     private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
+    private static final String FIRING_MUSIC = "music/firing.mp3";
+    private static final String PLANET_POP_SFX = "sfx/planet-pop.mp3";
+
+    private static final String PLAYER_HIT_LIGHT_SFX = "sfx/player-hit-light.mp3";
+    private static final String PLAYER_HIT_MEDIUM_SFX = "sfx/player-hit-medium.mp3";
+    private static final String PLAYER_HIT_HEAVY_SFX = "sfx/player-hit-heavy.mp3";
 
 }

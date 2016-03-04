@@ -5,9 +5,9 @@ package com.roaringcatgames.libgdxjam.values;
  */
 public class Damage {
 
-    public static final int comet = 5;
-    public static final int asteroidRock = 2;
-    public static final int asteroid = 10;
+    public static final int comet = 15;
+    public static final int asteroidRock = 10;
+    public static final int asteroid = 30;
 
     public static final int seed = 5;
 }
