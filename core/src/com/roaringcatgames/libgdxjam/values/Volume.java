@@ -4,7 +4,8 @@ package com.roaringcatgames.libgdxjam.values;
  * Created by barry on 2/2/16 @ 7:52 PM.
  */
 public class Volume {
-    public static final float BG_MUSIC = 0.8f;
+    public static final float BG_MUSIC = 0.3f;
+    public static final float FLYING_MUSIC = 1f;
 
     public static final float MENU_MUSIC = 1f;
     public static final float FIRING_MUSIC = 0.1f;

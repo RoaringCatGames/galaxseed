@@ -24,6 +24,7 @@ public class Assets {
         am.load(BG_MUSIC, MUSIC);
         am.load(GAME_OVER_MUSIC, MUSIC);
         am.load(FIRING_MUSIC, MUSIC);
+        am.load(FLYING_MUSIC, MUSIC);
         am.load(PLAYER_HIT_LIGHT_SFX, SOUND);
         am.load(PLAYER_HIT_MEDIUM_SFX, SOUND);
         am.load(PLAYER_HIT_HEAVY_SFX, SOUND);
@@ -297,6 +298,9 @@ public class Assets {
     public static Music getFiringMusic(){
         return am.get(FIRING_MUSIC, MUSIC);
     }
+    public static Music getFlyingMusic(){
+        return am.get(FLYING_MUSIC, MUSIC);
+    }
 
     /////////////
     //SFX
@@ -344,8 +348,9 @@ public class Assets {
     private static final String BG_MUSIC = "music/metamorphosis-oga.mp3";
     private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
     private static final String FIRING_MUSIC = "music/firing.mp3";
-    private static final String PLANET_POP_SFX = "sfx/planet-pop.mp3";
+    private static final String FLYING_MUSIC = "music/flying.mp3";
 
+    private static final String PLANET_POP_SFX = "sfx/planet-pop.mp3";
     private static final String PLAYER_HIT_LIGHT_SFX = "sfx/player-hit-light.mp3";
     private static final String PLAYER_HIT_MEDIUM_SFX = "sfx/player-hit-medium.mp3";
     private static final String PLAYER_HIT_HEAVY_SFX = "sfx/player-hit-heavy.mp3";
