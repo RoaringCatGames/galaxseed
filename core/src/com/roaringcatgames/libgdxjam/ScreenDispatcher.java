@@ -1,7 +1,10 @@
 package com.roaringcatgames.libgdxjam;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.roaringcatgames.libgdxjam.screens.IScreenDispatcher;
+import com.roaringcatgames.libgdxjam.screens.SpaceScreen;
+import com.roaringcatgames.libgdxjam.values.GameState;
 
 import java.util.ArrayList;
 
@@ -14,14 +17,16 @@ public class ScreenDispatcher implements IScreenDispatcher {
     private boolean isCurrenScreenEnded = false;
     private int currentIndex = 0;
 
-    ScreenDispatcher(){
+    private SpriteBatch batch;
+
+    public ScreenDispatcher(SpriteBatch batch){
+        this.batch = batch;
         screens = new ArrayList<>();
     }
 
     public void AddScreen(Screen screen){
         screens.add(screen);
     }
-
 
     @Override
     public void endCurrentScreen() {
@@ -34,12 +39,20 @@ public class ScreenDispatcher implements IScreenDispatcher {
             isCurrenScreenEnded = false;
             //Do logic to pick the next screen
             currentIndex++;
+            if(currentIndex == 2){
+                screens.set(2, new SpaceScreen(batch, this));
+            }
         }
 
         if(screens.size() > currentIndex){
             return screens.get(currentIndex);
         }else{
-            return screens.get(0);
+            currentIndex = 0;
+            if(App.getState() == GameState.MENU) {
+                currentIndex++;
+            }
+
+            return screens.get(currentIndex);
         }
     }
 }

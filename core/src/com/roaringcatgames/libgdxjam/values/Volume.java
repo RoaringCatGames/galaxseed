@@ -5,4 +5,6 @@ package com.roaringcatgames.libgdxjam.values;
  */
 public class Volume {
     public static final float BG_MUSIC = 1f;
+
+    public static final float MENU_MUSIC = 1f;
 }

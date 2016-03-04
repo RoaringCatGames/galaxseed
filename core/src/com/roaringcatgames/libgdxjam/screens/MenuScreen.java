@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -19,6 +20,7 @@ import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.systems.*;
 import com.roaringcatgames.libgdxjam.values.GameState;
+import com.roaringcatgames.libgdxjam.values.Volume;
 
 /**
  * Created by barry on 12/22/15 @ 5:51 PM.
@@ -32,7 +34,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
     private Vector3 touchPoint;
     private Viewport viewport;
 
-
+    private Music menuSong;
     private Entity startGameButton;
     private Entity plant;
 
@@ -54,15 +56,12 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         viewport.apply();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
+        menuSong = Assets.getGameOverMusic();
 
         Vector3 playerPosition = new Vector3(
                 cam.position.x,
                 5f,
                 0f);
-
-        Gdx.app.log("Menu Screen", "Cam Pos: " + cam.position.x + " | " +
-                cam.position.y + " Cam W/H: " + cam.viewportWidth + "/" + cam.viewportHeight);
-
 
         //AshleyExtensions Systems
         engine.addSystem(new MovementSystem());
@@ -83,7 +82,6 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new FollowerSystem());
         //Extension Systems
         engine.addSystem(renderingSystem);
-        //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
 
 
@@ -109,13 +107,22 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         plant.add(TextureComponent.create());
         plant.add(AnimationComponent.create()
             .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getTitleTreeFrames()))
-            .addAnimation("LEAF", new Animation(1f/12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP)));
+            .addAnimation("LEAF", new Animation(1f / 12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP)));
         plant.add(TransformComponent.create()
-            .setPosition(1.7f, 24f));
+                .setPosition(1.7f, 24f));
         engine.addEntity(plant);
 
 
         App.game.multiplexer.addProcessor(this);
+    }
+
+    @Override
+    public void show() {
+        super.show();
+
+        menuSong.setVolume(Volume.MENU_MUSIC);
+        menuSong.setLooping(true);
+        menuSong.play();
     }
 
     boolean treeLeafing = false;
@@ -171,8 +178,8 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
             touchPoint = cam.unproject(touchPoint);
 
             if (startGameButton.getComponent(BoundsComponent.class).bounds.contains(touchPoint.x, touchPoint.y)) {
+                menuSong.stop();
                 dispatcher.endCurrentScreen();
-                App.setState(GameState.PLAYING);
             }
         }
         return false;

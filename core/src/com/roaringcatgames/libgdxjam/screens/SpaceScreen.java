@@ -1,8 +1,6 @@
     package com.roaringcatgames.libgdxjam.screens;
 
-    import com.badlogic.ashley.core.Entity;
-    import com.badlogic.ashley.core.EntitySystem;
-    import com.badlogic.ashley.core.PooledEngine;
+    import com.badlogic.ashley.core.*;
     import com.badlogic.gdx.Gdx;
     import com.badlogic.gdx.Input;
     import com.badlogic.gdx.InputProcessor;
@@ -18,6 +16,8 @@
     import com.roaringcatgames.kitten2d.ashley.systems.*;
     import com.roaringcatgames.libgdxjam.App;
     import com.roaringcatgames.libgdxjam.Assets;
+    import com.roaringcatgames.libgdxjam.components.EnemyComponent;
+    import com.roaringcatgames.libgdxjam.components.FollowerComponent;
     import com.roaringcatgames.libgdxjam.values.GameState;
     import com.roaringcatgames.libgdxjam.values.Z;
     import com.roaringcatgames.libgdxjam.systems.*;
@@ -32,11 +32,8 @@
         private SpriteBatch batch;
         private PooledEngine engine;
         private OrthographicCamera cam;
-        private Vector3 touchPoint;
         private Viewport viewport;
         private Music music;
-
-        private Entity ball;
 
         private Array<EntitySystem> playingOnlySystems;
 
@@ -44,7 +41,6 @@
             super();
             this.batch = batch;
             this.dispatcher = dispatcher;
-            this.touchPoint = new Vector3();
             this.playingOnlySystems = new Array<>();
         }
 
@@ -77,7 +73,8 @@
 
 
             //AshleyExtensions Systems
-            engine.addSystem(new MovementSystem());
+            MovementSystem movementSystem = new MovementSystem();
+            engine.addSystem(movementSystem);
             engine.addSystem(new RotationSystem());
             engine.addSystem(new BoundsSystem());
             engine.addSystem(new AnimationSystem());
@@ -104,7 +101,7 @@
             engine.addSystem(playerDmgSystem);
             engine.addSystem(new FollowerSystem());
 
-            GameOverSystem gameOverSystem = new GameOverSystem();
+            GameOverSystem gameOverSystem = new GameOverSystem(cam, dispatcher);
             gameOverSystem.setProcessing(false);
             engine.addSystem(gameOverSystem);
 
@@ -118,12 +115,23 @@
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
             App.game.multiplexer.addProcessor(this);
 
+            playingOnlySystems.add(movementSystem);
             playingOnlySystems.add(firingSystem);
             playingOnlySystems.add(enemySpawnSystem);
             playingOnlySystems.add(enemyDmgSystem);
             playingOnlySystems.add(playerDmgSystem);
 
             music = Assets.getBackgroundMusic();
+
+        }
+
+        @Override
+        public void show() {
+            super.show();
+
+            App.setState(GameState.PLAYING);
+
+            //Start Music Playing
             music.setVolume(Volume.BG_MUSIC);
             music.setLooping(true);
             music.play();
@@ -141,6 +149,7 @@
             if(App.getState() != lastState){
                 lastState = App.getState();
                 if(lastState == GameState.GAME_OVER) {
+                    music.stop();
                     engine.getSystem(GameOverSystem.class).setProcessing(true);
                     for (EntitySystem es : playingOnlySystems) {
                         if(es.checkProcessing()) {
@@ -148,6 +157,7 @@
                         }
                     }
                 }else if(lastState == GameState.PLAYING){
+                    music.play();
                     engine.getSystem(GameOverSystem.class).setProcessing(false);
                     for (EntitySystem es : playingOnlySystems) {
                         if(!es.checkProcessing()) {
@@ -181,15 +191,6 @@
                     }
                 }
             }
-//            if(keycode == Input.Keys.ESCAPE){
-//                for(EntitySystem s:engine.getSystems()){
-//                    if(!(s instanceof RenderingSystem) &&
-//                            !(s instanceof DebugSystem) &&
-//                            !(s instanceof PlayerHealthSystem)) {
-//                        s.setProcessing(!s.checkProcessing());
-//                    }
-//                }
-//            }
 
             return false;
         }
@@ -226,7 +227,6 @@
 
         @Override
         public boolean scrolled(int amount) {
-            cam.zoom += amount * 0.5f;
             return false;
         }
 

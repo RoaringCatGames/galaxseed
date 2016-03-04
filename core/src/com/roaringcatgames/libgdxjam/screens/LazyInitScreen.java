@@ -20,13 +20,19 @@ public abstract class LazyInitScreen extends ScreenAdapter {
     protected abstract void update(float deltaChange);
 
     @Override
-    public void render(float delta) {
-        super.render(delta);
-
+    public void show() {
+        super.show();
         if(!isInitialized) {
             init();
             isInitialized = true;
         }
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+
+
 
         update(delta);
     }

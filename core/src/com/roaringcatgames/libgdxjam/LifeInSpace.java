@@ -22,7 +22,7 @@ public class LifeInSpace extends Game {
     @Override
     public void create () {
         batch = new SpriteBatch();
-        screenDispatcher = new ScreenDispatcher();
+        screenDispatcher = new ScreenDispatcher(batch);
         Screen splashScreen = new SplashScreen(batch, screenDispatcher);
         Screen gameScreen = new MenuScreen(batch, screenDispatcher);
         Screen spaceScreen = new SpaceScreen(batch, screenDispatcher);

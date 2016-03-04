@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.signals.Listener;
 import com.badlogic.ashley.signals.Signal;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
@@ -116,24 +117,23 @@ public class EnemyDamageSystem extends IteratingSystem {
                 applyHealthChange(bullet, hc);
 
                 if(startHealth > 0f && hc.health <= 0f) {
+
                     switch(ec.enemyType){
                         case ASTEROID_A:
-                            enemy.add(AnimationComponent.create()
-                                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAsteroidAFrames())));
+                            attachTreeCover(enemy, Assets.getAsteroidAFrames());
                             break;
                         case ASTEROID_B:
-                            enemy.add(AnimationComponent.create()
-                                    .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAsteroidBFrames())));
+                            attachTreeCover(enemy, Assets.getAsteroidBFrames());
                             break;
                         case ASTEROID_C:
-                            enemy.add(AnimationComponent.create()
-                                    .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAsteroidCFrames())));
+                            attachTreeCover(enemy, Assets.getAsteroidCFrames());
                             break;
                         case COMET:
 
                             break;
                     }
-                    enemy.add(StateComponent.create().set("DEFAULT").setLooping(false));
+
+                    //enemy.add(StateComponent.create().set("DEFAULT").setLooping(false));
                     ec.setDamaging(false);
                     if(sm.has(enemy)){
                         sm.get(enemy).setPaused(true);
@@ -144,6 +144,29 @@ public class EnemyDamageSystem extends IteratingSystem {
 
                 break;
         }
+    }
+
+    private void attachTreeCover(Entity enemy, Array<TextureAtlas.AtlasRegion> frames) {
+
+        TransformComponent tc = tm.get(enemy);
+
+        Entity treeCover = ((PooledEngine) getEngine()).createEntity();
+        treeCover.add(TransformComponent.create()
+                .setPosition(tc.position.x, tc.position.y, Z.treeCover)
+                .setRotation(tc.rotation));
+        treeCover.add(TextureComponent.create());
+        treeCover.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(false));
+
+        treeCover.add(FollowerComponent.create()
+                .setOffset(0f, 0f)
+                .setTarget(enemy)
+                .setBaseRotation(0f));
+
+        treeCover.add(AnimationComponent.create()
+            .addAnimation("DEFAULT", new Animation(1f / 6f, frames)));
+        getEngine().addEntity(treeCover);
     }
 
     private void applyHealthChange(Entity bullet, HealthComponent hc) {
@@ -164,7 +187,7 @@ public class EnemyDamageSystem extends IteratingSystem {
         Vector2 offsetVec = VectorUtils.rotateVector(outVec.cpy(), -et.rotation).add(eb.offset);
         float baseRotation = offsetVec.angle() - 90f;
 
-        final Entity plant = ((PooledEngine) getEngine()).createEntity();
+        Entity plant = ((PooledEngine) getEngine()).createEntity();
         plant.add(TransformComponent.create()
                 .setPosition(outVec.x, outVec.y, Z.plant)
                 .setRotation(et.rotation + baseRotation));
@@ -184,13 +207,6 @@ public class EnemyDamageSystem extends IteratingSystem {
                 .setOffset(offsetVec.x, offsetVec.y)
                 .setTarget(enemy)
                 .setBaseRotation(baseRotation));
-
-        enemy.componentRemoved.add(new Listener<Entity>() {
-            @Override
-            public void receive(Signal<Entity> signal, Entity object) {
-                getEngine().removeEntity(plant);
-            }
-        });
 
         getEngine().addEntity(plant);
 
