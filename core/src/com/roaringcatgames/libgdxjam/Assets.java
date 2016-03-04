@@ -37,6 +37,11 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getLoadingFrames(){
         return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegions("loading");
     }
+
+    public static TextureAtlas.AtlasRegion getSplashTitle(){
+        return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegion("RCG");
+    }
+
     /***
      * SAFE IMMEDIATELY after am.load() is called
      * @return AtlasRegion for the moon sprite.

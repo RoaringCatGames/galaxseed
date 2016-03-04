@@ -8,14 +8,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.roaringcatgames.kitten2d.ashley.components.AnimationComponent;
-import com.roaringcatgames.kitten2d.ashley.components.StateComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
+import com.badlogic.gdx.math.Vector2;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.AnimationSystem;
+import com.roaringcatgames.kitten2d.ashley.systems.MovementSystem;
 import com.roaringcatgames.kitten2d.ashley.systems.RenderingSystem;
+import com.roaringcatgames.kitten2d.ashley.systems.RotationSystem;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.systems.BackgroundSystem;
+import com.roaringcatgames.libgdxjam.values.Z;
+import sun.swing.BakedArrayList;
 
 /**
  * Created by barry on 12/22/15 @ 7:27 PM.
@@ -26,7 +29,7 @@ public class SplashScreen extends LazyInitScreen {
     private IScreenDispatcher dispatcher;
     private PooledEngine engine;
 
-    private int minSpalshSeconds = 2;
+    private float minSpalshSeconds = 5f;
     private float elapsedTime = 0f;
     private OrthographicCamera cam;
 
@@ -44,25 +47,42 @@ public class SplashScreen extends LazyInitScreen {
         cam = render.getCamera();
         engine.addSystem(new AnimationSystem());
         engine.addSystem(render);
+        Vector2 minBounds = new Vector2(0f, 0f);
+        Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
+        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false));
+        engine.addSystem(new MovementSystem());
+        engine.addSystem(new RotationSystem());
+
+        Entity title = engine.createEntity();
+        title.add(TransformComponent.create()
+            .setPosition(App.W/2f, App.H/2f, Z.gameOver)
+            .setScale(1f, 1f));
+        title.add(TextureComponent.create()
+            .setRegion(Assets.getSplashTitle()));
+        engine.addEntity(title);
 
         Entity e = engine.createEntity();
 
         e.add(TransformComponent.create()
-                .setPosition(render.getCamera().viewportWidth/2f, render.getCamera().viewportHeight/2f, 100f)
+                .setPosition(16f, 10f, 100f)
                 .setRotation(0f)
                 .setScale(1f, 1f));
         engine.addEntity(e);
 
         Entity loading = engine.createEntity();
+        loading.add(VelocityComponent.create()
+            .setSpeed(-4f, 0f));
+        loading.add(RotationComponent.create()
+            .setRotationSpeed(90f));
         loading.add(TransformComponent.create()
-                .setPosition(render.getCamera().viewportWidth/2f, render.getCamera().viewportHeight/2f, 0f)
+                .setPosition(16f, 10f, 0f)
                 .setScale(1f, 1f));
         loading.add(TextureComponent.create());
         loading.add(StateComponent.create()
                 .set("DEFAULT")
-                .setLooping(false));
+                .setLooping(true));
         loading.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 5f, Assets.getLoadingFrames())));
+                .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getLoadingFrames())));
 
         engine.addEntity(loading);
     }
