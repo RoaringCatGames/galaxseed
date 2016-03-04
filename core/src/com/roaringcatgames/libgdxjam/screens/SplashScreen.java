@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.AnimationSystem;
 import com.roaringcatgames.kitten2d.ashley.systems.MovementSystem;
@@ -33,6 +35,7 @@ public class SplashScreen extends LazyInitScreen {
     private float minSpalshSeconds = 6f;
     private float elapsedTime = 0f;
     private OrthographicCamera cam;
+    private Viewport viewport;
 
     public SplashScreen(SpriteBatch batch, IScreenDispatcher dispatcher){
         this.batch = batch;
@@ -46,6 +49,10 @@ public class SplashScreen extends LazyInitScreen {
         engine = new PooledEngine();
         RenderingSystem render = new RenderingSystem(batch, App.PPM);
         cam = render.getCamera();
+        viewport = new FitViewport(20f, 30f, cam);
+        viewport.apply();
+        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
 
         //Normally we would use a different camera, but our main camera
         //  never moves, so we're safe to use a single one here
@@ -105,6 +112,14 @@ public class SplashScreen extends LazyInitScreen {
             shapeRenderer.setColor(Color.WHITE);
             shapeRenderer.rect(0, 0, cam.viewportWidth * Assets.am.getProgress(), 1f);
             shapeRenderer.end();
+        }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        if(viewport != null) {
+            viewport.update(width, height);
         }
     }
 }
