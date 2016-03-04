@@ -119,6 +119,21 @@ public class Assets {
         return planets;
     }
 
+    /////////////
+    //PLAY
+    /////////////
+    public static Array<TextureAtlas.AtlasRegion> getPFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("PLAY/P");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getLFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("PLAY/L");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getAFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("PLAY/A");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getYFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("PLAY/Y");
+    }
 
 
     /////////////

@@ -1,6 +1,7 @@
 package com.roaringcatgames.libgdxjam.screens;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -18,6 +19,7 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.MenuItemComponent;
 import com.roaringcatgames.libgdxjam.systems.*;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Volume;
@@ -25,7 +27,7 @@ import com.roaringcatgames.libgdxjam.values.Volume;
 /**
  * Created by barry on 12/22/15 @ 5:51 PM.
  */
-public class MenuScreen extends LazyInitScreen implements InputProcessor {
+public class MenuScreen extends LazyInitScreen {
 
     private IScreenDispatcher dispatcher;
     private SpriteBatch batch;
@@ -35,8 +37,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
     private Viewport viewport;
 
     private Music menuSong;
-    private Entity startGameButton;
-    private Entity plant;
+    private Entity plant, p, l, a, y;
 
     public MenuScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
         super();
@@ -68,6 +69,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new RotationSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new AnimationSystem());
+        engine.addSystem(new MenuStartSystem());
 
         //Custom Systems
         Vector2 minBounds = new Vector2(0f, 0f);
@@ -80,19 +82,10 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
         engine.addSystem(new BulletSystem());
         engine.addSystem(new FollowerSystem());
+        engine.addSystem(new FadingSystem());
         //Extension Systems
         engine.addSystem(renderingSystem);
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
-
-
-        startGameButton = engine.createEntity();
-        startGameButton.add(TextureComponent.create()
-            .setRegion(Assets.getStartButtonImage()));
-        startGameButton.add(TransformComponent.create()
-                .setPosition(10f, 20f));
-        startGameButton.add(BoundsComponent.create()
-                .setBounds(9.25f, 22f, 10f, 4f));
-        engine.addEntity(startGameButton);
 
         Entity title = engine.createEntity();
         title.add(TextureComponent.create()
@@ -103,17 +96,84 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
 
         plant = engine.createEntity();
         plant.add(StateComponent.create()
-            .setLooping(false).set("DEFAULT"));
+                .setLooping(false).set("DEFAULT"));
         plant.add(TextureComponent.create());
         plant.add(AnimationComponent.create()
-            .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getTitleTreeFrames()))
-            .addAnimation("LEAF", new Animation(1f / 12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP)));
+                .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getTitleTreeFrames()))
+                .addAnimation("LEAF", new Animation(1f / 12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP)));
         plant.add(TransformComponent.create()
                 .setPosition(1.7f, 24f));
+
+        float xPos = 4f;
+        float yPos = 19f;
+        p = engine.createEntity();
+        p.add(MenuItemComponent.create());
+        p.add(TextureComponent.create());
+        p.add(CircleBoundsComponent.create()
+            .setCircle(xPos, yPos, 2f));
+        p.add(AnimationComponent.create()
+            .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getPFrames()))
+            .setPaused(true));
+        p.add(TransformComponent.create()
+                .setPosition(xPos, yPos)
+                .setScale(0.5f, 0.5f));
+        p.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(false));
+        engine.addEntity(p);
+        xPos += 4f;
+
+        l = engine.createEntity();
+        l.add(TextureComponent.create());
+        l.add(MenuItemComponent.create());
+        l.add(CircleBoundsComponent.create()
+                .setCircle(xPos, yPos, 2f));
+        l.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getLFrames()))
+                .setPaused(true));
+        l.add(TransformComponent.create()
+                .setPosition(xPos, yPos)
+                .setScale(0.5f, 0.5f));
+        l.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(false));
+        engine.addEntity(l);
+        xPos += 4f;
+
+        a = engine.createEntity();
+        a.add(TextureComponent.create());
+        a.add(MenuItemComponent.create());
+        a.add(CircleBoundsComponent.create()
+                .setCircle(xPos, yPos, 2f));
+        a.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAFrames()))
+                .setPaused(true));
+        a.add(TransformComponent.create()
+                .setPosition(xPos, yPos)
+                .setScale(0.5f, 0.5f));
+        a.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(false));
+        engine.addEntity(a);
+        xPos += 4f;
+
+        y = engine.createEntity();
+        y.add(TextureComponent.create());
+        y.add(MenuItemComponent.create());
+        y.add(CircleBoundsComponent.create()
+                .setCircle(xPos, yPos, 2f));
+        y.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getYFrames()))
+                .setPaused(true));
+        y.add(TransformComponent.create()
+                .setPosition(xPos, yPos)
+                .setScale(0.5f, 0.5f));
+        y.add(StateComponent.create()
+                .set("DEFAULT")
+                .setLooping(false));
+        engine.addEntity(y);
+
         engine.addEntity(plant);
-
-
-        App.game.multiplexer.addProcessor(this);
     }
 
     @Override
@@ -140,9 +200,17 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
                 sc.set("LEAF").setLooping(true);
                 treeLeafing = true;
             }
-
         }
 
+        if(isReady(p) && isReady(l) && isReady(a) && isReady(y)){
+            menuSong.stop();
+            dispatcher.endCurrentScreen();
+        }
+    }
+
+    private boolean isReady(Entity p){
+        return !p.getComponent(AnimationComponent.class).isPaused &&
+                p.getComponent(TransformComponent.class).opacity == 0f;
     }
 
     @Override
@@ -152,58 +220,4 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor {
             viewport.update(width, height);
         }
     }
-    /**************************
-     * Input Processor Methods
-     **************************/
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(App.getState() == GameState.MENU) {
-            touchPoint.set(screenX, screenY, 0f);
-            touchPoint = cam.unproject(touchPoint);
-
-            if (startGameButton.getComponent(BoundsComponent.class).bounds.contains(touchPoint.x, touchPoint.y)) {
-                menuSong.stop();
-                dispatcher.endCurrentScreen();
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
-
-
 }

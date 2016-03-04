@@ -17,6 +17,7 @@ import com.roaringcatgames.kitten2d.ashley.systems.RotationSystem;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.systems.BackgroundSystem;
+import com.roaringcatgames.libgdxjam.systems.TextRenderingSystem;
 import com.roaringcatgames.libgdxjam.values.Z;
 import sun.swing.BakedArrayList;
 
@@ -29,7 +30,7 @@ public class SplashScreen extends LazyInitScreen {
     private IScreenDispatcher dispatcher;
     private PooledEngine engine;
 
-    private float minSpalshSeconds = 5f;
+    private float minSpalshSeconds = 6f;
     private float elapsedTime = 0f;
     private OrthographicCamera cam;
 
@@ -45,6 +46,11 @@ public class SplashScreen extends LazyInitScreen {
         engine = new PooledEngine();
         RenderingSystem render = new RenderingSystem(batch, App.PPM);
         cam = render.getCamera();
+
+        //Normally we would use a different camera, but our main camera
+        //  never moves, so we're safe to use a single one here
+        OrthographicCamera guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        guiCam.position.set(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, 0f);
         engine.addSystem(new AnimationSystem());
         engine.addSystem(render);
         Vector2 minBounds = new Vector2(0f, 0f);
@@ -52,38 +58,33 @@ public class SplashScreen extends LazyInitScreen {
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RotationSystem());
+        engine.addSystem(new TextRenderingSystem(batch, guiCam, cam));
 
         Entity title = engine.createEntity();
         title.add(TransformComponent.create()
-            .setPosition(App.W/2f, App.H/2f, Z.gameOver)
-            .setScale(1f, 1f));
-        title.add(TextureComponent.create()
-            .setRegion(Assets.getSplashTitle()));
-        engine.addEntity(title);
-
-        Entity e = engine.createEntity();
-
-        e.add(TransformComponent.create()
-                .setPosition(16f, 10f, 100f)
-                .setRotation(0f)
+                .setPosition(App.W / 2f, 15f, Z.gameOver)
                 .setScale(1f, 1f));
-        engine.addEntity(e);
+        title.add(TextureComponent.create()
+                .setRegion(Assets.getSplashTitle()));
+        engine.addEntity(title);
 
         Entity loading = engine.createEntity();
         loading.add(VelocityComponent.create()
-            .setSpeed(-4f, 0f));
+            .setSpeed(-2.5f, 0f));
         loading.add(RotationComponent.create()
-            .setRotationSpeed(90f));
+            .setRotationSpeed(45f));
         loading.add(TransformComponent.create()
-                .setPosition(16f, 10f, 0f)
-                .setScale(1f, 1f));
+                .setPosition(16f, 8f, 0f)
+                .setScale(0.5f, 0.5f));
         loading.add(TextureComponent.create());
         loading.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
         loading.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getLoadingFrames())));
+                .addAnimation("DEFAULT", new Animation(1f / 30f, Assets.getLoadingFrames(), Animation.PlayMode.LOOP_PINGPONG)));
 
+        //TODO: Add loading %
+        //Entity loadingText =
         engine.addEntity(loading);
     }
 
@@ -101,8 +102,8 @@ public class SplashScreen extends LazyInitScreen {
             Gdx.gl20.glLineWidth(1f);
             shapeRenderer.setProjectionMatrix(cam.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(Color.CYAN);
-            shapeRenderer.rect(0, 0, cam.viewportWidth * Assets.am.getProgress(), cam.viewportHeight / 10f);
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(0, 0, cam.viewportWidth * Assets.am.getProgress(), 1f);
             shapeRenderer.end();
         }
     }
