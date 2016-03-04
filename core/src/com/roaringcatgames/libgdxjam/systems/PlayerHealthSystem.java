@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Bezier;
@@ -47,7 +48,7 @@ public class PlayerHealthSystem extends IteratingSystem {
         this.cam = cam;
         shapeRenderer = new ShapeRenderer();
 
-        healthColor = new Color(0f, 200f, 50f, 0.8f);
+        healthColor = new Color(255f, 0f, 0f, 0.4f);
 
         path = new Bezier<Vector2>(new Vector2(0, 0), new Vector2(10, 10), new Vector2(20, 30));
     }
@@ -67,16 +68,20 @@ public class PlayerHealthSystem extends IteratingSystem {
             App.setState(GameState.GAME_OVER);
         }
 
-        Gdx.gl20.glLineWidth(3f);
-        shapeRenderer.setProjectionMatrix(cam.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.WHITE);
+//        Gdx.gl20.glLineWidth(3f);
 
-        //OuterBar
-        shapeRenderer.rect(bc.bounds.x, bc.bounds.y, bc.bounds.width, bc.bounds.height);
-        shapeRenderer.end();
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setColor(Color.WHITE);
+//
+//        //OuterBar
+//        shapeRenderer.rect(bc.bounds.x, bc.bounds.y, bc.bounds.width, bc.bounds.height);
+//        shapeRenderer.end();
 
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl20.glLineWidth(1f);
+        shapeRenderer.setProjectionMatrix(cam.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         shapeRenderer.setColor(healthColor);
@@ -84,28 +89,7 @@ public class PlayerHealthSystem extends IteratingSystem {
         float width = bc.bounds.width * (hc.health/hc.maxHealth);
         shapeRenderer.rect(bc.bounds.x, bc.bounds.y, width, bc.bounds.height);
         shapeRenderer.end();
-
-
-//        float k = 100f;
-//        Vector2 p0 = new Vector2(0, 0);
-//        Vector2 p1 = new Vector2(20, 30);
-//        Vector2 p2 = new Vector2(15, 25);
-//        Vector2 p3 = new Vector2(1, 1);
-//        Vector2 tmp = new Vector2();
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        for(float i = 0; i < k-1; ++i)
-//        {
-//
-//            Bezier.quadratic(v1, (i/k), p0, p1, p2, tmp);
-//            Bezier.quadratic(v2, ((i+1f)/k), p0, p1, p2, tmp);
-////            path.valueAt(v1, (i/k)*1);
-////            path.valueAt(v2, (i+1/k)*1);
-////            path.cubic_derivative(v1, (i/k)*1, p0, p1, p2, p3,tmp);
-////            path.cubic_derivative(v2, (i+1f/k)*1, p0, p1, p2, p3, tmp);
-//            //Gdx.app.log("PLAYER HEALTH SYSTEM", "At Time: " + (i/k) + " V1:" + v1.x + "," + v1.y + " V2: " + v2.x + "," + v2.y);
-//            shapeRenderer.line(v1, v2);
-//        }
-//        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     private void init(){

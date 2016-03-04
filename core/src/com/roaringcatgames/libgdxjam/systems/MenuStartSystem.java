@@ -49,7 +49,7 @@ public class MenuStartSystem extends IteratingSystem{
         for(Entity bullet:bullets){
             CircleBoundsComponent bb = cm.get(bullet);
             for(Entity enemy:enemies){
-                if(cm.has(enemy)){
+                if(cm.has(enemy) && tm.get(enemy).opacity > 0f){
                     CircleBoundsComponent cb = cm.get(enemy);
                     if (cb.circle.overlaps(bb.circle)) {
                         processCollision(bullet, enemy);
