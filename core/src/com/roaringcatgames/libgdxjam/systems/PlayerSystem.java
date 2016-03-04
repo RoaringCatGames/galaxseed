@@ -24,26 +24,19 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private boolean isInitialized = false;
     private Entity player;
     private Entity flames;
-    private Entity touchIndicator;
+    private Entity scoreCard;
     private Vector3 initialPosition;
     private float initialScale;
-
-    private float deceleration = 100f;
-    private float maxVelocity = 25f;
-    private float ACCEL_RATE = 40f;
-    private float accelerationX = 0f;
-    private float accelerationY = 0f;
 
     private Vector2 controlOrigin;
 
     private Vector2 idleFlameOffset = new Vector2(0f, -2.6f);
     private Vector2 flyingFlameOffset = new Vector2(0f, -3.25f);
 
-    private ComponentMapper<VelocityComponent> vm;
+
     private ComponentMapper<StateComponent> sm;
-    private ComponentMapper<BoundsComponent> bm;
     private ComponentMapper<TransformComponent> tm;
-    private ComponentMapper<PlayerComponent> pm;
+
 
     private OrthographicCamera cam;
 
@@ -51,11 +44,9 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         super(Family.all(PlayerComponent.class).get());
         this.initialPosition = initialPosition;
         this.initialScale = initialScale;
-        this.vm = ComponentMapper.getFor(VelocityComponent.class);
+
         this.sm = ComponentMapper.getFor(StateComponent.class);
-        this.bm = ComponentMapper.getFor(BoundsComponent.class);
         this.tm = ComponentMapper.getFor(TransformComponent.class);
-        this.pm = ComponentMapper.getFor(PlayerComponent.class);
         this.cam = cam;
 
         this.controlOrigin = new Vector2();
@@ -67,12 +58,21 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             if (getEngine() instanceof PooledEngine) {
                 player = ((PooledEngine) getEngine()).createEntity();
                 flames = ((PooledEngine) getEngine()).createEntity();
-                touchIndicator = ((PooledEngine) getEngine()).createEntity();
+                scoreCard = ((PooledEngine) getEngine()).createEntity();
             } else {
                 player = new Entity();
                 flames = new Entity();
-                touchIndicator = new Entity();
+                scoreCard = new Entity();
             }
+
+            scoreCard.add(TextComponent.create()
+                .setText("Score: 00000")
+                .setFont(Assets.get32Font()));
+            scoreCard.add(TransformComponent.create()
+                .setPosition(10f, 30f, 0f));
+            scoreCard.add(ScoreComponent.create()
+                .setScore(0));
+            getEngine().addEntity(scoreCard);
 
             player.add(KinematicComponent.create());
             player.add(PlayerComponent.create());
@@ -82,16 +82,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(TransformComponent.create()
                     .setPosition(initialPosition.x, initialPosition.y, initialPosition.z)
                     .setScale(initialScale, initialScale));
-
-//            Vector2 p0 = new Vector2(0f, 0f);
-//            Vector2 p1 = new Vector2(0f, 25f);
-//            Vector2 p2 = new Vector2(20f, 30f);
-//
-//            player.add(PathFollowComponent.create()
-//                .setFacingPath(true)
-//                .setTotalPathTime(10f)
-//                //.setBaseRotation(90f)
-//                .setPath(new Bezier<>(p2, p1, p0)));
 
             player.add(BoundsComponent.create()
                     .setBounds(0f, 0f, 1.5f, 2.5f));
@@ -129,15 +119,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .setLooping(true));
             getEngine().addEntity(flames);
 
-            touchIndicator.add(TextureComponent.create()
-                    .setRegion(Assets.getTouchPoint()));
-            touchIndicator.add(TransformComponent.create()
-                .setPosition(0f, 0f, Z.touchIndicator)
-                .setHidden(true));
-
-            getEngine().addEntity(touchIndicator);
-
-
         }
         isInitialized = true;
     }
@@ -165,26 +146,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         StateComponent sc = sm.get(player);
         TransformComponent tc = tm.get(player);
         tc.position.add(currentPositionChange);
-//        VelocityComponent vc = vm.get(player);
 
-//
-//        float newX = vc.speed.x;
-//        float newY = vc.speed.y;
-//        if(accelerationX != 0f && Math.abs(newX) < maxVelocity){
-//            newX = applyAcceleration(deltaTime, newX, accelerationX);
-//        }else if(newX != 0f){
-//            newX = applyDeceleration(deltaTime, newX);
-//        }
-//
-//        //Y Accel
-//        if(accelerationY != 0f && Math.abs(newY) < maxVelocity){
-//            newY = applyAcceleration(deltaTime, newY, accelerationY);
-//        }else if(newY != 0f){
-//            newY = applyDeceleration(deltaTime, newY);
-//        }
-//
-//        vc.speed.set(newX, newY);
-//
         /**********************
          * Set Animation State
          **********************/
@@ -193,15 +155,12 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         boolean isLooping = true;
         //right
         if(currentPositionChange.x > 0f) {
-            //if(accelerationX > 0f){
             state = "FLYING_RIGHT";
             isLooping = false;
         }else if(currentPositionChange.x < 0f) {
-            //}else if(accelerationX < 0f){
             state = "FLYING_LEFT";
             isLooping = false;
         }else if(currentPositionChange.y != 0f){
-        //}else if(accelerationY != 0f){
             state = "FLYING";
         }
 
@@ -277,7 +236,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     }
 
     Vector3 touchPoint = new Vector3();
-    Vector3 dragPoint = new Vector3();
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -285,17 +243,12 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         touchPoint.set(screenX, screenY, 0f);
         touchPoint = cam.unproject(touchPoint);
         controlOrigin.set(touchPoint.x, touchPoint.y);
-        touchIndicator.getComponent(TransformComponent.class)
-            .setPosition(touchPoint.x, touchPoint.y)
-            .setHidden(false);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        accelerationX = 0f;
-        accelerationY = 0f;
-        touchIndicator.getComponent(TransformComponent.class).isHidden = true;
+
         currentPositionChange.set(0f, 0f, 0f);
         return false;
     }
@@ -311,23 +264,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         currentPositionChange.sub(touchPoint);
         touchPoint.set(newTouchPosition);
 
-
-
-//        dragPoint.set(screenX, screenY, 0f);
-//        dragPoint = cam.unproject(dragPoint);
-//
-//        if(dragPoint.x > controlOrigin.x){
-//            accelerationX = ACCEL_RATE;
-//        }else if(dragPoint.x < controlOrigin.x){
-//            accelerationX = -ACCEL_RATE;
-//        }
-//
-//        if(dragPoint.y > controlOrigin.y){
-//            accelerationY = ACCEL_RATE;
-//        }else if(dragPoint.y < controlOrigin.y){
-//            accelerationY = -ACCEL_RATE;
-//        }
-
         return false;
     }
 
@@ -339,29 +275,5 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
-    }
-
-
-    /************************
-     * Private Methods
-     ************************/
-    private float applyDeceleration(float deltaTime, float inputSpeed) {
-        return 0f;
-//        float newSpeed;
-//        boolean isReverse = inputSpeed < 0f;
-//        float adjust = !isReverse ?  -deceleration *deltaTime : deceleration *deltaTime;
-//        newSpeed = inputSpeed + adjust;
-//        newSpeed =  isReverse ? Math.min(0f, newSpeed) : Math.max(0f, newSpeed);
-//        return newSpeed;
-    }
-
-    private float applyAcceleration(float deltaTime, float inputSpeed, float acceleration) {
-        return acceleration > 0f ? maxVelocity : -maxVelocity;
-
-//        float newSpeed;
-//        float adjust = acceleration *deltaTime;
-//        newSpeed = inputSpeed + adjust;
-//        newSpeed = newSpeed > 0 ? Math.min(maxVelocity, newSpeed) : Math.max(-maxVelocity, newSpeed);
-//        return newSpeed;
     }
 }

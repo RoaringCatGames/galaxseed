@@ -94,6 +94,7 @@
             engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
             engine.addSystem(new BackgroundSystem(minBounds, maxBounds, true));
             engine.addSystem(new BulletSystem());
+            engine.addSystem(new ScoreSystem());
 
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
             PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();

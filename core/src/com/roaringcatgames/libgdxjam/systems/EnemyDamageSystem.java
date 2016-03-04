@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.signals.Listener;
 import com.badlogic.ashley.signals.Signal;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -40,6 +41,8 @@ public class EnemyDamageSystem extends IteratingSystem {
     private ComponentMapper<StateComponent> stm;
     private ComponentMapper<VelocityComponent> vm;
 
+    private ScoreComponent scoreCard;
+
     Random r = new Random();
 
     public EnemyDamageSystem(){
@@ -60,6 +63,11 @@ public class EnemyDamageSystem extends IteratingSystem {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+
+        ImmutableArray<Entity> scores = getEngine().getEntitiesFor(Family.all(ScoreComponent.class).get());
+        if(scores != null && scores.size() > 0){
+            scoreCard = scores.first().getComponent(ScoreComponent.class);
+        }
 
         for(Entity bullet:bullets){
             CircleBoundsComponent bb = cm.get(bullet);
@@ -105,6 +113,7 @@ public class EnemyDamageSystem extends IteratingSystem {
 
         EnemyComponent ec = em.get(enemy);
         HealthComponent hc;
+        int scoredPoints = 0;
 
         switch(ec.enemyType) {
             case ASTEROID_FRAG:
@@ -119,19 +128,21 @@ public class EnemyDamageSystem extends IteratingSystem {
                 applyHealthChange(bullet, hc);
 
                 if(startHealth > 0f && hc.health <= 0f) {
-
                     switch(ec.enemyType){
                         case ASTEROID_A:
                             attachTreeCover(enemy, Assets.getAsteroidAFrames());
+                            scoredPoints = 2;
                             break;
                         case ASTEROID_B:
                             attachTreeCover(enemy, Assets.getAsteroidBFrames());
+                            scoredPoints = 4;
                             break;
                         case ASTEROID_C:
                             attachTreeCover(enemy, Assets.getAsteroidCFrames());
+                            scoredPoints = 8;
                             break;
                         case COMET:
-
+                            scoredPoints = 1;
                             break;
                     }
 
@@ -148,6 +159,10 @@ public class EnemyDamageSystem extends IteratingSystem {
 
                     enemy.add(FadingComponent.create()
                             .setPercentPerSecond(100f));
+
+                    if(scoreCard != null){
+                        scoreCard.setScore(scoreCard.score + scoredPoints);
+                    }
                 }
 
                 getEngine().removeEntity(bullet);
@@ -219,6 +234,5 @@ public class EnemyDamageSystem extends IteratingSystem {
                 .setBaseRotation(baseRotation));
 
         getEngine().addEntity(plant);
-
     }
 }
