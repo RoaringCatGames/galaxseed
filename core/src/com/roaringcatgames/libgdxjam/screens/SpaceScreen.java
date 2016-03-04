@@ -32,11 +32,8 @@
         private SpriteBatch batch;
         private PooledEngine engine;
         private OrthographicCamera cam;
-        private Vector3 touchPoint;
         private Viewport viewport;
         private Music music;
-
-        private Entity ball;
 
         private Array<EntitySystem> playingOnlySystems;
 
@@ -44,7 +41,6 @@
             super();
             this.batch = batch;
             this.dispatcher = dispatcher;
-            this.touchPoint = new Vector3();
             this.playingOnlySystems = new Array<>();
         }
 
@@ -77,7 +73,8 @@
 
 
             //AshleyExtensions Systems
-            engine.addSystem(new MovementSystem());
+            MovementSystem movementSystem = new MovementSystem();
+            engine.addSystem(movementSystem);
             engine.addSystem(new RotationSystem());
             engine.addSystem(new BoundsSystem());
             engine.addSystem(new AnimationSystem());
@@ -104,7 +101,7 @@
             engine.addSystem(playerDmgSystem);
             engine.addSystem(new FollowerSystem());
 
-            GameOverSystem gameOverSystem = new GameOverSystem();
+            GameOverSystem gameOverSystem = new GameOverSystem(cam, dispatcher);
             gameOverSystem.setProcessing(false);
             engine.addSystem(gameOverSystem);
 
@@ -118,12 +115,23 @@
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
             App.game.multiplexer.addProcessor(this);
 
+            playingOnlySystems.add(movementSystem);
             playingOnlySystems.add(firingSystem);
             playingOnlySystems.add(enemySpawnSystem);
             playingOnlySystems.add(enemyDmgSystem);
             playingOnlySystems.add(playerDmgSystem);
 
             music = Assets.getBackgroundMusic();
+
+        }
+
+        @Override
+        public void show() {
+            super.show();
+
+            App.setState(GameState.PLAYING);
+
+            //Start Music Playing
             music.setVolume(Volume.BG_MUSIC);
             music.setLooping(true);
             music.play();
@@ -183,15 +191,6 @@
                     }
                 }
             }
-//            if(keycode == Input.Keys.ESCAPE){
-//                for(EntitySystem s:engine.getSystems()){
-//                    if(!(s instanceof RenderingSystem) &&
-//                            !(s instanceof DebugSystem) &&
-//                            !(s instanceof PlayerHealthSystem)) {
-//                        s.setProcessing(!s.checkProcessing());
-//                    }
-//                }
-//            }
 
             return false;
         }
@@ -228,7 +227,6 @@
 
         @Override
         public boolean scrolled(int amount) {
-            cam.zoom += amount * 0.5f;
             return false;
         }
 

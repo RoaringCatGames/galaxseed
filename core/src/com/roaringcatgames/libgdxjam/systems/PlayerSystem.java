@@ -94,7 +94,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 //                .setPath(new Bezier<>(p2, p1, p0)));
 
             player.add(BoundsComponent.create()
-                    .setBounds(0f, 0f, 2f, 3f));
+                    .setBounds(0f, 0f, 1.5f, 2.5f));
 
             player.add(TextureComponent.create());
             player.add(AnimationComponent.create()
