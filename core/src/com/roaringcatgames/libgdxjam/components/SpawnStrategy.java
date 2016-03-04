@@ -5,5 +5,6 @@ package com.roaringcatgames.libgdxjam.components;
  */
 public enum SpawnStrategy {
     ALL_DIRECTIONS,
+    ALL_DIRECTIONS_FAST,
     RANDOM_DIRECTIONS
 }

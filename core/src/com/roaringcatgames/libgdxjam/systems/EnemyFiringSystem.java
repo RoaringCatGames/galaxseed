@@ -59,6 +59,7 @@ public class EnemyFiringSystem extends IteratingSystem {
             TransformComponent tc = tm.get(spawner);
             float secsBetweenSpawns = 1f/sc.spawnRate;
             sc.elapsedTime += deltaTime;
+
             if(sc.elapsedTime - sc.lastSpawnTime >= secsBetweenSpawns) {
                 sc.lastSpawnTime = sc.elapsedTime;
                 switch (sc.strategy) {
