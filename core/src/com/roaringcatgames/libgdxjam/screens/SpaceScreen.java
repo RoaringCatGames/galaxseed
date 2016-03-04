@@ -104,6 +104,7 @@
             GameOverSystem gameOverSystem = new GameOverSystem(cam, dispatcher);
             gameOverSystem.setProcessing(false);
             engine.addSystem(gameOverSystem);
+            engine.addSystem(new FadingSystem());
 
             //Extension Systems
             engine.addSystem(renderingSystem);

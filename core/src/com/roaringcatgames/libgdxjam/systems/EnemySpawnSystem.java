@@ -132,10 +132,11 @@ public class EnemySpawnSystem extends IteratingSystem {
             size = 5f;
             health = Health.AsteroidC;
 
+            float spawnRate = r.nextFloat() < 0.1f ? 10f: 4f;
             spawner.setParticleSpeed(AsteroidFragSpeed + 5f)
                 .setParticleTextures(Assets.getAsteroidCFrags())
                 .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
-                .setSpawnRate(3f);
+                .setSpawnRate(spawnRate);
         }
         enemy.add(spawner);
         enemy.add(HealthComponent.create()

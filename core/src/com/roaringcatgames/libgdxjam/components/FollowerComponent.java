@@ -11,6 +11,7 @@ public class FollowerComponent implements Component{
     public Entity target = null;
     public Vector2 offset = new Vector2(0f, 0f);
     public float baseRotation = 0f;
+    public boolean shouldMatchOpacity = true;
 
     public FollowMode followMode = FollowMode.STICKY;
 
@@ -38,5 +39,9 @@ public class FollowerComponent implements Component{
         return this;
     }
 
+    public FollowerComponent setMatchOpacity(boolean shouldMatch){
+        this.shouldMatchOpacity = shouldMatch;
+        return this;
+    }
 
 }

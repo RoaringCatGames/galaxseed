@@ -38,6 +38,7 @@ public class EnemyDamageSystem extends IteratingSystem {
     private ComponentMapper<DamageComponent> dm;
     private ComponentMapper<SpawnerComponent> sm;
     private ComponentMapper<StateComponent> stm;
+    private ComponentMapper<VelocityComponent> vm;
 
     Random r = new Random();
 
@@ -52,6 +53,7 @@ public class EnemyDamageSystem extends IteratingSystem {
         dm = ComponentMapper.getFor(DamageComponent.class);
         sm = ComponentMapper.getFor(SpawnerComponent.class);
         stm = ComponentMapper.getFor(StateComponent.class);
+        vm = ComponentMapper.getFor(VelocityComponent.class);
     }
 
 
@@ -138,6 +140,14 @@ public class EnemyDamageSystem extends IteratingSystem {
                     if(sm.has(enemy)){
                         sm.get(enemy).setPaused(true);
                     }
+
+                    if(vm.has(enemy)){
+                        VelocityComponent vc = vm.get(enemy);
+                        vc.speed.scl(1.5f);
+                    }
+
+                    enemy.add(FadingComponent.create()
+                            .setPercentPerSecond(100f));
                 }
 
                 getEngine().removeEntity(bullet);
