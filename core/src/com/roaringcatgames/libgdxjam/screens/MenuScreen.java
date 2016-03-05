@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
@@ -53,7 +54,7 @@ public class MenuScreen extends LazyInitScreen {
 
         RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
         cam = renderingSystem.getCamera();
-        viewport = new ExtendViewport(App.W, App.H, App.W*2f, App.H*2f, cam);
+        viewport = new FitViewport(App.W, App.H);//new ExtendViewport(App.W, App.H, App.W*2f, App.H*2f, cam);
         viewport.apply();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
@@ -103,6 +104,7 @@ public class MenuScreen extends LazyInitScreen {
                 .addAnimation("LEAF", new Animation(1f / 12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP)));
         plant.add(TransformComponent.create()
                 .setPosition(1.7f, 24f));
+
 
         float xPos = 4f;
         float yPos = 19f;
