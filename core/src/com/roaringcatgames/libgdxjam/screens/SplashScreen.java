@@ -20,6 +20,8 @@ import com.roaringcatgames.libgdxjam.systems.FollowerSystem;
 import com.roaringcatgames.libgdxjam.systems.ScreenWrapSystem;
 import com.roaringcatgames.libgdxjam.values.Z;
 
+import java.util.Random;
+
 /**
  * Created by barry on 12/22/15 @ 7:27 PM.
  */
@@ -68,13 +70,26 @@ public class SplashScreen extends LazyInitScreen {
                 .setRegion(Assets.getSplashTitle()));
         engine.addEntity(title);
 
+
+        float catX, catY, catSpeedX, catSpeedY;
+        Random r = new Random();
+        float yAdjust = r.nextFloat();
+        catY = (App.H-4f) * yAdjust + 4f;
+        catX = r.nextFloat() < 0.5f ? 16f : 4f;
+        catSpeedX = catX == 16f ? -2.5f : 2.5f;
+        catSpeedY = catY >= 24f ? -2.5f :
+                    catY >= 16f ? -1.0f :
+                    catY <= 6f  ?  2.5f : 1.0f;
+
+
+
         Entity loading = engine.createEntity();
         loading.add(VelocityComponent.create()
-            .setSpeed(-2.5f, 0f));
-        loading.add(RotationComponent.create()
-            .setRotationSpeed(45f));
+            .setSpeed(catSpeedX, catSpeedY));
+//        loading.add(RotationComponent.create()
+//            .setRotationSpeed(45f));
         loading.add(TransformComponent.create()
-                .setPosition(16f, 8f, 0f)
+                .setPosition(catX, catY, 0f)
                 .setScale(0.5f, 0.5f));
         loading.add(TextureComponent.create());
         loading.add(StateComponent.create()

@@ -20,20 +20,22 @@ public class Assets {
         am.load(LOADING_ATLAS, TEXTURE_ATLAS);
         am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
         am.finishLoading();
-        am.load(ANI_ATLAS, TEXTURE_ATLAS);
-        am.load(BG_MUSIC, MUSIC);
-        am.load(GAME_OVER_MUSIC, MUSIC);
-        am.load(FIRING_MUSIC, MUSIC);
-        am.load(FLYING_MUSIC, MUSIC);
         am.load(PLAYER_HIT_LIGHT_SFX, SOUND);
         am.load(PLAYER_HIT_MEDIUM_SFX, SOUND);
         am.load(PLAYER_HIT_HEAVY_SFX, SOUND);
         am.load(PLANET_POP_SFX, SOUND);
-//        am.load(SEED_PLANT_SFX, SOUND);
-//        am.load(SEED_HIT_SFX, SOUND);
+        am.load(ANI_ATLAS, TEXTURE_ATLAS);
+        am.load(BG_MUSIC, MUSIC);
+        am.load(GAME_OVER_MUSIC, MUSIC);
         am.load(FONT_32, BITMAP_FONT);
         am.load(FONT_48, BITMAP_FONT);
         am.load(FONT_64, BITMAP_FONT);
+        am.load(FIRING_MUSIC, MUSIC);
+        am.load(FLYING_MUSIC, MUSIC);
+
+//        am.load(SEED_PLANT_SFX, SOUND);
+//        am.load(SEED_HIT_SFX, SOUND);
+
 
         return am;
     }
