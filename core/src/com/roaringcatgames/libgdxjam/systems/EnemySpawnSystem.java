@@ -174,13 +174,15 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setMaxHealth(Health.Comet));
 
             enemy.add(CircleBoundsComponent.create()
-                .setCircle(xPos, yPos, 0.25f)
+                .setCircle(xPos, yPos, 0.4f)
                 .setOffset(0f, -1.25f));
-
-            Array<TextureAtlas.AtlasRegion> frames = r.nextFloat() > 0.5f ? Assets.getRedCometFrames() : Assets.getBlueCometFrames();
+            float cometR = r.nextFloat();
+            Array<TextureAtlas.AtlasRegion> frames = cometR > 0.5f ? Assets.getRedCometFrames() : Assets.getBlueCometFrames();
+            Array<TextureAtlas.AtlasRegion> fullFrames = cometR > 0.5f ? Assets.getRedCometFullFrames() : Assets.getBlueCometFullFrames();
             enemy.add(TextureComponent.create());
             enemy.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 12f, frames, Animation.PlayMode.LOOP_PINGPONG)));
+                .addAnimation("DEFAULT", new Animation(1f / 12f, frames, Animation.PlayMode.LOOP_PINGPONG))
+                .addAnimation("FULL", new Animation(1f, fullFrames)));
 
             enemy.add(StateComponent.create()
                 .set("DEFAULT")
@@ -194,7 +196,7 @@ public class EnemySpawnSystem extends IteratingSystem {
             enemy.add(PathFollowComponent.create()
                     .setFacingPath(true)
                     .setBaseRotation(180f)
-                    .setTotalPathTime(8f)
+                    .setSpeed(1f/8f)
                     .setPath(new Bezier<>(p0, p1, p2)));
 
             getEngine().addEntity(enemy);

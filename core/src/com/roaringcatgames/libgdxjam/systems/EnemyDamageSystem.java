@@ -13,6 +13,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Path;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
@@ -43,6 +44,8 @@ public class EnemyDamageSystem extends IteratingSystem {
     private ComponentMapper<StateComponent> stm;
     private ComponentMapper<VelocityComponent> vm;
     private ComponentMapper<ShakeComponent> shm;
+    private ComponentMapper<AnimationComponent> am;
+    private ComponentMapper<PathFollowComponent> pfm;
 
     private ScoreComponent scoreCard;
 
@@ -65,6 +68,8 @@ public class EnemyDamageSystem extends IteratingSystem {
         stm = ComponentMapper.getFor(StateComponent.class);
         vm = ComponentMapper.getFor(VelocityComponent.class);
         shm = ComponentMapper.getFor(ShakeComponent.class);
+        am = ComponentMapper.getFor(AnimationComponent.class);
+        pfm = ComponentMapper.getFor(PathFollowComponent.class);
 
         popSfx = Assets.getPlanetPopSfx();
 //        hitSfx = Assets.getSeedHitSfx();
@@ -134,59 +139,82 @@ public class EnemyDamageSystem extends IteratingSystem {
                 break;
 
             default:
-                attachPlant(bullet, enemy);
                 hc = hm.get(enemy);
-                float startHealth = hc.health;
-                applyHealthChange(bullet, hc);
+                if(hc.health > 0f) {
+                    attachPlant(bullet, enemy, ec.enemyType == EnemyType.COMET);
 
-                float fadeSpeed = 50f;
-                if(startHealth > 0f && hc.health <= 0f) {
-                    switch(ec.enemyType){
-                        case ASTEROID_A:
-                            attachTreeCover(enemy, Assets.getAsteroidAFrames());
-                            scoredPoints = 2;
-                            break;
-                        case ASTEROID_B:
-                            attachTreeCover(enemy, Assets.getAsteroidBFrames());
-                            scoredPoints = 4;
-                            break;
-                        case ASTEROID_C:
-                            attachTreeCover(enemy, Assets.getAsteroidCFrames());
-                            scoredPoints = 8;
-                            break;
-                        case COMET:
-                            scoredPoints = 1;
-                            fadeSpeed = 250f;
-                            if(!shm.has(enemy)) {
-                                enemy.add(ShakeComponent.create()
-                                        .setOffsets(0.25f, 0.25f)
-                                        .setSpeed(0.05f, 0.05f));
-                            }
-                            break;
+                    float startHealth = hc.health;
+                    applyHealthChange(bullet, hc);
+
+                    float fadeSpeed = 50f;
+                    boolean addFade = true;
+                    if (startHealth > 0f && hc.health <= 0f) {
+                        switch (ec.enemyType) {
+                            case ASTEROID_A:
+                                attachTreeCover(enemy, Assets.getAsteroidAFrames());
+                                scoredPoints = 2;
+                                break;
+                            case ASTEROID_B:
+                                attachTreeCover(enemy, Assets.getAsteroidBFrames());
+                                scoredPoints = 4;
+                                break;
+                            case ASTEROID_C:
+                                attachTreeCover(enemy, Assets.getAsteroidCFrames());
+                                scoredPoints = 8;
+                                break;
+                            case COMET:
+                                scoredPoints = 1;
+                                fadeSpeed = 250f;
+                                addFade = false;
+                                StateComponent sc = stm.get(enemy);
+                                sc.setLooping(false);
+                                sc.set("FULL");
+                                if(pfm.has(enemy)){
+                                    PathFollowComponent pfc = pfm.get(enemy);
+                                    pfc.setSpeed(pfc.speed/2f);
+                                    pfc.setFacingPath(false);
+                                }
+
+                                float rotR = r.nextFloat();
+                                float rotSpeed = (20f*rotR) + 20f;
+                                if(rotR >0.5f){
+                                    rotSpeed *= -1f;
+                                }
+                                enemy.add(RotationComponent.create()
+                                    .setRotationSpeed(rotSpeed));
+
+//                                if (!shm.has(enemy)) {
+//                                    enemy.add(ShakeComponent.create()
+//                                            .setOffsets(0.25f, 0.25f)
+//                                            .setSpeed(0.05f, 0.05f));
+//                                }
+                                break;
+                        }
+
+                        //enemy.add(StateComponent.create().set("DEFAULT").setLooping(false));
+                        ec.setDamaging(false);
+                        if (sm.has(enemy)) {
+                            sm.get(enemy).setPaused(true);
+                            popSfx.play(Volume.POP_SFX);
+                        }
+
+                        if (vm.has(enemy)) {
+                            VelocityComponent vc = vm.get(enemy);
+                            vc.speed.scl(1.5f);
+                        }
+
+                        if (addFade) {
+                            enemy.add(FadingComponent.create()
+                                    .setPercentPerSecond(fadeSpeed));
+                        }
+
+                        if (scoreCard != null) {
+                            scoreCard.setScore(scoreCard.score + scoredPoints);
+                        }
                     }
 
-                    //enemy.add(StateComponent.create().set("DEFAULT").setLooping(false));
-                    ec.setDamaging(false);
-                    if(sm.has(enemy)){
-                        sm.get(enemy).setPaused(true);
-                        popSfx.play(Volume.POP_SFX);
-                    }
-
-                    if(vm.has(enemy)){
-                        VelocityComponent vc = vm.get(enemy);
-                        vc.speed.scl(1.5f);
-                    }
-
-                    enemy.add(FadingComponent.create()
-                            .setPercentPerSecond(fadeSpeed));
-
-                    if(scoreCard != null){
-                        scoreCard.setScore(scoreCard.score + scoredPoints);
-                    }
+                    getEngine().removeEntity(bullet);
                 }
-
-                getEngine().removeEntity(bullet);
-
                 break;
         }
     }
@@ -219,18 +247,30 @@ public class EnemyDamageSystem extends IteratingSystem {
         hc.health = Math.max(0f, (hc.health - dmg.dps));
     }
 
-    private void attachPlant(Entity bullet, Entity enemy) {
+    private void attachPlant(Entity bullet, Entity enemy, boolean isComet) {
         CircleBoundsComponent bb = cm.get(bullet);
         CircleBoundsComponent eb = cm.get(enemy);
         TransformComponent et = tm.get(enemy);
         bulletPos.set(bb.circle.x, bb.circle.y);
         enemyPos.set(eb.circle.x, eb.circle.y);
 
-        Vector2 outVec = bulletPos.sub(enemyPos).nor();
-        outVec = outVec.scl(eb.circle.radius);
+        Vector2 outVec;
+        if(isComet) {
+            outVec = enemyPos.cpy();
+        }else {
+            outVec = bulletPos.sub(enemyPos).nor();
+            outVec = outVec.scl(eb.circle.radius);
+        }
 
-        Vector2 offsetVec = VectorUtils.rotateVector(outVec.cpy(), -et.rotation).add(eb.offset);
-        float baseRotation = offsetVec.angle() - 90f;
+        Vector2 offsetVec;
+        float baseRotation;
+        if(isComet){
+            offsetVec = eb.offset.cpy().add(0.1f, -0.5f);
+        } else{
+            offsetVec =VectorUtils.rotateVector(outVec.cpy(), -et.rotation).add(eb.offset);
+        }
+        baseRotation = offsetVec.angle() - 90f;
+
 
         Entity plant = ((PooledEngine) getEngine()).createEntity();
         plant.add(TransformComponent.create()
@@ -247,7 +287,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                         Assets.getPinkTreeFrames() :
                         Assets.getPineTreeFrames();
         plant.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f / 9f, trees)));
+                .addAnimation("DEFAULT", new Animation(1f / 18f, trees)));
         plant.add(FollowerComponent.create()
                 .setOffset(offsetVec.x, offsetVec.y)
                 .setTarget(enemy)

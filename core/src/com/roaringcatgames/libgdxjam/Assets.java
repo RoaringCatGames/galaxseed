@@ -20,16 +20,16 @@ public class Assets {
         am.load(LOADING_ATLAS, TEXTURE_ATLAS);
         am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
         am.finishLoading();
-        am.load(PLAYER_HIT_LIGHT_SFX, SOUND);
-        am.load(PLAYER_HIT_MEDIUM_SFX, SOUND);
-        am.load(PLAYER_HIT_HEAVY_SFX, SOUND);
-        am.load(PLANET_POP_SFX, SOUND);
         am.load(ANI_ATLAS, TEXTURE_ATLAS);
         am.load(BG_MUSIC, MUSIC);
         am.load(GAME_OVER_MUSIC, MUSIC);
         am.load(FONT_32, BITMAP_FONT);
         am.load(FONT_48, BITMAP_FONT);
         am.load(FONT_64, BITMAP_FONT);
+        am.load(PLAYER_HIT_LIGHT_SFX, SOUND);
+        am.load(PLAYER_HIT_MEDIUM_SFX, SOUND);
+        am.load(PLAYER_HIT_HEAVY_SFX, SOUND);
+        am.load(PLANET_POP_SFX, SOUND);
         am.load(FIRING_MUSIC, MUSIC);
         am.load(FLYING_MUSIC, MUSIC);
 
@@ -285,8 +285,14 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getRedCometFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet-b");
     }
+    public static Array<TextureAtlas.AtlasRegion> getRedCometFullFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet-full-b");
+    }
     public static Array<TextureAtlas.AtlasRegion> getBlueCometFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet-a");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBlueCometFullFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet-full-a");
     }
 
 

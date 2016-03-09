@@ -86,8 +86,8 @@ public class SplashScreen extends LazyInitScreen {
         Entity loading = engine.createEntity();
         loading.add(VelocityComponent.create()
             .setSpeed(catSpeedX, catSpeedY));
-//        loading.add(RotationComponent.create()
-//            .setRotationSpeed(45f));
+        loading.add(RotationComponent.create()
+            .setRotationSpeed(45f));
         loading.add(TransformComponent.create()
                 .setPosition(catX, catY, 0f)
                 .setScale(0.5f, 0.5f));
