@@ -3,11 +3,9 @@ package com.roaringcatgames.libgdxjam.screens;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -17,20 +15,17 @@ import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.systems.BackgroundSystem;
 import com.roaringcatgames.libgdxjam.systems.ScreenWrapSystem;
-import com.roaringcatgames.libgdxjam.systems.TextRenderingSystem;
 import com.roaringcatgames.libgdxjam.values.Z;
-import sun.swing.BakedArrayList;
 
 /**
  * Created by barry on 12/22/15 @ 7:27 PM.
  */
 public class SplashScreen extends LazyInitScreen {
     SpriteBatch batch;
-    private ShapeRenderer shapeRenderer;
     private IScreenDispatcher dispatcher;
     private PooledEngine engine;
 
-    private float minSpalshSeconds = 6f;
+    private float minSplashSuggestions = 6f;
     private float elapsedTime = 0f;
     private OrthographicCamera cam;
     private Viewport viewport;
@@ -42,7 +37,6 @@ public class SplashScreen extends LazyInitScreen {
 
     @Override
     protected void init() {
-        this.shapeRenderer = new ShapeRenderer();
 
         engine = new PooledEngine();
         RenderingSystem render = new RenderingSystem(batch, App.PPM);
@@ -52,10 +46,6 @@ public class SplashScreen extends LazyInitScreen {
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
 
-        //Normally we would use a different camera, but our main camera
-        //  never moves, so we're safe to use a single one here
-        OrthographicCamera guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        guiCam.position.set(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, 0f);
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(render);
@@ -65,7 +55,6 @@ public class SplashScreen extends LazyInitScreen {
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RotationSystem());
-        engine.addSystem(new TextRenderingSystem(batch, guiCam, cam));
 
         Entity title = engine.createEntity();
         title.add(TransformComponent.create()
@@ -90,8 +79,6 @@ public class SplashScreen extends LazyInitScreen {
         loading.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f / 30f, Assets.getLoadingFrames(), Animation.PlayMode.LOOP_PINGPONG)));
 
-        //TODO: Add loading %
-        //Entity loadingText =
         engine.addEntity(loading);
     }
 
@@ -99,19 +86,11 @@ public class SplashScreen extends LazyInitScreen {
     protected void update(float delta) {
         elapsedTime += delta;
 
-        if(Assets.am.update() && elapsedTime >= minSpalshSeconds){
+        if(Assets.am.update() && elapsedTime >= minSplashSuggestions){
             Gdx.app.log("Splash Screen", "Assets are Loaded!");
             dispatcher.endCurrentScreen();
         }else {
             engine.update(delta);
-
-            //TODO: Juice with a progress bar Component/System
-            Gdx.gl20.glLineWidth(1f);
-            shapeRenderer.setProjectionMatrix(cam.combined);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(Color.WHITE);
-            shapeRenderer.rect(0, 0, cam.viewportWidth * Assets.am.getProgress(), 1f);
-            shapeRenderer.end();
         }
     }
 

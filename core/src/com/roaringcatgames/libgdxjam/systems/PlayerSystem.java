@@ -5,6 +5,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Bezier;
@@ -13,6 +14,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.values.Shakes;
+import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
@@ -33,6 +36,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private Vector2 idleFlameOffset = new Vector2(0f, -2.6f);
     private Vector2 flyingFlameOffset = new Vector2(0f, -3.25f);
 
+    private Music flyingMusic;
 
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<TransformComponent> tm;
@@ -48,6 +52,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         this.sm = ComponentMapper.getFor(StateComponent.class);
         this.tm = ComponentMapper.getFor(TransformComponent.class);
         this.cam = cam;
+
+        this.flyingMusic = Assets.getFlyingMusic();
 
         this.controlOrigin = new Vector2();
     }
@@ -71,7 +77,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             scoreCard.add(TransformComponent.create()
                 .setPosition(10f, 30f, 0f));
             scoreCard.add(ScoreComponent.create()
-                .setScore(0));
+                    .setScore(0));
             getEngine().addEntity(scoreCard);
 
             player.add(KinematicComponent.create());
@@ -84,7 +90,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .setScale(initialScale, initialScale));
 
             player.add(BoundsComponent.create()
-                    .setBounds(0f, 0f, 1.5f, 2.5f));
+                    .setBounds(0f, 0f, 1.5f, 2f));
 
             player.add(TextureComponent.create());
             player.add(AnimationComponent.create()
@@ -97,6 +103,11 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
+
+            player.add(ShakeComponent.create()
+                .setOffsets(0.25f, 0.25f)
+                .setSpeed(0.05f, 0.05f)
+                .setPaused(true));
 
             player.add(VelocityComponent.create()
                     .setSpeed(0f, 0f));
@@ -171,6 +182,14 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         }else{
             flameState = "DEFAULT";
             fc.setOffset(idleFlameOffset.x * initialScale, idleFlameOffset.y * initialScale);
+        }
+
+        if(flameState == "FLYING" && !flyingMusic.isPlaying()){
+            flyingMusic.setLooping(true);
+            flyingMusic.setVolume(Volume.FLYING_MUSIC);
+            flyingMusic.play();
+        }else if(flyingMusic.isPlaying()){
+            flyingMusic.stop();
         }
 
         if(sc.get() != state) {

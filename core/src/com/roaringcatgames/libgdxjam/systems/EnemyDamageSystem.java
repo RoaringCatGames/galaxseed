@@ -9,6 +9,7 @@ import com.badlogic.ashley.signals.Signal;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
@@ -40,8 +42,13 @@ public class EnemyDamageSystem extends IteratingSystem {
     private ComponentMapper<SpawnerComponent> sm;
     private ComponentMapper<StateComponent> stm;
     private ComponentMapper<VelocityComponent> vm;
+    private ComponentMapper<ShakeComponent> shm;
 
     private ScoreComponent scoreCard;
+
+    private Sound popSfx;
+//    private Sound hitSfx;
+//    private Sound plantSfx;
 
     Random r = new Random();
 
@@ -57,6 +64,11 @@ public class EnemyDamageSystem extends IteratingSystem {
         sm = ComponentMapper.getFor(SpawnerComponent.class);
         stm = ComponentMapper.getFor(StateComponent.class);
         vm = ComponentMapper.getFor(VelocityComponent.class);
+        shm = ComponentMapper.getFor(ShakeComponent.class);
+
+        popSfx = Assets.getPlanetPopSfx();
+//        hitSfx = Assets.getSeedHitSfx();
+//        plantSfx = Assets.getSeedPlantSfx();
     }
 
 
@@ -127,6 +139,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                 float startHealth = hc.health;
                 applyHealthChange(bullet, hc);
 
+                float fadeSpeed = 50f;
                 if(startHealth > 0f && hc.health <= 0f) {
                     switch(ec.enemyType){
                         case ASTEROID_A:
@@ -143,6 +156,12 @@ public class EnemyDamageSystem extends IteratingSystem {
                             break;
                         case COMET:
                             scoredPoints = 1;
+                            fadeSpeed = 250f;
+                            if(!shm.has(enemy)) {
+                                enemy.add(ShakeComponent.create()
+                                        .setOffsets(0.25f, 0.25f)
+                                        .setSpeed(0.05f, 0.05f));
+                            }
                             break;
                     }
 
@@ -150,6 +169,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                     ec.setDamaging(false);
                     if(sm.has(enemy)){
                         sm.get(enemy).setPaused(true);
+                        popSfx.play(Volume.POP_SFX);
                     }
 
                     if(vm.has(enemy)){
@@ -158,7 +178,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                     }
 
                     enemy.add(FadingComponent.create()
-                            .setPercentPerSecond(100f));
+                            .setPercentPerSecond(fadeSpeed));
 
                     if(scoreCard != null){
                         scoreCard.setScore(scoreCard.score + scoredPoints);
