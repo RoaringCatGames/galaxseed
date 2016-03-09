@@ -42,6 +42,7 @@ public class EnemyDamageSystem extends IteratingSystem {
     private ComponentMapper<SpawnerComponent> sm;
     private ComponentMapper<StateComponent> stm;
     private ComponentMapper<VelocityComponent> vm;
+    private ComponentMapper<ShakeComponent> shm;
 
     private ScoreComponent scoreCard;
 
@@ -63,6 +64,7 @@ public class EnemyDamageSystem extends IteratingSystem {
         sm = ComponentMapper.getFor(SpawnerComponent.class);
         stm = ComponentMapper.getFor(StateComponent.class);
         vm = ComponentMapper.getFor(VelocityComponent.class);
+        shm = ComponentMapper.getFor(ShakeComponent.class);
 
         popSfx = Assets.getPlanetPopSfx();
 //        hitSfx = Assets.getSeedHitSfx();
@@ -137,6 +139,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                 float startHealth = hc.health;
                 applyHealthChange(bullet, hc);
 
+                float fadeSpeed = 50f;
                 if(startHealth > 0f && hc.health <= 0f) {
                     switch(ec.enemyType){
                         case ASTEROID_A:
@@ -153,6 +156,12 @@ public class EnemyDamageSystem extends IteratingSystem {
                             break;
                         case COMET:
                             scoredPoints = 1;
+                            fadeSpeed = 250f;
+                            if(!shm.has(enemy)) {
+                                enemy.add(ShakeComponent.create()
+                                        .setOffsets(0.25f, 0.25f)
+                                        .setSpeed(0.05f, 0.05f));
+                            }
                             break;
                     }
 
@@ -169,7 +178,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                     }
 
                     enemy.add(FadingComponent.create()
-                            .setPercentPerSecond(100f));
+                            .setPercentPerSecond(fadeSpeed));
 
                     if(scoreCard != null){
                         scoreCard.setScore(scoreCard.score + scoredPoints);

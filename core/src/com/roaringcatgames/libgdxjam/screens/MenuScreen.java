@@ -54,7 +54,7 @@ public class MenuScreen extends LazyInitScreen {
 
         RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
         cam = renderingSystem.getCamera();
-        viewport = new FitViewport(App.W, App.H);//new ExtendViewport(App.W, App.H, App.W*2f, App.H*2f, cam);
+        viewport = new FitViewport(App.W, App.H, cam);//new ExtendViewport(App.W, App.H, App.W*2f, App.H*2f, cam);
         viewport.apply();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);

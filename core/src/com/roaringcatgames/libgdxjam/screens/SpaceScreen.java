@@ -95,6 +95,8 @@
             engine.addSystem(new BackgroundSystem(minBounds, maxBounds, true));
             engine.addSystem(new BulletSystem());
             engine.addSystem(new ScoreSystem());
+            engine.addSystem(new ShakeSystem());
+            engine.addSystem(new OscillationSystem());
 
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
             PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();

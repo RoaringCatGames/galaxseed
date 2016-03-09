@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.values.Shakes;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
@@ -76,7 +77,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             scoreCard.add(TransformComponent.create()
                 .setPosition(10f, 30f, 0f));
             scoreCard.add(ScoreComponent.create()
-                .setScore(0));
+                    .setScore(0));
             getEngine().addEntity(scoreCard);
 
             player.add(KinematicComponent.create());
@@ -102,6 +103,11 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(true));
+
+            player.add(ShakeComponent.create()
+                .setOffsets(0.25f, 0.25f)
+                .setSpeed(0.05f, 0.05f)
+                .setPaused(true));
 
             player.add(VelocityComponent.create()
                     .setSpeed(0f, 0f));
