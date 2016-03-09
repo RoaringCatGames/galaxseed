@@ -182,16 +182,9 @@ public class EnemyDamageSystem extends IteratingSystem {
                                 }
                                 enemy.add(RotationComponent.create()
                                     .setRotationSpeed(rotSpeed));
-
-//                                if (!shm.has(enemy)) {
-//                                    enemy.add(ShakeComponent.create()
-//                                            .setOffsets(0.25f, 0.25f)
-//                                            .setSpeed(0.05f, 0.05f));
-//                                }
                                 break;
                         }
 
-                        //enemy.add(StateComponent.create().set("DEFAULT").setLooping(false));
                         ec.setDamaging(false);
                         if (sm.has(enemy)) {
                             sm.get(enemy).setPaused(true);
