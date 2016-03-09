@@ -45,7 +45,9 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getLoadingFrames(){
         return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegions("loading");
     }
-
+    public static Array<TextureAtlas.AtlasRegion> getBubbleFrames(){
+        return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegions("bubble");
+    }
     public static TextureAtlas.AtlasRegion getSplashTitle(){
         return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegion("RCG");
     }

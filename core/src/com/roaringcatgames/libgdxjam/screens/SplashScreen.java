@@ -13,7 +13,10 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.FollowMode;
+import com.roaringcatgames.libgdxjam.components.FollowerComponent;
 import com.roaringcatgames.libgdxjam.systems.BackgroundSystem;
+import com.roaringcatgames.libgdxjam.systems.FollowerSystem;
 import com.roaringcatgames.libgdxjam.systems.ScreenWrapSystem;
 import com.roaringcatgames.libgdxjam.values.Z;
 
@@ -55,6 +58,7 @@ public class SplashScreen extends LazyInitScreen {
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RotationSystem());
+        engine.addSystem(new FollowerSystem());
 
         Entity title = engine.createEntity();
         title.add(TransformComponent.create()
@@ -78,8 +82,24 @@ public class SplashScreen extends LazyInitScreen {
                 .setLooping(true));
         loading.add(AnimationComponent.create()
                 .addAnimation("DEFAULT", new Animation(1f / 30f, Assets.getLoadingFrames(), Animation.PlayMode.LOOP_PINGPONG)));
-
         engine.addEntity(loading);
+
+        Entity bubble = engine.createEntity();
+        bubble.add(TransformComponent.create()
+                .setPosition(16f, 8f, 0f)
+            .setScale(0.5f, 0.5f));
+        bubble.add(FollowerComponent.create()
+            .setTarget(loading)
+            .setMode(FollowMode.STICKY)
+            .setOffset(-3.75f, 1f));
+        bubble.add(TextureComponent.create());
+        bubble.add(AnimationComponent.create()
+                .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getBubbleFrames())));
+        bubble.add(StateComponent.create()
+                .set("DEFAULT")
+            .setLooping(false));
+
+        engine.addEntity(bubble);
     }
 
     @Override
