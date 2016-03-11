@@ -25,7 +25,7 @@ public class FiringSystem extends IteratingSystem {
     private float timeBetweenFiring = 1f/firingRate;
     private float lastFireTime = 0f;
     private float timeElapsed = 0f;
-    private float bulletSpeed = 30f;
+    private float bulletSpeed = 20f;
     private Music firingMusic;
     private ComponentMapper<TransformComponent> tm;
 
@@ -98,8 +98,8 @@ public class FiringSystem extends IteratingSystem {
         bullet.add(DamageComponent.create()
             .setDPS(Damage.seed));
         bullet.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f/8f, Assets.getBulletFrames(), Animation.PlayMode.NORMAL))
-                .addAnimation("FLYING", new Animation(1f/12f, Assets.getBulletFlyingFrames(), Animation.PlayMode.NORMAL)));
+                .addAnimation("DEFAULT", new Animation(1f/6f, Assets.getBulletFrames(), Animation.PlayMode.NORMAL))
+                .addAnimation("FLYING", new Animation(1f/6f, Assets.getBulletFlyingFrames(), Animation.PlayMode.NORMAL)));
         bullet.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(false));
