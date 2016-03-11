@@ -90,7 +90,7 @@ public class FiringSystem extends IteratingSystem {
         bullet.add(KinematicComponent.create());
         bullet.add(TransformComponent.create()
                 .setPosition(playerPos.position.x + xOffset, playerPos.position.y + yOffset, Z.seed)
-                .setScale(0.5f, -0.5f));
+                .setScale(1f, 1f));
         bullet.add(CircleBoundsComponent.create()
             .setCircle(playerPos.position.x + xOffset - 0.125f, playerPos.position.y + yOffset - 0.125f, 0.25f)
             .setOffset(0f, 0.5f));
