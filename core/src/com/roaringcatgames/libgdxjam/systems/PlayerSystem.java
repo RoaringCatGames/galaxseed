@@ -75,7 +75,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                 .setText("Score: 00000")
                 .setFont(Assets.get32Font()));
             scoreCard.add(TransformComponent.create()
-                .setPosition(10f, 30f, 0f));
+                .setPosition(4f, 1f, Z.health));
             scoreCard.add(ScoreComponent.create()
                     .setScore(0));
             getEngine().addEntity(scoreCard);

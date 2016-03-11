@@ -90,19 +90,16 @@ public class FiringSystem extends IteratingSystem {
         bullet.add(KinematicComponent.create());
         bullet.add(TransformComponent.create()
                 .setPosition(playerPos.position.x + xOffset, playerPos.position.y + yOffset, Z.seed)
-                .setScale(1f, 1f));
+                .setScale(0.5f, -0.5f));
         bullet.add(CircleBoundsComponent.create()
             .setCircle(playerPos.position.x + xOffset - 0.125f, playerPos.position.y + yOffset - 0.125f, 0.25f)
             .setOffset(0f, 0.5f));
-//        bullet.add(BoundsComponent.create()
-//                .setBounds(playerPos.position.x + xOffset - 0.25f, playerPos.position.y - 0.25f, 0.5f, 0.5f)
-//                .setOffset(0f, 0.5f));
         bullet.add(TextureComponent.create());
         bullet.add(DamageComponent.create()
             .setDPS(Damage.seed));
         bullet.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f/2f, Assets.getBulletFrames(), Animation.PlayMode.NORMAL))
-                .addAnimation("FLYING", new Animation(1f / 3f, Assets.getBulletFlyingFrames(), Animation.PlayMode.NORMAL)));
+                .addAnimation("DEFAULT", new Animation(1f/8f, Assets.getBulletFrames(), Animation.PlayMode.NORMAL))
+                .addAnimation("FLYING", new Animation(1f/12f, Assets.getBulletFlyingFrames(), Animation.PlayMode.NORMAL)));
         bullet.add(StateComponent.create()
                 .set("DEFAULT")
                 .setLooping(false));

@@ -34,11 +34,9 @@ public class PlayerHealthSystem extends IteratingSystem {
     private ShapeRenderer shapeRenderer;
     private Entity player;
     private Color healthColor;
+    private Color flashColor;
     private boolean isInitialized = false;
-
-    Vector2 v1 = new Vector2();
-    Vector2 v2 = new Vector2();
-    private Bezier<Vector2> path;
+    private float lastHealth = 0f;
 
     public PlayerHealthSystem(OrthographicCamera cam){
         super(Family.all(PlayerComponent.class).get());
@@ -49,8 +47,7 @@ public class PlayerHealthSystem extends IteratingSystem {
         shapeRenderer = new ShapeRenderer();
 
         healthColor = new Color(255f, 0f, 0f, 0.4f);
-
-        path = new Bezier<Vector2>(new Vector2(0, 0), new Vector2(10, 10), new Vector2(20, 30));
+        flashColor = new Color(255f, 255f, 255f, 0.6f);
     }
 
     @Override
@@ -68,34 +65,31 @@ public class PlayerHealthSystem extends IteratingSystem {
             App.setState(GameState.GAME_OVER);
         }
 
-//        Gdx.gl20.glLineWidth(3f);
-
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRenderer.setColor(Color.WHITE);
-//
-//        //OuterBar
-//        shapeRenderer.rect(bc.bounds.x, bc.bounds.y, bc.bounds.width, bc.bounds.height);
-//        shapeRenderer.end();
-
-
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl20.glLineWidth(1f);
         shapeRenderer.setProjectionMatrix(cam.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        shapeRenderer.setColor(healthColor);
+
+        if(lastHealth != hc.health) {
+            shapeRenderer.setColor(flashColor);
+        }else{
+            shapeRenderer.setColor(healthColor);
+        }
+
         //InnerBar
         float width = bc.bounds.width * (hc.health/hc.maxHealth);
         shapeRenderer.rect(bc.bounds.x, bc.bounds.y, width, bc.bounds.height);
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+        lastHealth = hc.health;
     }
 
     private void init(){
         healthBar = ((PooledEngine)getEngine()).createEntity();
         healthBar.add(TransformComponent.create()
-            .setPosition(10f, 0.6f, Z.health));
+            .setPosition(App.W/2f, App.H-0.6f, Z.health));
         healthBar.add(BoundsComponent.create()
             .setBounds(0.1f, 0.1f, 19.8f, 1f));
         getEngine().addEntity(healthBar);

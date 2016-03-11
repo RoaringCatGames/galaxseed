@@ -24,6 +24,7 @@ import com.roaringcatgames.libgdxjam.components.MenuItemComponent;
 import com.roaringcatgames.libgdxjam.systems.*;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Volume;
+import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
  * Created by barry on 12/22/15 @ 5:51 PM.
@@ -63,7 +64,7 @@ public class MenuScreen extends LazyInitScreen {
         Vector3 playerPosition = new Vector3(
                 cam.position.x,
                 5f,
-                0f);
+                Z.player);
 
         //AshleyExtensions Systems
         engine.addSystem(new MovementSystem());

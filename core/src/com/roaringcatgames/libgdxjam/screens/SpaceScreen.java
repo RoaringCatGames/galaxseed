@@ -84,7 +84,7 @@
             Vector2 minBounds = new Vector2(0f, 0f);
             Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
             engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-1f), maxBounds.cpy().scl(2f)));
-            engine.addSystem(new PlayerSystem(playerPosition, 0.5f, cam));
+            engine.addSystem(new PlayerSystem(playerPosition, 1f, cam));
             FiringSystem firingSystem = new FiringSystem();
             engine.addSystem(firingSystem);
             EnemySpawnSystem enemySpawnSystem = new EnemySpawnSystem();
