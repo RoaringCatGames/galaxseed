@@ -259,16 +259,20 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-        touchPoint.set(screenX, screenY, 0f);
-        touchPoint = cam.unproject(touchPoint);
-        controlOrigin.set(touchPoint.x, touchPoint.y);
+        if(pointer == 0){
+            touchPoint.set(screenX, screenY, 0f);
+            touchPoint = cam.unproject(touchPoint);
+            controlOrigin.set(touchPoint.x, touchPoint.y);
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-        currentPositionChange.set(0f, 0f, 0f);
+        if(pointer == 0){
+            currentPositionChange.set(0f, 0f, 0f);
+        }
         return false;
     }
 
@@ -276,13 +280,14 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
-        currentPositionChange.set(screenX, screenY, 0f);
-        currentPositionChange = cam.unproject(currentPositionChange);
-        Vector3 newTouchPosition = currentPositionChange.cpy();
+        if(pointer == 0) {
+            currentPositionChange.set(screenX, screenY, 0f);
+            currentPositionChange = cam.unproject(currentPositionChange);
+            Vector3 newTouchPosition = currentPositionChange.cpy();
 
-        currentPositionChange.sub(touchPoint);
-        touchPoint.set(newTouchPosition);
-
+            currentPositionChange.sub(touchPoint);
+            touchPoint.set(newTouchPosition);
+        }
         return false;
     }
 
