@@ -37,7 +37,7 @@ public class EnemySpawnSystem extends IteratingSystem {
     private static float AsteroidXVelocity = 3f;
     private static float AsteroidYVelocity = -2f;
     private static float AsteroidY = 35f;
-    private static float AsteroidRotationSpeed = 180f;
+    private static float AsteroidRotationSpeed = 45f;
     private static float AsteroidFragSpeed = 15f;
 
     private Random r = new Random();

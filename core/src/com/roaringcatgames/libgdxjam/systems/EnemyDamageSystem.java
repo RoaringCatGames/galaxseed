@@ -268,7 +268,9 @@ public class EnemyDamageSystem extends IteratingSystem {
         Entity plant = ((PooledEngine) getEngine()).createEntity();
         plant.add(TransformComponent.create()
                 .setPosition(outVec.x, outVec.y, Z.plant)
-                .setRotation(et.rotation + baseRotation));
+                .setRotation(et.rotation + baseRotation)
+                .setScale(1f, 1f));
+
         plant.add(TextureComponent.create());
         plant.add(StateComponent.create()
                 .set("DEFAULT")
@@ -285,6 +287,17 @@ public class EnemyDamageSystem extends IteratingSystem {
                 .setOffset(offsetVec.x, offsetVec.y)
                 .setTarget(enemy)
                 .setBaseRotation(baseRotation));
+
+        Vector2 minSpeeds = offsetVec.cpy().nor().scl(1f, 1f);
+        Vector2 maxSpeeds = offsetVec.cpy().nor().scl(4f, 6f);
+        plant.add(ParticleEmitterComponent.create()
+            .setParticleImages(Assets.getLeafFrames())
+            .setParticleLifespans(0.1f, 0.3f)
+            .setSpawnRate(200f)
+            .setAngleRange(0f, 360f)
+            .setSpeed(3f)
+            .setShouldFade(true)
+            .setDuration(0.5f));
 
         getEngine().addEntity(plant);
     }

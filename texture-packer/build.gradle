@@ -4,9 +4,17 @@ sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "GameTexturePacker";
+project.ext.particleClassName = "ParticleEditorWrapper";
 
 task run(dependsOn: classes, type: JavaExec){
     main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+}
+
+task particles(dependsOn:classes, type:JavaExec){
+    main = project.particleClassName
+
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
 }

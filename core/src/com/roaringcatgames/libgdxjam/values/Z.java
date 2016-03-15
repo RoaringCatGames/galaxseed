@@ -15,8 +15,10 @@ public class Z {
     public static final float plant = 44f;
     public static final float treeCover = 43f;
     public static final float seed = 40;
+    public static final float leaves = 39f;
+
     public static final float gameOver = 2f;
     public static final float touchIndicator = 1f;
-
     public static final float health = 0f;
+
 }

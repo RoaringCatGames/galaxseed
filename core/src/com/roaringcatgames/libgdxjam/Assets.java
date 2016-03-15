@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
+import javax.xml.soap.Text;
+
 /**
  * Created by barry on 12/22/15 @ 7:32 PM.
  */
@@ -277,6 +279,9 @@ public class Assets {
     }
     public static Array<TextureAtlas.AtlasRegion> getPineTreeFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/pine");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getLeafFrames(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegions("leaves/leaf");
     }
 
     /////////////
