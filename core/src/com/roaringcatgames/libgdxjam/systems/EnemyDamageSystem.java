@@ -142,6 +142,9 @@ public class EnemyDamageSystem extends IteratingSystem {
                 hc = hm.get(enemy);
                 if(hc.health > 0f) {
                     attachPlant(bullet, enemy, ec.enemyType == EnemyType.COMET);
+                    if (scoreCard != null) {
+                        scoreCard.setScore(scoreCard.score + 1);
+                    }
 
                     float startHealth = hc.health;
                     applyHealthChange(bullet, hc);
@@ -193,17 +196,26 @@ public class EnemyDamageSystem extends IteratingSystem {
 
                         if (vm.has(enemy)) {
                             VelocityComponent vc = vm.get(enemy);
-                            vc.speed.scl(1.5f);
+                            vc.speed.scl(1.6f);
                         }
 
                         if (addFade) {
-                            enemy.add(FadingComponent.create()
-                                    .setPercentPerSecond(fadeSpeed));
+//                            enemy.add(FadingComponent.create()
+//                                    .setPercentPerSecond(fadeSpeed));
+//                            enemy.add(ShakeComponent.create()
+//                                    .setDuration(fadeSpeed/100f)
+//                                    .setOffsets(0.3f, 0.3f)
+//                                    .setSpeed(0.05f, 0.05f));
+//                            TransformComponent tc = tm.get(enemy);
+//                            enemy.add(OscillationComponent.create()
+//                                .setMinimumRotation(tc.rotation - 5f)
+//                                .setMaximumRotation(tc.rotation + 5f)
+//                                .setSpeed(360f));
                         }
 
-                        if (scoreCard != null) {
-                            scoreCard.setScore(scoreCard.score + scoredPoints);
-                        }
+//                        if (scoreCard != null) {
+//                            scoreCard.setScore(scoreCard.score + scoredPoints);
+//                        }
                     }
 
                     getEngine().removeEntity(bullet);
@@ -241,6 +253,9 @@ public class EnemyDamageSystem extends IteratingSystem {
     }
 
     private void attachPlant(Entity bullet, Entity enemy, boolean isComet) {
+
+
+
         CircleBoundsComponent bb = cm.get(bullet);
         CircleBoundsComponent eb = cm.get(enemy);
         TransformComponent et = tm.get(enemy);

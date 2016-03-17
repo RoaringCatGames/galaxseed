@@ -174,7 +174,8 @@ public class BackgroundSystem extends IteratingSystem {
                 Entity sticker = engine.createEntity();
                 sticker.add(TransformComponent.create()
                         .setPosition(position, yIndex * yStep, Z.bgSticker)
-                        .setRotation(rot));
+                        .setRotation(rot)
+                        .setOpacity(0.6f));
                 sticker.add(RotationComponent.create()
                     .setRotationSpeed(0.25f));
                 sticker.add(TextureComponent.create()

@@ -18,7 +18,7 @@ public class Z {
     public static final float leaves = 39f;
 
     public static final float gameOver = 2f;
-    public static final float touchIndicator = 1f;
-    public static final float health = 0f;
 
+    public static final float health = 0f;
+    public static final float score = 0f;
 }

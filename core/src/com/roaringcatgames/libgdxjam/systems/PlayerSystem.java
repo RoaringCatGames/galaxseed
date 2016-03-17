@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -27,7 +28,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private boolean isInitialized = false;
     private Entity player;
     private Entity flames;
-    private Entity scoreCard;
     private Vector3 initialPosition;
     private float initialScale;
 
@@ -64,21 +64,11 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             if (getEngine() instanceof PooledEngine) {
                 player = ((PooledEngine) getEngine()).createEntity();
                 flames = ((PooledEngine) getEngine()).createEntity();
-                scoreCard = ((PooledEngine) getEngine()).createEntity();
             } else {
                 player = new Entity();
                 flames = new Entity();
-                scoreCard = new Entity();
             }
 
-            scoreCard.add(TextComponent.create()
-                .setText("Score: 00000")
-                .setFont(Assets.get32Font()));
-            scoreCard.add(TransformComponent.create()
-                .setPosition(4f, 1f, Z.health));
-            scoreCard.add(ScoreComponent.create()
-                    .setScore(0));
-            getEngine().addEntity(scoreCard);
 
             player.add(KinematicComponent.create());
             player.add(PlayerComponent.create());
