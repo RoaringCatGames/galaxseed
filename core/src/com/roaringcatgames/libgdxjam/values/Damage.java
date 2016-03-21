@@ -9,5 +9,5 @@ public class Damage {
     public static final int asteroidRock = 10;
     public static final int asteroid = 30;
 
-    public static final int seed = 5;
+    public static final int seed = 1;
 }

@@ -11,10 +11,7 @@ import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.CircleBoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.HealthComponent;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.components.EnemyComponent;
-import com.roaringcatgames.libgdxjam.components.PlayerComponent;
-import com.roaringcatgames.libgdxjam.components.ProjectileComponent;
-import com.roaringcatgames.libgdxjam.components.ShakeComponent;
+import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.values.Shakes;
 import com.roaringcatgames.libgdxjam.values.Volume;
@@ -26,6 +23,7 @@ public class PlayerDamageSystem extends IteratingSystem {
 
     private static float SHAKE_TIME = 0.5f;
     private Entity player;
+    private Entity scoreCard;
     private Array<Entity> projectiles = new Array<>();
 
     private ComponentMapper<BoundsComponent> bm;
@@ -34,17 +32,19 @@ public class PlayerDamageSystem extends IteratingSystem {
     private ComponentMapper<CircleBoundsComponent> cm;
     private ComponentMapper<EnemyComponent> em;
     private ComponentMapper<ShakeComponent> sm;
+    private ComponentMapper<ScoreComponent> scm;
 
     private Sound lightHitSfx, mediumHitSfx, heavyHitSfx;
 
     public PlayerDamageSystem(){
-        super(Family.one(PlayerComponent.class, ProjectileComponent.class).get());
+        super(Family.one(ScoreComponent.class, PlayerComponent.class, ProjectileComponent.class).get());
         bm = ComponentMapper.getFor(BoundsComponent.class);
         hm = ComponentMapper.getFor(HealthComponent.class);
         pm = ComponentMapper.getFor(ProjectileComponent.class);
         cm = ComponentMapper.getFor(CircleBoundsComponent.class);
         em = ComponentMapper.getFor(EnemyComponent.class);
         sm = ComponentMapper.getFor(ShakeComponent.class);
+        scm = ComponentMapper.getFor(ScoreComponent.class);
 
         lightHitSfx = Assets.getPlayerHitLight();
         mediumHitSfx = Assets.getPlayerHitMedium();
@@ -107,6 +107,9 @@ public class PlayerDamageSystem extends IteratingSystem {
             }
         }
 
+        HealthComponent projHealth = hm.get(proj);
+        scm.get(scoreCard).score -= (projHealth.maxHealth - projHealth.health);
+
         ph.health = Math.max(0f, ph.health - pp.damage);
         getEngine().removeEntity(proj);
     }
@@ -115,6 +118,8 @@ public class PlayerDamageSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         if(pm.has(entity)){
             projectiles.add(entity);
+        }else if(scm.has(entity)) {
+            scoreCard = entity;
         }else{
             player = entity;
         }

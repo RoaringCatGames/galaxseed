@@ -130,13 +130,13 @@ public class EnemyDamageSystem extends IteratingSystem {
 
         EnemyComponent ec = em.get(enemy);
         HealthComponent hc;
-        int scoredPoints = 0;
+        //int scoredPoints = 0;
 
         switch(ec.enemyType) {
-            case ASTEROID_FRAG:
-                getEngine().removeEntity(bullet);
-                getEngine().removeEntity(enemy);
-                break;
+//            case ASTEROID_FRAG:
+//                getEngine().removeEntity(bullet);
+//                getEngine().removeEntity(enemy);
+//                break;
 
             default:
                 hc = hm.get(enemy);
@@ -153,29 +153,22 @@ public class EnemyDamageSystem extends IteratingSystem {
                     boolean addFade = true;
                     if (startHealth > 0f && hc.health <= 0f) {
                         switch (ec.enemyType) {
-                            case ASTEROID_A:
-                                attachTreeCover(enemy, Assets.getAsteroidAFrames());
-                                scoredPoints = 2;
-                                break;
-                            case ASTEROID_B:
-                                attachTreeCover(enemy, Assets.getAsteroidBFrames());
-                                scoredPoints = 4;
-                                break;
-                            case ASTEROID_C:
-                                attachTreeCover(enemy, Assets.getAsteroidCFrames());
-                                scoredPoints = 8;
-                                break;
+                            case ASTEROID_FRAG:
                             case COMET:
-                                scoredPoints = 1;
                                 fadeSpeed = 250f;
                                 addFade = false;
-                                StateComponent sc = stm.get(enemy);
-                                sc.setLooping(false);
-                                sc.set("FULL");
+                                if(stm.has(enemy)){
+                                    StateComponent sc = stm.get(enemy);
+                                    sc.setLooping(false);
+                                    sc.set("FULL");
+                                }
                                 if(pfm.has(enemy)){
                                     PathFollowComponent pfc = pfm.get(enemy);
                                     pfc.setSpeed(pfc.speed/2f);
                                     pfc.setFacingPath(false);
+                                }else if (vm.has(enemy)) {
+                                    VelocityComponent vc = vm.get(enemy);
+                                    vc.speed.scl(0.5f);
                                 }
 
                                 float rotR = r.nextFloat();
@@ -186,17 +179,25 @@ public class EnemyDamageSystem extends IteratingSystem {
                                 enemy.add(RotationComponent.create()
                                     .setRotationSpeed(rotSpeed));
                                 break;
+                            case ASTEROID_A:
+                                attachTreeCover(enemy, Assets.getAsteroidAFrames());
+                                break;
+                            case ASTEROID_B:
+                                attachTreeCover(enemy, Assets.getAsteroidBFrames());
+                                break;
+                            case ASTEROID_C:
+                                attachTreeCover(enemy, Assets.getAsteroidCFrames());
+                                break;
                         }
 
-                        ec.setDamaging(false);
+                        //ec.setDamaging(false);
                         if (sm.has(enemy)) {
                             sm.get(enemy).setPaused(true);
+                            if (vm.has(enemy)) {
+                                VelocityComponent vc = vm.get(enemy);
+                                vc.speed.scl(1.6f);
+                            }
                             popSfx.play(Volume.POP_SFX);
-                        }
-
-                        if (vm.has(enemy)) {
-                            VelocityComponent vc = vm.get(enemy);
-                            vc.speed.scl(1.6f);
                         }
 
                         if (addFade) {
@@ -212,10 +213,6 @@ public class EnemyDamageSystem extends IteratingSystem {
 //                                .setMaximumRotation(tc.rotation + 5f)
 //                                .setSpeed(360f));
                         }
-
-//                        if (scoreCard != null) {
-//                            scoreCard.setScore(scoreCard.score + scoredPoints);
-//                        }
                     }
 
                     getEngine().removeEntity(bullet);

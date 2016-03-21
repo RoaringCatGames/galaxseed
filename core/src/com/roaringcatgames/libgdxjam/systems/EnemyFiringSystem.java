@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.values.Damage;
+import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
@@ -69,27 +70,30 @@ public class EnemyFiringSystem extends IteratingSystem {
                             spawnVel.scl(sc.particleSpeed);
                             int target = r.nextInt(sc.particleTextures.size);
 
-                            Entity particle = engine.createEntity();
-                            particle.add(EnemyComponent.create()
-                                .setEnemyType(EnemyType.ASTEROID_FRAG));
-                            particle.add(WhenOffScreenComponent.create()
-                                .setHasBeenOnScreen(true));
-                            particle.add(TextureComponent.create()
+                            Entity frag = engine.createEntity();
+                            frag.add(HealthComponent.create()
+                                .setMaxHealth(Health.AsteroidFrag)
+                                .setMaxHealth(Health.AsteroidFrag));
+                            frag.add(EnemyComponent.create()
+                                    .setEnemyType(EnemyType.ASTEROID_FRAG));
+                            frag.add(WhenOffScreenComponent.create()
+                                    .setHasBeenOnScreen(true));
+                            frag.add(TextureComponent.create()
                                     .setRegion(sc.particleTextures.get(target)));
-                            particle.add(TransformComponent.create()
+                            frag.add(TransformComponent.create()
                                     .setPosition(tc.position.x, tc.position.y, Z.enemyParticle));
-                            particle.add(VelocityComponent.create()
+                            frag.add(VelocityComponent.create()
                                     .setSpeed(spawnVel.x, spawnVel.y));
-                            particle.add(RotationComponent.create()
+                            frag.add(RotationComponent.create()
                                     .setRotationSpeed(sc.particleSpeed * 10f));
-                            particle.add(CircleBoundsComponent.create()
+                            frag.add(CircleBoundsComponent.create()
                                     .setCircle(tc.position.x,
                                             tc.position.y,
                                             0.375f));
-                            particle.add(ProjectileComponent.create()
+                            frag.add(ProjectileComponent.create()
                                     .setDamage(Damage.asteroidRock));
-                            particle.add(KinematicComponent.create());
-                            engine.addEntity(particle);
+                            frag.add(KinematicComponent.create());
+                            engine.addEntity(frag);
                         }
                         break;
                     case RANDOM_DIRECTIONS:

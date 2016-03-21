@@ -5,8 +5,10 @@ package com.roaringcatgames.libgdxjam.values;
  */
 public class Health {
 
-    public static final float Comet = 10f;
-    public static final float AsteroidA = 50f;
-    public static final float AsteroidB = 80f;
-    public static final float AsteroidC = 110f;
+    public static final float Comet = 1f;
+    public static final float AsteroidFrag = 1f;
+    public static final float AsteroidA = 10f;
+    public static final float AsteroidB = 16f;
+    public static final float AsteroidC = 22f;
+
 }

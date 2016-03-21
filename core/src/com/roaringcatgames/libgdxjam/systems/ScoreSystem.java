@@ -80,7 +80,6 @@ public class ScoreSystem extends IteratingSystem {
         if(growthPosition >= animationFrames.size){
             growthPosition = animationFrames.size - 1;
         }
-        //Gdx.app.log("Score System", "Current Score: " + currentScore + " Image Position: " + growthPosition);
 
         txc.setRegion(animationFrames.get(growthPosition));
     }
@@ -97,6 +96,7 @@ public class ScoreSystem extends IteratingSystem {
 
     private int getGrowthPosition(int score){
 
+        //GROSSS!!!
         int pos = score <  10 ?  0 :
                   score <  20 ?  1 :
                   score <  30 ?  2 :

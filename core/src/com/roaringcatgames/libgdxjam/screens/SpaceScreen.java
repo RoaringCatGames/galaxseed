@@ -13,6 +13,7 @@
     import com.badlogic.gdx.utils.Array;
     import com.badlogic.gdx.utils.viewport.FitViewport;
     import com.badlogic.gdx.utils.viewport.Viewport;
+    import com.roaringcatgames.kitten2d.ashley.components.PathFollowComponent;
     import com.roaringcatgames.kitten2d.ashley.systems.*;
     import com.roaringcatgames.libgdxjam.App;
     import com.roaringcatgames.libgdxjam.Assets;
@@ -114,9 +115,8 @@
             engine.addSystem(renderingSystem);
             engine.addSystem(textRenderingSystem);
             engine.addSystem(new PlayerHealthSystem(cam));
-            //\engine.addSystem(new PathSystem(cam));
-            engine.addSystem(new PathFollowSystem());
-            //engine.addSystem(new GravitySystem(new Vector2(0f, -9.8f)));
+            PathFollowSystem pathFollowSystem = new PathFollowSystem();
+            engine.addSystem(pathFollowSystem);
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
             App.game.multiplexer.addProcessor(this);
 
@@ -125,6 +125,7 @@
             playingOnlySystems.add(enemySpawnSystem);
             playingOnlySystems.add(enemyDmgSystem);
             playingOnlySystems.add(playerDmgSystem);
+            playingOnlySystems.add(pathFollowSystem);
 
             music = Assets.getBackgroundMusic();
 
