@@ -118,6 +118,7 @@
             PathFollowSystem pathFollowSystem = new PathFollowSystem();
             engine.addSystem(pathFollowSystem);
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
+            engine.addSystem(new FPSSystem());
             App.game.multiplexer.addProcessor(this);
 
             playingOnlySystems.add(movementSystem);
@@ -149,6 +150,7 @@
         GameState lastState;
         @Override
         protected void update(float deltaChange) {
+
 
             engine.update(Math.min(deltaChange, App.MAX_DELTA_TICK));
 

@@ -52,6 +52,11 @@ public class ParticleEmitterComponent implements Component {
         return this;
     }
 
+    public ParticleEmitterComponent setShouldLoop(boolean shouldLoop){
+        this.isLooping = shouldLoop;
+        return this;
+    }
+
     public ParticleEmitterComponent setDuration(float duration){
         this.duration = duration;
         return this;

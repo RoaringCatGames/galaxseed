@@ -21,4 +21,5 @@ public class Z {
 
     public static final float health = 0f;
     public static final float score = 0f;
+    public static final float debug = 0f;
 }

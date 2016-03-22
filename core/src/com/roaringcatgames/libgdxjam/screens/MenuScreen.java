@@ -21,6 +21,7 @@ import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.MenuItemComponent;
+import com.roaringcatgames.libgdxjam.components.ParticleEmitterComponent;
 import com.roaringcatgames.libgdxjam.systems.*;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Volume;
@@ -85,6 +86,7 @@ public class MenuScreen extends LazyInitScreen {
         engine.addSystem(new BulletSystem());
         engine.addSystem(new FollowerSystem());
         engine.addSystem(new FadingSystem());
+        engine.addSystem(new ParticleSystem());
         //Extension Systems
         engine.addSystem(renderingSystem);
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
@@ -200,7 +202,15 @@ public class MenuScreen extends LazyInitScreen {
             StateComponent sc = plant.getComponent(StateComponent.class);
             AnimationComponent ac = plant.getComponent(AnimationComponent.class);
             if (ac.animations.get(sc.get()).isAnimationFinished(sc.time)) {
-                sc.set("LEAF").setLooping(true);
+                //sc.set("LEAF").setLooping(true);
+                plant.add(ParticleEmitterComponent.create()
+                        .setDuration(2f)
+                        .setParticleImages(Assets.getLeafFrames())
+                        .setShouldFade(true)
+                        .setAngleRange(-110f, 110f)
+                        .setSpawnRate(20f)
+                        .setSpeed(2f)
+                        .setShouldLoop(true));
                 treeLeafing = true;
             }
         }

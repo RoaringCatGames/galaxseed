@@ -80,7 +80,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .setScale(initialScale, initialScale));
 
             player.add(BoundsComponent.create()
-                    .setBounds(0f, 0f, 1.5f, 2f));
+                    .setBounds(0f, 0f, 1f, 1.5f));
 
             player.add(TextureComponent.create());
             player.add(AnimationComponent.create()

@@ -11,6 +11,7 @@ import com.roaringcatgames.kitten2d.ashley.components.AnimationComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.ParticleEmitterComponent;
 import com.roaringcatgames.libgdxjam.components.ScoreComponent;
 import com.roaringcatgames.libgdxjam.components.TextComponent;
 import com.roaringcatgames.libgdxjam.values.Z;
@@ -46,7 +47,6 @@ public class ScoreSystem extends IteratingSystem {
         plantGrowth.add(TransformComponent.create()
                 .setPosition(1f, 1.5f, Z.score)
                 .setScale(0.5f, 0.5f));
-
         engine.addEntity(plantGrowth);
 
         scoreCard = ((PooledEngine)engine).createEntity();
@@ -70,6 +70,7 @@ public class ScoreSystem extends IteratingSystem {
         scoreCard = null;
     }
 
+    private int lastPosition = 0;
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -77,6 +78,18 @@ public class ScoreSystem extends IteratingSystem {
         TextureComponent txc = txm.get(plantGrowth);
 
         int growthPosition = getGrowthPosition(currentScore);
+        if(growthPosition != lastPosition){
+            plantGrowth.add(ParticleEmitterComponent.create()
+                .setParticleLifespans(0.3f, 0.5f)
+                .setShouldFade(true)
+                .setSpawnRate(10f*(growthPosition))
+                .setAngleRange(-90f, 90f)
+                .setParticleImages(Assets.getLeafFrames())
+                .setDuration(0.3f)
+                .setSpeed(5f));
+        }
+
+        lastPosition = growthPosition;
         if(growthPosition >= animationFrames.size){
             growthPosition = animationFrames.size - 1;
         }
@@ -97,36 +110,22 @@ public class ScoreSystem extends IteratingSystem {
     private int getGrowthPosition(int score){
 
         //GROSSS!!!
-        int pos = score <  10 ?  0 :
-                  score <  20 ?  1 :
-                  score <  30 ?  2 :
-                  score <  40 ?  3 :
-                  score <  50 ?  4 :
-                  score <  60 ?  5 :
-                  score <  70 ?  6 :
-                  score <  80 ?  7 :
-                  score <  90 ?  8 :
-                  score < 100 ?  9 :
-                  score < 120 ? 10 :
-                  score < 140 ? 11 :
-                  score < 160 ? 12 :
-                  score < 180 ? 13 :
-                  score < 200 ? 14 :
-                  score < 220 ? 15 :
-                  score < 240 ? 16 :
-                  score < 260 ? 17 :
-                  score < 280 ? 18 :
-                  score < 300 ? 19 :
-                  score < 330 ? 20 :
-                  score < 360 ? 21 :
-                  score < 390 ? 22 :
-                  score < 420 ? 23 :
-                  score < 450 ? 24 :
-                  score < 480 ? 25 :
-                  score < 510 ? 26 :
-                  score < 550 ? 27 :
-                  score < 650 ? 28 :
-                                29;
+        int pos = score <     1 ?  0 :
+                  score <    10 ?  1 :
+                  score <    50 ?  2 :
+                  score <   100 ?  3 :
+                  score <   200 ?  4 :
+                  score <   400 ?  5 :
+                  score <   800 ?  6 :
+                  score <  1600 ?  7 :
+                  score <  3200 ?  8 :
+                  score <  6400 ?  9 :
+                  score < 10000 ? 10 :
+                  score < 15000 ? 11 :
+                  score < 20000 ? 12 :
+                  score < 25000 ? 13 :
+                  score < 30000 ? 14 :
+                                  15;
         return pos;
     }
     private String getBufferedScore(int score){

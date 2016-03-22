@@ -305,7 +305,7 @@ public class EnemyDamageSystem extends IteratingSystem {
         plant.add(ParticleEmitterComponent.create()
             .setParticleImages(Assets.getLeafFrames())
             .setParticleLifespans(0.1f, 0.3f)
-            .setSpawnRate(200f)
+            .setSpawnRate(100f)
             .setAngleRange(0f, 360f)
             .setSpeed(3f)
             .setShouldFade(true)
