@@ -205,6 +205,16 @@ public class Assets {
         return fragsC;
     }
 
+    public static Array<TextureAtlas.AtlasRegion> getImpactA(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactA/impact-asteroid-a");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getImpactB(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactA/impact-asteroid-b");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getImpactC(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactA/impact-asteroid-c");
+    }
+
 
     /****
      * ONLY SAFE AFTER am.update() is finished.
