@@ -84,23 +84,24 @@ public class EnemySpawnSystem extends IteratingSystem {
      *******************/
     private void generateAsteroid(float xPos, float yPos, float xVel, float yVel){
         //Generate Bullets here
-        Entity enemy = ((PooledEngine) getEngine()).createEntity();
-        enemy.add(WhenOffScreenComponent.create());
-        enemy.add(KinematicComponent.create());
-        enemy.add(ProjectileComponent.create()
+        PooledEngine engine = (PooledEngine)getEngine();
+        Entity enemy = engine.createEntity();
+        enemy.add(WhenOffScreenComponent.create(engine));
+        enemy.add(KinematicComponent.create(engine));
+        enemy.add(ProjectileComponent.create(engine)
                 .setDamage(Damage.asteroid));
 
 
-        enemy.add(TransformComponent.create()
+        enemy.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos, Z.enemy)
                 .setScale(1f, 1f));
         float rotSpeed = xVel > 0f ? AsteroidRotationSpeed : -AsteroidRotationSpeed;
-        enemy.add(RotationComponent.create()
+        enemy.add(RotationComponent.create(engine)
                 .setRotationSpeed(rotSpeed));
 
 
 
-        SpawnerComponent spawner = SpawnerComponent.create();
+        SpawnerComponent spawner = SpawnerComponent.create(engine);
         float cnt = r.nextFloat();
         float size;
         float health;
@@ -139,52 +140,53 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setSpawnRate(spawnRate);
         }
         enemy.add(spawner);
-        enemy.add(HealthComponent.create()
+        enemy.add(HealthComponent.create(engine)
             .setHealth(health)
             .setMaxHealth(health));
-        enemy.add(CircleBoundsComponent.create()
+        enemy.add(CircleBoundsComponent.create(engine)
                 .setCircle(xPos, yPos, size / 2f));
-        enemy.add(TextureComponent.create()
+        enemy.add(TextureComponent.create(engine)
             .setRegion(tr));
-        enemy.add(EnemyComponent.create()
+        enemy.add(EnemyComponent.create(engine)
                 .setEnemyType(eType));
-        enemy.add(VelocityComponent.create()
+        enemy.add(VelocityComponent.create(engine)
                 .setSpeed(xVel, yVel));
 
         getEngine().addEntity(enemy);
     }
 
     private void generateEnemy(float xPos, float yPos){
-
+            PooledEngine engine = (PooledEngine) getEngine();
             boolean isGoingRight = xPos < App.W/2f;
             //Generate Bullets here
-            Entity enemy = ((PooledEngine) getEngine()).createEntity();
-            enemy.add(WhenOffScreenComponent.create());
-            enemy.add(KinematicComponent.create());
-            enemy.add(ProjectileComponent.create()
+            Entity enemy = engine.createEntity();
+            enemy.add(WhenOffScreenComponent.create(engine));
+            enemy.add(KinematicComponent.create(engine));
+            enemy.add(ProjectileComponent.create(engine)
                 .setDamage(Damage.comet));
-            enemy.add(EnemyComponent.create());
+            enemy.add(EnemyComponent.create(engine)
+                .setEnemyType(EnemyType.COMET));
 
-            enemy.add(TransformComponent.create()
+            enemy.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos, Z.enemy)
                 .setScale(1f, 1f));
 
-            enemy.add(HealthComponent.create()
+            enemy.add(HealthComponent.create(engine)
                 .setMaxHealth(Health.Comet)
                 .setMaxHealth(Health.Comet));
 
-            enemy.add(CircleBoundsComponent.create()
+            enemy.add(CircleBoundsComponent.create(engine)
                 .setCircle(xPos, yPos, 0.4f)
                 .setOffset(0f, -1.25f));
             float cometR = r.nextFloat();
             Array<TextureAtlas.AtlasRegion> frames = cometR > 0.5f ? Assets.getRedCometFrames() : Assets.getBlueCometFrames();
             Array<TextureAtlas.AtlasRegion> fullFrames = cometR > 0.5f ? Assets.getRedCometFullFrames() : Assets.getBlueCometFullFrames();
-            enemy.add(TextureComponent.create());
-            enemy.add(AnimationComponent.create()
+            enemy.add(TextureComponent.create(engine));
+            enemy.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", new Animation(1f / 12f, frames, Animation.PlayMode.LOOP_PINGPONG))
                 .addAnimation("FULL", new Animation(1f, fullFrames)));
 
-            enemy.add(StateComponent.create()
+            enemy.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(true));
 
@@ -193,7 +195,7 @@ public class EnemySpawnSystem extends IteratingSystem {
             Vector2 p1 = new Vector2(p1x, 0f);
             float p2x = isGoingRight ? 42.25f : -22.25f;
             Vector2 p2 = new Vector2(p2x, -32f);
-            enemy.add(PathFollowComponent.create()
+            enemy.add(PathFollowComponent.create(engine)
                     .setFacingPath(true)
                     .setBaseRotation(180f)
                     .setSpeed(1f/8f)

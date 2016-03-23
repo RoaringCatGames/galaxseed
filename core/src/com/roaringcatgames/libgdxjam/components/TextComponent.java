@@ -1,18 +1,20 @@
 package com.roaringcatgames.libgdxjam.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.utils.Pool;
 
 /**
  * Created by barry on 3/1/16 @ 8:44 PM.
  */
-public class TextComponent implements Component {
+public class TextComponent implements Component, Pool.Poolable {
 
     public String text = "";
     public BitmapFont font;
 
-    public static TextComponent create(){
-        return new TextComponent();
+    public static TextComponent create(PooledEngine engine){
+        return engine.createComponent(TextComponent.class);
     }
 
     public TextComponent setText(String text){
@@ -23,5 +25,11 @@ public class TextComponent implements Component {
     public TextComponent setFont(BitmapFont font){
         this.font = font;
         return this;
+    }
+
+    @Override
+    public void reset() {
+        this.text = "";
+        this.font = null;
     }
 }

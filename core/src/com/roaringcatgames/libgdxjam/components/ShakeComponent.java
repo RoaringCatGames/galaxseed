@@ -1,12 +1,14 @@
 package com.roaringcatgames.libgdxjam.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
 
 /**
  * Created by barry on 3/5/16 @ 12:31 PM.
  */
-public class ShakeComponent implements Component {
+public class ShakeComponent implements Component, Pool.Poolable {
     public Vector2 speeds = new Vector2(1f, 1f);
     public float currentTime = 0f;
     public boolean isPaused = false;
@@ -14,8 +16,8 @@ public class ShakeComponent implements Component {
     public float shakeDuration = 0f;
 
 
-    public static ShakeComponent create(){
-        return new ShakeComponent();
+    public static ShakeComponent create(PooledEngine engine){
+        return engine.createComponent(ShakeComponent.class);
     }
 
     public ShakeComponent setSpeed(float spdX, float spdY){
@@ -52,4 +54,12 @@ public class ShakeComponent implements Component {
         return this;
     }
 
+    @Override
+    public void reset() {
+        this.speeds.set(1f, 1f);
+        this.isPaused = false;
+        this.currentTime = 0f;
+        this.maxOffets.set(1f, 1f);
+        this.shakeDuration = 0f;
+    }
 }

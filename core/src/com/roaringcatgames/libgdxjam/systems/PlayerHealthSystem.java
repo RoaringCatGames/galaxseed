@@ -88,9 +88,9 @@ public class PlayerHealthSystem extends IteratingSystem {
 
     private void init(){
         healthBar = ((PooledEngine)getEngine()).createEntity();
-        healthBar.add(TransformComponent.create()
+        healthBar.add(TransformComponent.create(getEngine())
             .setPosition(App.W/2f, App.H-0.6f, Z.health));
-        healthBar.add(BoundsComponent.create()
+        healthBar.add(BoundsComponent.create(getEngine())
             .setBounds(0.1f, 0.1f, 19.8f, 1f));
         getEngine().addEntity(healthBar);
         isInitialized = true;

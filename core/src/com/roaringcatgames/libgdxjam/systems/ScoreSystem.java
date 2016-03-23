@@ -40,23 +40,24 @@ public class ScoreSystem extends IteratingSystem {
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
+        PooledEngine pe = (PooledEngine)engine;
         animationFrames = Assets.getTitleTreeFrames();
-        plantGrowth = ((PooledEngine) engine).createEntity();
-        plantGrowth.add(TextureComponent.create()
+        plantGrowth = pe.createEntity();
+        plantGrowth.add(TextureComponent.create(pe)
             .setRegion(animationFrames.get(0)));
-        plantGrowth.add(TransformComponent.create()
+        plantGrowth.add(TransformComponent.create(pe)
                 .setPosition(1f, 1.5f, Z.score)
                 .setScale(0.5f, 0.5f));
         engine.addEntity(plantGrowth);
 
-        scoreCard = ((PooledEngine)engine).createEntity();
+        scoreCard = pe.createEntity();
         BitmapFont fnt = Gdx.graphics.getDensity() > 1f ? Assets.get128Font() : Assets.get64Font();
-        scoreCard.add(TextComponent.create()
+        scoreCard.add(TextComponent.create(pe)
                 .setText("Score: 00000")
                 .setFont(fnt));
-        scoreCard.add(TransformComponent.create()
+        scoreCard.add(TransformComponent.create(pe)
                 .setPosition(5f, 1.5f, Z.score));
-        scoreCard.add(ScoreComponent.create()
+        scoreCard.add(ScoreComponent.create(pe)
                 .setScore(0));
         engine.addEntity(scoreCard);
     }
@@ -79,7 +80,7 @@ public class ScoreSystem extends IteratingSystem {
 
         int growthPosition = getGrowthPosition(currentScore);
         if(growthPosition != lastPosition){
-            plantGrowth.add(ParticleEmitterComponent.create()
+            plantGrowth.add(ParticleEmitterComponent.create((PooledEngine)getEngine())
                 .setParticleLifespans(0.3f, 0.5f)
                 .setShouldFade(true)
                 .setSpawnRate(10f*(growthPosition))

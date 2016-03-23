@@ -63,10 +63,10 @@ public class SplashScreen extends LazyInitScreen {
         engine.addSystem(new FollowerSystem());
 
         Entity title = engine.createEntity();
-        title.add(TransformComponent.create()
+        title.add(TransformComponent.create(engine)
                 .setPosition(App.W / 2f, 15f, Z.gameOver)
                 .setScale(1f, 1f));
-        title.add(TextureComponent.create()
+        title.add(TextureComponent.create(engine)
                 .setRegion(Assets.getSplashTitle()));
         engine.addEntity(title);
 
@@ -84,33 +84,33 @@ public class SplashScreen extends LazyInitScreen {
 
 
         Entity loading = engine.createEntity();
-        loading.add(VelocityComponent.create()
+        loading.add(VelocityComponent.create(engine)
             .setSpeed(catSpeedX, catSpeedY));
-        loading.add(RotationComponent.create()
+        loading.add(RotationComponent.create(engine)
             .setRotationSpeed(45f));
-        loading.add(TransformComponent.create()
+        loading.add(TransformComponent.create(engine)
                 .setPosition(catX, catY, 0f)
                 .setScale(0.5f, 0.5f));
-        loading.add(TextureComponent.create());
-        loading.add(StateComponent.create()
+        loading.add(TextureComponent.create(engine));
+        loading.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(true));
-        loading.add(AnimationComponent.create()
+        loading.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", new Animation(1f / 30f, Assets.getLoadingFrames(), Animation.PlayMode.LOOP_PINGPONG)));
         engine.addEntity(loading);
 
         Entity bubble = engine.createEntity();
-        bubble.add(TransformComponent.create()
+        bubble.add(TransformComponent.create(engine)
                 .setPosition(16f, 8f, 0f)
             .setScale(0.5f, 0.5f));
-        bubble.add(FollowerComponent.create()
+        bubble.add(FollowerComponent.create(engine)
             .setTarget(loading)
             .setMode(FollowMode.STICKY)
             .setOffset(-3.75f, 1f));
-        bubble.add(TextureComponent.create());
-        bubble.add(AnimationComponent.create()
+        bubble.add(TextureComponent.create(engine));
+        bubble.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getBubbleFrames())));
-        bubble.add(StateComponent.create()
+        bubble.add(StateComponent.create(engine)
                 .set("DEFAULT")
             .setLooping(false));
 

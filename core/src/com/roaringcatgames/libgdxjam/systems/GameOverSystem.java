@@ -59,11 +59,12 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
 
         if(processing){
             hasInitialized = false;
+            PooledEngine engine = (PooledEngine)getEngine();
             if(gameOverText == null) {
-                gameOverText = ((PooledEngine) getEngine()).createEntity();
-                gameOverText.add(TransformComponent.create()
+                gameOverText = engine.createEntity();
+                gameOverText.add(TransformComponent.create(engine)
                         .setPosition(App.W / 2f, App.H / 2f, Z.gameOver));
-                gameOverText.add(TextComponent.create()
+                gameOverText.add(TextComponent.create(engine)
                         .setFont(Assets.get64Font())
                         .setText("GAME OVER"));
 
@@ -71,13 +72,13 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
             }
 
             if(restartButton == null){
-                restartButton = ((PooledEngine) getEngine()).createEntity();
-                restartButton.add(TransformComponent.create()
+                restartButton = engine.createEntity();
+                restartButton.add(TransformComponent.create(engine)
                     .setPosition(App.W/2f, ((App.H/2f)-2.5f), Z.gameOver));
-                restartButton.add(TextComponent.create()
+                restartButton.add(TextComponent.create(engine)
                     .setFont(Assets.get48Font())
                     .setText("Home"));
-                restartButton.add(BoundsComponent.create()
+                restartButton.add(BoundsComponent.create(engine)
                     .setBounds(0f, 0f, 5f, 1.5f)
                     .setOffset(0f, -0.75f));
 

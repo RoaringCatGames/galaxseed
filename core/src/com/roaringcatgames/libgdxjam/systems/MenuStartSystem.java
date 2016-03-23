@@ -82,12 +82,14 @@ public class MenuStartSystem extends IteratingSystem{
         AnimationComponent ani = am.get(enemy);
         ani.setPaused(false);
         attachPlant(bullet, enemy);
-        enemy.add(FadingComponent.create()
+        enemy.add(FadingComponent.create((PooledEngine)getEngine())
             .setPercentPerSecond(50f));
         getEngine().removeEntity(bullet);
     }
 
     private void attachPlant(Entity bullet, Entity enemy) {
+        PooledEngine engine = (PooledEngine)getEngine();
+
         CircleBoundsComponent bb = cm.get(bullet);
         CircleBoundsComponent eb = cm.get(enemy);
         TransformComponent et = tm.get(enemy);
@@ -100,12 +102,12 @@ public class MenuStartSystem extends IteratingSystem{
         Vector2 offsetVec = VectorUtils.rotateVector(outVec.cpy(), -et.rotation).add(eb.offset);
         float baseRotation = offsetVec.angle() - 90f;
 
-        Entity plant = ((PooledEngine) getEngine()).createEntity();
-        plant.add(TransformComponent.create()
+        Entity plant = engine.createEntity();
+        plant.add(TransformComponent.create(engine)
                 .setPosition(outVec.x, outVec.y, Z.plant)
                 .setRotation(et.rotation + baseRotation));
-        plant.add(TextureComponent.create());
-        plant.add(StateComponent.create()
+        plant.add(TextureComponent.create(engine));
+        plant.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(false));
         float rnd = r.nextFloat();
@@ -114,9 +116,9 @@ public class MenuStartSystem extends IteratingSystem{
                 rnd < 0.6f ?
                         Assets.getPinkTreeFrames() :
                         Assets.getPineTreeFrames();
-        plant.add(AnimationComponent.create()
+        plant.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", new Animation(1f / 9f, trees)));
-        plant.add(FollowerComponent.create()
+        plant.add(FollowerComponent.create(engine)
                 .setOffset(offsetVec.x, offsetVec.y)
                 .setTarget(enemy)
                 .setBaseRotation(baseRotation));

@@ -176,7 +176,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                                 if(rotR >0.5f){
                                     rotSpeed *= -1f;
                                 }
-                                enemy.add(RotationComponent.create()
+                                enemy.add(RotationComponent.create(getEngine())
                                     .setRotationSpeed(rotSpeed));
                                 break;
                             case ASTEROID_A:
@@ -223,23 +223,24 @@ public class EnemyDamageSystem extends IteratingSystem {
 
     private void attachTreeCover(Entity enemy, Array<TextureAtlas.AtlasRegion> frames) {
 
+        PooledEngine engine = (PooledEngine) getEngine();
         TransformComponent tc = tm.get(enemy);
 
-        Entity treeCover = ((PooledEngine) getEngine()).createEntity();
-        treeCover.add(TransformComponent.create()
+        Entity treeCover = engine.createEntity();
+        treeCover.add(TransformComponent.create(engine)
                 .setPosition(tc.position.x, tc.position.y, Z.treeCover)
                 .setRotation(tc.rotation));
-        treeCover.add(TextureComponent.create());
-        treeCover.add(StateComponent.create()
+        treeCover.add(TextureComponent.create(engine));
+        treeCover.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(false));
 
-        treeCover.add(FollowerComponent.create()
+        treeCover.add(FollowerComponent.create(engine)
                 .setOffset(0f, 0f)
                 .setTarget(enemy)
                 .setBaseRotation(0f));
 
-        treeCover.add(AnimationComponent.create()
+        treeCover.add(AnimationComponent.create(engine)
             .addAnimation("DEFAULT", new Animation(1f / 6f, frames)));
         getEngine().addEntity(treeCover);
     }
@@ -251,7 +252,7 @@ public class EnemyDamageSystem extends IteratingSystem {
 
     private void attachPlant(Entity bullet, Entity enemy, boolean isComet) {
 
-
+        PooledEngine engine = (PooledEngine)getEngine();
 
         CircleBoundsComponent bb = cm.get(bullet);
         CircleBoundsComponent eb = cm.get(enemy);
@@ -277,14 +278,14 @@ public class EnemyDamageSystem extends IteratingSystem {
         baseRotation = offsetVec.angle() - 90f;
 
 
-        Entity plant = ((PooledEngine) getEngine()).createEntity();
-        plant.add(TransformComponent.create()
+        Entity plant = (engine).createEntity();
+        plant.add(TransformComponent.create(engine)
                 .setPosition(outVec.x, outVec.y, Z.plant)
                 .setRotation(et.rotation + baseRotation)
                 .setScale(1f, 1f));
 
-        plant.add(TextureComponent.create());
-        plant.add(StateComponent.create()
+        plant.add(TextureComponent.create(engine));
+        plant.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(false));
         float rnd = r.nextFloat();
@@ -293,23 +294,23 @@ public class EnemyDamageSystem extends IteratingSystem {
                 rnd < 0.6f ?
                         Assets.getPinkTreeFrames() :
                         Assets.getPineTreeFrames();
-        plant.add(AnimationComponent.create()
+        plant.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", new Animation(1f / 18f, trees)));
-        plant.add(FollowerComponent.create()
+        plant.add(FollowerComponent.create(engine)
                 .setOffset(offsetVec.x, offsetVec.y)
                 .setTarget(enemy)
                 .setBaseRotation(baseRotation));
 
         Vector2 minSpeeds = offsetVec.cpy().nor().scl(1f, 1f);
         Vector2 maxSpeeds = offsetVec.cpy().nor().scl(4f, 6f);
-        plant.add(ParticleEmitterComponent.create()
+        plant.add(ParticleEmitterComponent.create(engine)
             .setParticleImages(Assets.getLeafFrames())
-            .setParticleLifespans(0.1f, 0.3f)
-            .setSpawnRate(100f)
+            .setParticleLifespans(0.1f, 0.2f)
+            .setSpawnRate(50f)
             .setAngleRange(0f, 360f)
             .setSpeed(3f)
             .setShouldFade(true)
-            .setDuration(0.5f));
+            .setDuration(0.3f));
 
         getEngine().addEntity(plant);
     }

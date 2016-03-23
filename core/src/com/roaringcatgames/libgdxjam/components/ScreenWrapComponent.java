@@ -1,18 +1,20 @@
 package com.roaringcatgames.libgdxjam.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.utils.Pool;
 
 /**
  * Created by barry on 1/8/16 @ 8:31 PM.
  */
-public class ScreenWrapComponent implements Component {
+public class ScreenWrapComponent implements Component, Pool.Poolable {
 
     public ScreenWrapMode mode = ScreenWrapMode.HORIZONTAL;
     public boolean isReversed = false;
     public float wrapOffset = 0f;
 
-    public static ScreenWrapComponent create(){
-        return new ScreenWrapComponent();
+    public static ScreenWrapComponent create(PooledEngine engine){
+        return engine.createComponent(ScreenWrapComponent.class);
     }
 
     public ScreenWrapComponent setMode(ScreenWrapMode newMode){
@@ -28,5 +30,12 @@ public class ScreenWrapComponent implements Component {
     public ScreenWrapComponent setWrapOffset(float offset){
         this.wrapOffset = offset;
         return this;
+    }
+
+    @Override
+    public void reset() {
+        this.mode = ScreenWrapMode.HORIZONTAL;
+        this.isReversed = false;
+        this.wrapOffset = 0f;
     }
 }
