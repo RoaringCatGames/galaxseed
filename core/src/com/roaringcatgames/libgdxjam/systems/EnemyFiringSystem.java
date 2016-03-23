@@ -71,28 +71,28 @@ public class EnemyFiringSystem extends IteratingSystem {
                             int target = r.nextInt(sc.particleTextures.size);
 
                             Entity frag = engine.createEntity();
-                            frag.add(HealthComponent.create()
+                            frag.add(HealthComponent.create(engine)
                                 .setMaxHealth(Health.AsteroidFrag)
                                 .setMaxHealth(Health.AsteroidFrag));
-                            frag.add(EnemyComponent.create()
+                            frag.add(EnemyComponent.create(engine)
                                     .setEnemyType(EnemyType.ASTEROID_FRAG));
-                            frag.add(WhenOffScreenComponent.create()
+                            frag.add(WhenOffScreenComponent.create(engine)
                                     .setHasBeenOnScreen(true));
-                            frag.add(TextureComponent.create()
+                            frag.add(TextureComponent.create(engine)
                                     .setRegion(sc.particleTextures.get(target)));
-                            frag.add(TransformComponent.create()
+                            frag.add(TransformComponent.create(engine)
                                     .setPosition(tc.position.x, tc.position.y, Z.enemyParticle));
-                            frag.add(VelocityComponent.create()
+                            frag.add(VelocityComponent.create(engine)
                                     .setSpeed(spawnVel.x, spawnVel.y));
-                            frag.add(RotationComponent.create()
+                            frag.add(RotationComponent.create(engine)
                                     .setRotationSpeed(sc.particleSpeed * 10f));
-                            frag.add(CircleBoundsComponent.create()
+                            frag.add(CircleBoundsComponent.create(engine)
                                     .setCircle(tc.position.x,
                                             tc.position.y,
                                             0.375f));
-                            frag.add(ProjectileComponent.create()
+                            frag.add(ProjectileComponent.create(engine)
                                     .setDamage(Damage.asteroidRock));
-                            frag.add(KinematicComponent.create());
+                            frag.add(KinematicComponent.create(engine));
                             engine.addEntity(frag);
                         }
                         break;

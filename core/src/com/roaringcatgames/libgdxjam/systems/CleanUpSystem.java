@@ -50,10 +50,11 @@ public class CleanUpSystem extends IteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
         if(bounds == null){
-            bounds = ((PooledEngine)getEngine()).createEntity();
-            bounds.add(BoundsComponent.create()
+            PooledEngine engine = (PooledEngine)getEngine();
+            bounds = engine.createEntity();
+            bounds.add(BoundsComponent.create(engine)
                 .setBounds(targetBounds.x, targetBounds.y, targetBounds.width, targetBounds.height));
-            bounds.add(TransformComponent.create()
+            bounds.add(TransformComponent.create(engine)
                 .setPosition(targetBounds.x + (targetBounds.width / 2f),
                              targetBounds.y + (targetBounds.height / 2f),
                              0f));

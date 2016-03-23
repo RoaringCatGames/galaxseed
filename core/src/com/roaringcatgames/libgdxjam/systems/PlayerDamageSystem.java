@@ -60,26 +60,26 @@ public class PlayerDamageSystem extends IteratingSystem {
 
         for(Entity proj:projectiles){
             ProjectileComponent pp = pm.get(proj);
-            if(em.has(proj)){
-                EnemyComponent ec = em.get(proj);
-                if(!ec.isDamaging){
-                    continue;
-                }
-            }
+//            if(em.has(proj)){
+//                EnemyComponent ec = em.get(proj);
+//                if(!ec.isDamaging){
+//                    continue;
+//                }
+//            }
 
-            if(bm.has(proj)) {
-                BoundsComponent pjb = bm.get(proj);
-                if (pb.bounds.overlaps(pjb.bounds)) {
-                    //TODO: Do Projectile Explosion stuff
-                    processCollision(ph, proj, pp);
-                }
-            }else if(cm.has(proj)){
+//            if(bm.has(proj)) {
+//                BoundsComponent pjb = bm.get(proj);
+//                if (pb.bounds.overlaps(pjb.bounds)) {
+//                    //TODO: Do Projectile Explosion stuff
+//                    processCollision(ph, proj, pp);
+//                }
+//            }else if(cm.has(proj)){
                 CircleBoundsComponent cb = cm.get(proj);
                 if(Intersector.overlaps(cb.circle, pb.bounds)){
                     //TODO: Do Projectile Explosion stuff
                     processCollision(ph, proj, pp);
                 }
-            }
+//            }
         }
         projectiles.clear();
     }

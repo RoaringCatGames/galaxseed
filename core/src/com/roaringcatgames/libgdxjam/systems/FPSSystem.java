@@ -29,10 +29,10 @@ public class FPSSystem extends IteratingSystem {
         super.addedToEngine(engine);
         if(fpsText == null){
             fpsText = ((PooledEngine)engine).createEntity();
-            fpsText.add(TextComponent.create()
+            fpsText.add(TextComponent.create((PooledEngine)engine)
                 .setFont(Assets.get32Font())
                 .setText("FPS: 0"));
-            fpsText.add(TransformComponent.create()
+            fpsText.add(TransformComponent.create(engine)
                 .setPosition(App.W - 2f, App.H - 1f, Z.debug));
             fpsText.add(FPSComponent.create(((PooledEngine)engine)));
             engine.addEntity(fpsText);

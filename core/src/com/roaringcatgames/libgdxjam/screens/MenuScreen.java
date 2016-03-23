@@ -92,88 +92,88 @@ public class MenuScreen extends LazyInitScreen {
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
 
         Entity title = engine.createEntity();
-        title.add(TextureComponent.create()
+        title.add(TextureComponent.create(engine)
                 .setRegion(Assets.getTitleImage()));
-        title.add(TransformComponent.create()
+        title.add(TransformComponent.create(engine)
                 .setPosition(10.8f, 25f));
         engine.addEntity(title);
 
         plant = engine.createEntity();
-        plant.add(StateComponent.create()
+        plant.add(StateComponent.create(engine)
                 .setLooping(false).set("DEFAULT"));
-        plant.add(TextureComponent.create());
-        plant.add(AnimationComponent.create()
+        plant.add(TextureComponent.create(engine));
+        plant.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getTitleTreeFrames()))
                 .addAnimation("LEAF", new Animation(1f / 12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP)));
-        plant.add(TransformComponent.create()
+        plant.add(TransformComponent.create(engine)
                 .setPosition(1.7f, 24f));
 
 
         float xPos = 4f;
         float yPos = 19f;
         p = engine.createEntity();
-        p.add(MenuItemComponent.create());
-        p.add(TextureComponent.create());
-        p.add(CircleBoundsComponent.create()
+        p.add(MenuItemComponent.create(engine));
+        p.add(TextureComponent.create(engine));
+        p.add(CircleBoundsComponent.create(engine)
             .setCircle(xPos, yPos, 2f));
-        p.add(AnimationComponent.create()
+        p.add(AnimationComponent.create(engine)
             .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getPFrames()))
             .setPaused(true));
-        p.add(TransformComponent.create()
+        p.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos)
                 .setScale(0.5f, 0.5f));
-        p.add(StateComponent.create()
+        p.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(false));
         engine.addEntity(p);
         xPos += 4f;
 
         l = engine.createEntity();
-        l.add(TextureComponent.create());
-        l.add(MenuItemComponent.create());
-        l.add(CircleBoundsComponent.create()
+        l.add(TextureComponent.create(engine));
+        l.add(MenuItemComponent.create(engine));
+        l.add(CircleBoundsComponent.create(engine)
                 .setCircle(xPos, yPos, 2f));
-        l.add(AnimationComponent.create()
+        l.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getLFrames()))
                 .setPaused(true));
-        l.add(TransformComponent.create()
+        l.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos)
                 .setScale(0.5f, 0.5f));
-        l.add(StateComponent.create()
+        l.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(false));
         engine.addEntity(l);
         xPos += 4f;
 
         a = engine.createEntity();
-        a.add(TextureComponent.create());
-        a.add(MenuItemComponent.create());
-        a.add(CircleBoundsComponent.create()
+        a.add(TextureComponent.create(engine));
+        a.add(MenuItemComponent.create(engine));
+        a.add(CircleBoundsComponent.create(engine)
                 .setCircle(xPos, yPos, 2f));
-        a.add(AnimationComponent.create()
+        a.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAFrames()))
                 .setPaused(true));
-        a.add(TransformComponent.create()
+        a.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos)
                 .setScale(0.5f, 0.5f));
-        a.add(StateComponent.create()
+        a.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(false));
         engine.addEntity(a);
         xPos += 4f;
 
         y = engine.createEntity();
-        y.add(TextureComponent.create());
-        y.add(MenuItemComponent.create());
-        y.add(CircleBoundsComponent.create()
+        y.add(TextureComponent.create(engine));
+        y.add(MenuItemComponent.create(engine));
+        y.add(CircleBoundsComponent.create(engine)
                 .setCircle(xPos, yPos, 2f));
-        y.add(AnimationComponent.create()
+        y.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getYFrames()))
                 .setPaused(true));
-        y.add(TransformComponent.create()
+        y.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos)
                 .setScale(0.5f, 0.5f));
-        y.add(StateComponent.create()
+        y.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(false));
         engine.addEntity(y);
@@ -203,7 +203,7 @@ public class MenuScreen extends LazyInitScreen {
             AnimationComponent ac = plant.getComponent(AnimationComponent.class);
             if (ac.animations.get(sc.get()).isAnimationFinished(sc.time)) {
                 //sc.set("LEAF").setLooping(true);
-                plant.add(ParticleEmitterComponent.create()
+                plant.add(ParticleEmitterComponent.create(engine)
                         .setDuration(2f)
                         .setParticleImages(Assets.getLeafFrames())
                         .setShouldFade(true)

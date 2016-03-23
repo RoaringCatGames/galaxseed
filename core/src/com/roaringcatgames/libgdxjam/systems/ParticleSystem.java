@@ -76,27 +76,28 @@ public class ParticleSystem extends IteratingSystem {
     Vector2 upNorm = new Vector2(0f, 1f).nor();
     private void spawnParticle(ParticleEmitterComponent pc, TransformComponent tc){
 
-        Entity particle = ((PooledEngine)getEngine()).createEntity();
+        PooledEngine engine = (PooledEngine)getEngine();
+        Entity particle = engine.createEntity();
 
-        particle.add(TransformComponent.create()
+        particle.add(TransformComponent.create(engine)
             .setPosition(tc.position.x, tc.position.y, Z.leaves)
             .setScale(0.5f, 0.5f));
 
         float lifeSpan = (r.nextFloat()*(pc.particleMinMaxLifespans.y-pc.particleMinMaxLifespans.x)) + pc.particleMinMaxLifespans.x;
-        particle.add(ParticleComponent.create(((PooledEngine)getEngine()))
+        particle.add(ParticleComponent.create(engine)
                 .setLifespan(lifeSpan));
 
 
         float angle = tc.rotation + (pc.angleRange.getBetween(r.nextFloat()));
         Vector2 speed = VectorUtils.rotateVector(upNorm.cpy(), angle).scl(pc.particleSpeed);
-        particle.add(VelocityComponent.create()
+        particle.add(VelocityComponent.create(engine)
             .setSpeed(speed.x, speed.y));
 
-        particle.add(TextureComponent.create()
+        particle.add(TextureComponent.create(engine)
             .setRegion(pc.particleImages.get(r.nextInt(pc.particleImages.size))));
 
         if(pc.shouldFade) {
-            particle.add(FadingComponent.create()
+            particle.add(FadingComponent.create(engine)
                     .setPercentPerSecond(1f/pc.duration));
         }
 

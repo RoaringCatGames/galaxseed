@@ -72,7 +72,7 @@ public class BackgroundSystem extends IteratingSystem {
         PooledEngine engine = ((PooledEngine)getEngine());
 
         Entity vp = engine.createEntity();
-        vp.add(BoundsComponent.create()
+        vp.add(BoundsComponent.create(engine)
             .setBounds(left, bottom, (right-left), (top-bottom)));
         engine.addEntity(vp);
         float tileSize = 16f;
@@ -125,38 +125,38 @@ public class BackgroundSystem extends IteratingSystem {
             //Sometimes add a galaxy
             if(bg.galaxy != null){
                 Entity galaxy = engine.createEntity();
-                galaxy.add(TextureComponent.create()
+                galaxy.add(TextureComponent.create(engine)
                         .setRegion(bg.galaxy));
 
-                galaxy.add(TransformComponent.create()
+                galaxy.add(TransformComponent.create(engine)
                         .setPosition(bg.x, bg.y, Z.bg_galaxy)
                         .setRotation(bg.rotation)
                         .setScale(1f, 1f));
-                galaxy.add(BoundsComponent.create()
+                galaxy.add(BoundsComponent.create(engine)
                         .setBounds(bg.x - 4.6875f, bg.y - 4.6875f, 9.375f, 9.375f));
-                galaxy.add(ScreenWrapComponent.create()
+                galaxy.add(ScreenWrapComponent.create(engine)
                         .setMode(ScreenWrapMode.VERTICAL)
                         .setReversed(true)
                         .setWrapOffset(offset));
-                galaxy.add(VelocityComponent.create()
+                galaxy.add(VelocityComponent.create(engine)
                         .setSpeed(0f, bgSpeed));
                 engine.addEntity(galaxy);
             }
 
             Entity e = engine.createEntity();
-            e.add(TextureComponent.create()
+            e.add(TextureComponent.create(engine)
                     .setRegion(bg.image));
-            e.add(TransformComponent.create()
+            e.add(TransformComponent.create(engine)
                     .setPosition(bg.x, bg.y, Z.bg)
                     .setRotation(bg.rotation)
                     .setScale(1f, 1f));
-            e.add(BoundsComponent.create()
+            e.add(BoundsComponent.create(engine)
                     .setBounds(bg.x - tileHalfPoint, bg.y - tileHalfPoint, tileSize, tileSize));
-            e.add(ScreenWrapComponent.create()
+            e.add(ScreenWrapComponent.create((PooledEngine)getEngine())
                     .setMode(ScreenWrapMode.VERTICAL)
                     .setReversed(true)
                     .setWrapOffset(offset));
-            e.add(VelocityComponent.create()
+            e.add(VelocityComponent.create(engine)
                     .setSpeed(0f, bgSpeed));
             engine.addEntity(e);
         }
@@ -172,20 +172,20 @@ public class BackgroundSystem extends IteratingSystem {
                 float height = (reg.getRegionHeight()/App.PPM);
 
                 Entity sticker = engine.createEntity();
-                sticker.add(TransformComponent.create()
+                sticker.add(TransformComponent.create(engine)
                         .setPosition(position, yIndex * yStep, Z.bgSticker)
                         .setRotation(rot)
                         .setOpacity(0.6f));
-                sticker.add(RotationComponent.create()
+                sticker.add(RotationComponent.create(engine)
                     .setRotationSpeed(0.25f));
-                sticker.add(TextureComponent.create()
+                sticker.add(TextureComponent.create(engine)
                         .setRegion(reg));
-                sticker.add(VelocityComponent.create()
+                sticker.add(VelocityComponent.create(engine)
                         .setSpeed(0f, bgSpeed));
-                sticker.add(KinematicComponent.create());
-                sticker.add(BoundsComponent.create()
+                sticker.add(KinematicComponent.create(engine));
+                sticker.add(BoundsComponent.create(engine)
                     .setBounds(position - (width / 2f), (yIndex * yStep) - (height / 2f), width, height));
-                sticker.add(WhenOffScreenComponent.create());
+                sticker.add(WhenOffScreenComponent.create((PooledEngine)getEngine()));
                 engine.addEntity(sticker);
                 yIndex++;
             }

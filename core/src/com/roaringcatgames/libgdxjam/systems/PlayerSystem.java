@@ -60,62 +60,59 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private void init(){
         if(player == null) {
+            PooledEngine engine = (PooledEngine)getEngine();
 
-            if (getEngine() instanceof PooledEngine) {
-                player = ((PooledEngine) getEngine()).createEntity();
-                flames = ((PooledEngine) getEngine()).createEntity();
-            } else {
-                player = new Entity();
-                flames = new Entity();
-            }
+            player = engine.createEntity();
+            flames = engine.createEntity();
 
 
-            player.add(KinematicComponent.create());
-            player.add(PlayerComponent.create());
-            player.add(HealthComponent.create()
+
+            player.add(KinematicComponent.create(engine));
+            player.add(PlayerComponent.create(engine));
+            player.add(HealthComponent.create(engine)
                 .setHealth(App.getPlayerHealth())
                 .setMaxHealth(App.getPlayerHealth()));
-            player.add(TransformComponent.create()
+            player.add(TransformComponent.create(engine)
                     .setPosition(initialPosition.x, initialPosition.y, initialPosition.z)
                     .setScale(initialScale, initialScale));
 
-            player.add(BoundsComponent.create()
+            player.add(BoundsComponent.create(engine)
                     .setBounds(0f, 0f, 1f, 1.5f));
 
-            player.add(TextureComponent.create());
-            player.add(AnimationComponent.create()
+            player.add(TextureComponent.create(engine));
+            player.add(AnimationComponent.create(engine)
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getShipIdleFrames()))
                     .addAnimation("FLYING", new Animation(1f / 12f, Assets.getShipFlyingFrames()))
                     .addAnimation("FLYING_LEFT", new Animation(1f / 6f, Assets.getShipFlyingLeftFrames()))
                     .addAnimation("FLYING_RIGHT", new Animation(1f / 6f, Assets.getShipFlyingRightFrames())));
-            player.add(RemainInBoundsComponent.create()
+            player.add(RemainInBoundsComponent.create(engine)
                 .setMode(BoundMode.CONTAINED));
-            player.add(StateComponent.create()
+            player.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(true));
 
-            player.add(ShakeComponent.create()
+            player.add(ShakeComponent.create((PooledEngine)getEngine())
                 .setOffsets(0.25f, 0.25f)
                 .setSpeed(0.05f, 0.05f)
                 .setPaused(true));
 
-            player.add(VelocityComponent.create()
+            player.add(VelocityComponent.create(engine)
                     .setSpeed(0f, 0f));
 
             getEngine().addEntity(player);
 
-            flames.add(FollowerComponent.create()
+            flames.add(FollowerComponent.create((PooledEngine)getEngine())
                     .setOffset(idleFlameOffset.x * initialScale, idleFlameOffset.y * initialScale)
                     .setTarget(player)
                     .setMode(FollowMode.STICKY));
-            flames.add(TextureComponent.create());
-            flames.add(TransformComponent.create()
+            flames.add(TextureComponent.create(engine));
+            flames.add(TransformComponent.create(engine)
                     .setPosition(initialPosition.x, initialPosition.y - ((3.25f * initialScale) * initialScale), Z.flames)
                     .setScale(initialScale, initialScale));
-            flames.add(AnimationComponent.create()
+            flames.add(AnimationComponent.create(engine)
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getIdleFlamesFrames()))
                     .addAnimation("FLYING", new Animation(1f / 9f, Assets.getFlamesFrames())));
-            flames.add(StateComponent.create()
+            flames.add(StateComponent.create(engine)
                     .set("DEFAULT")
                     .setLooping(true));
             getEngine().addEntity(flames);

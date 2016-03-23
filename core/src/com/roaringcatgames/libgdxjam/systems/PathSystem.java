@@ -57,10 +57,10 @@ public class PathSystem extends IteratingSystem implements InputProcessor {
 
         if(curvePoints == null){
             curvePoints = ((PooledEngine)getEngine()).createEntity();
-            curvePoints.add(TextComponent.create()
+            curvePoints.add(TextComponent.create((PooledEngine)getEngine())
                 .setText("p0:(" + p0.x + "," + p0.y + ") p1:(" + p1.x + "," + p1.y + ") p2:(" + p2.x + "," + p2.y + ")")
                 .setFont(Assets.get32Font()));
-            curvePoints.add(TransformComponent.create()
+            curvePoints.add(TransformComponent.create(getEngine())
                 .setPosition(2f, 28f, 0f));
             getEngine().addEntity(curvePoints);
         }

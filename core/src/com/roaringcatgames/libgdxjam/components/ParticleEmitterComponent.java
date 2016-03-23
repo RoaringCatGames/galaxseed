@@ -1,14 +1,16 @@
 package com.roaringcatgames.libgdxjam.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 
 /**
  * Created by barry on 3/13/16 @ 2:37 PM.
  */
-public class ParticleEmitterComponent implements Component {
+public class ParticleEmitterComponent implements Component, Pool.Poolable {
 
     public Array<TextureRegion> particleImages = new Array<>();
     public float elapsedTime = 0f;
@@ -21,8 +23,8 @@ public class ParticleEmitterComponent implements Component {
     public boolean shouldFade = false;
     public boolean isLooping = false;
 
-    public static ParticleEmitterComponent create(){
-        return new ParticleEmitterComponent();
+    public static ParticleEmitterComponent create(PooledEngine engine){
+        return engine.createComponent(ParticleEmitterComponent.class);
     }
 
     public ParticleEmitterComponent setParticleImages(Array<? extends TextureRegion> particleImages){
@@ -66,4 +68,20 @@ public class ParticleEmitterComponent implements Component {
         this.particleSpeed = speed;
         return this;
     }
+
+    @Override
+    public void reset() {
+        this.particleImages.clear();
+        this.elapsedTime = 0f;
+        this.lastSpawnTime = 0f;
+        this.spawnRate = 100f;
+        this.duration = 1f;
+        this.particleSpeed = 1f;
+        this.particleMinMaxLifespans.set(1f, 1f);
+        this.angleRange.setMin(-45f);
+        this.angleRange.setMax(45f);
+        this.shouldFade = false;
+        this.isLooping = false;
+    }
+
 }

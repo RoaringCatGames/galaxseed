@@ -83,28 +83,29 @@ public class FiringSystem extends IteratingSystem {
 
 
     private void generateBullet(float xOffset, float yOffset, float xVel, float yVel){
+        PooledEngine engine = (PooledEngine)getEngine();
         TransformComponent playerPos = tm.get(player);
         //Generate Bullets here
-        Entity bullet = ((PooledEngine) getEngine()).createEntity();
-        bullet.add(WhenOffScreenComponent.create());
-        bullet.add(KinematicComponent.create());
-        bullet.add(TransformComponent.create()
+        Entity bullet = engine.createEntity();
+        bullet.add(WhenOffScreenComponent.create(engine));
+        bullet.add(KinematicComponent.create(engine));
+        bullet.add(TransformComponent.create(engine)
                 .setPosition(playerPos.position.x + xOffset, playerPos.position.y + yOffset, Z.seed)
                 .setScale(1f, 1f));
-        bullet.add(CircleBoundsComponent.create()
+        bullet.add(CircleBoundsComponent.create(engine)
             .setCircle(playerPos.position.x + xOffset - 0.125f, playerPos.position.y + yOffset - 0.125f, 0.25f)
             .setOffset(0f, 0.5f));
-        bullet.add(TextureComponent.create());
-        bullet.add(DamageComponent.create()
+        bullet.add(TextureComponent.create(engine));
+        bullet.add(DamageComponent.create(engine)
             .setDPS(Damage.seed));
-        bullet.add(AnimationComponent.create()
-                .addAnimation("DEFAULT", new Animation(1f/6f, Assets.getBulletFrames(), Animation.PlayMode.NORMAL))
-                .addAnimation("FLYING", new Animation(1f/6f, Assets.getBulletFlyingFrames(), Animation.PlayMode.NORMAL)));
-        bullet.add(StateComponent.create()
+        bullet.add(AnimationComponent.create(engine)
+                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getBulletFrames(), Animation.PlayMode.NORMAL))
+                .addAnimation("FLYING", new Animation(1f / 6f, Assets.getBulletFlyingFrames(), Animation.PlayMode.NORMAL)));
+        bullet.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(false));
-        bullet.add(BulletComponent.create());
-        bullet.add(VelocityComponent.create()
+        bullet.add(BulletComponent.create((PooledEngine)getEngine()));
+        bullet.add(VelocityComponent.create(engine)
                 .setSpeed(xVel, yVel));
         getEngine().addEntity(bullet);
     }
