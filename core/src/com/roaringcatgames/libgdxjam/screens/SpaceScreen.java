@@ -84,7 +84,7 @@
             //Custom Systems
             Vector2 minBounds = new Vector2(0f, 0f);
             Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
-            engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-1f), maxBounds.cpy().scl(2f)));
+            engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-0.25f), maxBounds.cpy().scl(1.25f)));
             engine.addSystem(new PlayerSystem(playerPosition, 0.5f, cam));
             FiringSystem firingSystem = new FiringSystem();
             engine.addSystem(firingSystem);

@@ -5,11 +5,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Array;
-import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
-import com.roaringcatgames.kitten2d.ashley.components.CircleBoundsComponent;
-import com.roaringcatgames.kitten2d.ashley.components.HealthComponent;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.Damage;
@@ -34,6 +33,10 @@ public class PlayerDamageSystem extends IteratingSystem {
     private ComponentMapper<ShakeComponent> sm;
     private ComponentMapper<ScoreComponent> scm;
 
+    private ComponentMapper<AnimationComponent> am;
+    private ComponentMapper<StateComponent> stm;
+
+
     private Sound lightHitSfx, mediumHitSfx, heavyHitSfx;
 
     public PlayerDamageSystem(){
@@ -45,6 +48,9 @@ public class PlayerDamageSystem extends IteratingSystem {
         em = ComponentMapper.getFor(EnemyComponent.class);
         sm = ComponentMapper.getFor(ShakeComponent.class);
         scm = ComponentMapper.getFor(ScoreComponent.class);
+
+        am = ComponentMapper.getFor(AnimationComponent.class);
+        stm = ComponentMapper.getFor(StateComponent.class);
 
         lightHitSfx = Assets.getPlayerHitLight();
         mediumHitSfx = Assets.getPlayerHitMedium();
@@ -60,12 +66,17 @@ public class PlayerDamageSystem extends IteratingSystem {
 
         for(Entity proj:projectiles){
             ProjectileComponent pp = pm.get(proj);
-//            if(em.has(proj)){
-//                EnemyComponent ec = em.get(proj);
-//                if(!ec.isDamaging){
-//                    continue;
-//                }
-//            }
+            if(em.has(proj)){
+                EnemyComponent ec = em.get(proj);
+                if(!ec.isDamaging){
+                    StateComponent sc = stm.get(proj);
+                    AnimationComponent ac = am.get(proj);
+                    if(ac.animations.get(sc.get()).isAnimationFinished(sc.time)){
+                        getEngine().removeEntity(proj);
+                    }
+                    continue;
+                }
+            }
 
 //            if(bm.has(proj)) {
 //                BoundsComponent pjb = bm.get(proj);
@@ -87,9 +98,11 @@ public class PlayerDamageSystem extends IteratingSystem {
 
     private void processCollision(HealthComponent ph, Entity proj, ProjectileComponent pp) {
         float shakeTime = Shakes.TimePlayerHitLight;
+        float scale = 0.3f;
         if(pp.damage == Damage.asteroidRock) {
             mediumHitSfx.play(Volume.PLAYER_HIT_M);
         }else if(pp.damage == Damage.comet){
+            scale = 0.5f;
             mediumHitSfx.play(Volume.PLAYER_HIT_M);
         }else if(pp.damage == Damage.asteroid){
             heavyHitSfx.play(Volume.PLAYER_HIT_H);
@@ -111,7 +124,14 @@ public class PlayerDamageSystem extends IteratingSystem {
         scm.get(scoreCard).score -= (projHealth.maxHealth - projHealth.health);
 
         ph.health = Math.max(0f, ph.health - pp.damage);
-        getEngine().removeEntity(proj);
+        em.get(proj).isDamaging = false;
+        proj.getComponent(TransformComponent.class).scale.set(scale, scale);
+        proj.add(AnimationComponent.create(getEngine())
+            .addAnimation("DEFAULT", new Animation(1f / 18f, Assets.getImpactA())));
+        proj.add(StateComponent.create(getEngine())
+                .set("DEFAULT")
+                .setLooping(false));
+        //getEngine().removeEntity(proj);
     }
 
     @Override
