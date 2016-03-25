@@ -76,12 +76,12 @@ public class PlayerDamageSystem extends IteratingSystem {
 
         for (Entity proj : projectiles) {
             ProjectileComponent pp = pm.get(proj);
-            if (em.has(proj)) {
-                EnemyComponent ec = em.get(proj);
-                if (!ec.isDamaging) {
-                    continue;
-                }
-            }
+//            if (em.has(proj)) {
+//                EnemyComponent ec = em.get(proj);
+//                if (!ec.isDamaging) {
+//                    continue;
+//                }
+//            }
 
             CircleBoundsComponent cb = cm.get(proj);
             if (Intersector.overlaps(cb.circle, pb.bounds)) {
@@ -113,7 +113,7 @@ public class PlayerDamageSystem extends IteratingSystem {
         }
 
 
-        //SHAKE WHEN HIT!!!
+        //SHAKE Player WHEN HIT!!!
         if(sm.has(player)) {
             ShakeComponent sc = sm.get(player);
             if(sc.isPaused){
@@ -123,12 +123,13 @@ public class PlayerDamageSystem extends IteratingSystem {
             }
         }
 
+        //Adjust Player Health
         HealthComponent projHealth = hm.get(proj);
         scm.get(scoreCard).score -= (projHealth.maxHealth - projHealth.health);
-
         ph.health = Math.max(0f, ph.health - pp.damage);
 
 
+        //Generate Explosion
         EnemyComponent ec = em.get(proj);
         ec.isDamaging = false;
         Array<TextureAtlas.AtlasRegion> impactFrames;
@@ -143,8 +144,6 @@ public class PlayerDamageSystem extends IteratingSystem {
                 impactFrames = Assets.getImpactA();
                 break;
         }
-
-        //Generate Explosion
 
         App.setSlowed(true);
         PooledEngine engine = ((PooledEngine)getEngine());
@@ -164,21 +163,6 @@ public class PlayerDamageSystem extends IteratingSystem {
 
         //Remove Entity
         engine.removeEntity(proj);
-//        proj.getComponent(TransformComponent.class).scale.set(scale, scale);
-//        proj.remove(VelocityComponent.class);
-//        AnimationComponent ac = am.get(proj);
-//        if(ac == null) {
-//            proj.add(AnimationComponent.create(getEngine())
-//                    .addAnimation("DEFAULT", new Animation(1f / 18f, impactFrames)));
-//            proj.add(StateComponent.create(getEngine())
-//                    .set("DEFAULT")
-//                    .setLooping(false));
-//        }else{
-//            ac.addAnimation("EXPLODED", new Animation(1f/18f, impactFrames));
-//            StateComponent sc = stm.get(proj);
-//            sc.setLooping(false);
-//            sc.set("EXPLODED");
-//        }
     }
 
     @Override

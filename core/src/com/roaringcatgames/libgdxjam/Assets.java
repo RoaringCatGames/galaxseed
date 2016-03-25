@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 import javax.xml.soap.Text;
@@ -279,6 +280,10 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/SeedFly");
     }
 
+    public static Array<? extends TextureRegion> getMuzzleFrames() {
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("muzzleflash/muzzle");
+    }
+
     /////////////
     //Life
     /////////////
@@ -384,5 +389,4 @@ public class Assets {
     private static final String PLAYER_HIT_LIGHT_SFX = "sfx/player-hit-light.mp3";
     private static final String PLAYER_HIT_MEDIUM_SFX = "sfx/player-hit-medium.mp3";
     private static final String PLAYER_HIT_HEAVY_SFX = "sfx/player-hit-heavy.mp3";
-
 }

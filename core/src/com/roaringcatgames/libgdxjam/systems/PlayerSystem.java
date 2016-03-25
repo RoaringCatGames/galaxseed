@@ -8,14 +8,13 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.values.Shakes;
+import com.roaringcatgames.libgdxjam.values.Rates;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
@@ -24,6 +23,8 @@ import com.roaringcatgames.libgdxjam.components.*;
  * Created by barry on 12/29/15 @ 8:07 PM.
  */
 public class PlayerSystem extends IteratingSystem implements InputProcessor {
+
+    private Array<Vector2> muzzlePositions = new Array<>();
 
     private boolean isInitialized = false;
     private Entity player;
@@ -56,6 +57,23 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         this.flyingMusic = Assets.getFlyingMusic();
 
         this.controlOrigin = new Vector2();
+
+//        generateBullet(-0.5f, 0.6f, 0f, bulletSpeed);
+//        generateBullet(0.5f, 0.6f, 0f, bulletSpeed);
+//
+//        generateBullet(-0.906f, -0.181f, 0f, bulletSpeed);
+//        generateBullet(0.906f, -0.181f, 0f, bulletSpeed);
+//
+//        generateBullet(-1.312f, -0.8f, 0f, bulletSpeed);
+//        generateBullet(1.312f, -0.8f, 0f, bulletSpeed);
+
+        muzzlePositions.add(new Vector2(-0.5f, 1.6f));
+        muzzlePositions.add(new Vector2(-0.906f, 0.881f));
+        muzzlePositions.add(new Vector2(-1.312f, 0.3f));
+
+        muzzlePositions.add(new Vector2(0.5f, 1.6f));
+        muzzlePositions.add(new Vector2(0.906f, 0.881f));
+        muzzlePositions.add(new Vector2(1.312f, 0.3f));
     }
 
     private void init(){
@@ -86,18 +104,44 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .addAnimation("FLYING_LEFT", new Animation(1f / 6f, Assets.getShipFlyingLeftFrames()))
                     .addAnimation("FLYING_RIGHT", new Animation(1f / 6f, Assets.getShipFlyingRightFrames())));
             player.add(RemainInBoundsComponent.create(engine)
-                .setMode(BoundMode.CONTAINED));
+                    .setMode(BoundMode.CONTAINED));
             player.add(StateComponent.create(engine)
-                .set("DEFAULT")
-                .setLooping(true));
+                    .set("DEFAULT")
+                    .setLooping(true));
 
-            player.add(ShakeComponent.create((PooledEngine)getEngine())
-                .setOffsets(0.25f, 0.25f)
-                .setSpeed(0.05f, 0.05f)
-                .setPaused(true));
+            player.add(ShakeComponent.create((PooledEngine) getEngine())
+                    .setOffsets(0.25f, 0.25f)
+                    .setSpeed(0.05f, 0.05f)
+                    .setPaused(true));
 
             player.add(VelocityComponent.create(engine)
                     .setSpeed(0f, 0f));
+
+
+            //generateMuzzles
+            Animation muzzleAni = new Animation(Rates.timeBetweenShots/6f, Assets.getMuzzleFrames());
+            for(Vector2 muzzlePos:muzzlePositions){
+                Entity muzzle = engine.createEntity();
+                muzzle.add(GunComponent.create(engine));
+                muzzle.add(FollowerComponent.create(engine)
+                    .setOffset(muzzlePos.x*initialScale, muzzlePos.y*initialScale)
+                    .setTarget(player)
+                    .setMode(FollowMode.STICKY));
+                muzzle.add(TextureComponent.create(engine));
+                muzzle.add(AnimationComponent.create(engine)
+                    .addAnimation("FIRING", muzzleAni));
+                muzzle.add(StateComponent.create(engine)
+                    .set("DEFAULT")
+                    .setLooping(false));
+                muzzle.add(TransformComponent.create(engine)
+                    .setPosition(initialPosition.x, initialPosition.y, Z.muzzleFlash)
+                    .setScale(initialScale*0.5f, initialScale*0.5f)
+                    .setOpacity(0.8f));
+                engine.addEntity(muzzle);
+            }
+
+
+
 
             getEngine().addEntity(player);
 

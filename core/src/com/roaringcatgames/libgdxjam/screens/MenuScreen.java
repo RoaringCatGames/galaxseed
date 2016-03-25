@@ -202,14 +202,14 @@ public class MenuScreen extends LazyInitScreen {
             StateComponent sc = plant.getComponent(StateComponent.class);
             AnimationComponent ac = plant.getComponent(AnimationComponent.class);
             if (ac.animations.get(sc.get()).isAnimationFinished(sc.time)) {
-                //sc.set("LEAF").setLooping(true);
                 plant.add(ParticleEmitterComponent.create(engine)
-                        .setDuration(2f)
+                        .setDuration(200f)
+                        .setParticleLifespans(2f, 3f)
                         .setParticleImages(Assets.getLeafFrames())
-                        .setShouldFade(true)
+                        .setShouldFade(false)
                         .setAngleRange(-110f, 110f)
-                        .setSpawnRate(20f)
-                        .setSpeed(2f)
+                        .setSpawnRate(60f)
+                        .setSpeed(3f)
                         .setShouldLoop(true));
                 treeLeafing = true;
             }

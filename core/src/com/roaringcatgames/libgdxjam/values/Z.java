@@ -10,6 +10,7 @@ public class Z {
     public static final float bgSticker = 95f;
     public static final float flames = 51f;
     public static final float player = 50f;
+    public static final float muzzleFlash = 49f;
     public static final float enemyParticle = 46f;
     public static final float enemy = 45f;
     public static final float plant = 44f;
@@ -24,4 +25,5 @@ public class Z {
     public static final float debug = 2f;
     public static final float gameOver = 1f;
     public static final float explosion = 0f;
+
 }

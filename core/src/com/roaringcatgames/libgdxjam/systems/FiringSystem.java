@@ -7,33 +7,38 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.Damage;
+import com.roaringcatgames.libgdxjam.values.Rates;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
-import com.roaringcatgames.libgdxjam.components.BulletComponent;
-import com.roaringcatgames.libgdxjam.components.PlayerComponent;
-import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 
 /**
  * Created by barry on 1/3/16 @ 1:14 AM.
  */
 public class FiringSystem extends IteratingSystem {
 
-    private float firingRate = 6f;
-    private float timeBetweenFiring = 1f/firingRate;
     private float lastFireTime = 0f;
     private float timeElapsed = 0f;
     private float bulletSpeed = 20f;
     private Music firingMusic;
     private ComponentMapper<TransformComponent> tm;
+    private ComponentMapper<GunComponent> mm;
+    private ComponentMapper<StateComponent> sm;
+    private ComponentMapper<AnimationComponent> am;
 
+    Array<Entity> muzzles = new Array<>();
     Entity player;
 
     public FiringSystem(){
-        super(Family.all(PlayerComponent.class).get());
+        super(Family.one(PlayerComponent.class, GunComponent.class).get());
         tm = ComponentMapper.getFor(TransformComponent.class);
+        mm = ComponentMapper.getFor(GunComponent.class);
+        sm = ComponentMapper.getFor(StateComponent.class);
+        am = ComponentMapper.getFor(AnimationComponent.class);
         firingMusic = Assets.getFiringMusic();
     }
 
@@ -49,36 +54,46 @@ public class FiringSystem extends IteratingSystem {
             }
 
             if(sc.get() != "DEFAULT") {
-                timeBetweenFiring = 1f / firingRate;
                 timeElapsed += deltaTime;
 
-                if (timeElapsed - lastFireTime >= timeBetweenFiring) {
+                if (timeElapsed - lastFireTime >= Rates.timeBetweenShots) {
 
                     lastFireTime = timeElapsed;
-                    generateBullet(-0.5f, 0.6f, 0f, bulletSpeed);
-                    generateBullet(0.5f, 0.6f, 0f, bulletSpeed);
 
-                    generateBullet(-0.906f, -0.181f, 0f, bulletSpeed);
-                    generateBullet(0.906f, -0.181f, 0f, bulletSpeed);
-
-                    generateBullet(-1.312f, -0.8f, 0f, bulletSpeed);
-                    generateBullet(1.312f, -0.8f, 0f, bulletSpeed);
-
+                    for(Entity m:muzzles){
+                        StateComponent mState = sm.get(m);
+                        mState.set("FIRING");
+                        FollowerComponent follower = m.getComponent(FollowerComponent.class);
+                        generateBullet(follower.offset.x, follower.offset.y, 0f, bulletSpeed);
+                    }
                 }
             }else{
                 firingMusic.stop();
+                for(Entity m:muzzles){
+                    StateComponent mState = sm.get(m);
+                    if(mState.get() != "DEFAULT") {
+                        mState.set("DEFAULT");
+                        m.getComponent(TextureComponent.class).setRegion(null);
+                    }
+                }
             }
         }
 
+        muzzles.clear();
         player = null;
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        if(player != null) {
-            throw new IllegalStateException("Cannot handle Two Players right now!");
+
+        if(mm.has(entity)){
+            muzzles.add(entity);
+        }else {
+            if (player != null) {
+                throw new IllegalStateException("Cannot handle Two Players right now!");
+            }
+            player = entity;
         }
-        player = entity;
     }
 
 
@@ -91,10 +106,10 @@ public class FiringSystem extends IteratingSystem {
         bullet.add(KinematicComponent.create(engine));
         bullet.add(TransformComponent.create(engine)
                 .setPosition(playerPos.position.x + xOffset, playerPos.position.y + yOffset, Z.seed)
-                .setScale(1f, 1f));
+                .setScale(0.5f, 0.5f));
         bullet.add(CircleBoundsComponent.create(engine)
-            .setCircle(playerPos.position.x + xOffset - 0.125f, playerPos.position.y + yOffset - 0.125f, 0.25f)
-            .setOffset(0f, 0.5f));
+            .setCircle(playerPos.position.x + xOffset, playerPos.position.y + yOffset, 0.125f)
+            .setOffset(0f, 0.25f));
         bullet.add(TextureComponent.create(engine));
         bullet.add(DamageComponent.create(engine)
             .setDPS(Damage.seed));

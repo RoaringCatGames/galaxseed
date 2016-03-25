@@ -98,7 +98,7 @@ public class ParticleSystem extends IteratingSystem {
 
         if(pc.shouldFade) {
             particle.add(FadingComponent.create(engine)
-                    .setPercentPerSecond(1f/pc.duration));
+                    .setPercentPerSecond(100f/lifeSpan));
         }
 
         getEngine().addEntity(particle);
