@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Pool;
 public class EnemyComponent implements Component, Pool.Poolable {
 
     public EnemyType enemyType = EnemyType.ASTEROID_FRAG;
+    public EnemyColor enemyColor = EnemyColor.BROWN;
     public boolean isDamaging = true;
 
     public static EnemyComponent create(PooledEngine engine) {
@@ -18,6 +19,11 @@ public class EnemyComponent implements Component, Pool.Poolable {
 
     public EnemyComponent setEnemyType(EnemyType eType){
         this.enemyType = eType;
+        return this;
+    }
+
+    public EnemyComponent setEnemyColor(EnemyColor eColor){
+        this.enemyColor = eColor;
         return this;
     }
 

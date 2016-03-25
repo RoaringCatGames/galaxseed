@@ -107,9 +107,11 @@ public class EnemySpawnSystem extends IteratingSystem {
         float health;
         TextureRegion tr;
         EnemyType eType;
+        EnemyColor eColor;
         if(cnt < 0.33f) {
             tr = Assets.getAsteroidA();
             eType = EnemyType.ASTEROID_A;
+            eColor = EnemyColor.BROWN;
             size = 2.5f;
             health = Health.AsteroidA;
 
@@ -120,6 +122,7 @@ public class EnemySpawnSystem extends IteratingSystem {
         }else if(cnt < 0.66f){
             tr = Assets.getAsteroidB();
             eType = EnemyType.ASTEROID_B;
+            eColor = EnemyColor.BLUE;
             size = 3.75f;
             health = Health.AsteroidB;
 
@@ -130,6 +133,7 @@ public class EnemySpawnSystem extends IteratingSystem {
         }else{
             tr = Assets.getAsteroidC();
             eType = EnemyType.ASTEROID_C;
+            eColor = EnemyColor.PURPLE;
             size = 5f;
             health = Health.AsteroidC;
 
@@ -148,7 +152,8 @@ public class EnemySpawnSystem extends IteratingSystem {
         enemy.add(TextureComponent.create(engine)
             .setRegion(tr));
         enemy.add(EnemyComponent.create(engine)
-                .setEnemyType(eType));
+            .setEnemyType(eType)
+            .setEnemyColor(eColor));
         enemy.add(VelocityComponent.create(engine)
                 .setSpeed(xVel, yVel));
 
@@ -156,51 +161,57 @@ public class EnemySpawnSystem extends IteratingSystem {
     }
 
     private void generateEnemy(float xPos, float yPos){
-            PooledEngine engine = (PooledEngine) getEngine();
-            boolean isGoingRight = xPos < App.W/2f;
-            //Generate Bullets here
-            Entity enemy = engine.createEntity();
-            enemy.add(WhenOffScreenComponent.create(engine));
-            enemy.add(KinematicComponent.create(engine));
-            enemy.add(ProjectileComponent.create(engine)
-                .setDamage(Damage.comet));
-            enemy.add(EnemyComponent.create(engine)
-                .setEnemyType(EnemyType.COMET));
+        PooledEngine engine = (PooledEngine) getEngine();
+        boolean isGoingRight = xPos < App.W/2f;
+        float cometR = r.nextFloat();
+        boolean isRed = cometR > 0.5f;
+        Array<TextureAtlas.AtlasRegion> frames = isRed ? Assets.getRedCometFrames() : Assets.getBlueCometFrames();
+        Array<TextureAtlas.AtlasRegion> fullFrames = isRed ? Assets.getRedCometFullFrames() : Assets.getBlueCometFullFrames();
+        EnemyColor color = isRed ? EnemyColor.BROWN:EnemyColor.BLUE;
 
-            enemy.add(TransformComponent.create(engine)
-                .setPosition(xPos, yPos, Z.enemy)
-                .setScale(1f, 1f));
+        //Generate Bullets here
+        Entity enemy = engine.createEntity();
+        enemy.add(WhenOffScreenComponent.create(engine));
+        enemy.add(KinematicComponent.create(engine));
+        enemy.add(ProjectileComponent.create(engine)
+            .setDamage(Damage.comet));
 
-            enemy.add(HealthComponent.create(engine)
-                .setMaxHealth(Health.Comet)
-                .setMaxHealth(Health.Comet));
+        enemy.add(TransformComponent.create(engine)
+            .setPosition(xPos, yPos, Z.enemy)
+            .setScale(1f, 1f));
 
-            enemy.add(CircleBoundsComponent.create(engine)
-                .setCircle(xPos, yPos, 0.4f)
-                .setOffset(0f, -1.25f));
-            float cometR = r.nextFloat();
-            Array<TextureAtlas.AtlasRegion> frames = cometR > 0.5f ? Assets.getRedCometFrames() : Assets.getBlueCometFrames();
-            Array<TextureAtlas.AtlasRegion> fullFrames = cometR > 0.5f ? Assets.getRedCometFullFrames() : Assets.getBlueCometFullFrames();
-            enemy.add(TextureComponent.create(engine));
-            enemy.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", new Animation(1f / 12f, frames, Animation.PlayMode.LOOP_PINGPONG))
-                .addAnimation("FULL", new Animation(1f, fullFrames)));
+        enemy.add(HealthComponent.create(engine)
+            .setMaxHealth(Health.Comet)
+            .setMaxHealth(Health.Comet));
 
-            enemy.add(StateComponent.create(engine)
-                .set("DEFAULT")
-                .setLooping(true));
+        enemy.add(CircleBoundsComponent.create(engine)
+            .setCircle(xPos, yPos, 0.4f)
+            .setOffset(0f, -1.25f));
 
-            Vector2 p0 = new Vector2(xPos, yPos);
-            float p1x = isGoingRight ? -4.22f : 24.22f;
-            Vector2 p1 = new Vector2(p1x, 0f);
-            float p2x = isGoingRight ? 42.25f : -22.25f;
-            Vector2 p2 = new Vector2(p2x, -32f);
-            enemy.add(PathFollowComponent.create(engine)
-                    .setFacingPath(true)
-                    .setBaseRotation(180f)
-                    .setSpeed(1f/8f)
-                    .setPath(new Bezier<>(p0, p1, p2)));
 
-            getEngine().addEntity(enemy);
+        enemy.add(EnemyComponent.create(engine)
+            .setEnemyType(EnemyType.COMET)
+            .setEnemyColor(color));
+        enemy.add(TextureComponent.create(engine));
+        enemy.add(AnimationComponent.create(engine)
+            .addAnimation("DEFAULT", new Animation(1f / 12f, frames, Animation.PlayMode.LOOP_PINGPONG))
+            .addAnimation("FULL", new Animation(1f, fullFrames)));
+
+        enemy.add(StateComponent.create(engine)
+            .set("DEFAULT")
+            .setLooping(true));
+
+        Vector2 p0 = new Vector2(xPos, yPos);
+        float p1x = isGoingRight ? -4.22f : 24.22f;
+        Vector2 p1 = new Vector2(p1x, 0f);
+        float p2x = isGoingRight ? 42.25f : -22.25f;
+        Vector2 p2 = new Vector2(p2x, -32f);
+        enemy.add(PathFollowComponent.create(engine)
+                .setFacingPath(true)
+                .setBaseRotation(180f)
+                .setSpeed(1f/8f)
+                .setPath(new Bezier<>(p0, p1, p2)));
+
+        getEngine().addEntity(enemy);
     }
 }

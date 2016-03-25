@@ -209,10 +209,10 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactA/impact-asteroid-a");
     }
     public static Array<TextureAtlas.AtlasRegion> getImpactB(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactA/impact-asteroid-b");
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactB/impact-asteroid-b");
     }
     public static Array<TextureAtlas.AtlasRegion> getImpactC(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactA/impact-asteroid-c");
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactC/impact-asteroid-c");
     }
 
 

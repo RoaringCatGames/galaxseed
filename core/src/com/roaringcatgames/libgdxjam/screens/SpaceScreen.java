@@ -104,6 +104,7 @@
             PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();
             engine.addSystem(enemyDmgSystem);
             engine.addSystem(playerDmgSystem);
+            engine.addSystem(new ExplosionSystem());
             engine.addSystem(new FollowerSystem());
 
             GameOverSystem gameOverSystem = new GameOverSystem(cam, dispatcher);
@@ -150,9 +151,17 @@
         GameState lastState;
         @Override
         protected void update(float deltaChange) {
-
-
-            engine.update(Math.min(deltaChange, App.MAX_DELTA_TICK));
+            float deltaToApply = Math.min(deltaChange, App.MAX_DELTA_TICK);
+            if(App.isSlowed()){
+                App.setTimeSpentSlow(App.getTimeSpentSlow() + deltaChange);
+                if(App.getTimeSpentSlow() >= App.PAUSE_LENGTH){
+                    App.setSlowed(false);
+                }
+                if(App.isSlowed()) {
+                    deltaToApply *= App.SLOW_SCALE;
+                }
+            }
+            engine.update(deltaToApply);
 
             if(App.getState() != lastState){
                 lastState = App.getState();

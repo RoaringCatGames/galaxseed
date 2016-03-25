@@ -22,6 +22,7 @@ import java.util.Random;
 public class EnemyFiringSystem extends IteratingSystem {
 
     private Array<Entity> spawners;
+    private ComponentMapper<EnemyComponent> em;
     private ComponentMapper<SpawnerComponent> sm;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<VelocityComponent> vm;
@@ -40,6 +41,7 @@ public class EnemyFiringSystem extends IteratingSystem {
 
     public EnemyFiringSystem(){
         super(Family.all(SpawnerComponent.class).get());
+        em = ComponentMapper.getFor(EnemyComponent.class);
         sm = ComponentMapper.getFor(SpawnerComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         vm = ComponentMapper.getFor(VelocityComponent.class);
@@ -53,6 +55,7 @@ public class EnemyFiringSystem extends IteratingSystem {
         PooledEngine engine = ((PooledEngine)getEngine());
 
         for(Entity spawner:spawners){
+            EnemyColor parentColor = em.has(spawner) ? em.get(spawner).enemyColor : EnemyColor.BROWN;
             SpawnerComponent sc = sm.get(spawner);
             if(sc.isPaused){
                 continue;
@@ -75,7 +78,8 @@ public class EnemyFiringSystem extends IteratingSystem {
                                 .setMaxHealth(Health.AsteroidFrag)
                                 .setMaxHealth(Health.AsteroidFrag));
                             frag.add(EnemyComponent.create(engine)
-                                    .setEnemyType(EnemyType.ASTEROID_FRAG));
+                                .setEnemyType(EnemyType.ASTEROID_FRAG)
+                                .setEnemyColor(parentColor));
                             frag.add(WhenOffScreenComponent.create(engine)
                                     .setHasBeenOnScreen(true));
                             frag.add(TextureComponent.create(engine)

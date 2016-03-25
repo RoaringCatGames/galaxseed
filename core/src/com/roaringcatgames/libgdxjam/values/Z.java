@@ -17,9 +17,11 @@ public class Z {
     public static final float seed = 40;
     public static final float leaves = 39f;
 
-    public static final float gameOver = 2f;
 
-    public static final float health = 0f;
-    public static final float score = 0f;
-    public static final float debug = 0f;
+
+    public static final float health = 2f;
+    public static final float score = 2f;
+    public static final float debug = 2f;
+    public static final float gameOver = 1f;
+    public static final float explosion = 0f;
 }
