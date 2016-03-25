@@ -206,7 +206,7 @@ public class MenuScreen extends LazyInitScreen {
                         .setDuration(200f)
                         .setParticleLifespans(2f, 3f)
                         .setParticleImages(Assets.getLeafFrames())
-                        .setShouldFade(false)
+                        .setShouldFade(true)
                         .setAngleRange(-110f, 110f)
                         .setSpawnRate(60f)
                         .setSpeed(3f)

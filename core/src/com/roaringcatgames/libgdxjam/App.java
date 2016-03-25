@@ -8,7 +8,7 @@ import com.roaringcatgames.libgdxjam.values.GameState;
  */
 public class App {
 
-    public static float PAUSE_LENGTH = 0.3f;
+    public static float PAUSE_LENGTH = 1f;
     public static float SLOW_SCALE = 0.3f; //30% speed
 
     public static final Game Initialize(){

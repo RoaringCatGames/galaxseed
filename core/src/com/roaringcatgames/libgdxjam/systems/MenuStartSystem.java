@@ -123,6 +123,15 @@ public class MenuStartSystem extends IteratingSystem{
                 .setTarget(enemy)
                 .setBaseRotation(baseRotation));
 
+        plant.add(ParticleEmitterComponent.create(engine)
+                .setParticleImages(Assets.getLeafFrames())
+                .setParticleLifespans(0.1f, 0.2f)
+                .setSpawnRate(100f)
+                .setAngleRange(0f, 360f)
+                .setSpeed(3f)
+                .setShouldFade(true)
+                .setDuration(0.3f));
+
         getEngine().addEntity(plant);
 
     }
