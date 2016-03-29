@@ -87,7 +87,7 @@ public class ScoreSystem extends IteratingSystem {
                 .setAngleRange(-90f, 90f)
                 .setParticleImages(Assets.getLeafFrames())
                 .setDuration(0.3f)
-                .setSpeed(5f));
+                .setSpeed(5f, 8f));
         }
 
         lastPosition = growthPosition;

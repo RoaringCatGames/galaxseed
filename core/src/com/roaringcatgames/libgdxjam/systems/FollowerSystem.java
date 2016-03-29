@@ -10,6 +10,7 @@ import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.libgdxjam.components.EnemyComponent;
 import com.roaringcatgames.libgdxjam.components.FollowerComponent;
+import com.roaringcatgames.libgdxjam.components.MenuItemComponent;
 
 /**
  * Created by barry on 1/6/16 @ 7:47 PM.
@@ -20,12 +21,14 @@ public class FollowerSystem extends IteratingSystem {
     ComponentMapper<TransformComponent> tm;
 
     Array<Entity> queue;
+    Family familyToWatchForRemovals;
 
-    public FollowerSystem(){
+    public FollowerSystem(Family familyToWatchForRemovals){
         super(Family.all(FollowerComponent.class).get());
         this.queue = new Array<>();
         fm = ComponentMapper.getFor(FollowerComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
+        this.familyToWatchForRemovals = familyToWatchForRemovals;
     }
 
     EntityListener el;
@@ -46,7 +49,7 @@ public class FollowerSystem extends IteratingSystem {
                 public void entityRemoved(Entity entity) {
                     for (Entity follower : eg.getEntitiesFor(Family.all(FollowerComponent.class).get())) {
                         FollowerComponent fc = fm.get(follower);
-                        if (fc.target == entity) {
+                        if (fc != null && fc.target == entity) {
                             fc.target = null;
                             follower.removeAll();
                             eg.removeEntity(follower);
@@ -57,7 +60,7 @@ public class FollowerSystem extends IteratingSystem {
             };
         }
 
-        engine.addEntityListener(Family.all(EnemyComponent.class).get(), el);
+        engine.addEntityListener(familyToWatchForRemovals, el); //Family.all(MenuItemComponent.class).get(), el);
     }
 
     @Override

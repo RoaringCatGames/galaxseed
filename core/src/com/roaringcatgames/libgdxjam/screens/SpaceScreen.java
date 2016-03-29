@@ -105,7 +105,7 @@
             engine.addSystem(enemyDmgSystem);
             engine.addSystem(playerDmgSystem);
             engine.addSystem(new ExplosionSystem());
-            engine.addSystem(new FollowerSystem());
+            engine.addSystem(new FollowerSystem(Family.all(EnemyComponent.class).get()));
 
             GameOverSystem gameOverSystem = new GameOverSystem(cam, dispatcher);
             gameOverSystem.setProcessing(false);
