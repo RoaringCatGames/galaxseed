@@ -208,7 +208,14 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         FollowerComponent fc = flames.getComponent(FollowerComponent.class);
         if(state != "DEFAULT"){
             flameState = "FLYING";
-            fc.setOffset(flyingFlameOffset.x*initialScale, flyingFlameOffset.y * initialScale);
+            float x = flyingFlameOffset.x;
+
+            if(state == "FLYING_RIGHT"){
+                x -= 0.3f;
+            }else if(state == "FLYING_LEFT"){
+                x += 0.3f;
+            }
+            fc.setOffset(x*initialScale, flyingFlameOffset.y * initialScale);
         }else{
             flameState = "DEFAULT";
             fc.setOffset(idleFlameOffset.x * initialScale, idleFlameOffset.y * initialScale);
