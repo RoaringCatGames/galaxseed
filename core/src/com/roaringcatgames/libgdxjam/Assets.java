@@ -1,5 +1,6 @@
 package com.roaringcatgames.libgdxjam;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -66,15 +67,8 @@ public class Assets {
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/moon");
     }
 
-    public static TextureAtlas.AtlasRegion getTouchPoint(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("touch-point");
-    }
-
     public static TextureAtlas.AtlasRegion getTitleImage(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/Title");
-    }
-    public static TextureAtlas.AtlasRegion getStartButtonImage(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/start");
     }
 
     public static Array<TextureAtlas.AtlasRegion> getTitleTreeFrames(){
@@ -151,6 +145,17 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("PLAY/Y");
     }
 
+    //////////////
+    //BG
+    //////////////
+    public static TextureAtlas.AtlasRegion getSpeedLine(int i){
+        if(i < 0){
+            throw new IllegalArgumentException("Speed line is bad");
+        }
+        String name = "speed/speed" + ((i%4) + 1);
+        Gdx.app.log("Assets", "Name:" + name);
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion(name);
+    }
 
     /////////////
     //Enemies
