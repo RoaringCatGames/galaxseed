@@ -19,6 +19,8 @@ import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
 
+import java.util.Vector;
+
 /**
  * Created by barry on 12/29/15 @ 8:07 PM.
  */
@@ -45,7 +47,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private OrthographicCamera cam;
 
-    public PlayerSystem(Vector3 initialPosition, float initialScale, OrthographicCamera cam){
+    public PlayerSystem(Vector3 initialPosition, float initialScale, OrthographicCamera cam, Vector2...muzzlePositions){
         super(Family.all(PlayerComponent.class).get());
         this.initialPosition = initialPosition;
         this.initialScale = initialScale;
@@ -67,13 +69,19 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 //        generateBullet(-1.312f, -0.8f, 0f, bulletSpeed);
 //        generateBullet(1.312f, -0.8f, 0f, bulletSpeed);
 
-        muzzlePositions.add(new Vector2(-0.5f, 1.6f));
-        muzzlePositions.add(new Vector2(-0.906f, 0.881f));
-        muzzlePositions.add(new Vector2(-1.312f, 0.3f));
+        if(muzzlePositions != null && muzzlePositions .length > 0){
+            for(Vector2 muzzle:muzzlePositions){
+                this.muzzlePositions.add(muzzle);
+            }
+        }else {
+            this.muzzlePositions.add(new Vector2(-0.5f, 1.6f));
+            this.muzzlePositions.add(new Vector2(-0.906f, 0.881f));
+            this.muzzlePositions.add(new Vector2(-1.312f, 0.3f));
 
-        muzzlePositions.add(new Vector2(0.5f, 1.6f));
-        muzzlePositions.add(new Vector2(0.906f, 0.881f));
-        muzzlePositions.add(new Vector2(1.312f, 0.3f));
+            this.muzzlePositions.add(new Vector2(0.5f, 1.6f));
+            this.muzzlePositions.add(new Vector2(0.906f, 0.881f));
+            this.muzzlePositions.add(new Vector2(1.312f, 0.3f));
+        }
     }
 
     private void init(){
@@ -101,8 +109,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(AnimationComponent.create(engine)
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getShipIdleFrames()))
                     .addAnimation("FLYING", new Animation(1f / 12f, Assets.getShipFlyingFrames()))
-                    .addAnimation("FLYING_LEFT", new Animation(1f / 6f, Assets.getShipFlyingLeftFrames()))
-                    .addAnimation("FLYING_RIGHT", new Animation(1f / 6f, Assets.getShipFlyingRightFrames())));
+                    .addAnimation("FLYING_LEFT", new Animation(1f / 3f, Assets.getShipFlyingLeftFrames()))
+                    .addAnimation("FLYING_RIGHT", new Animation(1f / 3f, Assets.getShipFlyingRightFrames())));
             player.add(RemainInBoundsComponent.create(engine)
                     .setMode(BoundMode.CONTAINED));
             player.add(StateComponent.create(engine)

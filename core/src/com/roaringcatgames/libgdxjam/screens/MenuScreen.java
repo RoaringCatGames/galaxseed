@@ -11,8 +11,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -22,8 +25,10 @@ import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.MenuItemComponent;
 import com.roaringcatgames.libgdxjam.components.ParticleEmitterComponent;
+import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 import com.roaringcatgames.libgdxjam.systems.*;
 import com.roaringcatgames.libgdxjam.values.GameState;
+import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 
@@ -75,16 +80,23 @@ public class MenuScreen extends LazyInitScreen {
         engine.addSystem(new MenuStartSystem());
 
         //Custom Systems
+        Vector2[] muzzlePositions = new Vector2[]{
+                new Vector2(-0.5f, 1.6f),
+                new Vector2(-0.906f, 0.881f),
+                new Vector2(0.5f, 1.6f),
+                new Vector2(0.906f, 0.881f)
+        };
+
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false));
-        engine.addSystem(new PlayerSystem(playerPosition, 0.5f, cam));
-        engine.addSystem(new FiringSystem());
         engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
+        engine.addSystem(new PlayerSystem(playerPosition, 0.5f, cam, muzzlePositions));
+        engine.addSystem(new FiringSystem());
         engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
         engine.addSystem(new BulletSystem());
-        engine.addSystem(new FollowerSystem());
+        engine.addSystem(new FollowerSystem(Family.all(MenuItemComponent.class).get()));
         engine.addSystem(new FadingSystem());
         engine.addSystem(new ParticleSystem());
         //Extension Systems
@@ -111,74 +123,45 @@ public class MenuScreen extends LazyInitScreen {
 
         float xPos = 4f;
         float yPos = 19f;
-        p = engine.createEntity();
-        p.add(MenuItemComponent.create(engine));
-        p.add(TextureComponent.create(engine));
-        p.add(CircleBoundsComponent.create(engine)
-            .setCircle(xPos, yPos, 2f));
-        p.add(AnimationComponent.create(engine)
-            .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getPFrames()))
-            .setPaused(true));
-        p.add(TransformComponent.create(engine)
-                .setPosition(xPos, yPos)
-                .setScale(0.5f, 0.5f));
-        p.add(StateComponent.create(engine)
-                .set("DEFAULT")
-                .setLooping(false));
+        p = createPlayAsteroid(xPos, yPos, Assets.getPFrames());
         engine.addEntity(p);
         xPos += 4f;
 
-        l = engine.createEntity();
-        l.add(TextureComponent.create(engine));
-        l.add(MenuItemComponent.create(engine));
-        l.add(CircleBoundsComponent.create(engine)
-                .setCircle(xPos, yPos, 2f));
-        l.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getLFrames()))
-                .setPaused(true));
-        l.add(TransformComponent.create(engine)
-                .setPosition(xPos, yPos)
-                .setScale(0.5f, 0.5f));
-        l.add(StateComponent.create(engine)
-                .set("DEFAULT")
-                .setLooping(false));
+        l = createPlayAsteroid(xPos, yPos, Assets.getLFrames());
         engine.addEntity(l);
         xPos += 4f;
 
-        a = engine.createEntity();
-        a.add(TextureComponent.create(engine));
-        a.add(MenuItemComponent.create(engine));
-        a.add(CircleBoundsComponent.create(engine)
-                .setCircle(xPos, yPos, 2f));
-        a.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getAFrames()))
-                .setPaused(true));
-        a.add(TransformComponent.create(engine)
-                .setPosition(xPos, yPos)
-                .setScale(0.5f, 0.5f));
-        a.add(StateComponent.create(engine)
-                .set("DEFAULT")
-                .setLooping(false));
+        a = createPlayAsteroid(xPos, yPos, Assets.getAFrames());
         engine.addEntity(a);
         xPos += 4f;
 
-        y = engine.createEntity();
-        y.add(TextureComponent.create(engine));
-        y.add(MenuItemComponent.create(engine));
-        y.add(CircleBoundsComponent.create(engine)
-                .setCircle(xPos, yPos, 2f));
-        y.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getYFrames()))
-                .setPaused(true));
-        y.add(TransformComponent.create(engine)
-                .setPosition(xPos, yPos)
-                .setScale(0.5f, 0.5f));
-        y.add(StateComponent.create(engine)
-                .set("DEFAULT")
-                .setLooping(false));
+        y = createPlayAsteroid(xPos, yPos, Assets.getYFrames());
         engine.addEntity(y);
 
         engine.addEntity(plant);
+    }
+
+    private Entity createPlayAsteroid(float xPos, float yPos, Array<TextureAtlas.AtlasRegion> frames) {
+        Entity playAsteroid = engine.createEntity();
+        playAsteroid.add(WhenOffScreenComponent.create(engine));
+        playAsteroid.add(MenuItemComponent.create(engine));
+        playAsteroid.add(HealthComponent.create(engine)
+            .setMaxHealth(Health.PlayAsteroid)
+            .setHealth(Health.PlayAsteroid));
+        playAsteroid.add(TextureComponent.create(engine));
+        playAsteroid.add(CircleBoundsComponent.create(engine)
+            .setCircle(xPos, yPos, 2f));
+        playAsteroid.add(AnimationComponent.create(engine)
+            .addAnimation("DEFAULT", new Animation(1f / 6f, frames))
+            .setPaused(true));
+        playAsteroid.add(TransformComponent.create(engine)
+                .setPosition(xPos, yPos)
+                .setScale(0.5f, 0.5f));
+        playAsteroid.add(StateComponent.create(engine)
+                .set("DEFAULT")
+                .setLooping(false));;
+
+        return playAsteroid;
     }
 
     @Override
@@ -209,7 +192,7 @@ public class MenuScreen extends LazyInitScreen {
                         .setShouldFade(true)
                         .setAngleRange(-110f, 110f)
                         .setSpawnRate(60f)
-                        .setSpeed(3f)
+                        .setSpeed(2f, 4f)
                         .setShouldLoop(true));
                 treeLeafing = true;
             }
@@ -222,8 +205,7 @@ public class MenuScreen extends LazyInitScreen {
     }
 
     private boolean isReady(Entity p){
-        return !p.getComponent(AnimationComponent.class).isPaused &&
-                p.getComponent(TransformComponent.class).opacity == 0f;
+        return p.getComponents().size() == 0;
     }
 
     @Override

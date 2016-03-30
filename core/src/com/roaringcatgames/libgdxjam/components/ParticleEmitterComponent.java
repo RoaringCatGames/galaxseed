@@ -17,7 +17,7 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
     public float lastSpawnTime = 0f;
     public float spawnRate = 100f;
     public float duration = 1f;
-    public float particleSpeed = 1f;
+    public Vector2 particleMinMaxSpeeds = new Vector2(1f, 1f);
     public Vector2 particleMinMaxLifespans = new Vector2(1f, 1f);
     public Range angleRange = new Range(-45f, 45f);
     public boolean shouldFade = false;
@@ -64,8 +64,8 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
         return this;
     }
 
-    public ParticleEmitterComponent setSpeed(float speed){
-        this.particleSpeed = speed;
+    public ParticleEmitterComponent setSpeed(float min, float max){
+        this.particleMinMaxSpeeds.set(min, max);
         return this;
     }
 
@@ -76,7 +76,7 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
         this.lastSpawnTime = 0f;
         this.spawnRate = 100f;
         this.duration = 1f;
-        this.particleSpeed = 1f;
+        this.particleMinMaxSpeeds.set(1f, 1f);
         this.particleMinMaxLifespans.set(1f, 1f);
         this.angleRange.setMin(-45f);
         this.angleRange.setMax(45f);

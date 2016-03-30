@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
@@ -83,13 +84,14 @@ public class ParticleSystem extends IteratingSystem {
             .setPosition(tc.position.x, tc.position.y, Z.leaves)
             .setScale(0.5f, 0.5f));
 
-        float lifeSpan = (r.nextFloat()*(pc.particleMinMaxLifespans.y-pc.particleMinMaxLifespans.x)) + pc.particleMinMaxLifespans.x;
+        float lifeSpan = K2MathUtil.getRandomInRange(pc.particleMinMaxLifespans.x, pc.particleMinMaxLifespans.y); //(r.nextFloat() * (pc.particleMinMaxLifespans.y - pc.particleMinMaxLifespans.x)) + pc.particleMinMaxLifespans.x;
         particle.add(ParticleComponent.create(engine)
                 .setLifespan(lifeSpan));
 
 
         float angle = tc.rotation + (pc.angleRange.getBetween(r.nextFloat()));
-        Vector2 speed = VectorUtils.rotateVector(upNorm.cpy(), angle).scl(pc.particleSpeed);
+        float particleSpeed = K2MathUtil.getRandomInRange(pc.particleMinMaxSpeeds.x, pc.particleMinMaxSpeeds.y);
+        Vector2 speed = VectorUtils.rotateVector(upNorm.cpy(), angle).scl(particleSpeed);
         particle.add(VelocityComponent.create(engine)
             .setSpeed(speed.x, speed.y));
 

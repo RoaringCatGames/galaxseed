@@ -9,10 +9,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
+import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.values.Z;
 
 import java.util.Random;
@@ -29,6 +31,8 @@ public class MenuStartSystem extends IteratingSystem{
     private ComponentMapper<CircleBoundsComponent> cm;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<AnimationComponent> am;
+    private ComponentMapper<HealthComponent> hm;
+    private ComponentMapper<DamageComponent> dm;
 
     Random r = new Random();
 
@@ -38,6 +42,8 @@ public class MenuStartSystem extends IteratingSystem{
         cm = ComponentMapper.getFor(CircleBoundsComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         am = ComponentMapper.getFor(AnimationComponent.class);
+        hm = ComponentMapper.getFor(HealthComponent.class);
+        dm = ComponentMapper.getFor(DamageComponent.class);
 
     }
 
@@ -79,12 +85,33 @@ public class MenuStartSystem extends IteratingSystem{
     private Vector2 enemyPos = new Vector2();
     private void processCollision(Entity bullet, Entity enemy){
 
-        AnimationComponent ani = am.get(enemy);
-        ani.setPaused(false);
+        HealthComponent enemyHealth = hm.get(enemy);
+        if(enemyHealth.health <= 0f){
+            return;
+        }
+
+        enemyHealth.health -= dm.get(bullet).dps;
         attachPlant(bullet, enemy);
-        enemy.add(FadingComponent.create((PooledEngine)getEngine())
-            .setPercentPerSecond(50f));
         getEngine().removeEntity(bullet);
+        if(enemyHealth.health <= 0f) {
+            AnimationComponent ani = am.get(enemy);
+            ani.setPaused(false);
+            float xSpeed = K2MathUtil.getRandomInRange(8f, 15f) * (r.nextFloat() > 0.5f ? -1f : 1f);
+            float ySpeed = K2MathUtil.getRandomInRange(8f, 15f) * (r.nextFloat() > 0.5f ? -1f : 1f);
+            Vector2 speed = new Vector2(xSpeed, ySpeed);
+            float angle = (speed.angle() - 90f) + 180f;
+            enemy.add(VelocityComponent.create(getEngine())
+                .setSpeed(xSpeed, ySpeed));
+            enemy.add(ParticleEmitterComponent.create((PooledEngine)getEngine())
+                .setParticleImages(Assets.getLeafFrames())
+                .setDuration(10f)
+                .setShouldLoop(true)
+                .setSpeed(15f, 20f)
+                .setAngleRange(angle -15f, angle + 15f)
+                .setSpawnRate(1000f)
+                .setParticleLifespans(0.3f, 0.5f));
+        }
+
     }
 
     private void attachPlant(Entity bullet, Entity enemy) {
@@ -128,7 +155,7 @@ public class MenuStartSystem extends IteratingSystem{
                 .setParticleLifespans(0.1f, 0.2f)
                 .setSpawnRate(100f)
                 .setAngleRange(0f, 360f)
-                .setSpeed(3f)
+                .setSpeed(2f, 3f)
                 .setShouldFade(true)
                 .setDuration(0.3f));
 

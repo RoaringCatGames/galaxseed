@@ -1,6 +1,7 @@
 package com.roaringcatgames.libgdxjam.screens;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -60,7 +61,7 @@ public class SplashScreen extends LazyInitScreen {
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RotationSystem());
-        engine.addSystem(new FollowerSystem());
+        engine.addSystem(new FollowerSystem(Family.all(AnimationComponent.class).get()));
 
         Entity title = engine.createEntity();
         title.add(TransformComponent.create(engine)
