@@ -19,12 +19,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.MenuItemComponent;
 import com.roaringcatgames.libgdxjam.components.ParticleEmitterComponent;
+import com.roaringcatgames.libgdxjam.components.ShakeComponent;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 import com.roaringcatgames.libgdxjam.systems.*;
 import com.roaringcatgames.libgdxjam.values.GameState;
@@ -99,6 +101,7 @@ public class MenuScreen extends LazyInitScreen {
         engine.addSystem(new FollowerSystem(Family.all(MenuItemComponent.class).get()));
         engine.addSystem(new FadingSystem());
         engine.addSystem(new ParticleSystem());
+        engine.addSystem(new ShakeSystem());
         //Extension Systems
         engine.addSystem(renderingSystem);
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
@@ -121,19 +124,19 @@ public class MenuScreen extends LazyInitScreen {
                 .setPosition(1.7f, 24f));
 
 
-        float xPos = 4f;
-        float yPos = 19f;
+        float xPos = 3f;
+        float yPos = 18f;
         p = createPlayAsteroid(xPos, yPos, Assets.getPFrames());
         engine.addEntity(p);
-        xPos += 4f;
+        xPos += 4.5f;
 
         l = createPlayAsteroid(xPos, yPos, Assets.getLFrames());
         engine.addEntity(l);
-        xPos += 4f;
+        xPos += 4.5f;
 
         a = createPlayAsteroid(xPos, yPos, Assets.getAFrames());
         engine.addEntity(a);
-        xPos += 4f;
+        xPos += 4.5f;
 
         y = createPlayAsteroid(xPos, yPos, Assets.getYFrames());
         engine.addEntity(y);
@@ -159,7 +162,11 @@ public class MenuScreen extends LazyInitScreen {
                 .setScale(0.5f, 0.5f));
         playAsteroid.add(StateComponent.create(engine)
                 .set("DEFAULT")
-                .setLooping(false));;
+                .setLooping(false));
+        playAsteroid.add(ShakeComponent.create(engine)
+            .setSpeed(6f, 4f)
+            .setOffsets(0.4f, 0.8f)
+            .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
 
         return playAsteroid;
     }

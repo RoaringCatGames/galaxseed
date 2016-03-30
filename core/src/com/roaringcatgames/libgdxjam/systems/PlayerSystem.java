@@ -60,15 +60,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
         this.controlOrigin = new Vector2();
 
-//        generateBullet(-0.5f, 0.6f, 0f, bulletSpeed);
-//        generateBullet(0.5f, 0.6f, 0f, bulletSpeed);
-//
-//        generateBullet(-0.906f, -0.181f, 0f, bulletSpeed);
-//        generateBullet(0.906f, -0.181f, 0f, bulletSpeed);
-//
-//        generateBullet(-1.312f, -0.8f, 0f, bulletSpeed);
-//        generateBullet(1.312f, -0.8f, 0f, bulletSpeed);
-
         if(muzzlePositions != null && muzzlePositions .length > 0){
             for(Vector2 muzzle:muzzlePositions){
                 this.muzzlePositions.add(muzzle);
@@ -109,8 +100,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(AnimationComponent.create(engine)
                     .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getShipIdleFrames()))
                     .addAnimation("FLYING", new Animation(1f / 12f, Assets.getShipFlyingFrames()))
-                    .addAnimation("FLYING_LEFT", new Animation(1f / 3f, Assets.getShipFlyingLeftFrames()))
-                    .addAnimation("FLYING_RIGHT", new Animation(1f / 3f, Assets.getShipFlyingRightFrames())));
+                    .addAnimation("FLYING_LEFT", new Animation(1f / 6f, Assets.getShipFlyingLeftFrames()))
+                    .addAnimation("FLYING_RIGHT", new Animation(1f / 6f, Assets.getShipFlyingRightFrames())));
             player.add(RemainInBoundsComponent.create(engine)
                     .setMode(BoundMode.CONTAINED));
             player.add(StateComponent.create(engine)
