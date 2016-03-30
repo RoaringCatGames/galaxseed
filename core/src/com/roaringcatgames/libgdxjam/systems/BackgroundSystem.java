@@ -181,7 +181,7 @@ public class BackgroundSystem extends IteratingSystem {
                 sticker.add(TextureComponent.create(engine)
                         .setRegion(reg));
                 sticker.add(VelocityComponent.create(engine)
-                        .setSpeed(0f, bgSpeed));
+                        .setSpeed(0f, bgSpeed*1.5f));
                 sticker.add(KinematicComponent.create(engine));
                 sticker.add(BoundsComponent.create(engine)
                     .setBounds(position - (width / 2f), (yIndex * yStep) - (height / 2f), width, height));
