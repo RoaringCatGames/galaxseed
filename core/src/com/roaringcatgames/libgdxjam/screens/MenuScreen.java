@@ -24,10 +24,7 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.components.MenuItemComponent;
-import com.roaringcatgames.libgdxjam.components.ParticleEmitterComponent;
-import com.roaringcatgames.libgdxjam.components.ShakeComponent;
-import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
+import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.systems.*;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Health;
@@ -207,6 +204,9 @@ public class MenuScreen extends LazyInitScreen {
 
         if(isReady(p) && isReady(l) && isReady(a) && isReady(y)){
             menuSong.stop();
+            //FUCKING GROSS. What is this, Unity??
+            TransformComponent tc = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(TransformComponent.class);
+            App.playerLastPosition.set(tc.position.x, tc.position.y);
             dispatcher.endCurrentScreen();
         }
     }

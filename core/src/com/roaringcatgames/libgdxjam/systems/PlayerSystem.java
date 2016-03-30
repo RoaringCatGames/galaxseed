@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Rates;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
@@ -87,11 +88,11 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(KinematicComponent.create(engine));
             player.add(PlayerComponent.create(engine));
             player.add(HealthComponent.create(engine)
-                .setHealth(App.getPlayerHealth())
-                .setMaxHealth(App.getPlayerHealth()));
+                .setHealth(Health.Player)
+                .setMaxHealth(Health.Player));
             player.add(TransformComponent.create(engine)
-                    .setPosition(initialPosition.x, initialPosition.y, initialPosition.z)
-                    .setScale(initialScale, initialScale));
+                .setPosition(initialPosition.x, initialPosition.y, initialPosition.z)
+                .setScale(initialScale, initialScale));
 
             player.add(BoundsComponent.create(engine)
                     .setBounds(0f, 0f, 1f, 1.5f));

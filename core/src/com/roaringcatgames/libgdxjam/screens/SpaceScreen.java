@@ -65,8 +65,8 @@
             TextRenderingSystem textRenderingSystem = new TextRenderingSystem(batch, guiCam, cam);
 
             Vector3 playerPosition = new Vector3(
-                    cam.position.x,
-                    5f,
+                    App.playerLastPosition.x,
+                    App.playerLastPosition.y,
                     Z.player);
 
             Gdx.app.log("Menu Screen", "Cam Pos: " + cam.position.x + " | " +
@@ -80,7 +80,6 @@
             engine.addSystem(new BoundsSystem());
             engine.addSystem(new AnimationSystem());
 
-            //engine.addSystem(new CircleBoundsSystem());
             //Custom Systems
             Vector2 minBounds = new Vector2(0f, 0f);
             Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
