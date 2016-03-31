@@ -74,7 +74,10 @@ public class FollowerSystem extends IteratingSystem {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-
+        
+        //TODO: Why am I doing this in update?? It's just causing a double 
+        //      iteration over the entities...move this to processEntity
+        //      Jam code strikes again!
         for(Entity e:queue){
             FollowerComponent fc = fm.get(e);
             if(fc.target != null) {
