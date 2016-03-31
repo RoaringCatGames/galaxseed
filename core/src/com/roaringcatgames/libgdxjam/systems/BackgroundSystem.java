@@ -4,9 +4,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
@@ -24,6 +26,11 @@ import java.util.Random;
 public class BackgroundSystem extends IteratingSystem {
 
     public float bgSpeed = -1f;
+    private float speedLineSpeedMin = -25f;
+    private float speedLineSpeedMax = -40f;
+    private float speedLineOpacity = 0.1f;
+    private int speedLineCount = 4;
+
     private float left;
     private float bottom;
     private float right;
@@ -162,6 +169,35 @@ public class BackgroundSystem extends IteratingSystem {
         }
 
 
+        //Speed Lines
+        for(int i=0;i<speedLineCount;i++){
+            Entity sl = engine.createEntity();
+            int speedIndex = rnd.nextInt(5) + 1;
+            float x = K2MathUtil.getRandomInRange(0.1f, 19.8f);
+            float y = K2MathUtil.getRandomInRange(5f, 45f);
+            TextureAtlas.AtlasRegion region = Assets.getSpeedLine(speedIndex);
+            sl.add(TextureComponent.create(engine)
+                .setRegion(region));
+            sl.add(VelocityComponent.create(engine)
+                .setSpeed(0f, K2MathUtil.getRandomInRange(speedLineSpeedMin, speedLineSpeedMax)));
+            sl.add(TransformComponent.create(engine)
+                .setPosition(x, y, Z.speedLine)
+                .setScale(1f, 1f)
+                .setOpacity(speedLineOpacity));
+            sl.add(BoundsComponent.create(engine)
+                .setBounds(
+                        x - ((region.getRegionWidth() / 2f)/App.PPM),
+                        y - ((region.getRegionHeight() / 2f)/App.PPM),
+                        (region.getRegionWidth()/App.PPM),
+                        region.getRegionHeight()/App.PPM));
+            sl.add(ScreenWrapComponent.create(engine)
+                .setMode(ScreenWrapMode.VERTICAL)
+                .setReversed(true)
+                .shouldRandomPerpendicularPosition(true)
+                .setMinMaxPos(0.1f, 19.8f));
+            engine.addEntity(sl);
+        }
+
         if(isUsingStickers) {
             int yStep = 35;
             int yIndex = 1;
@@ -181,7 +217,7 @@ public class BackgroundSystem extends IteratingSystem {
                 sticker.add(TextureComponent.create(engine)
                         .setRegion(reg));
                 sticker.add(VelocityComponent.create(engine)
-                        .setSpeed(0f, bgSpeed));
+                        .setSpeed(0f, bgSpeed*1.5f));
                 sticker.add(KinematicComponent.create(engine));
                 sticker.add(BoundsComponent.create(engine)
                     .setBounds(position - (width / 2f), (yIndex * yStep) - (height / 2f), width, height));

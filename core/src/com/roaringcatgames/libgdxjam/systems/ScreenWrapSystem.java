@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
@@ -66,34 +67,41 @@ public class ScreenWrapSystem extends IteratingSystem {
                 boolean isOffRight = tc.position.x - (regionWidthInMeters / 2f) > right;
                 boolean isOffLeft = (regionWidthInMeters / 2f) + tc.position.x < left;
 
+                float y = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.y;
+
                 if (!swc.isReversed && isOffRight){
-                    tc.position.set(left-(regionWidthInMeters/2f) - swc.wrapOffset, tc.position.y, tc.position.z);
+                    tc.position.set(left-(regionWidthInMeters/2f) - swc.wrapOffset, y, tc.position.z);
                 } else if (swc.isReversed && isOffLeft) {
-                    tc.position.set(right + (regionWidthInMeters / 2f) + swc.wrapOffset, tc.position.y, tc.position.z);
+                    tc.position.set(right + (regionWidthInMeters / 2f) + swc.wrapOffset, y, tc.position.z);
                 }
             }else{
+                float x = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.x;
                 float regionHeightInUnits = txc.region.getRegionHeight() / ppm;
                 boolean isAboveTop = tc.position.y - (regionHeightInUnits / 2f) > top;
                 boolean isBelowBottom = tc.position.y - (regionHeightInUnits / 2f) < bottom;
                 if (!swc.isReversed && isAboveTop) {
-                    tc.position.set(tc.position.x, top - (regionHeightInUnits / 2f) - swc.wrapOffset, tc.position.z);
+                    tc.position.set(x, top - (regionHeightInUnits / 2f) - swc.wrapOffset, tc.position.z);
 
                 } else if (swc.isReversed && isBelowBottom) {
-                    tc.position.set(tc.position.x, top + (regionHeightInUnits / 2f) + swc.wrapOffset, tc.position.z);
+                    tc.position.set(x, top + (regionHeightInUnits / 2f) + swc.wrapOffset, tc.position.z);
                 }
             }
         }else {
             if(swc.mode == ScreenWrapMode.HORIZONTAL) {
+
+                float y = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.y;
+
                 if (bc.bounds.x > right && !swc.isReversed) {
-                    tc.position.set(left - (bc.bounds.width / 2f) - swc.wrapOffset, tc.position.y, tc.position.z);
+                    tc.position.set(left - (bc.bounds.width / 2f) - swc.wrapOffset, y, tc.position.z);
                 } else if (bc.bounds.x + bc.bounds.width < left && swc.isReversed) {
-                    tc.position.set(right + (bc.bounds.width / 2f) + swc.wrapOffset, tc.position.y, tc.position.z);
+                    tc.position.set(right + (bc.bounds.width / 2f) + swc.wrapOffset, y, tc.position.z);
                 }
             }else{
+                float x = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.x;
                 if (bc.bounds.y > top && !swc.isReversed) {
-                    tc.position.set(tc.position.x,bottom - (bc.bounds.width / 2f) - swc.wrapOffset, tc.position.z);
+                    tc.position.set(x, bottom - (bc.bounds.width / 2f) - swc.wrapOffset, tc.position.z);
                 } else if (bc.bounds.y + bc.bounds.height < bottom && swc.isReversed) {
-                    tc.position.set(tc.position.x, top + (bc.bounds.height / 2f) + swc.wrapOffset, tc.position.z);
+                    tc.position.set(x, top + (bc.bounds.height / 2f) + swc.wrapOffset, tc.position.z);
                 }
             }
         }
