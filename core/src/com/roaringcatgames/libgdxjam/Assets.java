@@ -153,7 +153,6 @@ public class Assets {
             throw new IllegalArgumentException("Speed line is bad");
         }
         String name = "speed/speed" + ((i%4) + 1);
-        Gdx.app.log("Assets", "Name:" + name);
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion(name);
     }
 
