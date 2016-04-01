@@ -93,6 +93,12 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getGalaxyB(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("galaxy-b");
     }
+    public static TextureAtlas.AtlasRegion getGalaxyC(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("galaxy-c");
+    }
+    public static TextureAtlas.AtlasRegion getGasCluster(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("GasCluster");
+    }
 
 
     public static TextureAtlas.AtlasRegion getPlanetA(){
@@ -144,6 +150,10 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getYFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("PLAY/Y");
     }
+    public static Array<TextureAtlas.AtlasRegion> getSwipeFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("swipe/swipe");
+    }
+
 
     //////////////
     //BG

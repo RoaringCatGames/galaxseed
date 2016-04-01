@@ -78,7 +78,7 @@ public class ScreenWrapSystem extends IteratingSystem {
                 float x = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.x;
                 float regionHeightInUnits = txc.region.getRegionHeight() / ppm;
                 boolean isAboveTop = tc.position.y - (regionHeightInUnits / 2f) > top;
-                boolean isBelowBottom = tc.position.y - (regionHeightInUnits / 2f) < bottom;
+                boolean isBelowBottom = tc.position.y + (regionHeightInUnits / 2f) < bottom;
                 if (!swc.isReversed && isAboveTop) {
                     tc.position.set(x, top - (regionHeightInUnits / 2f) - swc.wrapOffset, tc.position.z);
 

@@ -110,10 +110,14 @@ public class BackgroundSystem extends IteratingSystem {
                 TextureRegion galaxy = null;
                 float galaxyFloat = rnd.nextFloat();
                 if(galaxyFloat < 0.5f){
-                    if(galaxyFloat < 0.25f){
+                    if(galaxyFloat < 0.125f){
                         galaxy = Assets.getGalaxyA();
-                    }else{
+                    }else if(galaxyFloat < 0.25f){
                         galaxy = Assets.getGalaxyB();
+                    }else if(galaxyFloat < 0.375f){
+                        galaxy = Assets.getGalaxyC();
+                    }else{
+                        galaxy = Assets.getGasCluster();
                     }
                 }
 
@@ -139,8 +143,8 @@ public class BackgroundSystem extends IteratingSystem {
                         .setPosition(bg.x, bg.y, Z.bg_galaxy)
                         .setRotation(bg.rotation)
                         .setScale(1f, 1f));
-                galaxy.add(BoundsComponent.create(engine)
-                        .setBounds(bg.x - 4.6875f, bg.y - 4.6875f, 9.375f, 9.375f));
+//                galaxy.add(BoundsComponent.create(engine)
+//                        .setBounds(bg.x - 4.6875f, bg.y - 4.6875f, 9.375f, 9.375f));
                 galaxy.add(ScreenWrapComponent.create(engine)
                         .setMode(ScreenWrapMode.VERTICAL)
                         .setReversed(true)
@@ -211,7 +215,7 @@ public class BackgroundSystem extends IteratingSystem {
                 sticker.add(TransformComponent.create(engine)
                         .setPosition(position, yIndex * yStep, Z.bgSticker)
                         .setRotation(rot)
-                        .setOpacity(0.6f));
+                        .setOpacity(1f));
                 sticker.add(RotationComponent.create(engine)
                     .setRotationSpeed(0.25f));
                 sticker.add(TextureComponent.create(engine)

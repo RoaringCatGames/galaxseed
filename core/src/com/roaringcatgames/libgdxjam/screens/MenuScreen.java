@@ -40,7 +40,7 @@ public class MenuScreen extends LazyInitScreen {
     private Viewport viewport;
 
     private Music menuSong;
-    private Entity plant, p, l, a, y;
+    private Entity plant, p, l, a, y, swipeTutorial;
 
     public MenuScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
         super();
@@ -64,7 +64,7 @@ public class MenuScreen extends LazyInitScreen {
 
         Vector3 playerPosition = new Vector3(
                 cam.position.x,
-                5f,
+                7f,
                 Z.player);
 
 
@@ -135,6 +135,18 @@ public class MenuScreen extends LazyInitScreen {
 
         y = createPlayAsteroid(xPos, yPos, Assets.getYFrames());
         engine.addEntity(y);
+
+        swipeTutorial = engine.createEntity();
+        swipeTutorial.add(TextureComponent.create(engine));
+        swipeTutorial.add(AnimationComponent.create(engine)
+            .addAnimation("DEFAULT", new Animation(1f / 15f, Assets.getSwipeFrames())));
+        swipeTutorial.add(StateComponent.create(engine)
+            .set("DEFAULT")
+            .setLooping(true));
+        swipeTutorial.add(TransformComponent.create(engine)
+            .setPosition(App.W/2f, 2f, Z.tutorial)
+            .setOpacity(0.5f));
+        engine.addEntity(swipeTutorial);
 
         engine.addEntity(plant);
     }

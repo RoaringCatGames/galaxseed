@@ -25,6 +25,7 @@ public class Z {
     public static final float score = 2f;
     public static final float debug = 2f;
     public static final float gameOver = 1f;
+    public static final float tutorial = 1f;
     public static final float explosion = 0f;
 
 
