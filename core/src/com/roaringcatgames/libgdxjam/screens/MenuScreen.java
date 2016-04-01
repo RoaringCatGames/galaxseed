@@ -5,18 +5,15 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
@@ -26,7 +23,6 @@ import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.systems.*;
-import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
@@ -44,7 +40,7 @@ public class MenuScreen extends LazyInitScreen {
     private Viewport viewport;
 
     private Music menuSong;
-    private Entity plant, p, l, a, y;
+    private Entity plant, p, l, a, y, swipeTutorial;
 
     public MenuScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
         super();
@@ -68,8 +64,10 @@ public class MenuScreen extends LazyInitScreen {
 
         Vector3 playerPosition = new Vector3(
                 cam.position.x,
-                5f,
+                7f,
                 Z.player);
+
+
 
         //AshleyExtensions Systems
         engine.addSystem(new MovementSystem());
@@ -137,6 +135,18 @@ public class MenuScreen extends LazyInitScreen {
 
         y = createPlayAsteroid(xPos, yPos, Assets.getYFrames());
         engine.addEntity(y);
+
+        swipeTutorial = engine.createEntity();
+        swipeTutorial.add(TextureComponent.create(engine));
+        swipeTutorial.add(AnimationComponent.create(engine)
+            .addAnimation("DEFAULT", new Animation(1f / 15f, Assets.getSwipeFrames())));
+        swipeTutorial.add(StateComponent.create(engine)
+            .set("DEFAULT")
+            .setLooping(true));
+        swipeTutorial.add(TransformComponent.create(engine)
+            .setPosition(App.W/2f, 2f, Z.tutorial)
+            .setOpacity(0.5f));
+        engine.addEntity(swipeTutorial);
 
         engine.addEntity(plant);
     }

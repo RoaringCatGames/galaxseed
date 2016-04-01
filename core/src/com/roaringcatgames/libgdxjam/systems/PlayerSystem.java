@@ -99,7 +99,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
             player.add(TextureComponent.create(engine));
             player.add(AnimationComponent.create(engine)
-                    .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getShipIdleFrames()))
+                    .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getShipIdleFrames()))
                     .addAnimation("FLYING", new Animation(1f / 12f, Assets.getShipFlyingFrames()))
                     .addAnimation("FLYING_LEFT", new Animation(1f / 6f, Assets.getShipFlyingLeftFrames()))
                     .addAnimation("FLYING_RIGHT", new Animation(1f / 6f, Assets.getShipFlyingRightFrames())));
