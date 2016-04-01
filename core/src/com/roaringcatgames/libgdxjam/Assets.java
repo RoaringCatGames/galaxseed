@@ -87,6 +87,15 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getBgBTile(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("SpaceBG-b");
     }
+    public static TextureAtlas.AtlasRegion getBgClearTileA(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("stars-a");
+    }
+    public static TextureAtlas.AtlasRegion getBgClearTileB(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("stars-b");
+    }
+    public static TextureAtlas.AtlasRegion getBgClearTileC(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("stars-c");
+    }
     public static TextureAtlas.AtlasRegion getGalaxyA(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("galaxy-a");
     }

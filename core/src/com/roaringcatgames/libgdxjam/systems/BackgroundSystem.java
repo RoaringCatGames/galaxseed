@@ -26,6 +26,7 @@ import java.util.Random;
 public class BackgroundSystem extends IteratingSystem {
 
     public float bgSpeed = -1f;
+    public float bgClearSpeed = -2f;
     private float speedLineSpeedMin = -25f;
     private float speedLineSpeedMax = -40f;
     private float speedLineOpacity = 0.1f;
@@ -41,12 +42,14 @@ public class BackgroundSystem extends IteratingSystem {
 
     protected class BackgroundTile extends BackgroundSticker{
         protected TextureRegion galaxy;
-        protected  BackgroundTile(float x, float y, float rot, TextureRegion tile, TextureRegion galaxy){
+        protected TextureRegion clearImage;
+        protected  BackgroundTile(float x, float y, float rot, TextureRegion tile, TextureRegion clearTile, TextureRegion galaxy){
             super(x, y, rot, tile);
             this.x = x;
             this.y = y;
             this.rotation = rot;
             this.image = tile;
+            this.clearImage = clearTile;
             this.galaxy = galaxy;
         }
     }
@@ -107,6 +110,10 @@ public class BackgroundSystem extends IteratingSystem {
                                                  270f;
                 float textVal = rnd.nextFloat();
                 TextureRegion texture = textVal < 0.5f ? Assets.getBgATile() : Assets.getBgBTile();
+                float clearVal = rnd.nextFloat();
+                TextureRegion clearTile = clearVal < 0.33f ? Assets.getBgClearTileA() :
+                                          clearVal < 0.66f ? Assets.getBgClearTileB() :
+                                                             Assets.getBgClearTileC();
                 TextureRegion galaxy = null;
                 float galaxyFloat = rnd.nextFloat();
                 if(galaxyFloat < 0.5f){
@@ -121,7 +128,7 @@ public class BackgroundSystem extends IteratingSystem {
                     }
                 }
 
-                tiles.add(new BackgroundTile(x, y, rotation, texture, galaxy));
+                tiles.add(new BackgroundTile(x, y, rotation, texture, clearTile, galaxy));
                 topY = y;
             }
         }
@@ -170,6 +177,24 @@ public class BackgroundSystem extends IteratingSystem {
             e.add(VelocityComponent.create(engine)
                     .setSpeed(0f, bgSpeed));
             engine.addEntity(e);
+
+            Entity clearTile = engine.createEntity();
+            clearTile.add(TextureComponent.create(engine)
+                    .setRegion(bg.clearImage));
+            clearTile.add(TransformComponent.create(engine)
+                    .setPosition(bg.x, bg.y, Z.bg_clear)
+                    .setRotation(bg.rotation)
+                    .setOpacity(0.5f)
+                    .setScale(1f, 1f));
+            clearTile.add(BoundsComponent.create(engine)
+                    .setBounds(bg.x - tileHalfPoint, bg.y - tileHalfPoint, tileSize, tileSize));
+            clearTile.add(ScreenWrapComponent.create((PooledEngine) getEngine())
+                    .setMode(ScreenWrapMode.VERTICAL)
+                    .setReversed(true)
+                    .setWrapOffset(offset));
+            clearTile.add(VelocityComponent.create(engine)
+                    .setSpeed(0f, bgClearSpeed));
+            engine.addEntity(clearTile);
         }
 
 
