@@ -9,7 +9,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
-		config.title = "Life In Space";
+		config.title = "GalaxSeed";
 		config.height = 960;
 		config.width = 640;
 		config.samples = 4;

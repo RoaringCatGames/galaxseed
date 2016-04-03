@@ -13,4 +13,5 @@ public class Health {
 
     public static final float PlayAsteroid = 20f;
     public static final float Player = 100f;
+    public static final float HealthPack = 10f;
 }
