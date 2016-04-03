@@ -26,7 +26,8 @@ import java.util.Random;
 public class BackgroundSystem extends IteratingSystem {
 
     public float bgSpeed = -1f;
-    public float bgClearSpeed = -2f;
+    public float stickerSpeed = -1.5f;
+    public float bgClearSpeed = -2.5f;
     private float speedLineSpeedMin = -25f;
     private float speedLineSpeedMax = -40f;
     private float speedLineOpacity = 0.1f;
@@ -246,7 +247,7 @@ public class BackgroundSystem extends IteratingSystem {
                 sticker.add(TextureComponent.create(engine)
                         .setRegion(reg));
                 sticker.add(VelocityComponent.create(engine)
-                        .setSpeed(0f, bgSpeed*1.5f));
+                        .setSpeed(0f, stickerSpeed));
                 sticker.add(KinematicComponent.create(engine));
                 sticker.add(BoundsComponent.create(engine)
                     .setBounds(position - (width / 2f), (yIndex * yStep) - (height / 2f), width, height));
