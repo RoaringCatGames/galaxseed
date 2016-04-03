@@ -92,7 +92,7 @@
             engine.addSystem(new EnemyFiringSystem());
             engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
             engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
-            engine.addSystem(new BackgroundSystem(minBounds, maxBounds, true));
+            engine.addSystem(new BackgroundSystem(minBounds, maxBounds, true, true));
             engine.addSystem(new ParticleSystem());
             engine.addSystem(new BulletSystem());
             engine.addSystem(new ScoreSystem());

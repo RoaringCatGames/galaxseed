@@ -175,6 +175,16 @@ public class Assets {
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion(name);
     }
 
+    public static Array<TextureAtlas.AtlasRegion> getStarAFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("stars/stara");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getStarBFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("stars/starb");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getStarCFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("stars/starc");
+    }
+
     /////////////
     //Enemies
     /////////////

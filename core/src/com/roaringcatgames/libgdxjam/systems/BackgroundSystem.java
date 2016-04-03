@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -32,6 +33,8 @@ public class BackgroundSystem extends IteratingSystem {
     private float speedLineSpeedMax = -40f;
     private float speedLineOpacity = 0.1f;
     private int speedLineCount = 4;
+    private int numberOfStars = 20;
+    private float starSpeed = -1.25f;
 
     private float left;
     private float bottom;
@@ -40,6 +43,7 @@ public class BackgroundSystem extends IteratingSystem {
 
     private boolean isUsingStickers;
     private boolean isInitialized = false;
+    private boolean isUsingStars = false;
 
     protected class BackgroundTile extends BackgroundSticker{
         protected TextureRegion galaxy;
@@ -68,7 +72,7 @@ public class BackgroundSystem extends IteratingSystem {
     }
 
 
-    public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds, boolean shouldProduceStickers){
+    public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds, boolean shouldProduceStickers, boolean shouldProduceStars){
         //No components will be modified here, just need a limited class to
         //create a family
         super(Family.all(PlayerComponent.class).get());
@@ -77,6 +81,7 @@ public class BackgroundSystem extends IteratingSystem {
         this.right = maxBounds.x;
         this.top = maxBounds.y;
         this.isUsingStickers = shouldProduceStickers;
+        this.isUsingStars = shouldProduceStars;
     }
 
     private void init(){
@@ -216,16 +221,48 @@ public class BackgroundSystem extends IteratingSystem {
                 .setOpacity(speedLineOpacity));
             sl.add(BoundsComponent.create(engine)
                 .setBounds(
-                        x - ((region.getRegionWidth() / 2f)/App.PPM),
-                        y - ((region.getRegionHeight() / 2f)/App.PPM),
-                        (region.getRegionWidth()/App.PPM),
-                        region.getRegionHeight()/App.PPM));
+                        x - ((region.getRegionWidth() / 2f) / App.PPM),
+                        y - ((region.getRegionHeight() / 2f) / App.PPM),
+                        (region.getRegionWidth() / App.PPM),
+                        region.getRegionHeight() / App.PPM));
             sl.add(ScreenWrapComponent.create(engine)
                 .setMode(ScreenWrapMode.VERTICAL)
                 .setReversed(true)
                 .shouldRandomPerpendicularPosition(true)
                 .setMinMaxPos(0.1f, 19.8f));
             engine.addEntity(sl);
+        }
+
+        if(isUsingStars) {
+            //Stars
+            for (int i = 0; i < numberOfStars; i++) {
+                Entity star = engine.createEntity();
+                float x = K2MathUtil.getRandomInRange(0.1f, 19.8f);
+                float y = K2MathUtil.getRandomInRange(0f, 45f);
+                float typeR = rnd.nextFloat();
+                Array<TextureAtlas.AtlasRegion> regions = typeR > 0.33f ? Assets.getStarAFrames() :
+                        typeR > 0.66f ? Assets.getStarBFrames() :
+                                Assets.getStarCFrames();
+                star.add(TextureComponent.create(engine));
+                star.add(AnimationComponent.create(engine)
+                        .addAnimation("DEFAULT", new Animation(1f / 3f, regions)));
+                StateComponent state = StateComponent.create(engine)
+                        .set("DEFAULT")
+                        .setLooping(true);
+                state.time = rnd.nextFloat();
+                star.add(state);
+                star.add(VelocityComponent.create(engine)
+                        .setSpeed(0f, starSpeed));
+                star.add(TransformComponent.create(engine)
+                        .setPosition(x, y, Z.star)
+                        .setScale(1f, 1f));
+                star.add(ScreenWrapComponent.create(engine)
+                        .setMode(ScreenWrapMode.VERTICAL)
+                        .setReversed(true)
+                        .shouldRandomPerpendicularPosition(true)
+                        .setMinMaxPos(0.1f, 19.8f));
+                engine.addEntity(star);
+            }
         }
 
         if(isUsingStickers) {
