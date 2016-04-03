@@ -61,29 +61,31 @@ public class ScreenWrapSystem extends IteratingSystem {
 
         if(bc == null){
             TextureComponent txc = txm.get(entity);
+            if(txc.region != null) {
 
-            if(swc.mode == ScreenWrapMode.HORIZONTAL) {
-                float regionWidthInMeters = txc.region.getRegionWidth() / ppm;
-                boolean isOffRight = tc.position.x - (regionWidthInMeters / 2f) > right;
-                boolean isOffLeft = (regionWidthInMeters / 2f) + tc.position.x < left;
+                if (swc.mode == ScreenWrapMode.HORIZONTAL) {
+                    float regionWidthInMeters = txc.region.getRegionWidth() / ppm;
+                    boolean isOffRight = tc.position.x - (regionWidthInMeters / 2f) > right;
+                    boolean isOffLeft = (regionWidthInMeters / 2f) + tc.position.x < left;
 
-                float y = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.y;
+                    float y = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.y;
 
-                if (!swc.isReversed && isOffRight){
-                    tc.position.set(left-(regionWidthInMeters/2f) - swc.wrapOffset, y, tc.position.z);
-                } else if (swc.isReversed && isOffLeft) {
-                    tc.position.set(right + (regionWidthInMeters / 2f) + swc.wrapOffset, y, tc.position.z);
-                }
-            }else{
-                float x = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.x;
-                float regionHeightInUnits = txc.region.getRegionHeight() / ppm;
-                boolean isAboveTop = tc.position.y - (regionHeightInUnits / 2f) > top;
-                boolean isBelowBottom = tc.position.y + (regionHeightInUnits / 2f) < bottom;
-                if (!swc.isReversed && isAboveTop) {
-                    tc.position.set(x, top - (regionHeightInUnits / 2f) - swc.wrapOffset, tc.position.z);
+                    if (!swc.isReversed && isOffRight) {
+                        tc.position.set(left - (regionWidthInMeters / 2f) - swc.wrapOffset, y, tc.position.z);
+                    } else if (swc.isReversed && isOffLeft) {
+                        tc.position.set(right + (regionWidthInMeters / 2f) + swc.wrapOffset, y, tc.position.z);
+                    }
+                } else {
+                    float x = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.x;
+                    float regionHeightInUnits = txc.region.getRegionHeight() / ppm;
+                    boolean isAboveTop = tc.position.y - (regionHeightInUnits / 2f) > top;
+                    boolean isBelowBottom = tc.position.y + (regionHeightInUnits / 2f) < bottom;
+                    if (!swc.isReversed && isAboveTop) {
+                        tc.position.set(x, top - (regionHeightInUnits / 2f) - swc.wrapOffset, tc.position.z);
 
-                } else if (swc.isReversed && isBelowBottom) {
-                    tc.position.set(x, top + (regionHeightInUnits / 2f) + swc.wrapOffset, tc.position.z);
+                    } else if (swc.isReversed && isBelowBottom) {
+                        tc.position.set(x, top + (regionHeightInUnits / 2f) + swc.wrapOffset, tc.position.z);
+                    }
                 }
             }
         }else {

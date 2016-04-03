@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -26,10 +27,14 @@ import java.util.Random;
 public class BackgroundSystem extends IteratingSystem {
 
     public float bgSpeed = -1f;
+    public float stickerSpeed = -1.5f;
+    public float bgClearSpeed = -2.5f;
     private float speedLineSpeedMin = -25f;
     private float speedLineSpeedMax = -40f;
     private float speedLineOpacity = 0.1f;
     private int speedLineCount = 4;
+    private int numberOfStars = 20;
+    private float starSpeed = -1.25f;
 
     private float left;
     private float bottom;
@@ -38,15 +43,18 @@ public class BackgroundSystem extends IteratingSystem {
 
     private boolean isUsingStickers;
     private boolean isInitialized = false;
+    private boolean isUsingStars = false;
 
     protected class BackgroundTile extends BackgroundSticker{
         protected TextureRegion galaxy;
-        protected  BackgroundTile(float x, float y, float rot, TextureRegion tile, TextureRegion galaxy){
+        protected TextureRegion clearImage;
+        protected  BackgroundTile(float x, float y, float rot, TextureRegion tile, TextureRegion clearTile, TextureRegion galaxy){
             super(x, y, rot, tile);
             this.x = x;
             this.y = y;
             this.rotation = rot;
             this.image = tile;
+            this.clearImage = clearTile;
             this.galaxy = galaxy;
         }
     }
@@ -64,7 +72,7 @@ public class BackgroundSystem extends IteratingSystem {
     }
 
 
-    public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds, boolean shouldProduceStickers){
+    public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds, boolean shouldProduceStickers, boolean shouldProduceStars){
         //No components will be modified here, just need a limited class to
         //create a family
         super(Family.all(PlayerComponent.class).get());
@@ -73,6 +81,7 @@ public class BackgroundSystem extends IteratingSystem {
         this.right = maxBounds.x;
         this.top = maxBounds.y;
         this.isUsingStickers = shouldProduceStickers;
+        this.isUsingStars = shouldProduceStars;
     }
 
     private void init(){
@@ -107,6 +116,10 @@ public class BackgroundSystem extends IteratingSystem {
                                                  270f;
                 float textVal = rnd.nextFloat();
                 TextureRegion texture = textVal < 0.5f ? Assets.getBgATile() : Assets.getBgBTile();
+                float clearVal = rnd.nextFloat();
+                TextureRegion clearTile = clearVal < 0.33f ? Assets.getBgClearTileA() :
+                                          clearVal < 0.66f ? Assets.getBgClearTileB() :
+                                                             Assets.getBgClearTileC();
                 TextureRegion galaxy = null;
                 float galaxyFloat = rnd.nextFloat();
                 if(galaxyFloat < 0.5f){
@@ -121,7 +134,7 @@ public class BackgroundSystem extends IteratingSystem {
                     }
                 }
 
-                tiles.add(new BackgroundTile(x, y, rotation, texture, galaxy));
+                tiles.add(new BackgroundTile(x, y, rotation, texture, clearTile, galaxy));
                 topY = y;
             }
         }
@@ -170,6 +183,24 @@ public class BackgroundSystem extends IteratingSystem {
             e.add(VelocityComponent.create(engine)
                     .setSpeed(0f, bgSpeed));
             engine.addEntity(e);
+
+            Entity clearTile = engine.createEntity();
+            clearTile.add(TextureComponent.create(engine)
+                    .setRegion(bg.clearImage));
+            clearTile.add(TransformComponent.create(engine)
+                    .setPosition(bg.x, bg.y, Z.bg_clear)
+                    .setRotation(bg.rotation)
+                    .setOpacity(0.5f)
+                    .setScale(1f, 1f));
+            clearTile.add(BoundsComponent.create(engine)
+                    .setBounds(bg.x - tileHalfPoint, bg.y - tileHalfPoint, tileSize, tileSize));
+            clearTile.add(ScreenWrapComponent.create((PooledEngine) getEngine())
+                    .setMode(ScreenWrapMode.VERTICAL)
+                    .setReversed(true)
+                    .setWrapOffset(offset));
+            clearTile.add(VelocityComponent.create(engine)
+                    .setSpeed(0f, bgClearSpeed));
+            engine.addEntity(clearTile);
         }
 
 
@@ -190,16 +221,48 @@ public class BackgroundSystem extends IteratingSystem {
                 .setOpacity(speedLineOpacity));
             sl.add(BoundsComponent.create(engine)
                 .setBounds(
-                        x - ((region.getRegionWidth() / 2f)/App.PPM),
-                        y - ((region.getRegionHeight() / 2f)/App.PPM),
-                        (region.getRegionWidth()/App.PPM),
-                        region.getRegionHeight()/App.PPM));
+                        x - ((region.getRegionWidth() / 2f) / App.PPM),
+                        y - ((region.getRegionHeight() / 2f) / App.PPM),
+                        (region.getRegionWidth() / App.PPM),
+                        region.getRegionHeight() / App.PPM));
             sl.add(ScreenWrapComponent.create(engine)
                 .setMode(ScreenWrapMode.VERTICAL)
                 .setReversed(true)
                 .shouldRandomPerpendicularPosition(true)
                 .setMinMaxPos(0.1f, 19.8f));
             engine.addEntity(sl);
+        }
+
+        if(isUsingStars) {
+            //Stars
+            for (int i = 0; i < numberOfStars; i++) {
+                Entity star = engine.createEntity();
+                float x = K2MathUtil.getRandomInRange(0.1f, 19.8f);
+                float y = K2MathUtil.getRandomInRange(0f, 45f);
+                float typeR = rnd.nextFloat();
+                Array<TextureAtlas.AtlasRegion> regions = typeR > 0.33f ? Assets.getStarAFrames() :
+                        typeR > 0.66f ? Assets.getStarBFrames() :
+                                Assets.getStarCFrames();
+                star.add(TextureComponent.create(engine));
+                star.add(AnimationComponent.create(engine)
+                        .addAnimation("DEFAULT", new Animation(1f / 3f, regions)));
+                StateComponent state = StateComponent.create(engine)
+                        .set("DEFAULT")
+                        .setLooping(true);
+                state.time = rnd.nextFloat();
+                star.add(state);
+                star.add(VelocityComponent.create(engine)
+                        .setSpeed(0f, starSpeed));
+                star.add(TransformComponent.create(engine)
+                        .setPosition(x, y, Z.star)
+                        .setScale(1f, 1f));
+                star.add(ScreenWrapComponent.create(engine)
+                        .setMode(ScreenWrapMode.VERTICAL)
+                        .setReversed(true)
+                        .shouldRandomPerpendicularPosition(true)
+                        .setMinMaxPos(0.1f, 19.8f));
+                engine.addEntity(star);
+            }
         }
 
         if(isUsingStickers) {
@@ -221,7 +284,7 @@ public class BackgroundSystem extends IteratingSystem {
                 sticker.add(TextureComponent.create(engine)
                         .setRegion(reg));
                 sticker.add(VelocityComponent.create(engine)
-                        .setSpeed(0f, bgSpeed*1.5f));
+                        .setSpeed(0f, stickerSpeed));
                 sticker.add(KinematicComponent.create(engine));
                 sticker.add(BoundsComponent.create(engine)
                     .setBounds(position - (width / 2f), (yIndex * yStep) - (height / 2f), width, height));

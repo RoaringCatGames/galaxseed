@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -104,6 +105,8 @@ public class PlayerDamageSystem extends IteratingSystem {
             shakeTime = Shakes.TimePlayerHitHeavy;
             scale = 1f;
         }
+
+        Gdx.input.vibrate(500);
 
 
         //SHAKE Player WHEN HIT!!!
