@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.*;
@@ -187,6 +188,26 @@ public class EnemyDamageSystem extends IteratingSystem {
                                 break;
                             case ASTEROID_C:
                                 attachTreeCover(enemy, Assets.getAsteroidCFrames());
+                                if(r.nextFloat() < 1f){
+                                    PooledEngine engine = (PooledEngine) getEngine();
+                                    TransformComponent enemyTfm = tm.get(enemy);
+                                    Entity healthPack = engine.createEntity();
+                                    healthPack.add(TransformComponent.create(engine)
+                                        .setPosition(enemyTfm.position.x, enemyTfm.position.y, Z.healthPack)
+                                        .setScale(1f, 1f));
+                                    healthPack.add(TextureComponent.create(engine));
+                                    healthPack.add(AnimationComponent.create(engine)
+                                        .addAnimation("DEFAULT", new Animation(1f / 4f, Assets.getHealthFrames())));
+                                    healthPack.add(StateComponent.create(engine)
+                                        .set("DEFAULT")
+                                        .setLooping(true));
+                                    healthPack.add(HealthPackComponent.create(engine)
+                                        .setHealth(Health.HealthPack)
+                                        .setInstant(true));
+                                    healthPack.add(BoundsComponent.create(engine)
+                                        .setBounds(0f, 0f, 1f, 1f));
+                                    engine.addEntity(healthPack);
+                                }
                                 break;
                         }
 

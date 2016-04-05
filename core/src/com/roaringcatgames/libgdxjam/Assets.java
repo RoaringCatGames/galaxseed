@@ -293,7 +293,12 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/propel");
     }
 
-
+    /////////////
+    //Health Pack
+    /////////////
+    public static Array<TextureAtlas.AtlasRegion> getHealthFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("pickups/health");
+    }
 
     /////////////
     //Bullets

@@ -110,6 +110,7 @@
             gameOverSystem.setProcessing(false);
             engine.addSystem(gameOverSystem);
             engine.addSystem(new FadingSystem());
+            engine.addSystem(new HealthPackSystem());
 
             //Extension Systems
             engine.addSystem(renderingSystem);
