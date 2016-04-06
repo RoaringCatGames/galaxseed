@@ -31,6 +31,8 @@ import java.util.Random;
  */
 public class EnemyDamageSystem extends IteratingSystem {
 
+    private static final float healthPackSpeed = -1f;
+
     private Array<Entity> bullets = new Array<>();
     private Array<Entity> enemies = new Array<>();
 
@@ -195,6 +197,10 @@ public class EnemyDamageSystem extends IteratingSystem {
                                     healthPack.add(TransformComponent.create(engine)
                                         .setPosition(enemyTfm.position.x, enemyTfm.position.y, Z.healthPack)
                                         .setScale(1f, 1f));
+                                    healthPack.add(RotationComponent.create(engine)
+                                        .setRotationSpeed(-60f));
+                                    healthPack.add(VelocityComponent.create(engine)
+                                        .setSpeed(0f, healthPackSpeed));
                                     healthPack.add(TextureComponent.create(engine));
                                     healthPack.add(AnimationComponent.create(engine)
                                         .addAnimation("DEFAULT", new Animation(1f / 4f, Assets.getHealthFrames())));
