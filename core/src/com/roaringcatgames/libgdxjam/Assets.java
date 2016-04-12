@@ -108,6 +108,12 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getGasCluster(){
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("GasCluster");
     }
+    public static TextureAtlas.AtlasRegion getGasClusterA(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("GasCluster-a");
+    }
+    public static TextureAtlas.AtlasRegion getGasClusterB(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("GasCluster-b");
+    }
 
 
     public static TextureAtlas.AtlasRegion getPlanetA(){

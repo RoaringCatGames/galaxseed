@@ -13,11 +13,14 @@ import com.roaringcatgames.kitten2d.ashley.components.VelocityComponent;
 import com.roaringcatgames.libgdxjam.components.ScreenWrapComponent;
 import com.roaringcatgames.libgdxjam.components.ScreenWrapMode;
 
+import java.util.Random;
+
 /**
  * Created by barry on 1/8/16 @ 8:38 PM.
  */
 public class ScreenWrapSystem extends IteratingSystem {
 
+    Random r = new Random();
     ComponentMapper<BoundsComponent> bm;
     ComponentMapper<VelocityComponent> vm;
     ComponentMapper<TransformComponent> tm;
@@ -59,9 +62,11 @@ public class ScreenWrapSystem extends IteratingSystem {
             return;
         }
 
+        boolean isResetting = false;
+        TextureComponent txc = txm.get(entity);
         if(bc == null){
-            TextureComponent txc = txm.get(entity);
             if(txc.region != null) {
+
 
                 if (swc.mode == ScreenWrapMode.HORIZONTAL) {
                     float regionWidthInMeters = txc.region.getRegionWidth() / ppm;
@@ -72,8 +77,10 @@ public class ScreenWrapSystem extends IteratingSystem {
 
                     if (!swc.isReversed && isOffRight) {
                         tc.position.set(left - (regionWidthInMeters / 2f) - swc.wrapOffset, y, tc.position.z);
+                        isResetting = true;
                     } else if (swc.isReversed && isOffLeft) {
                         tc.position.set(right + (regionWidthInMeters / 2f) + swc.wrapOffset, y, tc.position.z);
+                        isResetting = true;
                     }
                 } else {
                     float x = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.x;
@@ -82,9 +89,10 @@ public class ScreenWrapSystem extends IteratingSystem {
                     boolean isBelowBottom = tc.position.y + (regionHeightInUnits / 2f) < bottom;
                     if (!swc.isReversed && isAboveTop) {
                         tc.position.set(x, top - (regionHeightInUnits / 2f) - swc.wrapOffset, tc.position.z);
-
+                        isResetting = true;
                     } else if (swc.isReversed && isBelowBottom) {
                         tc.position.set(x, top + (regionHeightInUnits / 2f) + swc.wrapOffset, tc.position.z);
+                        isResetting = true;
                     }
                 }
             }
@@ -95,17 +103,25 @@ public class ScreenWrapSystem extends IteratingSystem {
 
                 if (bc.bounds.x > right && !swc.isReversed) {
                     tc.position.set(left - (bc.bounds.width / 2f) - swc.wrapOffset, y, tc.position.z);
+                    isResetting = true;
                 } else if (bc.bounds.x + bc.bounds.width < left && swc.isReversed) {
                     tc.position.set(right + (bc.bounds.width / 2f) + swc.wrapOffset, y, tc.position.z);
+                    isResetting = true;
                 }
             }else{
                 float x = swc.shouldRandomizePerpendicularPosition ? K2MathUtil.getRandomInRange(swc.minPos, swc.maxPos) : tc.position.x;
                 if (bc.bounds.y > top && !swc.isReversed) {
                     tc.position.set(x, bottom - (bc.bounds.width / 2f) - swc.wrapOffset, tc.position.z);
+                    isResetting = true;
                 } else if (bc.bounds.y + bc.bounds.height < bottom && swc.isReversed) {
                     tc.position.set(x, top + (bc.bounds.height / 2f) + swc.wrapOffset, tc.position.z);
+                    isResetting = true;
                 }
             }
+        }
+
+        if(isResetting && swc.shouldRandomizeTexture){
+             txc.setRegion(swc.possibleRegions.get(r.nextInt(swc.possibleRegions.size)));
         }
     }
 }

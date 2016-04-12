@@ -46,16 +46,16 @@ public class BackgroundSystem extends IteratingSystem {
     private boolean isUsingStars = false;
 
     protected class BackgroundTile extends BackgroundSticker{
-        protected TextureRegion galaxy;
+        protected Array<TextureRegion> galaxies;
         protected TextureRegion clearImage;
-        protected  BackgroundTile(float x, float y, float rot, TextureRegion tile, TextureRegion clearTile, TextureRegion galaxy){
+        protected  BackgroundTile(float x, float y, float rot, TextureRegion tile, TextureRegion clearTile, Array<TextureRegion> possibleGalaxies){
             super(x, y, rot, tile);
             this.x = x;
             this.y = y;
             this.rotation = rot;
             this.image = tile;
             this.clearImage = clearTile;
-            this.galaxy = galaxy;
+            this.galaxies = possibleGalaxies;
         }
     }
 
@@ -120,21 +120,23 @@ public class BackgroundSystem extends IteratingSystem {
                 TextureRegion clearTile = clearVal < 0.33f ? Assets.getBgClearTileA() :
                                           clearVal < 0.66f ? Assets.getBgClearTileB() :
                                                              Assets.getBgClearTileC();
-                TextureRegion galaxy = null;
+                Array<TextureRegion> galaxies = null;
                 float galaxyFloat = rnd.nextFloat();
-                if(galaxyFloat < 0.5f){
-                    if(galaxyFloat < 0.125f){
-                        galaxy = Assets.getGalaxyA();
-                    }else if(galaxyFloat < 0.25f){
-                        galaxy = Assets.getGalaxyB();
-                    }else if(galaxyFloat < 0.375f){
-                        galaxy = Assets.getGalaxyC();
+                if(galaxyFloat < 0.6f){
+                    galaxies = new Array<>();
+                    if(galaxyFloat < 0.3f){
+                        galaxies.add(Assets.getGalaxyA());
+                        galaxies.add(Assets.getGalaxyB());
+                        galaxies.add(Assets.getGalaxyC());
+
                     }else{
-                        galaxy = Assets.getGasCluster();
+                        galaxies.add(Assets.getGasCluster());
+                        galaxies.add(Assets.getGasClusterA());
+                        galaxies.add(Assets.getGasClusterB());
                     }
                 }
 
-                tiles.add(new BackgroundTile(x, y, rotation, texture, clearTile, galaxy));
+                tiles.add(new BackgroundTile(x, y, rotation, texture, clearTile, galaxies));
                 topY = y;
             }
         }
@@ -147,10 +149,11 @@ public class BackgroundSystem extends IteratingSystem {
 
         for(BackgroundTile bg:tiles){
             //Sometimes add a galaxy
-            if(bg.galaxy != null){
+            if(bg.galaxies != null){
                 Entity galaxy = engine.createEntity();
+                int galaxyPos = rnd.nextInt(bg.galaxies.size);
                 galaxy.add(TextureComponent.create(engine)
-                        .setRegion(bg.galaxy));
+                        .setRegion(bg.galaxies.get(galaxyPos)));
 
                 galaxy.add(TransformComponent.create(engine)
                         .setPosition(bg.x, bg.y, Z.bg_galaxy)
@@ -161,7 +164,10 @@ public class BackgroundSystem extends IteratingSystem {
                 galaxy.add(ScreenWrapComponent.create(engine)
                         .setMode(ScreenWrapMode.VERTICAL)
                         .setReversed(true)
-                        .setWrapOffset(offset));
+                        .setWrapOffset(offset)
+                        .shouldRandomPerpendicularPosition(true)
+                        .setMinMaxPos(0f, 20f)
+                        .setPossibleRegions(bg.galaxies));
                 galaxy.add(VelocityComponent.create(engine)
                         .setSpeed(0f, bgSpeed));
                 engine.addEntity(galaxy);
