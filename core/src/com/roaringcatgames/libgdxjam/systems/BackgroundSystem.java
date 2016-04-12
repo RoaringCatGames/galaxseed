@@ -152,6 +152,7 @@ public class BackgroundSystem extends IteratingSystem {
             if(bg.galaxies != null){
                 Entity galaxy = engine.createEntity();
                 int galaxyPos = rnd.nextInt(bg.galaxies.size);
+                float additionalOffest = K2MathUtil.getRandomInRange(0f, 3f);
                 galaxy.add(TextureComponent.create(engine)
                         .setRegion(bg.galaxies.get(galaxyPos)));
 
@@ -164,7 +165,7 @@ public class BackgroundSystem extends IteratingSystem {
                 galaxy.add(ScreenWrapComponent.create(engine)
                         .setMode(ScreenWrapMode.VERTICAL)
                         .setReversed(true)
-                        .setWrapOffset(offset)
+                        .setWrapOffset(offset + additionalOffest)
                         .shouldRandomPerpendicularPosition(true)
                         .setMinMaxPos(0f, 20f)
                         .setPossibleRegions(bg.galaxies));
