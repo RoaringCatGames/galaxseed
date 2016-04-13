@@ -71,6 +71,13 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/Title");
     }
 
+    public static TextureAtlas.AtlasRegion getGalaxTitleImage(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/galax");
+    }
+    public static TextureAtlas.AtlasRegion getSeedTitleImage(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/seed");
+    }
+
     public static Array<TextureAtlas.AtlasRegion> getTitleTreeFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("cherry title/cherry-title");
     }

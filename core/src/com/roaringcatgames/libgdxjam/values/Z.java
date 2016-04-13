@@ -22,10 +22,9 @@ public class Z {
     public static final float seed = 40;
     public static final float leaves = 39f;
 
-
     public static final float playAsteroids = 35f;
-    public static final float title = 38f;
-
+    public static final float title = 34f;
+    public static final float titlePlant = 33f;
 
     public static final float health = 2f;
     public static final float score = 2f;

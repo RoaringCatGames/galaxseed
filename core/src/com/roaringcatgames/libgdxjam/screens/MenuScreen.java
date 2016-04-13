@@ -97,16 +97,31 @@ public class MenuScreen extends LazyInitScreen {
         engine.addSystem(new FadingSystem());
         engine.addSystem(new ParticleSystem());
         engine.addSystem(new ShakeSystem());
+        engine.addSystem(new MoveToSystem());
         //Extension Systems
         engine.addSystem(renderingSystem);
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
 
-        Entity title = engine.createEntity();
-        title.add(TextureComponent.create(engine)
-                .setRegion(Assets.getTitleImage()));
-        title.add(TransformComponent.create(engine)
-                .setPosition(10.8f, 25f, Z.title));
-        engine.addEntity(title);
+        float titleSpeed = 6f;
+        Entity galaxTitle = engine.createEntity();
+        galaxTitle.add(TextureComponent.create(engine)
+                .setRegion(Assets.getGalaxTitleImage()));
+        galaxTitle.add(TransformComponent.create(engine)
+                .setPosition(-5f, 25.2f, Z.title));
+        galaxTitle.add(MoveToComponent.create(engine)
+                .setSpeed(titleSpeed)
+                .setTarget(5.4f, 25.2f, Z.title));
+        engine.addEntity(galaxTitle);
+
+        Entity seedTitle = engine.createEntity();
+        seedTitle.add(TextureComponent.create(engine)
+                .setRegion(Assets.getSeedTitleImage()));
+        seedTitle.add(TransformComponent.create(engine)
+                .setPosition(24.4f, 24.8f, Z.title));
+        seedTitle.add(MoveToComponent.create(engine)
+            .setSpeed(titleSpeed)
+            .setTarget(14f, 24.8f, Z.title));
+        engine.addEntity(seedTitle);
 
         plant = engine.createEntity();
         plant.add(StateComponent.create(engine)
@@ -116,7 +131,7 @@ public class MenuScreen extends LazyInitScreen {
                 .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getTitleTreeFrames()))
                 .addAnimation("LEAF", new Animation(1f / 12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP)));
         plant.add(TransformComponent.create(engine)
-                .setPosition(1.7f, 24f));
+                .setPosition(10f, 25f, Z.titlePlant));
 
 
         float xPos = 3f;
