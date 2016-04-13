@@ -105,7 +105,7 @@ public class MenuScreen extends LazyInitScreen {
         title.add(TextureComponent.create(engine)
                 .setRegion(Assets.getTitleImage()));
         title.add(TransformComponent.create(engine)
-                .setPosition(10.8f, 25f));
+                .setPosition(10.8f, 25f, Z.title));
         engine.addEntity(title);
 
         plant = engine.createEntity();
@@ -165,7 +165,7 @@ public class MenuScreen extends LazyInitScreen {
             .addAnimation("DEFAULT", new Animation(1f / 6f, frames))
             .setPaused(true));
         playAsteroid.add(TransformComponent.create(engine)
-                .setPosition(xPos, yPos)
+                .setPosition(xPos, yPos, Z.playAsteroids)
                 .setScale(0.5f, 0.5f));
         playAsteroid.add(StateComponent.create(engine)
                 .set("DEFAULT")
