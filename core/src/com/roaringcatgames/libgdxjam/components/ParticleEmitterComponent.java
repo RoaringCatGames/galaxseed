@@ -22,6 +22,7 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
     public Range angleRange = new Range(-45f, 45f);
     public boolean shouldFade = false;
     public boolean isLooping = false;
+    public float zIndex = 100f;
 
     public static ParticleEmitterComponent create(PooledEngine engine){
         return engine.createComponent(ParticleEmitterComponent.class);
@@ -69,6 +70,11 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
         return this;
     }
 
+    public ParticleEmitterComponent setZIndex(float index){
+        this.zIndex = index;
+        return this;
+    }
+
     @Override
     public void reset() {
         this.particleImages.clear();
@@ -82,6 +88,7 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
         this.angleRange.setMax(45f);
         this.shouldFade = false;
         this.isLooping = false;
+        this.zIndex = 100f;
     }
 
 }

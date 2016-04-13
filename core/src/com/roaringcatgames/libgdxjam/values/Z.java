@@ -24,7 +24,8 @@ public class Z {
 
     public static final float playAsteroids = 35f;
     public static final float title = 34f;
-    public static final float titlePlant = 33f;
+    public static final float titlePlantLeaves = 33f;
+    public static final float titlePlant = 32f;
 
     public static final float health = 2f;
     public static final float score = 2f;

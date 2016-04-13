@@ -107,20 +107,20 @@ public class MenuScreen extends LazyInitScreen {
         galaxTitle.add(TextureComponent.create(engine)
                 .setRegion(Assets.getGalaxTitleImage()));
         galaxTitle.add(TransformComponent.create(engine)
-                .setPosition(-5f, 25.2f, Z.title));
+                .setPosition(-5.1f, 24.6f, Z.title));
         galaxTitle.add(MoveToComponent.create(engine)
                 .setSpeed(titleSpeed)
-                .setTarget(5.4f, 25.2f, Z.title));
+                .setTarget(5.4f, 24.8f, Z.title));
         engine.addEntity(galaxTitle);
 
         Entity seedTitle = engine.createEntity();
         seedTitle.add(TextureComponent.create(engine)
                 .setRegion(Assets.getSeedTitleImage()));
         seedTitle.add(TransformComponent.create(engine)
-                .setPosition(24.4f, 24.8f, Z.title));
+                .setPosition(24.5f, 24.6f, Z.title));
         seedTitle.add(MoveToComponent.create(engine)
             .setSpeed(titleSpeed)
-            .setTarget(14f, 24.8f, Z.title));
+            .setTarget(14.4f, 23.8f, Z.title));
         engine.addEntity(seedTitle);
 
         plant = engine.createEntity();
@@ -131,7 +131,8 @@ public class MenuScreen extends LazyInitScreen {
                 .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getTitleTreeFrames()))
                 .addAnimation("LEAF", new Animation(1f / 12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP)));
         plant.add(TransformComponent.create(engine)
-                .setPosition(10f, 25f, Z.titlePlant));
+                .setPosition(10.4f, 25f, Z.titlePlant)
+                .setScale(0.85f, 0.85f));
 
 
         float xPos = 3f;
@@ -222,6 +223,7 @@ public class MenuScreen extends LazyInitScreen {
                         .setAngleRange(-110f, 110f)
                         .setSpawnRate(60f)
                         .setSpeed(2f, 4f)
+                        .setZIndex(Z.titlePlantLeaves)
                         .setShouldLoop(true));
                 treeLeafing = true;
             }

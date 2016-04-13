@@ -107,6 +107,7 @@ public class MenuStartSystem extends IteratingSystem{
                 .setDuration(10f)
                 .setShouldLoop(true)
                 .setSpeed(15f, 20f)
+                .setZIndex(Z.leaves)
                 .setAngleRange(angle -15f, angle + 15f)
                 .setSpawnRate(1000f)
                 .setParticleLifespans(0.3f, 0.5f));
@@ -157,6 +158,7 @@ public class MenuStartSystem extends IteratingSystem{
                 .setAngleRange(0f, 360f)
                 .setSpeed(2f, 3f)
                 .setShouldFade(true)
+                .setZIndex(Z.leaves)
                 .setDuration(0.3f));
 
         getEngine().addEntity(plant);

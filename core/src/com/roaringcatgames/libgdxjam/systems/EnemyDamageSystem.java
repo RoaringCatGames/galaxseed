@@ -337,6 +337,7 @@ public class EnemyDamageSystem extends IteratingSystem {
             .setAngleRange(0f, 360f)
             .setSpeed(2f, 3f)
             .setShouldFade(true)
+            .setZIndex(Z.leaves)
             .setDuration(0.3f));
 
         getEngine().addEntity(plant);

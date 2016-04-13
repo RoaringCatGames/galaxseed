@@ -87,6 +87,7 @@ public class ScoreSystem extends IteratingSystem {
                 .setAngleRange(-90f, 90f)
                 .setParticleImages(Assets.getLeafFrames())
                 .setDuration(0.3f)
+                .setZIndex(Z.leaves)
                 .setSpeed(5f, 8f));
         }
 

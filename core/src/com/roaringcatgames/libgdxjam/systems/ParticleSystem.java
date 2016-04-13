@@ -81,7 +81,7 @@ public class ParticleSystem extends IteratingSystem {
         Entity particle = engine.createEntity();
 
         particle.add(TransformComponent.create(engine)
-            .setPosition(tc.position.x, tc.position.y, Z.leaves)
+            .setPosition(tc.position.x, tc.position.y, pc.zIndex)
             .setScale(0.5f, 0.5f));
 
         float lifeSpan = K2MathUtil.getRandomInRange(pc.particleMinMaxLifespans.x, pc.particleMinMaxLifespans.y); //(r.nextFloat() * (pc.particleMinMaxLifespans.y - pc.particleMinMaxLifespans.x)) + pc.particleMinMaxLifespans.x;
