@@ -34,7 +34,7 @@ public class BackgroundSystem extends IteratingSystem {
     private float speedLineOpacity = 0.1f;
     private int speedLineCount = 4;
     private int numberOfStars = 20;
-    private float starSpeed = -1.25f;
+    private float starSpeed = -1f;
 
     private float left;
     private float bottom;
