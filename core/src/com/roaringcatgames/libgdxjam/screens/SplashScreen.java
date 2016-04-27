@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
+import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.systems.BackgroundSystem;
@@ -120,6 +121,7 @@ public class SplashScreen extends LazyInitScreen {
 
         if(Assets.am.update() && elapsedTime >= minSplashSuggestions){
             Gdx.app.log("Splash Screen", "Assets are Loaded!");
+            Animations.init();
             dispatcher.endCurrentScreen();
         }else {
             engine.update(delta);

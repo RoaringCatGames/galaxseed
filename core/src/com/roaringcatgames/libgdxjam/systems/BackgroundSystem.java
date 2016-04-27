@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.values.Z;
@@ -245,12 +246,12 @@ public class BackgroundSystem extends IteratingSystem {
                 float x = K2MathUtil.getRandomInRange(0.1f, 19.8f);
                 float y = K2MathUtil.getRandomInRange(0f, 45f);
                 float typeR = rnd.nextFloat();
-                Array<TextureAtlas.AtlasRegion> regions = typeR > 0.33f ? Assets.getStarAFrames() :
-                        typeR > 0.66f ? Assets.getStarBFrames() :
-                                Assets.getStarCFrames();
+                Animation ani = typeR > 0.33f ? Animations.getStarA() :
+                                typeR > 0.66f ? Animations.getStarB() :
+                                                Animations.getStarC();
                 star.add(TextureComponent.create(engine));
                 star.add(AnimationComponent.create(engine)
-                        .addAnimation("DEFAULT", new Animation(1f / 3f, regions)));
+                        .addAnimation("DEFAULT", ani));
                 StateComponent state = StateComponent.create(engine)
                         .set("DEFAULT")
                         .setLooping(true);

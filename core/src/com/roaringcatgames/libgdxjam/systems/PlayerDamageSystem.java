@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
@@ -128,16 +129,16 @@ public class PlayerDamageSystem extends IteratingSystem {
         //Generate Explosion
         EnemyComponent ec = em.get(proj);
         ec.isDamaging = false;
-        Array<TextureAtlas.AtlasRegion> impactFrames;
+        Animation impactAni;
         switch(ec.enemyColor){
             case BLUE:
-                impactFrames = Assets.getImpactB();
+                impactAni = Animations.getImpactB();
                 break;
             case PURPLE:
-                impactFrames = Assets.getImpactC();
+                impactAni = Animations.getImpactC();
                 break;
             default:
-                impactFrames = Assets.getImpactA();
+                impactAni = Animations.getImpactA();
                 break;
         }
 
@@ -154,7 +155,7 @@ public class PlayerDamageSystem extends IteratingSystem {
                 .setLooping(false));
         explosion.add(TextureComponent.create(engine));
         explosion.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", new Animation(1f / 12f, impactFrames)));
+                .addAnimation("DEFAULT", impactAni));
         engine.addEntity(explosion);
 
         //Remove Entity

@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.Damage;
@@ -114,8 +115,8 @@ public class FiringSystem extends IteratingSystem {
         bullet.add(DamageComponent.create(engine)
             .setDPS(Damage.seed));
         bullet.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getBulletFrames(), Animation.PlayMode.NORMAL))
-                .addAnimation("FLYING", new Animation(1f / 6f, Assets.getBulletFlyingFrames(), Animation.PlayMode.NORMAL)));
+                .addAnimation("DEFAULT", Animations.getBullet())
+                .addAnimation("FLYING", Animations.getBulletFlying()));
         bullet.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(false));

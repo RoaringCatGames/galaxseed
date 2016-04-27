@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
+import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
@@ -119,8 +120,8 @@ public class MenuScreen extends LazyInitScreen {
         seedTitle.add(TransformComponent.create(engine)
                 .setPosition(24.5f, 24.6f, Z.title));
         seedTitle.add(MoveToComponent.create(engine)
-            .setSpeed(titleSpeed)
-            .setTarget(14.4f, 23.8f, Z.title));
+                .setSpeed(titleSpeed)
+                .setTarget(14.4f, 23.8f, Z.title));
         engine.addEntity(seedTitle);
 
         plant = engine.createEntity();
@@ -128,8 +129,8 @@ public class MenuScreen extends LazyInitScreen {
                 .setLooping(false).set("DEFAULT"));
         plant.add(TextureComponent.create(engine));
         plant.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", new Animation(1f / 12f, Assets.getTitleTreeFrames()))
-                .addAnimation("LEAF", new Animation(1f / 12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP)));
+                .addAnimation("DEFAULT", Animations.getTitleTree())
+                .addAnimation("LEAF", Animations.getTitleTreeLeaf()));
         plant.add(TransformComponent.create(engine)
                 .setPosition(10.4f, 25f, Z.titlePlant)
                 .setScale(0.85f, 0.85f));
@@ -137,25 +138,25 @@ public class MenuScreen extends LazyInitScreen {
 
         float xPos = 3f;
         float yPos = 18f;
-        p = createPlayAsteroid(xPos, yPos, Assets.getPFrames());
+        p = createPlayAsteroid(xPos, yPos, Animations.getpMenu());
         engine.addEntity(p);
         xPos += 4.5f;
 
-        l = createPlayAsteroid(xPos, yPos, Assets.getLFrames());
+        l = createPlayAsteroid(xPos, yPos, Animations.getlMenu());
         engine.addEntity(l);
         xPos += 4.5f;
 
-        a = createPlayAsteroid(xPos, yPos, Assets.getAFrames());
+        a = createPlayAsteroid(xPos, yPos, Animations.getaMenu());
         engine.addEntity(a);
         xPos += 4.5f;
 
-        y = createPlayAsteroid(xPos, yPos, Assets.getYFrames());
+        y = createPlayAsteroid(xPos, yPos, Animations.getyMenu());
         engine.addEntity(y);
 
         swipeTutorial = engine.createEntity();
         swipeTutorial.add(TextureComponent.create(engine));
         swipeTutorial.add(AnimationComponent.create(engine)
-            .addAnimation("DEFAULT", new Animation(1f / 15f, Assets.getSwipeFrames())));
+            .addAnimation("DEFAULT", Animations.getSwipeTutorial()));
         swipeTutorial.add(StateComponent.create(engine)
             .set("DEFAULT")
             .setLooping(true));
@@ -167,7 +168,7 @@ public class MenuScreen extends LazyInitScreen {
         engine.addEntity(plant);
     }
 
-    private Entity createPlayAsteroid(float xPos, float yPos, Array<TextureAtlas.AtlasRegion> frames) {
+    private Entity createPlayAsteroid(float xPos, float yPos, Animation ani) {
         Entity playAsteroid = engine.createEntity();
         playAsteroid.add(WhenOffScreenComponent.create(engine));
         playAsteroid.add(MenuItemComponent.create(engine));
@@ -178,7 +179,7 @@ public class MenuScreen extends LazyInitScreen {
         playAsteroid.add(CircleBoundsComponent.create(engine)
             .setCircle(xPos, yPos, 2f));
         playAsteroid.add(AnimationComponent.create(engine)
-            .addAnimation("DEFAULT", new Animation(1f / 6f, frames))
+            .addAnimation("DEFAULT", ani)
             .setPaused(true));
         playAsteroid.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos, Z.playAsteroids)

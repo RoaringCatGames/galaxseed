@@ -312,6 +312,12 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getHealthFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("pickups/health");
     }
+    public static Array<TextureAtlas.AtlasRegion> getFertilizerFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("pickups/health");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getWaterCanFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("pickups/health-a");
+    }
 
     /////////////
     //Bullets

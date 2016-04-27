@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.values.Damage;
@@ -165,8 +166,8 @@ public class EnemySpawnSystem extends IteratingSystem {
         boolean isGoingRight = xPos < App.W/2f;
         float cometR = r.nextFloat();
         boolean isRed = cometR > 0.5f;
-        Array<TextureAtlas.AtlasRegion> frames = isRed ? Assets.getRedCometFrames() : Assets.getBlueCometFrames();
-        Array<TextureAtlas.AtlasRegion> fullFrames = isRed ? Assets.getRedCometFullFrames() : Assets.getBlueCometFullFrames();
+        Animation ani = isRed ? Animations.getRedComet() : Animations.getBlueComet();
+        Animation aniFull = isRed ? Animations.getRedCometFull() : Animations.getBlueCometFull();
         EnemyColor color = isRed ? EnemyColor.BROWN:EnemyColor.BLUE;
 
         //Generate Bullets here
@@ -194,8 +195,8 @@ public class EnemySpawnSystem extends IteratingSystem {
             .setEnemyColor(color));
         enemy.add(TextureComponent.create(engine));
         enemy.add(AnimationComponent.create(engine)
-            .addAnimation("DEFAULT", new Animation(1f / 12f, frames, Animation.PlayMode.LOOP_PINGPONG))
-            .addAnimation("FULL", new Animation(1f, fullFrames)));
+            .addAnimation("DEFAULT", ani)
+            .addAnimation("FULL", aniFull));
 
         enemy.add(StateComponent.create(engine)
             .set("DEFAULT")

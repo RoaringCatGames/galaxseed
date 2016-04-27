@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.Damage;
@@ -139,13 +140,11 @@ public class MenuStartSystem extends IteratingSystem{
                 .set("DEFAULT")
                 .setLooping(false));
         float rnd = r.nextFloat();
-        Array<TextureAtlas.AtlasRegion> trees = rnd < 0.3f ?
-                Assets.getGreenTreeFrames() :
-                rnd < 0.6f ?
-                        Assets.getPinkTreeFrames() :
-                        Assets.getPineTreeFrames();
+        Animation ani = rnd < 0.3f ? Animations.getGreenTree() :
+                        rnd < 0.6f ? Animations.getPinkTree() :
+                                     Animations.getPineTree();
         plant.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", new Animation(1f / 9f, trees)));
+                .addAnimation("DEFAULT", ani));
         plant.add(FollowerComponent.create(engine)
                 .setOffset(offsetVec.x, offsetVec.y)
                 .setTarget(enemy)

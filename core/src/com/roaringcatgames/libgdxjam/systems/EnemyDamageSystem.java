@@ -4,25 +4,21 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.ashley.signals.Listener;
-import com.badlogic.ashley.signals.Signal;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Path;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
-import com.roaringcatgames.libgdxjam.components.*;
 
 import java.util.Random;
 
@@ -46,8 +42,8 @@ public class EnemyDamageSystem extends IteratingSystem {
     private ComponentMapper<SpawnerComponent> sm;
     private ComponentMapper<StateComponent> stm;
     private ComponentMapper<VelocityComponent> vm;
-    private ComponentMapper<ShakeComponent> shm;
-    private ComponentMapper<AnimationComponent> am;
+//    private ComponentMapper<ShakeComponent> shm;
+//    private ComponentMapper<AnimationComponent> am;
     private ComponentMapper<PathFollowComponent> pfm;
 
     private ScoreComponent scoreCard;
@@ -70,8 +66,8 @@ public class EnemyDamageSystem extends IteratingSystem {
         sm = ComponentMapper.getFor(SpawnerComponent.class);
         stm = ComponentMapper.getFor(StateComponent.class);
         vm = ComponentMapper.getFor(VelocityComponent.class);
-        shm = ComponentMapper.getFor(ShakeComponent.class);
-        am = ComponentMapper.getFor(AnimationComponent.class);
+//        shm = ComponentMapper.getFor(ShakeComponent.class);
+//        am = ComponentMapper.getFor(AnimationComponent.class);
         pfm = ComponentMapper.getFor(PathFollowComponent.class);
 
         popSfx = Assets.getPlanetPopSfx();
@@ -152,14 +148,11 @@ public class EnemyDamageSystem extends IteratingSystem {
                     float startHealth = hc.health;
                     applyHealthChange(bullet, hc);
 
-                    float fadeSpeed = 50f;
-                    boolean addFade = true;
+
                     if (startHealth > 0f && hc.health <= 0f) {
                         switch (ec.enemyType) {
                             case ASTEROID_FRAG:
                             case COMET:
-                                fadeSpeed = 250f;
-                                addFade = false;
                                 if(stm.has(enemy)){
                                     StateComponent sc = stm.get(enemy);
                                     sc.setLooping(false);
@@ -183,13 +176,13 @@ public class EnemyDamageSystem extends IteratingSystem {
                                     .setRotationSpeed(rotSpeed));
                                 break;
                             case ASTEROID_A:
-                                attachTreeCover(enemy, Assets.getAsteroidAFrames());
+                                attachTreeCover(enemy, Animations.getAsteroidA());
                                 break;
                             case ASTEROID_B:
-                                attachTreeCover(enemy, Assets.getAsteroidBFrames());
+                                attachTreeCover(enemy, Animations.getAsteroidB());
                                 break;
                             case ASTEROID_C:
-                                attachTreeCover(enemy, Assets.getAsteroidCFrames());
+                                attachTreeCover(enemy, Animations.getAsteroidC());
                                 if(r.nextFloat() < 1f){
                                     PooledEngine engine = (PooledEngine) getEngine();
                                     TransformComponent enemyTfm = tm.get(enemy);
@@ -203,7 +196,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                                         .setSpeed(0f, healthPackSpeed));
                                     healthPack.add(TextureComponent.create(engine));
                                     healthPack.add(AnimationComponent.create(engine)
-                                        .addAnimation("DEFAULT", new Animation(1f / 4f, Assets.getHealthFrames())));
+                                        .addAnimation("DEFAULT", Animations.getHealthFertilizer()));
                                     healthPack.add(StateComponent.create(engine)
                                         .set("DEFAULT")
                                         .setLooping(true));
@@ -227,19 +220,6 @@ public class EnemyDamageSystem extends IteratingSystem {
                             popSfx.play(Volume.POP_SFX);
                         }
 
-                        if (addFade) {
-//                            enemy.add(FadingComponent.create()
-//                                    .setPercentPerSecond(fadeSpeed));
-//                            enemy.add(ShakeComponent.create()
-//                                    .setDuration(fadeSpeed/100f)
-//                                    .setOffsets(0.3f, 0.3f)
-//                                    .setSpeed(0.05f, 0.05f));
-//                            TransformComponent tc = tm.get(enemy);
-//                            enemy.add(OscillationComponent.create()
-//                                .setMinimumRotation(tc.rotation - 5f)
-//                                .setMaximumRotation(tc.rotation + 5f)
-//                                .setSpeed(360f));
-                        }
                     }
 
                     getEngine().removeEntity(bullet);
@@ -248,7 +228,7 @@ public class EnemyDamageSystem extends IteratingSystem {
         }
     }
 
-    private void attachTreeCover(Entity enemy, Array<TextureAtlas.AtlasRegion> frames) {
+    private void attachTreeCover(Entity enemy, Animation ani) {
 
         PooledEngine engine = (PooledEngine) getEngine();
         TransformComponent tc = tm.get(enemy);
@@ -268,7 +248,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                 .setBaseRotation(0f));
 
         treeCover.add(AnimationComponent.create(engine)
-            .addAnimation("DEFAULT", new Animation(1f / 6f, frames)));
+            .addAnimation("DEFAULT", ani));
         getEngine().addEntity(treeCover);
     }
 
@@ -316,20 +296,18 @@ public class EnemyDamageSystem extends IteratingSystem {
                 .set("DEFAULT")
                 .setLooping(false));
         float rnd = r.nextFloat();
-        Array<TextureAtlas.AtlasRegion> trees = rnd < 0.3f ?
-                Assets.getGreenTreeFrames() :
-                rnd < 0.6f ?
-                        Assets.getPinkTreeFrames() :
-                        Assets.getPineTreeFrames();
+        Animation ani = rnd < 0.3f ? Animations.getGreenTree() :
+                        rnd < 0.6f ? Animations.getPinkTree() :
+                                     Animations.getPineTree();
         plant.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", new Animation(1f / 18f, trees)));
+                .addAnimation("DEFAULT", ani));
         plant.add(FollowerComponent.create(engine)
                 .setOffset(offsetVec.x, offsetVec.y)
                 .setTarget(enemy)
                 .setBaseRotation(baseRotation));
 
-        Vector2 minSpeeds = offsetVec.cpy().nor().scl(1f, 1f);
-        Vector2 maxSpeeds = offsetVec.cpy().nor().scl(4f, 6f);
+//        Vector2 minSpeeds = offsetVec.cpy().nor().scl(1f, 1f);
+//        Vector2 maxSpeeds = offsetVec.cpy().nor().scl(4f, 6f);
         plant.add(ParticleEmitterComponent.create(engine)
             .setParticleImages(Assets.getLeafFrames())
             .setParticleLifespans(0.1f, 0.2f)

@@ -12,15 +12,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.GunComponent;
+import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.values.Health;
-import com.roaringcatgames.libgdxjam.values.Rates;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
-import com.roaringcatgames.libgdxjam.components.*;
-
-import java.util.Vector;
 
 /**
  * Created by barry on 12/29/15 @ 8:07 PM.
@@ -99,17 +98,17 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
             player.add(TextureComponent.create(engine));
             player.add(AnimationComponent.create(engine)
-                    .addAnimation("DEFAULT", new Animation(1f / 6f, Assets.getShipIdleFrames()))
-                    .addAnimation("FLYING", new Animation(1f / 12f, Assets.getShipFlyingFrames()))
-                    .addAnimation("FLYING_LEFT", new Animation(1f / 6f, Assets.getShipFlyingLeftFrames()))
-                    .addAnimation("FLYING_RIGHT", new Animation(1f / 6f, Assets.getShipFlyingRightFrames())));
+                    .addAnimation("DEFAULT", Animations.getShipIdle())
+                    .addAnimation("FLYING", Animations.getShipFlying())
+                    .addAnimation("FLYING_LEFT", Animations.getShipFlyingLeft())
+                    .addAnimation("FLYING_RIGHT", Animations.getShipFlyingRight()));
             player.add(RemainInBoundsComponent.create(engine)
                     .setMode(BoundMode.CONTAINED));
             player.add(StateComponent.create(engine)
                     .set("DEFAULT")
                     .setLooping(true));
 
-            player.add(ShakeComponent.create((PooledEngine) getEngine())
+            player.add(ShakeComponent.create(getEngine())
                     .setOffsets(0.25f, 0.25f)
                     .setSpeed(0.05f, 0.05f)
                     .setPaused(true));
@@ -119,7 +118,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
 
             //generateMuzzles
-            Animation muzzleAni = new Animation(Rates.timeBetweenShots/6f, Assets.getMuzzleFrames());
+            Animation muzzleAni = Animations.getMuzzle();
             for(Vector2 muzzlePos:muzzlePositions){
                 Entity muzzle = engine.createEntity();
                 muzzle.add(GunComponent.create(engine));
@@ -145,7 +144,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
             getEngine().addEntity(player);
 
-            flames.add(FollowerComponent.create((PooledEngine)getEngine())
+            flames.add(FollowerComponent.create(getEngine())
                     .setOffset(idleFlameOffset.x * initialScale, idleFlameOffset.y * initialScale)
                     .setTarget(player)
                     .setMode(FollowMode.STICKY));
@@ -154,8 +153,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .setPosition(initialPosition.x, initialPosition.y - ((3.25f * initialScale) * initialScale), Z.flames)
                     .setScale(initialScale, initialScale));
             flames.add(AnimationComponent.create(engine)
-                    .addAnimation("DEFAULT", new Animation(1f / 9f, Assets.getIdleFlamesFrames()))
-                    .addAnimation("FLYING", new Animation(1f / 9f, Assets.getFlamesFrames())));
+                    .addAnimation("DEFAULT", Animations.getFlamesIdle())
+                    .addAnimation("FLYING", Animations.getFlames()));
             flames.add(StateComponent.create(engine)
                     .set("DEFAULT")
                     .setLooping(true));
@@ -207,13 +206,13 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         }
 
         FollowerComponent fc = flames.getComponent(FollowerComponent.class);
-        if(state != "DEFAULT"){
+        if(!state.equals("DEFAULT")){
             flameState = "FLYING";
             float x = flyingFlameOffset.x;
 
-            if(state == "FLYING_RIGHT"){
+            if(state.equals("FLYING_RIGHT")){
                 x -= 0.3f;
-            }else if(state == "FLYING_LEFT"){
+            }else if(state.equals("FLYING_LEFT")){
                 x += 0.3f;
             }
             fc.setOffset(x*initialScale, flyingFlameOffset.y * initialScale);
@@ -222,7 +221,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             fc.setOffset(idleFlameOffset.x * initialScale, idleFlameOffset.y * initialScale);
         }
 
-        if(flameState == "FLYING" && !flyingMusic.isPlaying()){
+        if(flameState.equals("FLYING") && !flyingMusic.isPlaying()){
             flyingMusic.setLooping(true);
             flyingMusic.setVolume(Volume.FLYING_MUSIC);
             flyingMusic.play();
@@ -230,10 +229,10 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             flyingMusic.stop();
         }
 
-        if(sc.get() != state) {
+        if(!state.equals(sc.get())) {
             sc.set(state).setLooping(isLooping);
             StateComponent fsc = sm.get(flames);
-            if(fsc.get() != flameState){
+            if(!flameState.equals(fsc.get())){
                 fsc.set(flameState);
             }
         }
