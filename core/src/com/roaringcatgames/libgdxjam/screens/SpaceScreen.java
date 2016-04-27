@@ -1,6 +1,8 @@
     package com.roaringcatgames.libgdxjam.screens;
 
-    import com.badlogic.ashley.core.*;
+    import com.badlogic.ashley.core.EntitySystem;
+    import com.badlogic.ashley.core.Family;
+    import com.badlogic.ashley.core.PooledEngine;
     import com.badlogic.gdx.Gdx;
     import com.badlogic.gdx.Input;
     import com.badlogic.gdx.InputProcessor;
@@ -13,16 +15,14 @@
     import com.badlogic.gdx.utils.Array;
     import com.badlogic.gdx.utils.viewport.FitViewport;
     import com.badlogic.gdx.utils.viewport.Viewport;
-    import com.roaringcatgames.kitten2d.ashley.components.PathFollowComponent;
     import com.roaringcatgames.kitten2d.ashley.systems.*;
     import com.roaringcatgames.libgdxjam.App;
     import com.roaringcatgames.libgdxjam.Assets;
     import com.roaringcatgames.libgdxjam.components.EnemyComponent;
-    import com.roaringcatgames.libgdxjam.components.FollowerComponent;
-    import com.roaringcatgames.libgdxjam.values.GameState;
-    import com.roaringcatgames.libgdxjam.values.Z;
     import com.roaringcatgames.libgdxjam.systems.*;
+    import com.roaringcatgames.libgdxjam.values.GameState;
     import com.roaringcatgames.libgdxjam.values.Volume;
+    import com.roaringcatgames.libgdxjam.values.Z;
 
     /**
      * Created by barry on 12/22/15 @ 5:51 PM.
@@ -119,7 +119,7 @@
             PathFollowSystem pathFollowSystem = new PathFollowSystem();
             engine.addSystem(pathFollowSystem);
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
-            engine.addSystem(new FPSSystem());
+            engine.addSystem(new FPSSystem(Assets.get48Font(), new Vector2(App.W - 3f, App.H - 1f), 10));
             App.game.multiplexer.addProcessor(this);
 
             playingOnlySystems.add(movementSystem);

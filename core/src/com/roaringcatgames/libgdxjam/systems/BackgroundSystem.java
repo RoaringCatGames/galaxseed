@@ -15,8 +15,6 @@ import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
-import com.roaringcatgames.libgdxjam.components.ScreenWrapComponent;
-import com.roaringcatgames.libgdxjam.components.ScreenWrapMode;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 
 import java.util.Random;

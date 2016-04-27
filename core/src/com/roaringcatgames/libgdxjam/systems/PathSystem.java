@@ -13,10 +13,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.*;
 import com.roaringcatgames.kitten2d.ashley.components.PathFollowComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TextComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.components.TextComponent;
 
 
 /**
@@ -57,7 +57,7 @@ public class PathSystem extends IteratingSystem implements InputProcessor {
 
         if(curvePoints == null){
             curvePoints = ((PooledEngine)getEngine()).createEntity();
-            curvePoints.add(TextComponent.create((PooledEngine)getEngine())
+            curvePoints.add(TextComponent.create((PooledEngine) getEngine())
                 .setText("p0:(" + p0.x + "," + p0.y + ") p1:(" + p1.x + "," + p1.y + ") p2:(" + p2.x + "," + p2.y + ")")
                 .setFont(Assets.get32Font()));
             curvePoints.add(TransformComponent.create(getEngine())

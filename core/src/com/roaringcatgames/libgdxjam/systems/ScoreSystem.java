@@ -3,17 +3,15 @@ package com.roaringcatgames.libgdxjam.systems;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.roaringcatgames.kitten2d.ashley.components.AnimationComponent;
+import com.roaringcatgames.kitten2d.ashley.components.ParticleEmitterComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TextComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.components.ParticleEmitterComponent;
 import com.roaringcatgames.libgdxjam.components.ScoreComponent;
-import com.roaringcatgames.libgdxjam.components.TextComponent;
 import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
@@ -80,7 +78,7 @@ public class ScoreSystem extends IteratingSystem {
 
         int growthPosition = getGrowthPosition(currentScore);
         if(growthPosition != lastPosition){
-            plantGrowth.add(ParticleEmitterComponent.create((PooledEngine)getEngine())
+            plantGrowth.add(ParticleEmitterComponent.create((PooledEngine) getEngine())
                 .setParticleLifespans(0.3f, 0.5f)
                 .setShouldFade(true)
                 .setSpawnRate(10f*(growthPosition))

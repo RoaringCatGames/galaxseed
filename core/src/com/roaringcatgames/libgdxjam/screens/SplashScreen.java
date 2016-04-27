@@ -14,11 +14,7 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.components.FollowMode;
-import com.roaringcatgames.libgdxjam.components.FollowerComponent;
 import com.roaringcatgames.libgdxjam.systems.BackgroundSystem;
-import com.roaringcatgames.libgdxjam.systems.FollowerSystem;
-import com.roaringcatgames.libgdxjam.systems.ScreenWrapSystem;
 import com.roaringcatgames.libgdxjam.values.Z;
 
 import java.util.Random;
