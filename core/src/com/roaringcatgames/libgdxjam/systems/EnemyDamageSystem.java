@@ -27,6 +27,11 @@ import java.util.Random;
  */
 public class EnemyDamageSystem extends IteratingSystem {
 
+    private enum HealthPackType {
+        FERTILIZER,
+        WATER_CAN
+    }
+
     private static final float healthPackSpeed = -1f;
 
     private Array<Entity> bullets = new Array<>();
@@ -150,6 +155,7 @@ public class EnemyDamageSystem extends IteratingSystem {
 
 
                     if (startHealth > 0f && hc.health <= 0f) {
+                        TransformComponent enemyTfm = tm.get(enemy);
                         switch (ec.enemyType) {
                             case ASTEROID_FRAG:
                             case COMET:
@@ -180,32 +186,14 @@ public class EnemyDamageSystem extends IteratingSystem {
                                 break;
                             case ASTEROID_B:
                                 attachTreeCover(enemy, Animations.getAsteroidB());
+                                if(r.nextFloat() < 0.5f){
+                                    generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
+                                }
                                 break;
                             case ASTEROID_C:
                                 attachTreeCover(enemy, Animations.getAsteroidC());
                                 if(r.nextFloat() < 1f){
-                                    PooledEngine engine = (PooledEngine) getEngine();
-                                    TransformComponent enemyTfm = tm.get(enemy);
-                                    Entity healthPack = engine.createEntity();
-                                    healthPack.add(TransformComponent.create(engine)
-                                        .setPosition(enemyTfm.position.x, enemyTfm.position.y, Z.healthPack)
-                                        .setScale(1f, 1f));
-                                    healthPack.add(RotationComponent.create(engine)
-                                        .setRotationSpeed(-60f));
-                                    healthPack.add(VelocityComponent.create(engine)
-                                        .setSpeed(0f, healthPackSpeed));
-                                    healthPack.add(TextureComponent.create(engine));
-                                    healthPack.add(AnimationComponent.create(engine)
-                                        .addAnimation("DEFAULT", Animations.getHealthFertilizer()));
-                                    healthPack.add(StateComponent.create(engine)
-                                        .set("DEFAULT")
-                                        .setLooping(true));
-                                    healthPack.add(HealthPackComponent.create(engine)
-                                        .setHealth(Health.HealthPack)
-                                        .setInstant(true));
-                                    healthPack.add(BoundsComponent.create(engine)
-                                        .setBounds(0f, 0f, 1f, 1f));
-                                    engine.addEntity(healthPack);
+                                    generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.FERTILIZER);
                                 }
                                 break;
                         }
@@ -226,6 +214,39 @@ public class EnemyDamageSystem extends IteratingSystem {
                 }
                 break;
         }
+    }
+
+    private void generateHealthPack(float x, float y, HealthPackType hType) {
+        PooledEngine engine = (PooledEngine) getEngine();
+        Entity healthPack = engine.createEntity();
+        healthPack.add(TransformComponent.create(engine)
+            .setPosition(x, y, Z.healthPack)
+            .setScale(1f, 1f));
+        healthPack.add(RotationComponent.create(engine)
+            .setRotationSpeed(-60f));
+        healthPack.add(VelocityComponent.create(engine)
+            .setSpeed(0f, healthPackSpeed));
+        healthPack.add(TextureComponent.create(engine));
+        Animation ani;
+        float health;
+        if(hType == HealthPackType.FERTILIZER){
+            ani = Animations.getHealthFertilizer();
+            health = Health.HealthPackFertilizer;
+        }else{
+            ani = Animations.getHealthWaterCan();
+            health = Health.HealthPackWaterCan;
+        }
+        healthPack.add(AnimationComponent.create(engine)
+            .addAnimation("DEFAULT", ani));
+        healthPack.add(StateComponent.create(engine)
+            .set("DEFAULT")
+            .setLooping(true));
+        healthPack.add(HealthPackComponent.create(engine)
+            .setHealth(health)
+            .setInstant(true));
+        healthPack.add(BoundsComponent.create(engine)
+            .setBounds(0f, 0f, 1f, 1f));
+        engine.addEntity(healthPack);
     }
 
     private void attachTreeCover(Entity enemy, Animation ani) {

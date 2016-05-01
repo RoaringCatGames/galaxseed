@@ -89,7 +89,8 @@
             engine.addSystem(firingSystem);
             EnemySpawnSystem enemySpawnSystem = new EnemySpawnSystem();
             engine.addSystem(enemySpawnSystem);
-            engine.addSystem(new EnemyFiringSystem());
+            EnemyFiringSystem enemyFiringSystem = new EnemyFiringSystem();
+            engine.addSystem(enemyFiringSystem);
             engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
             engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
             engine.addSystem(new BackgroundSystem(minBounds, maxBounds, true, true));
@@ -124,6 +125,7 @@
 
             playingOnlySystems.add(movementSystem);
             playingOnlySystems.add(firingSystem);
+            playingOnlySystems.add(enemyFiringSystem);
             playingOnlySystems.add(enemySpawnSystem);
             playingOnlySystems.add(enemyDmgSystem);
             playingOnlySystems.add(playerDmgSystem);
