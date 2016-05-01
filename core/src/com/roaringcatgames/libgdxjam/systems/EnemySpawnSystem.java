@@ -5,15 +5,15 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.data.EnemySpawn;
+import com.roaringcatgames.libgdxjam.data.EnemySpawns;
 import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.Timer;
 import com.roaringcatgames.libgdxjam.values.Health;
@@ -52,27 +52,44 @@ public class EnemySpawnSystem extends IteratingSystem {
         leftTimer.elapsedTime += RightCometSpawnFrequency/2f;
     }
 
+    private float elapsedTime = 0f;
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        //Spawn Comets
-        if(leftTimer.doesTriggerThisStep(deltaTime)) {
-            float leftPosition = (CometXRange * r.nextFloat());
-            generateEnemy(leftPosition, CometY);
+        elapsedTime += deltaTime;
+
+        for(EnemySpawn spawn: EnemySpawns.getLevelOneSpawns()){
+            if(!spawn.hasSpawned && spawn.spawnTime <= elapsedTime){
+                if(spawn.enemyType == EnemyType.COMET){
+                    generateComet(spawn.startPosition.x, spawn.startPosition.y);
+                }else {
+                    generateAsteroid(spawn.enemyType, spawn.startPosition.x, spawn.startPosition.y,
+                            spawn.speed.x, spawn.speed.y);
+                }
+
+                spawn.hasSpawned = true;
+            }
         }
 
-        if(rightTimer.doesTriggerThisStep(deltaTime)){
-            float rightPosition = (CometXRange * r.nextFloat()) + (App.W - CometXRange);
-            generateEnemy(rightPosition, CometY);
-        }
+//        //Spawn Comets
+//        if(leftTimer.doesTriggerThisStep(deltaTime)) {
+//            float leftPosition = (CometXRange * r.nextFloat());
+//            generateComet(leftPosition, CometY);
+//        }
+//
+//        if(rightTimer.doesTriggerThisStep(deltaTime)){
+//            float rightPosition = (CometXRange * r.nextFloat()) + (App.W - CometXRange);
+//            generateComet(rightPosition, CometY);
+//        }
 
-        //Spawn Asteroids
-        if(asteroidTimer.doesTriggerThisStep(deltaTime)){
-            float xVel = asteroidX < 0f ? AsteroidXVelocity : -AsteroidXVelocity;
-            generateAsteroid(asteroidX, AsteroidY, xVel, AsteroidYVelocity);
-            asteroidX = asteroidX < 0f ? AsteroidRightX : AsteroidLeftX;
-        }
+//        //Spawn Asteroids
+//        if(asteroidTimer.doesTriggerThisStep(deltaTime)){
+//            float xVel = asteroidX < 0f ? AsteroidXVelocity : -AsteroidXVelocity;
+//            generateAsteroid(asteroidX, AsteroidY, xVel, AsteroidYVelocity);
+//            asteroidX = asteroidX < 0f ? AsteroidRightX : AsteroidLeftX;
+//        }
     }
 
     @Override
@@ -83,7 +100,7 @@ public class EnemySpawnSystem extends IteratingSystem {
     /*******************
      * Private Methods
      *******************/
-    private void generateAsteroid(float xPos, float yPos, float xVel, float yVel){
+    private void generateAsteroid(EnemyType eType, float xPos, float yPos, float xVel, float yVel){
         //Generate Bullets here
         PooledEngine engine = (PooledEngine)getEngine();
         Entity enemy = engine.createEntity();
@@ -107,43 +124,56 @@ public class EnemySpawnSystem extends IteratingSystem {
         float size;
         float health;
         TextureRegion tr;
-        EnemyType eType;
+        //EnemyType eType;
         EnemyColor eColor;
-        if(cnt < 0.33f) {
-            tr = Assets.getAsteroidA();
-            eType = EnemyType.ASTEROID_A;
-            eColor = EnemyColor.BROWN;
-            size = 2.5f;
-            health = Health.AsteroidA;
+        switch(eType){
+            case ASTEROID_A:
+                tr = Assets.getAsteroidA();
+                eColor = EnemyColor.BROWN;
+                size = 2.5f;
+                health = Health.AsteroidA;
 
-            spawner.setParticleSpeed(AsteroidFragSpeed)
-                .setParticleTextures(Assets.getAsteroidAFrags())
-                .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
-                .setSpawnRate(2f);
-        }else if(cnt < 0.66f){
-            tr = Assets.getAsteroidB();
-            eType = EnemyType.ASTEROID_B;
-            eColor = EnemyColor.BLUE;
-            size = 3.75f;
-            health = Health.AsteroidB;
+                spawner.setParticleSpeed(AsteroidFragSpeed)
+                        .setParticleTextures(Assets.getAsteroidAFrags())
+                        .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                        .setSpawnRate(2f);
+                break;
+            case ASTEROID_B:
+                tr = Assets.getAsteroidB();
+                eColor = EnemyColor.BLUE;
+                size = 3.75f;
+                health = Health.AsteroidB;
 
-            spawner.setParticleSpeed(AsteroidFragSpeed + 3f)
-                .setParticleTextures(Assets.getAsteroidBFrags())
-                .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
-                .setSpawnRate(2.5f);
-        }else{
-            tr = Assets.getAsteroidC();
-            eType = EnemyType.ASTEROID_C;
-            eColor = EnemyColor.PURPLE;
-            size = 5f;
-            health = Health.AsteroidC;
+                spawner.setParticleSpeed(AsteroidFragSpeed + 3f)
+                    .setParticleTextures(Assets.getAsteroidBFrags())
+                    .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                    .setSpawnRate(2.5f);
+                break;
+            case ASTEROID_C:
+                tr = Assets.getAsteroidC();
+                eColor = EnemyColor.PURPLE;
+                size = 5f;
+                health = Health.AsteroidC;
 
-            float spawnRate = r.nextFloat() < 0.1f ? 10f: 4f;
-            spawner.setParticleSpeed(AsteroidFragSpeed + 5f)
-                .setParticleTextures(Assets.getAsteroidCFrags())
-                .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
-                .setSpawnRate(spawnRate);
+                float spawnRate = r.nextFloat() < 0.1f ? 10f: 4f;
+                spawner.setParticleSpeed(AsteroidFragSpeed + 5f)
+                    .setParticleTextures(Assets.getAsteroidCFrags())
+                    .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                    .setSpawnRate(spawnRate);
+                break;
+            default:
+                tr = Assets.getAsteroidA();
+                eColor = EnemyColor.BROWN;
+                size = 2.5f;
+                health = Health.AsteroidA;
+
+                spawner.setParticleSpeed(AsteroidFragSpeed)
+                        .setParticleTextures(Assets.getAsteroidAFrags())
+                        .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                        .setSpawnRate(2f);
+                break;
         }
+
         enemy.add(spawner);
         enemy.add(HealthComponent.create(engine)
             .setHealth(health)
@@ -161,7 +191,7 @@ public class EnemySpawnSystem extends IteratingSystem {
         getEngine().addEntity(enemy);
     }
 
-    private void generateEnemy(float xPos, float yPos){
+    private void generateComet(float xPos, float yPos){
         PooledEngine engine = (PooledEngine) getEngine();
         boolean isGoingRight = xPos < App.W/2f;
         float cometR = r.nextFloat();
@@ -170,7 +200,6 @@ public class EnemySpawnSystem extends IteratingSystem {
         Animation aniFull = isRed ? Animations.getRedCometFull() : Animations.getBlueCometFull();
         EnemyColor color = isRed ? EnemyColor.BROWN:EnemyColor.BLUE;
 
-        //Generate Bullets here
         Entity enemy = engine.createEntity();
         enemy.add(WhenOffScreenComponent.create(engine));
         enemy.add(KinematicComponent.create(engine));

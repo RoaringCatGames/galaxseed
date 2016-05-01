@@ -20,9 +20,6 @@ import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 
 import java.util.Random;
 
-/**
- * Created by barry on 1/9/16 @ 6:35 PM.
- */
 public class BackgroundSystem extends IteratingSystem {
 
     public float bgSpeed = -1f;
@@ -73,7 +70,7 @@ public class BackgroundSystem extends IteratingSystem {
 
     public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds, boolean shouldProduceStickers, boolean shouldProduceStars){
         //No components will be modified here, just need a limited class to
-        //create a family
+        //  create a family
         super(Family.all(PlayerComponent.class).get());
         this.left = minBounds.x;
         this.bottom = minBounds.y;
@@ -182,7 +179,7 @@ public class BackgroundSystem extends IteratingSystem {
                     .setScale(1f, 1f));
             e.add(BoundsComponent.create(engine)
                     .setBounds(bg.x - tileHalfPoint, bg.y - tileHalfPoint, tileSize, tileSize));
-            e.add(ScreenWrapComponent.create((PooledEngine)getEngine())
+            e.add(ScreenWrapComponent.create(getEngine())
                     .setMode(ScreenWrapMode.VERTICAL)
                     .setReversed(true)
                     .setWrapOffset(offset));
@@ -200,7 +197,7 @@ public class BackgroundSystem extends IteratingSystem {
                     .setScale(1f, 1f));
             clearTile.add(BoundsComponent.create(engine)
                     .setBounds(bg.x - tileHalfPoint, bg.y - tileHalfPoint, tileSize, tileSize));
-            clearTile.add(ScreenWrapComponent.create((PooledEngine) getEngine())
+            clearTile.add(ScreenWrapComponent.create(getEngine())
                     .setMode(ScreenWrapMode.VERTICAL)
                     .setReversed(true)
                     .setWrapOffset(offset));
