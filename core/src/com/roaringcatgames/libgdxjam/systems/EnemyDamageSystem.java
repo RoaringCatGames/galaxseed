@@ -1,5 +1,7 @@
 package com.roaringcatgames.libgdxjam.systems;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -11,11 +13,14 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
+import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
+import com.roaringcatgames.libgdxjam.values.Colors;
 import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
@@ -207,6 +212,11 @@ public class EnemyDamageSystem extends IteratingSystem {
                             }
                             popSfx.play(Volume.POP_SFX);
                         }
+
+                        enemy.add(TweenComponent.create(getEngine())
+                            .addTween(Tween.to(enemy, K2EntityTweenAccessor.COLOR, 2f)
+                                    .target(Colors.PLANTED_GREEN.r, Colors.PLANTED_GREEN.g, Colors.PLANTED_GREEN.b)
+                                .ease(TweenEquations.easeInOutSine)));
 
                     }
 
