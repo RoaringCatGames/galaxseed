@@ -236,6 +236,11 @@ public class EnemyDamageSystem extends IteratingSystem {
             .setScale(1f, 1f));
         healthPack.add(RotationComponent.create(engine)
             .setRotationSpeed(-60f));
+        healthPack.add(TweenComponent.create(engine)
+            .addTween(Tween.to(healthPack, K2EntityTweenAccessor.SCALE, 0.5f)
+                    .target(1.25f, 1.25f)
+                    .ease(TweenEquations.easeInOutBounce)
+                    .repeatYoyo(Tween.INFINITY, 0)));
         healthPack.add(VelocityComponent.create(engine)
             .setSpeed(0f, healthPackSpeed));
         healthPack.add(TextureComponent.create(engine));
@@ -274,7 +279,11 @@ public class EnemyDamageSystem extends IteratingSystem {
                 .addTween(Tween.to(glow, K2EntityTweenAccessor.COLOR, 0.5f)
                         .target(Colors.GLOW_YELLOW.r, Colors.GLOW_YELLOW.g, Colors.GLOW_YELLOW.b)
                         .ease(TweenEquations.easeInOutBounce)
-                .repeatYoyo(Tween.INFINITY, 0)));
+                        .repeatYoyo(Tween.INFINITY, 0))
+                .addTween(Tween.to(glow, K2EntityTweenAccessor.SCALE, 0.5f)
+                        .target(1.25f, 1.25f)
+                        .ease(TweenEquations.easeInOutBounce)
+                        .repeatYoyo(Tween.INFINITY, 0)));
         engine.addEntity(glow);
     }
 
