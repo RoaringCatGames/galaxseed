@@ -16,9 +16,11 @@
     import com.badlogic.gdx.utils.viewport.FitViewport;
     import com.badlogic.gdx.utils.viewport.Viewport;
     import com.roaringcatgames.kitten2d.ashley.systems.*;
+    import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
     import com.roaringcatgames.libgdxjam.App;
     import com.roaringcatgames.libgdxjam.Assets;
     import com.roaringcatgames.libgdxjam.components.EnemyComponent;
+    import com.roaringcatgames.libgdxjam.data.EnemySpawns;
     import com.roaringcatgames.libgdxjam.systems.*;
     import com.roaringcatgames.libgdxjam.values.GameState;
     import com.roaringcatgames.libgdxjam.values.Volume;
@@ -140,6 +142,7 @@
             super.show();
 
             App.setState(GameState.PLAYING);
+            EnemySpawns.resetSpawns();
 
             //Start Music Playing
             music.setVolume(Volume.BG_MUSIC);

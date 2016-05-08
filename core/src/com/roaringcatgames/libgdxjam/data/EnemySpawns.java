@@ -45,4 +45,12 @@ public class EnemySpawns {
 
         return levelOneSpawns;
     }
+
+    public static void resetSpawns(){
+        if(levelOneSpawns != null){
+            for(EnemySpawn spawn:levelOneSpawns){
+                spawn.hasSpawned = false;
+            }
+        }
+    }
 }
