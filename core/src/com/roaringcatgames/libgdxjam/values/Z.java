@@ -19,7 +19,8 @@ public class Z {
     public static final float enemy = 45f;
     public static final float plant = 44f;
     public static final float treeCover = 43f;
-    public static final float healthPack = 42f;
+    public static final float healthGlow = 42f;
+    public static final float healthPack = 41f;
     public static final float seed = 40;
     public static final float leaves = 39f;
 
