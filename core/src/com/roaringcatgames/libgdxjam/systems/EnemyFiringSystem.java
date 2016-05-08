@@ -5,10 +5,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.values.Colors;
 import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Z;
@@ -56,6 +58,9 @@ public class EnemyFiringSystem extends IteratingSystem {
 
         for(Entity spawner:spawners){
             EnemyColor parentColor = em.has(spawner) ? em.get(spawner).enemyColor : EnemyColor.BROWN;
+            Color fragColor = parentColor == EnemyColor.BROWN ? Colors.BROWN_ASTEROID :
+                              parentColor == EnemyColor.BLUE ? Colors.BLUE_ASTEROID :
+                                                               Colors.PURPLE_ASTEROID;
             SpawnerComponent sc = sm.get(spawner);
             if(sc.isPaused){
                 continue;
@@ -85,7 +90,8 @@ public class EnemyFiringSystem extends IteratingSystem {
                             frag.add(TextureComponent.create(engine)
                                     .setRegion(sc.particleTextures.get(target)));
                             frag.add(TransformComponent.create(engine)
-                                    .setPosition(tc.position.x, tc.position.y, Z.enemyParticle));
+                                    .setPosition(tc.position.x, tc.position.y, Z.enemyParticle)
+                                    .setTint(fragColor));
                             frag.add(VelocityComponent.create(engine)
                                     .setSpeed(spawnVel.x, spawnVel.y));
                             frag.add(RotationComponent.create(engine)

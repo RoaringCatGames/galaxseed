@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Bezier;
@@ -14,6 +15,7 @@ import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.data.EnemySpawn;
 import com.roaringcatgames.libgdxjam.data.EnemySpawns;
+import com.roaringcatgames.libgdxjam.values.Colors;
 import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.Timer;
 import com.roaringcatgames.libgdxjam.values.Health;
@@ -109,10 +111,6 @@ public class EnemySpawnSystem extends IteratingSystem {
         enemy.add(ProjectileComponent.create(engine)
                 .setDamage(Damage.asteroid));
 
-
-        enemy.add(TransformComponent.create(engine)
-                .setPosition(xPos, yPos, Z.enemy)
-                .setScale(1f, 1f));
         float rotSpeed = xVel > 0f ? AsteroidRotationSpeed : -AsteroidRotationSpeed;
         enemy.add(RotationComponent.create(engine)
                 .setRotationSpeed(rotSpeed));
@@ -126,15 +124,17 @@ public class EnemySpawnSystem extends IteratingSystem {
         TextureRegion tr;
         //EnemyType eType;
         EnemyColor eColor;
+        Color assColor;
         switch(eType){
             case ASTEROID_A:
                 tr = Assets.getAsteroidA();
                 eColor = EnemyColor.BROWN;
                 size = 2.5f;
                 health = Health.AsteroidA;
+                assColor = Colors.BROWN_ASTEROID;
 
                 spawner.setParticleSpeed(AsteroidFragSpeed)
-                        .setParticleTextures(Assets.getAsteroidAFrags())
+                        .setParticleTextures(Assets.getFrags())
                         .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                         .setSpawnRate(2f);
                 break;
@@ -143,9 +143,10 @@ public class EnemySpawnSystem extends IteratingSystem {
                 eColor = EnemyColor.BLUE;
                 size = 3.75f;
                 health = Health.AsteroidB;
+                assColor = Colors.BLUE_ASTEROID;
 
                 spawner.setParticleSpeed(AsteroidFragSpeed + 3f)
-                    .setParticleTextures(Assets.getAsteroidBFrags())
+                    .setParticleTextures(Assets.getFrags())
                     .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                     .setSpawnRate(2.5f);
                 break;
@@ -154,10 +155,11 @@ public class EnemySpawnSystem extends IteratingSystem {
                 eColor = EnemyColor.PURPLE;
                 size = 5f;
                 health = Health.AsteroidC;
+                assColor = Colors.PURPLE_ASTEROID;
 
                 float spawnRate = r.nextFloat() < 0.1f ? 10f: 4f;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 5f)
-                    .setParticleTextures(Assets.getAsteroidCFrags())
+                    .setParticleTextures(Assets.getFrags())
                     .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                     .setSpawnRate(spawnRate);
                 break;
@@ -166,14 +168,19 @@ public class EnemySpawnSystem extends IteratingSystem {
                 eColor = EnemyColor.BROWN;
                 size = 2.5f;
                 health = Health.AsteroidA;
+                assColor = Colors.BROWN_ASTEROID;
 
                 spawner.setParticleSpeed(AsteroidFragSpeed)
-                        .setParticleTextures(Assets.getAsteroidAFrags())
+                        .setParticleTextures(Assets.getFrags())
                         .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
                         .setSpawnRate(2f);
                 break;
         }
 
+        enemy.add(TransformComponent.create(engine)
+                .setPosition(xPos, yPos, Z.enemy)
+                .setScale(1f, 1f)
+                .setTint(assColor));
         enemy.add(spawner);
         enemy.add(HealthComponent.create(engine)
             .setHealth(health)
