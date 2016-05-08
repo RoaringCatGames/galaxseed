@@ -201,56 +201,66 @@ public class Assets {
     /////////////
     //Enemies
     /////////////
+    private static Array<TextureAtlas.AtlasRegion> frags = new Array<>();
+    public static Array<TextureAtlas.AtlasRegion> getFrags(){
+        if(frags.size == 0){
+            frags.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/frag-a"));
+            frags.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/frag-b"));
+            frags.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/frag-c"));
+        }
+        return frags;
+    }
+
     public static TextureAtlas.AtlasRegion getAsteroidA(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a");
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/asteroid-a"); //asteroid-a/asteroid-a");
     }
     public static Array<TextureAtlas.AtlasRegion> getAsteroidAFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("asteroid-treed/asterroid-a");
     }
     private static Array<TextureAtlas.AtlasRegion> fragsA = new Array<>();
-    public static Array<TextureAtlas.AtlasRegion> getAsteroidAFrags(){
-        if(fragsA.size == 0){
-            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a-frag-a"));
-            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a-frag-b"));
-            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a-frag-c"));
-        }
-
-        return fragsA;
-    }
+//    public static Array<TextureAtlas.AtlasRegion> getAsteroidAFrags(){
+//        if(fragsA.size == 0){
+//            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a-frag-a"));
+//            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a-frag-b"));
+//            fragsA.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-a/asteroid-a-frag-c"));
+//        }
+//
+//        return fragsA;
+//    }
 
     public static TextureAtlas.AtlasRegion getAsteroidB(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b");
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/asteroid-b"); //asteroid-b/asteroid-b");
     }
     public static Array<TextureAtlas.AtlasRegion> getAsteroidBFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("asteroid-treed/asterroid-b");
     }
-    private static Array<TextureAtlas.AtlasRegion> fragsB = new Array<>();
-    public static Array<TextureAtlas.AtlasRegion> getAsteroidBFrags(){
-        if(fragsB.size == 0){
-            fragsB.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-a"));
-            fragsB.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-b"));
-            fragsB.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-c"));
-        }
-
-        return fragsB;
-    }
+//    private static Array<TextureAtlas.AtlasRegion> fragsB = new Array<>();
+//    public static Array<TextureAtlas.AtlasRegion> getAsteroidBFrags(){
+//        if(fragsB.size == 0){
+//            fragsB.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-a"));
+//            fragsB.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-b"));
+//            fragsB.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-b/asteroid-b-frag-c"));
+//        }
+//
+//        return fragsB;
+//    }
 
     public static TextureAtlas.AtlasRegion getAsteroidC(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c");
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/asteroid-c"); //asteroid-c/asteroid-c");
     }
     public static Array<TextureAtlas.AtlasRegion> getAsteroidCFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("asteroid-treed/asterroid-c");
     }
-    private static Array<TextureAtlas.AtlasRegion> fragsC = new Array<>();
-    public static Array<TextureAtlas.AtlasRegion> getAsteroidCFrags(){
-        if(fragsC.size == 0){
-            fragsC.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-a"));
-            fragsC.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-b"));
-            fragsC.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-c"));
-        }
-
-        return fragsC;
-    }
+//    private static Array<TextureAtlas.AtlasRegion> fragsC = new Array<>();
+//    public static Array<TextureAtlas.AtlasRegion> getAsteroidCFrags(){
+//        if(fragsC.size == 0){
+//            fragsC.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-a"));
+//            fragsC.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-b"));
+//            fragsC.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroid-c/asteroid-c-frag-c"));
+//        }
+//
+//        return fragsC;
+//    }
 
     public static Array<TextureAtlas.AtlasRegion> getImpactA(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactA/impact-asteroid-a");
