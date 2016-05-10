@@ -23,18 +23,19 @@ public class Z {
     public static final float healthPack = 41f;
     public static final float seed = 40;
     public static final float leaves = 39f;
+    public static final float explosion = 30f;
 
     public static final float playAsteroids = 35f;
     public static final float title = 34f;
     public static final float titlePlantLeaves = 33f;
     public static final float titlePlant = 32f;
 
+
     public static final float health = 2f;
     public static final float score = 2f;
     public static final float debug = 2f;
-    public static final float gameOver = 1f;
-    public static final float tutorial = 1f;
-    public static final float explosion = 0f;
-
+    public static float healthLeaf = 1f;
+    public static final float gameOver = 0f;
+    public static final float tutorial = 0f;
 
 }

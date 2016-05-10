@@ -287,6 +287,16 @@ public class Assets {
     }
 
     /////////////
+    //Health Bar
+    /////////////
+    public static TextureAtlas.AtlasRegion getBranch(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("branch");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getBranchLeaf(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("health/leaf");
+    }
+
+    /////////////
     //Health Pack
     /////////////
     public static Array<TextureAtlas.AtlasRegion> getFertilizerFrames(){
