@@ -1,6 +1,7 @@
 package com.roaringcatgames.libgdxjam.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool;
 
@@ -11,8 +12,12 @@ public class WhenOffScreenComponent implements Component, Pool.Poolable {
 
     public boolean hasBeenOnScreen = false;
 
-    public static WhenOffScreenComponent create(PooledEngine engine){
-        return engine.createComponent(WhenOffScreenComponent.class);
+    public static WhenOffScreenComponent create(Engine engine){
+        if(engine instanceof PooledEngine) {
+            return ((PooledEngine)engine).createComponent(WhenOffScreenComponent.class);
+        }else{
+            return new WhenOffScreenComponent();
+        }
     }
 
     public WhenOffScreenComponent setHasBeenOnScreen(boolean beenOnScreen){

@@ -50,6 +50,8 @@ public class Animations {
     private static Animation flamesIdle;
     private static Animation flames;
 
+    private static Animation healthLeaf;
+
     public static void init(){
         pMenu = new Animation(1f/6f, Assets.getPFrames());
         lMenu = new Animation(1f/6f, Assets.getLFrames());
@@ -93,6 +95,8 @@ public class Animations {
         muzzle = new Animation(Rates.timeBetweenShots/6f, Assets.getMuzzleFrames());
         flamesIdle = new Animation(1f/9f, Assets.getIdleFlamesFrames());
         flames = new Animation(1f/9f, Assets.getFlamesFrames());
+
+        healthLeaf = new Animation(1f/9f, Assets.getBranchLeaf());
 
     }
 
@@ -230,5 +234,9 @@ public class Animations {
 
     public static Animation getFlames() {
         return flames;
+    }
+
+    public static Animation getHealthLeaf(){
+        return healthLeaf;
     }
 }

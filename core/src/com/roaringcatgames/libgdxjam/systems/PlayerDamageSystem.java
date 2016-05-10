@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
+import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
@@ -36,6 +37,7 @@ public class PlayerDamageSystem extends IteratingSystem {
     private Entity player;
     private Entity scoreCard;
     private Array<Entity> projectiles = new Array<>();
+    private Array<Entity> healthLeaves = new Array<>();
 
     private ComponentMapper<BoundsComponent> bm;
     private ComponentMapper<HealthComponent> hm;
@@ -45,15 +47,15 @@ public class PlayerDamageSystem extends IteratingSystem {
     private ComponentMapper<ShakeComponent> sm;
     private ComponentMapper<ScoreComponent> scm;
     private ComponentMapper<TransformComponent> tm;
-
-    private ComponentMapper<AnimationComponent> am;
-    private ComponentMapper<StateComponent> stm;
+    private ComponentMapper<HealthLeafComponent> hlm;
+    private ComponentMapper<TweenComponent> twm;
 
 
     private Sound lightHitSfx, mediumHitSfx, heavyHitSfx;
 
     public PlayerDamageSystem(){
-        super(Family.one(ScoreComponent.class, PlayerComponent.class, ProjectileComponent.class).get());
+        super(Family.one(ScoreComponent.class, PlayerComponent.class,
+                         ProjectileComponent.class, HealthLeafComponent.class).get());
         bm = ComponentMapper.getFor(BoundsComponent.class);
         hm = ComponentMapper.getFor(HealthComponent.class);
         pm = ComponentMapper.getFor(ProjectileComponent.class);
@@ -62,9 +64,8 @@ public class PlayerDamageSystem extends IteratingSystem {
         sm = ComponentMapper.getFor(ShakeComponent.class);
         scm = ComponentMapper.getFor(ScoreComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
-
-        am = ComponentMapper.getFor(AnimationComponent.class);
-        stm = ComponentMapper.getFor(StateComponent.class);
+        hlm = ComponentMapper.getFor(HealthLeafComponent.class);
+        twm = ComponentMapper.getFor(TweenComponent.class);
 
         lightHitSfx = Assets.getPlayerHitLight();
         mediumHitSfx = Assets.getPlayerHitMedium();
@@ -89,6 +90,7 @@ public class PlayerDamageSystem extends IteratingSystem {
         }
 
         projectiles.clear();
+        healthLeaves.clear();
     }
 
 
@@ -122,6 +124,25 @@ public class PlayerDamageSystem extends IteratingSystem {
                 sc.setPaused(false);
                 sc.setDuration(shakeTime);
             }
+        }
+
+        boolean leftFirst = true;
+        for(Entity leaf:healthLeaves){
+            TransformComponent ltc = tm.get(leaf);
+            float rotOffset = K2MathUtil.getRandomInRange(4f, 8f);
+            Timeline tl = Timeline.createSequence()
+                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.025f)
+                                .target(ltc.rotation + (leftFirst ? -rotOffset : rotOffset)))
+                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.025f)
+                                    .target(ltc.rotation))
+                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.025f)
+                                .target(ltc.rotation + (leftFirst ? rotOffset : -rotOffset)))
+                    .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.025f)
+                            .target(ltc.rotation))
+                    .repeat(3, 0);
+            leaf.add(TweenComponent.create(getEngine())
+                .setTimeline(tl));
+            leftFirst = !leftFirst;
         }
 
         //Adjust Player Health
@@ -185,6 +206,8 @@ public class PlayerDamageSystem extends IteratingSystem {
             projectiles.add(entity);
         }else if(scm.has(entity)) {
             scoreCard = entity;
+        }else if(hlm.has(entity)) {
+            healthLeaves.add(entity);
         }else{
             player = entity;
         }
