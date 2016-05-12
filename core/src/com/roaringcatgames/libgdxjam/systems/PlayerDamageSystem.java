@@ -131,14 +131,14 @@ public class PlayerDamageSystem extends IteratingSystem {
             TransformComponent ltc = tm.get(leaf);
             float rotOffset = K2MathUtil.getRandomInRange(4f, 8f);
             Timeline tl = Timeline.createSequence()
-                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.025f)
+                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.0125f)
                                 .target(ltc.rotation + (leftFirst ? -rotOffset : rotOffset)))
-                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.025f)
-                                    .target(ltc.rotation))
-                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.025f)
+                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.0125f)
+                                    .target(0f))
+                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.0125f)
                                 .target(ltc.rotation + (leftFirst ? rotOffset : -rotOffset)))
-                    .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.025f)
-                            .target(ltc.rotation))
+                    .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.0125f)
+                            .target(0f))
                     .repeat(3, 0);
             leaf.add(TweenComponent.create(getEngine())
                 .setTimeline(tl));

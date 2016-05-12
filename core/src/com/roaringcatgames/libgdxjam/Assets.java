@@ -290,10 +290,28 @@ public class Assets {
     //Health Bar
     /////////////
     public static TextureAtlas.AtlasRegion getBranch(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("branch");
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("health/branch");
     }
-    public static Array<TextureAtlas.AtlasRegion> getBranchLeaf(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("health/leaf");
+    private static Array<TextureAtlas.AtlasRegion> leaves;
+    public static TextureAtlas.AtlasRegion getBranchLeaf(int index){
+        if(leaves == null){
+            leaves = new Array<>();
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-a"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-b"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-c"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-d"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-e"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-f"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-g"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-h"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-i"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-j"));
+        }
+        if(index < leaves.size){
+            return leaves.get(index);
+        }else{
+            return leaves.get(0);
+        }
     }
 
     /////////////

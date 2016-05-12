@@ -76,6 +76,7 @@ public class MenuScreen extends LazyInitScreen {
         engine.addSystem(new RotationSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new AnimationSystem());
+
         engine.addSystem(new MenuStartSystem());
 
         //Custom Systems
