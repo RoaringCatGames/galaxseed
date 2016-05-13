@@ -41,6 +41,8 @@ public class BackgroundSystem extends IteratingSystem {
     private boolean isInitialized = false;
     private boolean isUsingStars = false;
 
+    private Array<BackgroundSticker> planets;
+
     protected class BackgroundTile extends BackgroundSticker{
         protected Array<TextureRegion> galaxies;
         protected TextureRegion clearImage;
@@ -82,6 +84,17 @@ public class BackgroundSystem extends IteratingSystem {
 
     private void init(){
         PooledEngine engine = ((PooledEngine)getEngine());
+
+        planets = new Array<>();
+        planets.add(new BackgroundSticker(10f, 30f, 0f, Assets.getPluto()));
+        planets.add(new BackgroundSticker(5f, 62f, 0f, Assets.getNeptune()));
+        planets.add(new BackgroundSticker(9.5f, 110f, 0f, Assets.getUranus()));
+        planets.add(new BackgroundSticker(10f, 165f, 0f, Assets.getSaturn()));
+        planets.add(new BackgroundSticker(10f, 240f, 0f, Assets.getJupiterBottom()));
+        planets.add(new BackgroundSticker(10f, 284.22f, 0f, Assets.getJupiterTop()));
+        planets.add(new BackgroundSticker(17f, 405f, 0f, Assets.getMars()));
+        planets.add(new BackgroundSticker(5f, 430f, 0f, Assets.getMoon()));
+        planets.add(new BackgroundSticker(10f, 450f, 0f, Assets.getEarth()));
 
         Entity vp = engine.createEntity();
         vp.add(BoundsComponent.create(engine)
@@ -244,8 +257,8 @@ public class BackgroundSystem extends IteratingSystem {
                 float y = K2MathUtil.getRandomInRange(0f, 45f);
                 float typeR = rnd.nextFloat();
                 Animation ani = typeR > 0.33f ? Animations.getStarA() :
-                                typeR > 0.66f ? Animations.getStarB() :
-                                                Animations.getStarC();
+                        typeR > 0.66f ? Animations.getStarB() :
+                                Animations.getStarC();
                 star.add(TextureComponent.create(engine));
                 star.add(AnimationComponent.create(engine)
                         .addAnimation("DEFAULT", ani));
@@ -271,27 +284,21 @@ public class BackgroundSystem extends IteratingSystem {
         if(isUsingStickers) {
             int yStep = 35;
             int yIndex = 1;
-            for (TextureRegion reg : Assets.getPlanets()) {
-                int position = rnd.nextInt(10) + 5;
-                float rot = rnd.nextFloat() * 360f;
-                float width = (reg.getRegionWidth()/ App.PPM);
-                float height = (reg.getRegionHeight()/App.PPM);
+            for(BackgroundSticker bgSticker:planets){
+                float width = (bgSticker.image.getRegionWidth()/ App.PPM);
+                float height = (bgSticker.image.getRegionHeight()/App.PPM);
 
                 Entity sticker = engine.createEntity();
                 sticker.add(TransformComponent.create(engine)
-                        .setPosition(position, yIndex * yStep, Z.bgSticker)
-                        .setRotation(rot)
-                        .setOpacity(1f));
-                sticker.add(RotationComponent.create(engine)
-                    .setRotationSpeed(0.25f));
+                        .setPosition(bgSticker.x, bgSticker.y, Z.bgSticker));
                 sticker.add(TextureComponent.create(engine)
-                        .setRegion(reg));
+                        .setRegion(bgSticker.image));
                 sticker.add(VelocityComponent.create(engine)
                         .setSpeed(0f, stickerSpeed));
                 sticker.add(KinematicComponent.create(engine));
                 sticker.add(BoundsComponent.create(engine)
-                    .setBounds(position - (width / 2f), (yIndex * yStep) - (height / 2f), width, height));
-                sticker.add(WhenOffScreenComponent.create((PooledEngine)getEngine()));
+                    .setBounds(bgSticker.x - (width / 2f), (bgSticker.y) - (height / 2f), width, height));
+                sticker.add(WhenOffScreenComponent.create(getEngine()));
                 engine.addEntity(sticker);
                 yIndex++;
             }

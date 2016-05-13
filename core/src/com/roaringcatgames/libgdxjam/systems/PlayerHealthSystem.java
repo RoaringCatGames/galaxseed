@@ -5,6 +5,7 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -214,6 +215,10 @@ public class PlayerHealthSystem extends IteratingSystem implements InputProcesso
 
     @Override
     public boolean keyDown(int keycode) {
+
+        if(keycode == Input.Keys.H){
+            player.getComponent(HealthComponent.class).health += 10f;
+        }
 //        if(keycode == Input.Keys.NUM_1){
 //            leafIndex = 0;
 //        }else if(keycode == Input.Keys.NUM_2){
