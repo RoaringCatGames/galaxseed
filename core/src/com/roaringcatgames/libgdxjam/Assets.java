@@ -63,10 +63,6 @@ public class Assets {
      * SAFE IMMEDIATELY after am.load() is called
      * @return AtlasRegion for the moon sprite.
      */
-    public static TextureAtlas.AtlasRegion getMoon(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/moon");
-    }
-
     public static TextureAtlas.AtlasRegion getTitleImage(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/Title");
     }
@@ -122,39 +118,32 @@ public class Assets {
         return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("GasCluster-b");
     }
 
-
-    public static TextureAtlas.AtlasRegion getPlanetA(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-a");
+    public static TextureAtlas.AtlasRegion getPluto(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/pluto");
     }
-    public static TextureAtlas.AtlasRegion getPlanetB(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-b");
+    public static TextureAtlas.AtlasRegion getNeptune(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/neptune");
     }
-    public static TextureAtlas.AtlasRegion getPlanetC(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-c");
+    public static TextureAtlas.AtlasRegion getUranus(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/uranus");
     }
-    public static TextureAtlas.AtlasRegion getPlanetD(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-d");
+    public static TextureAtlas.AtlasRegion getSaturn(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/saturn");
     }
-    public static TextureAtlas.AtlasRegion getPlanetE(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-e");
+    public static TextureAtlas.AtlasRegion getJupiterBottom(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/jupiter-b");
     }
-    public static TextureAtlas.AtlasRegion getPlanetF(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/planet-f");
+    public static TextureAtlas.AtlasRegion getJupiterTop(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/jupiter-t");
     }
-    private static Array<TextureAtlas.AtlasRegion> planets;
-    public static Array<TextureAtlas.AtlasRegion> getPlanets(){
-        if(planets == null){
-            planets = new Array<>();
-            planets.add(getPlanetA());
-            planets.add(getPlanetB());
-            planets.add(getPlanetC());
-            planets.add(getPlanetD());
-            planets.add(getPlanetE());
-            planets.add(getPlanetF());
-            planets.add(getMoon());
-        }
-
-        return planets;
+    public static TextureAtlas.AtlasRegion getMars(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/mars");
+    }
+    public static TextureAtlas.AtlasRegion getMoon(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/moon");
+    }
+    public static TextureAtlas.AtlasRegion getEarth(){
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/earth");
     }
 
     /////////////
@@ -290,10 +279,28 @@ public class Assets {
     //Health Bar
     /////////////
     public static TextureAtlas.AtlasRegion getBranch(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("branch");
+        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("health/branch");
     }
-    public static Array<TextureAtlas.AtlasRegion> getBranchLeaf(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("health/leaf");
+    private static Array<TextureAtlas.AtlasRegion> leaves;
+    public static TextureAtlas.AtlasRegion getBranchLeaf(int index){
+        if(leaves == null){
+            leaves = new Array<>();
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-a"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-b"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-c"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-d"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-e"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-f"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-g"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-h"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-i"));
+            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-j"));
+        }
+        if(index < leaves.size){
+            return leaves.get(index);
+        }else{
+            return leaves.get(0);
+        }
     }
 
     /////////////

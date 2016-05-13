@@ -82,6 +82,7 @@
             engine.addSystem(new RotationSystem());
             engine.addSystem(new BoundsSystem());
             engine.addSystem(new AnimationSystem());
+            engine.addSystem(new TweenSystem());
 
             //Custom Systems
             Vector2 minBounds = new Vector2(0f, 0f);
@@ -102,7 +103,7 @@
             engine.addSystem(new ScoreSystem());
             engine.addSystem(new ShakeSystem());
             engine.addSystem(new OscillationSystem());
-            engine.addSystem(new TweenSystem());
+
 
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
             PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();

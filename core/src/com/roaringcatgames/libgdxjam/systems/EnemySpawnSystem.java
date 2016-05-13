@@ -136,7 +136,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 spawner.setParticleSpeed(AsteroidFragSpeed)
                         .setParticleTextures(Assets.getFrags())
                         .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
-                        .setSpawnRate(2f);
+                        .setSpawnRate(1f);
                 break;
             case ASTEROID_B:
                 tr = Assets.getAsteroidB();
