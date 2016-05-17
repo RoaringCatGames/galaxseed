@@ -160,8 +160,7 @@ public class PlayerHealthSystem extends IteratingSystem implements InputProcesso
 
         healthBar = ((PooledEngine)getEngine()).createEntity();
         healthBar.add(TransformComponent.create(getEngine())
-                .setPosition(9.3125f, 28.6719f, Z.health)
-                .setOpacity(0.9f));
+                .setPosition(9.3125f, 28.6719f, Z.health));
         healthBar.add(TextureComponent.create(getEngine())
             .setRegion(Assets.getBranch()));
         healthBar.add(BoundsComponent.create(getEngine())
