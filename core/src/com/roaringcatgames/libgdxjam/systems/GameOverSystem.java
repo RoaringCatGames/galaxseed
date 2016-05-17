@@ -9,11 +9,13 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.roaringcatgames.kitten2d.ashley.components.AnimationComponent;
 import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TextComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.BulletComponent;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.screens.IScreenDispatcher;
 import com.roaringcatgames.libgdxjam.values.GameState;
@@ -53,10 +55,14 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
     @Override
     public void setProcessing(boolean processing) {
         super.setProcessing(processing);
-
+        PooledEngine engine = (PooledEngine)getEngine();
         if(processing){
+            //Pause all of our bullet animations
+            for(Entity bullet:engine.getEntitiesFor(Family.all(BulletComponent.class).get())){
+                bullet.getComponent(AnimationComponent.class).setPaused(true);
+            }
             hasInitialized = false;
-            PooledEngine engine = (PooledEngine)getEngine();
+
             if(gameOverText == null) {
                 gameOverText = engine.createEntity();
                 gameOverText.add(TransformComponent.create(engine)
@@ -85,6 +91,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
             restartButton.getComponent(TransformComponent.class).setHidden(false);
             endSong.play();
         }else{
+
             if(endSong.isPlaying()) {
                 endSong.stop();
             }
