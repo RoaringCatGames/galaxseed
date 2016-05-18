@@ -8,6 +8,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -143,6 +144,18 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 rawry.add(TextureComponent.create(engine));
                 rawry.add(RotationComponent.create(engine)
                         .setRotationSpeed(45f));
+
+                Array<TextureAtlas.AtlasRegion> smokes = new Array<>();
+                smokes.add(Assets.getSmoke());
+                rawry.add(ParticleEmitterComponent.create(engine)
+                                .setSpawnRate(1000f)
+                                .setSpeed(2f, 3f)
+                                .setParticleLifespans(0.3f, 0.5f)
+                                .setAngleRange(120f, 180f)
+                                .setDuration(3f)
+                                .setShouldFade(true)
+                                //.setShouldLoop(true)
+                                .setParticleImages(smokes));
                 engine.addEntity(rawry);
 
                 for(int i=0;i<shipPartVelocities.length;i++){

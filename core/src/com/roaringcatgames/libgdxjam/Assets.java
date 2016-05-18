@@ -289,6 +289,10 @@ public class Assets {
         return shipParts.get(index % shipParts.size);
     }
 
+    public static TextureAtlas.AtlasRegion getSmoke(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/smoke");
+    }
+
     /////////////
     //Health Bar
     /////////////
