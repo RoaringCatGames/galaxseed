@@ -24,6 +24,7 @@ public class Z {
     public static final float seed = 40;
     public static final float leaves = 39f;
     public static final float explosion = 30f;
+    public static final float rawry = 20f;
 
     public static final float playAsteroids = 35f;
     public static final float title = 34f;
@@ -37,5 +38,6 @@ public class Z {
     public static float healthLeaf = 1f;
     public static final float gameOver = 0f;
     public static final float tutorial = 0f;
+
 
 }

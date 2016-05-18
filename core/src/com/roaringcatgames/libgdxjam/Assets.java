@@ -274,6 +274,20 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getIdleFlamesFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/propel");
     }
+    public static Array<TextureAtlas.AtlasRegion> getShipDeathFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-death");
+    }
+
+    private static Array<TextureAtlas.AtlasRegion> shipParts;
+    public static TextureAtlas.AtlasRegion getShipPart(int index){
+        if(shipParts == null){
+            shipParts = new Array<>();
+            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-a"));
+            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-b"));
+            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-c"));
+        }
+        return shipParts.get(index % shipParts.size);
+    }
 
     /////////////
     //Health Bar

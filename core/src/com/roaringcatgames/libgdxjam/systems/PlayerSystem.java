@@ -17,6 +17,7 @@ import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.GunComponent;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
+import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
@@ -43,6 +44,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<TransformComponent> tm;
+    private ComponentMapper<AnimationComponent> am;
 
 
     private OrthographicCamera cam;
@@ -54,6 +56,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
         this.sm = ComponentMapper.getFor(StateComponent.class);
         this.tm = ComponentMapper.getFor(TransformComponent.class);
+        this.am = ComponentMapper.getFor(AnimationComponent.class);
         this.cam = cam;
 
         this.flyingMusic = Assets.getFlyingMusic();
@@ -101,7 +104,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                     .addAnimation("DEFAULT", Animations.getShipIdle())
                     .addAnimation("FLYING", Animations.getShipFlying())
                     .addAnimation("FLYING_LEFT", Animations.getShipFlyingLeft())
-                    .addAnimation("FLYING_RIGHT", Animations.getShipFlyingRight()));
+                    .addAnimation("FLYING_RIGHT", Animations.getShipFlyingRight())
+                    .addAnimation("DEAD", Animations.getShipDeath()));
             player.add(RemainInBoundsComponent.create(engine)
                     .setMode(BoundMode.CONTAINED));
             player.add(StateComponent.create(engine)
@@ -186,56 +190,66 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
         StateComponent sc = sm.get(player);
         TransformComponent tc = tm.get(player);
-        tc.position.add(currentPositionChange);
+        StateComponent fsc = sm.get(flames);
 
-        /**********************
-         * Set Animation State
-         **********************/
         String state = "DEFAULT";
         String flameState;
         boolean isLooping = true;
-        //right
-        if(currentPositionChange.x > 0f) {
-            state = "FLYING_RIGHT";
-            isLooping = false;
-        }else if(currentPositionChange.x < 0f) {
-            state = "FLYING_LEFT";
-            isLooping = false;
-        }else if(currentPositionChange.y != 0f){
-            state = "FLYING";
-        }
 
-        FollowerComponent fc = flames.getComponent(FollowerComponent.class);
-        if(!state.equals("DEFAULT")){
-            flameState = "FLYING";
-            float x = flyingFlameOffset.x;
+        if(App.getState() != GameState.GAME_OVER){
+            tc.position.add(currentPositionChange);
 
-            if(state.equals("FLYING_RIGHT")){
-                x -= 0.3f;
-            }else if(state.equals("FLYING_LEFT")){
-                x += 0.3f;
+            /**********************
+             * Set Animation State
+             **********************/
+
+
+            //right
+            if (currentPositionChange.x > 0f) {
+                state = "FLYING_RIGHT";
+                isLooping = false;
+            } else if (currentPositionChange.x < 0f) {
+                state = "FLYING_LEFT";
+                isLooping = false;
+            } else if (currentPositionChange.y != 0f) {
+                state = "FLYING";
             }
-            fc.setOffset(x*initialScale, flyingFlameOffset.y * initialScale);
-        }else{
-            flameState = "DEFAULT";
-            fc.setOffset(idleFlameOffset.x * initialScale, idleFlameOffset.y * initialScale);
-        }
 
-        if(flameState.equals("FLYING") && !flyingMusic.isPlaying()){
-            flyingMusic.setLooping(true);
-            flyingMusic.setVolume(Volume.FLYING_MUSIC);
-            flyingMusic.play();
-        }else if(flyingMusic.isPlaying()){
-            flyingMusic.stop();
-        }
+            FollowerComponent fc = flames.getComponent(FollowerComponent.class);
+            if (!state.equals("DEFAULT")) {
+                flameState = "FLYING";
+                float x = flyingFlameOffset.x;
 
-        if(!state.equals(sc.get())) {
-            sc.set(state).setLooping(isLooping);
-            StateComponent fsc = sm.get(flames);
-            if(!flameState.equals(fsc.get())){
-                fsc.set(flameState);
+                if (state.equals("FLYING_RIGHT")) {
+                    x -= 0.3f;
+                } else if (state.equals("FLYING_LEFT")) {
+                    x += 0.3f;
+                }
+                fc.setOffset(x * initialScale, flyingFlameOffset.y * initialScale);
+            } else {
+                flameState = "DEFAULT";
+                fc.setOffset(idleFlameOffset.x * initialScale, idleFlameOffset.y * initialScale);
+            }
+
+            if (flameState.equals("FLYING") && !flyingMusic.isPlaying()) {
+                flyingMusic.setLooping(true);
+                flyingMusic.setVolume(Volume.FLYING_MUSIC);
+                flyingMusic.play();
+            } else if (flyingMusic.isPlaying()) {
+                flyingMusic.stop();
+            }
+
+
+            if(!state.equals(sc.get())) {
+                sc.set(state).setLooping(isLooping);
+
+                if(!flameState.equals(fsc.get())){
+                    fsc.set(flameState);
+                }
             }
         }
+
+
     }
 
     @Override

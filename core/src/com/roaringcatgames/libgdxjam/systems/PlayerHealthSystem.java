@@ -119,39 +119,43 @@ public class PlayerHealthSystem extends IteratingSystem implements InputProcesso
             init();
         }
 
-        HealthComponent hc = hm.get(player);
+        if(player != null) {
+            HealthComponent hc = hm.get(player);
 
-        if(hc.health <= 0f && App.getState() != GameState.GAME_OVER){
-            healthBar.add(TweenComponent.create(getEngine())
-                .addTween(Tween.to(healthBar, K2EntityTweenAccessor.COLOR, 4f)
-                    .target(Color.LIGHT_GRAY.r, Color.LIGHT_GRAY.g, Color.LIGHT_GRAY.b)));
-            App.setState(GameState.GAME_OVER);
-        }
+            if(hc != null) {
+                if (hc.health <= 0f && App.getState() != GameState.GAME_OVER) {
+                    healthBar.add(TweenComponent.create(getEngine())
+                            .addTween(Tween.to(healthBar, K2EntityTweenAccessor.COLOR, 4f)
+                                    .target(Color.LIGHT_GRAY.r, Color.LIGHT_GRAY.g, Color.LIGHT_GRAY.b)));
+                    App.setState(GameState.GAME_OVER);
+                }
 
-        int remainingLeaves = (int)Math.ceil(hc.health/healthPerLeaf);
+                int remainingLeaves = (int) Math.ceil(hc.health / healthPerLeaf);
 
-        if(remainingLeaves > leaves.size && leaves.size < leafPositions.length){
-            for(int i=0;i<(remainingLeaves-leaves.size);i++){
-                addLeaf(leaves.size, 0f);
+                if (remainingLeaves > leaves.size && leaves.size < leafPositions.length) {
+                    for (int i = 0; i < (remainingLeaves - leaves.size); i++) {
+                        addLeaf(leaves.size, 0f);
+                    }
+                }
+
+
+                while (remainingLeaves < leaves.size) {
+                    Entity leaf = leaves.pop();
+                    TransformComponent tc = tm.get(leaf);
+                    Timeline tl = Timeline.createSequence()
+                            .push(Tween.to(leaf, K2EntityTweenAccessor.POSITION_X, 0.5f)
+                                    .target(tc.position.x + K2MathUtil.getRandomInRange(-1.2f, 1.2f)))
+                            .push(Tween.to(leaf, K2EntityTweenAccessor.POSITION_X, 1f)
+                                    .target(tc.position.x + K2MathUtil.getRandomInRange(-1.2f, 1.2f)))
+                            .repeatYoyo(6, 0f);
+                    leaf.add(TweenComponent.create(getEngine())
+                            .setTimeline(tl)
+                            .addTween(Tween.to(leaf, K2EntityTweenAccessor.OPACITY, 2f).target(0f)));
+
+                    leaf.add(VelocityComponent.create(getEngine()).setSpeed(0f, -5f));
+                    leaf.add(WhenOffScreenComponent.create(getEngine()));
+                }
             }
-        }
-
-
-        while(remainingLeaves < leaves.size){
-            Entity leaf = leaves.pop();
-            TransformComponent tc = tm.get(leaf);
-            Timeline tl = Timeline.createSequence()
-                    .push(Tween.to(leaf, K2EntityTweenAccessor.POSITION_X, 0.5f)
-                               .target(tc.position.x + K2MathUtil.getRandomInRange(-1.2f, 1.2f)))
-                    .push(Tween.to(leaf, K2EntityTweenAccessor.POSITION_X, 1f)
-                               .target(tc.position.x + K2MathUtil.getRandomInRange(-1.2f, 1.2f)))
-                    .repeatYoyo(6, 0f);
-            leaf.add(TweenComponent.create(getEngine())
-                    .setTimeline(tl)
-                    .addTween(Tween.to(leaf, K2EntityTweenAccessor.OPACITY, 2f).target(0f)));
-
-            leaf.add(VelocityComponent.create(getEngine()).setSpeed(0f, -5f));
-            leaf.add(WhenOffScreenComponent.create(getEngine()));
         }
     }
 

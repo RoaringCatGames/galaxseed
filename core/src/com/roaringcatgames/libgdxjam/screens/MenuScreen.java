@@ -242,7 +242,8 @@ public class MenuScreen extends LazyInitScreen {
     }
 
     private boolean isReady(Entity p){
-        return p.getComponents().size() == 0;
+        ParticleEmitterComponent pec = p.getComponent(ParticleEmitterComponent.class);
+        return p.getComponents().size() == 0 || (pec != null && pec.elapsedTime > 2f);
     }
 
     @Override

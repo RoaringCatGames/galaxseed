@@ -49,6 +49,9 @@ public class Animations {
     private static Animation muzzle;
     private static Animation flamesIdle;
     private static Animation flames;
+    private static Animation shipDeath;
+
+    private static Animation rawry;
 
     public static void init(){
         pMenu = new Animation(1f/6f, Assets.getPFrames());
@@ -93,6 +96,9 @@ public class Animations {
         muzzle = new Animation(Rates.timeBetweenShots/6f, Assets.getMuzzleFrames());
         flamesIdle = new Animation(1f/9f, Assets.getIdleFlamesFrames());
         flames = new Animation(1f/9f, Assets.getFlamesFrames());
+        shipDeath = new Animation(1f/9f, Assets.getShipDeathFrames());
+
+        rawry = new Animation(1f / 30f, Assets.getLoadingFrames(), Animation.PlayMode.LOOP_PINGPONG);
     }
 
     public static Animation getpMenu() {
@@ -229,6 +235,14 @@ public class Animations {
 
     public static Animation getFlames() {
         return flames;
+    }
+
+    public static Animation getShipDeath(){
+        return shipDeath;
+    }
+
+    public static Animation getRawry(){
+        return rawry;
     }
 
 }
