@@ -76,35 +76,6 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
             for(Entity bullet:engine.getEntitiesFor(Family.all(BulletComponent.class).get())){
                 bullet.getComponent(AnimationComponent.class).setPaused(true);
             }
-            hasInitialized = false;
-
-            if(gameOverText == null) {
-                gameOverText = engine.createEntity();
-                gameOverText.add(TransformComponent.create(engine)
-                        .setPosition(App.W / 2f, App.H / 2f, Z.gameOver));
-                gameOverText.add(TextComponent.create(engine)
-                        .setFont(Assets.get64Font())
-                        .setText("GAME OVER"));
-
-                getEngine().addEntity(gameOverText);
-            }
-
-            if(restartButton == null){
-                restartButton = engine.createEntity();
-                restartButton.add(TransformComponent.create(engine)
-                    .setPosition(App.W/2f, ((App.H/2f)-2.5f), Z.gameOver));
-                restartButton.add(TextComponent.create(engine)
-                    .setFont(Assets.get48Font())
-                    .setText("Home"));
-                restartButton.add(BoundsComponent.create(engine)
-                    .setBounds(0f, 0f, 5f, 1.5f)
-                    .setOffset(0f, -0.75f));
-
-                getEngine().addEntity(restartButton);
-            }
-            gameOverText.getComponent(TransformComponent.class).setHidden(false);
-            restartButton.getComponent(TransformComponent.class).setHidden(false);
-            endSong.play();
         }else{
 
             if(endSong.isPlaying()) {
@@ -131,6 +102,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
             String state = "DEFAULT";
             String flameState;
             boolean isLooping = true;
+            PooledEngine engine = (PooledEngine)getEngine();
 
             if (!"DEAD".equals(sc.get())) {
                 state = "DEAD";
@@ -141,7 +113,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 //fsc.set(flameState);
 
                 //Spawn Roary
-                PooledEngine engine = (PooledEngine)getEngine();
+
                 rawry = engine.createEntity();
                 rawry.add(TransformComponent.create(engine)
                         .setPosition(tc.position.x, tc.position.y, Z.player)
@@ -184,15 +156,44 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                         .setScale(tc.scale.x, tc.scale.y));
                     shipPart.add(WhenOffScreenComponent.create(engine));
                     shipPart.add(TweenComponent.create(engine)
-                        .addTween(Tween.to(shipPart, K2EntityTweenAccessor.POSITION_XY, 2f)
-                                .target(shipPartVelocities[i].x, shipPartVelocities[i].y)
-                                .ease(TweenEquations.easeOutExpo)));
+                            .addTween(Tween.to(shipPart, K2EntityTweenAccessor.POSITION_XY, 2f)
+                                    .target(shipPartVelocities[i].x, shipPartVelocities[i].y)
+                                    .ease(TweenEquations.easeOutExpo)));
                     engine.addEntity(shipPart);
                 }
 
 
-            } else if (ac.animations.get("DEAD").isAnimationFinished(sc.time)) {
+            } else if (!hasInitialized && ac.animations.get("DEAD").isAnimationFinished(sc.time)) {
                 getEngine().removeEntity(player);
+
+                if(gameOverText == null) {
+                    gameOverText = engine.createEntity();
+                    gameOverText.add(TransformComponent.create(engine)
+                            .setPosition(App.W / 2f, App.H / 2f, Z.gameOver));
+                    gameOverText.add(TextComponent.create(engine)
+                            .setFont(Assets.get64Font())
+                            .setText("GAME OVER"));
+
+                    getEngine().addEntity(gameOverText);
+                }
+
+                if(restartButton == null){
+                    restartButton = engine.createEntity();
+                    restartButton.add(TransformComponent.create(engine)
+                            .setPosition(App.W/2f, ((App.H/2f)-2.5f), Z.gameOver));
+                    restartButton.add(TextComponent.create(engine)
+                            .setFont(Assets.get48Font())
+                            .setText("Home"));
+                    restartButton.add(BoundsComponent.create(engine)
+                            .setBounds(0f, 0f, 5f, 1.5f)
+                            .setOffset(0f, -0.75f));
+
+                    getEngine().addEntity(restartButton);
+                }
+                gameOverText.getComponent(TransformComponent.class).setHidden(false);
+                restartButton.getComponent(TransformComponent.class).setHidden(false);
+                endSong.play();
+                hasInitialized = true;
             }
 
 
@@ -217,7 +218,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
     Vector3 touchPoint = new Vector3();
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(App.getState() == GameState.GAME_OVER){
+        if(hasInitialized && App.getState() == GameState.GAME_OVER){
             touchPoint.set(screenX, screenY, 0f);
             touchPoint = cam.unproject(touchPoint);
 

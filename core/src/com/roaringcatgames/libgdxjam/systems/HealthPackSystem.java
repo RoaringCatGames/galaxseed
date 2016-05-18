@@ -38,12 +38,14 @@ public class HealthPackSystem extends IteratingSystem {
         if(player != null){
             BoundsComponent playerBounds = bm.get(player);
             HealthComponent playerHealth = hm.get(player);
-            for(Entity pack:packs){
-                BoundsComponent packBounds = bm.get(pack);
-                if(playerBounds.bounds.overlaps(packBounds.bounds)){
-                    HealthPackComponent packPack = hpm.get(pack);
-                    playerHealth.health += packPack.health;
-                    getEngine().removeEntity(pack);
+            if(playerBounds != null && playerHealth != null) {
+                for (Entity pack : packs) {
+                    BoundsComponent packBounds = bm.get(pack);
+                    if (playerBounds.bounds.overlaps(packBounds.bounds)) {
+                        HealthPackComponent packPack = hpm.get(pack);
+                        playerHealth.health += packPack.health;
+                        getEngine().removeEntity(pack);
+                    }
                 }
             }
         }
