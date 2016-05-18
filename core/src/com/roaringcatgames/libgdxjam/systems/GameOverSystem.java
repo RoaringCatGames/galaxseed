@@ -34,10 +34,18 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
     private Entity gameOverText;
     private Entity restartButton;
     private Entity rawry;
-    private Vector2[] shipPartVelocities = new Vector2[]{
-            new Vector2(-5f, 5f),
-            new Vector2(-5f, -3f),
-            new Vector2(5f, 4f)
+    private Vector2[] shipPartEndPositions = new Vector2[]{
+            new Vector2(30f, 15f), //a
+            new Vector2(30f, 10f), //b
+            new Vector2(30f, 5f),  //c
+            new Vector2(30f, -5f), //d
+            new Vector2(20f, -10f),//e
+            new Vector2(15f, -10f),//f
+            new Vector2(5f, -10f), //g
+            new Vector2(-5f, -10f),//h
+            new Vector2(-5f, 30f), //i
+            new Vector2(0f, 40f)   //j
+
     };
     private Music endSong;
     private OrthographicCamera cam;
@@ -134,50 +142,58 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                                 .target(-4f, 30f).ease(TweenEquations.easeNone))
                         .repeatYoyo(10, 0f);
                 Timeline tl = Timeline.createParallel()
-                        .push(Tween.to(rawry, K2EntityTweenAccessor.SCALE, 3f)
+                        .push(Tween.to(rawry, K2EntityTweenAccessor.SCALE, 5f)
                                 .target(0.25f, 0.25f).ease(TweenEquations.easeOutSine))
-                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_Z, 3f)
+                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_Z, 5f)
                                 .target(Z.rawry))
-                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_XY, 3f)
+                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_XY, 5f)
                                 .target(0f, 25f).ease(TweenEquations.easeNone));
                 rawry.add(TweenComponent.create(engine).setTimeline(Timeline.createSequence().push(tl).push(secondTL)));
                 rawry.add(TextureComponent.create(engine));
                 rawry.add(RotationComponent.create(engine)
                         .setRotationSpeed(45f));
 
-                Array<TextureAtlas.AtlasRegion> smokes = new Array<>();
-                smokes.add(Assets.getSmoke());
                 rawry.add(ParticleEmitterComponent.create(engine)
-                                .setSpawnRate(1000f)
-                                .setSpeed(2f, 3f)
-                                .setParticleLifespans(0.3f, 0.5f)
-                                .setAngleRange(120f, 180f)
-                                .setDuration(3f)
-                                .setShouldFade(true)
-                                //.setShouldLoop(true)
-                                .setParticleImages(smokes));
+                        .setSpawnRate(100f)
+                        .setSpeed(2f, 3f)
+                        .setParticleLifespans(0.3f, 0.5f)
+                        .setAngleRange(120f, 180f)
+                        .setDuration(6f)
+                        .setSpawnType(ParticleSpawnType.RANDOM_IN_BOUNDS)
+                        .setSpawnRange(1f, 1f)
+                        .setParticleMinMaxScale(1f, 2f)
+                        .setShouldFade(true)
+                        .setParticleImage(Assets.getSmoke()));
                 engine.addEntity(rawry);
+            } else if (!hasInitialized && ac.animations.get("DEAD").isAnimationFinished(sc.time)) {
 
-                for(int i=0;i<shipPartVelocities.length;i++){
+                for(int i=0;i< shipPartEndPositions.length;i++){
                     Entity shipPart = engine.createEntity();
                     shipPart.add(TextureComponent.create(engine)
-                        .setRegion(Assets.getShipPart(i)));
+                            .setRegion(Assets.getShipPart(i)));
                     shipPart.add(RotationComponent.create(engine)
-                        .setRotationSpeed(K2MathUtil.getRandomInRange(720f, 2000f)));
+                            .setRotationSpeed(K2MathUtil.getRandomInRange(180f, 270f)));
                     shipPart.add(TransformComponent.create(engine)
-                        .setPosition(tc.position.x, tc.position.y, tc.position.z)
-                        .setScale(tc.scale.x, tc.scale.y));
+                            .setPosition(tc.position.x, tc.position.y, tc.position.z)
+                            .setScale(tc.scale.x, tc.scale.y));
                     shipPart.add(WhenOffScreenComponent.create(engine));
                     shipPart.add(TweenComponent.create(engine)
-                            .addTween(Tween.to(shipPart, K2EntityTweenAccessor.POSITION_XY, 2f)
-                                    .target(shipPartVelocities[i].x, shipPartVelocities[i].y)
+                            .addTween(Tween.to(shipPart, K2EntityTweenAccessor.POSITION_XY, 20f)
+                                    .target(shipPartEndPositions[i].x, shipPartEndPositions[i].y)
                                     .ease(TweenEquations.easeOutExpo)));
+                    shipPart.add(ParticleEmitterComponent.create(engine)
+                            .setSpawnRate(100f)
+                            .setSpeed(2f, 3f)
+                            .setParticleLifespans(0.3f, 0.5f)
+                            .setAngleRange(120f, 180f)
+                            .setDuration(8f)
+                            .setSpawnType(ParticleSpawnType.RANDOM_IN_BOUNDS)
+                            .setSpawnRange(1f, 1f)
+                            .setParticleMinMaxScale(1f, 2f)
+                            .setShouldFade(true)
+                            .setParticleImage(Assets.getSmoke()));
                     engine.addEntity(shipPart);
                 }
-
-
-            } else if (!hasInitialized && ac.animations.get("DEAD").isAnimationFinished(sc.time)) {
-                getEngine().removeEntity(player);
 
                 if(gameOverText == null) {
                     gameOverText = engine.createEntity();
@@ -206,6 +222,8 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 gameOverText.getComponent(TransformComponent.class).setHidden(false);
                 restartButton.getComponent(TransformComponent.class).setHidden(false);
                 endSong.play();
+
+                getEngine().removeEntity(player);
                 hasInitialized = true;
             }
 

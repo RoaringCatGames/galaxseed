@@ -225,6 +225,7 @@ public class MenuScreen extends LazyInitScreen {
                         .setShouldFade(true)
                         .setAngleRange(-110f, 110f)
                         .setSpawnRate(60f)
+                        .setParticleMinMaxScale(0.5f, 0.5f)
                         .setSpeed(2f, 4f)
                         .setZIndex(Z.titlePlantLeaves)
                         .setShouldLoop(true));

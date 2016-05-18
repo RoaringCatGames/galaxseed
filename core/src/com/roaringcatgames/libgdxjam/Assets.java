@@ -285,6 +285,14 @@ public class Assets {
             shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-a"));
             shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-b"));
             shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-c"));
+            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-d"));
+            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-e"));
+            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-f"));
+            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-g"));
+            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-h"));
+            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-i"));
+            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-j"));
+
         }
         return shipParts.get(index % shipParts.size);
     }

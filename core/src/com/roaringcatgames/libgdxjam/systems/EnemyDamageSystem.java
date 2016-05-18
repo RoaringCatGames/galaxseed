@@ -372,6 +372,7 @@ public class EnemyDamageSystem extends IteratingSystem {
             .setParticleLifespans(0.1f, 0.2f)
             .setSpawnRate(100f)
             .setAngleRange(0f, 360f)
+            .setParticleMinMaxScale(0.5f, 0.5f)
             .setSpeed(2f, 3f)
             .setShouldFade(true)
             .setZIndex(Z.leaves)
