@@ -178,7 +178,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                             .setScale(0.5f, 0.5f));
                     shipPart.add(WhenOffScreenComponent.create(engine));
                     shipPart.add(TweenComponent.create(engine)
-                            .addTween(Tween.to(shipPart, K2EntityTweenAccessor.POSITION_XY, 20f)
+                            .addTween(Tween.to(shipPart, K2EntityTweenAccessor.POSITION_XY, K2MathUtil.getRandomInRange(15f, 25f))
                                     .target(shipPartEndPositions[i].x, shipPartEndPositions[i].y)
                                     .ease(TweenEquations.easeOutExpo)));
                     shipPart.add(ParticleEmitterComponent.create(engine)
