@@ -119,6 +119,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 flameState = "DEAD";
                 sc.set(state);
                 sc.setLooping(isLooping);
+                tc.setScale(1f, 1f);
                 //fsc.set(flameState);
 
                 //Spawn Roary
@@ -165,7 +166,6 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                         .setShouldFade(true)
                         .setParticleImage(Assets.getSmoke()));
                 engine.addEntity(rawry);
-            } else if (!hasInitialized && ac.animations.get("DEAD").isAnimationFinished(sc.time)) {
 
                 for(int i=0;i< shipPartEndPositions.length;i++){
                     Entity shipPart = engine.createEntity();
@@ -174,8 +174,8 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                     shipPart.add(RotationComponent.create(engine)
                             .setRotationSpeed(K2MathUtil.getRandomInRange(180f, 270f)));
                     shipPart.add(TransformComponent.create(engine)
-                            .setPosition(tc.position.x, tc.position.y, tc.position.z)
-                            .setScale(tc.scale.x, tc.scale.y));
+                            .setPosition(tc.position.x, tc.position.y, tc.position.z-1f)
+                            .setScale(0.5f, 0.5f));
                     shipPart.add(WhenOffScreenComponent.create(engine));
                     shipPart.add(TweenComponent.create(engine)
                             .addTween(Tween.to(shipPart, K2EntityTweenAccessor.POSITION_XY, 20f)
@@ -188,12 +188,16 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                             .setAngleRange(120f, 180f)
                             .setDuration(8f)
                             .setSpawnType(ParticleSpawnType.RANDOM_IN_BOUNDS)
-                            .setSpawnRange(1f, 1f)
+                            .setSpawnRange(0.5f, 0.5f)
                             .setParticleMinMaxScale(1f, 2f)
                             .setShouldFade(true)
                             .setParticleImage(Assets.getSmoke()));
                     engine.addEntity(shipPart);
                 }
+
+            } else if (!hasInitialized && ac.animations.get("DEAD").isAnimationFinished(sc.time)) {
+
+
 
                 if(gameOverText == null) {
                     gameOverText = engine.createEntity();

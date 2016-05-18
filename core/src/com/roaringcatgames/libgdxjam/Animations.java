@@ -96,7 +96,7 @@ public class Animations {
         muzzle = new Animation(Rates.timeBetweenShots/6f, Assets.getMuzzleFrames());
         flamesIdle = new Animation(1f/9f, Assets.getIdleFlamesFrames());
         flames = new Animation(1f/9f, Assets.getFlamesFrames());
-        shipDeath = new Animation(1f/9f, Assets.getShipDeathFrames());
+        shipDeath = new Animation(1f/6f, Assets.getShipDeathFrames());
 
         rawry = new Animation(1f / 30f, Assets.getLoadingFrames(), Animation.PlayMode.LOOP_PINGPONG);
     }

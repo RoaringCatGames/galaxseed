@@ -191,6 +191,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         StateComponent sc = sm.get(player);
         TransformComponent tc = tm.get(player);
         StateComponent fsc = sm.get(flames);
+        TransformComponent ftc = tm.get(flames);
 
         String state = "DEFAULT";
         String flameState;
@@ -246,6 +247,10 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                 if(!flameState.equals(fsc.get())){
                     fsc.set(flameState);
                 }
+            }
+        }else if(App.getState() == GameState.GAME_OVER){
+            if(flames != null && ftc != null) {
+                ftc.setHidden(true);
             }
         }
 
