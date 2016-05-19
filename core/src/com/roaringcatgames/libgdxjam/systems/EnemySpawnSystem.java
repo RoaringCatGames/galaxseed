@@ -100,9 +100,12 @@ public class EnemySpawnSystem extends IteratingSystem {
         //Spawn Asteroids
         if(asteroidTimer.doesTriggerThisStep(deltaTime)){
             float xVel = asteroidX < 0f ? AsteroidXVelocity : -AsteroidXVelocity;
-            EnemyType eType = EnemyType.values()[r.nextInt(EnemyType.values().length)];
+            float rnd = r.nextFloat();
+            EnemyType eType = rnd < 0.5f ? EnemyType.ASTEROID_A :
+                              rnd < 0.8f ? EnemyType.ASTEROID_B : EnemyType.ASTEROID_C;
             generateAsteroid(eType, asteroidX, AsteroidY, xVel, AsteroidYVelocity);
-            asteroidX = asteroidX < 0f ? AsteroidRightX : AsteroidLeftX;
+            //Randomize left and right
+            asteroidX =  r.nextFloat() < 0.5f ? AsteroidRightX : AsteroidLeftX;
         }
     }
 
@@ -186,10 +189,11 @@ public class EnemySpawnSystem extends IteratingSystem {
                 health = Health.AsteroidA;
                 assColor = Colors.BROWN_ASTEROID;
 
+                strat = stratWeight < (homingChance/4f) ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed)
                         .setParticleTextures(Assets.getFrags())
                         .setStrategy(strat)
-                        .setSpawnRate(2f);
+                        .setSpawnRate(1f);
                 break;
         }
 
