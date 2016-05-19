@@ -5,9 +5,11 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -38,17 +40,6 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
     private Entity restartButton;
     private Entity rawry;
     private Array<Vector2> shipPartEndPositions = new Array<>();
-//            new Vector2(30f, 15f), //a
-//            new Vector2(30f, 10f), //b
-//            new Vector2(30f, 5f),  //c
-//            new Vector2(30f, -5f), //d
-//            new Vector2(20f, -10f),//e
-//            new Vector2(15f, -10f),//f
-//            new Vector2(5f, -10f), //g
-//            new Vector2(-5f, -10f),//h
-//            new Vector2(-5f, 30f), //i
-//            new Vector2(0f, 40f)   //j
-//    };
 
     Array<Vector2> randomEdgePoints = new Array<>();
     private Music endSong;
@@ -242,13 +233,14 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
             } else if (!hasInitialized && ac.animations.get("DEAD").isAnimationFinished(sc.time)) {
 
 
-
+                BitmapFont largeFont = Gdx.graphics.getDensity() > 1f ? Assets.get128Font() : Assets.get64Font();
+                BitmapFont subFont = Gdx.graphics.getDensity() > 1f ? Assets.get64Font() : Assets.get48Font();
                 if(gameOverText == null) {
                     gameOverText = engine.createEntity();
                     gameOverText.add(TransformComponent.create(engine)
                             .setPosition(App.W / 2f, App.H / 2f, Z.gameOver));
                     gameOverText.add(TextComponent.create(engine)
-                            .setFont(Assets.get64Font())
+                            .setFont(largeFont)
                             .setText("GAME OVER"));
 
                     getEngine().addEntity(gameOverText);
@@ -259,10 +251,10 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                     restartButton.add(TransformComponent.create(engine)
                             .setPosition(App.W/2f, ((App.H/2f)-2.5f), Z.gameOver));
                     restartButton.add(TextComponent.create(engine)
-                            .setFont(Assets.get48Font())
-                            .setText("Home"));
+                            .setFont(subFont)
+                            .setText("RE-LAUNCH"));
                     restartButton.add(BoundsComponent.create(engine)
-                            .setBounds(0f, 0f, 5f, 1.5f)
+                            .setBounds(0f, 0f, 8f, 3f)
                             .setOffset(0f, -0.75f));
 
                     getEngine().addEntity(restartButton);
