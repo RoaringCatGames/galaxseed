@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -203,6 +204,9 @@ public class EnemyDamageSystem extends IteratingSystem {
                                 attachTreeCover(enemy, Animations.getAsteroidC());
                                 generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.FERTILIZER);
                                 break;
+                            default:
+                                Gdx.app.log("EnemyType", "EnemyType:" + ec.enemyType);
+                                break;
                         }
 
                         //ec.setDamaging(false);
@@ -211,6 +215,8 @@ public class EnemyDamageSystem extends IteratingSystem {
                             if (vm.has(enemy)) {
                                 VelocityComponent vc = vm.get(enemy);
                                 vc.speed.scl(1.6f);
+                            }else{
+                                Gdx.app.log("EnemyDamageSystem", "Enemy doesn't have Velocity!");
                             }
                             popSfx.play(Volume.POP_SFX);
                         }
@@ -372,6 +378,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                 .setAngleRange(0f, 360f)
                 .setParticleMinMaxScale(0.5f, 0.5f)
                 .setSpeed(2f, 3f)
+                .setParticleMinMaxScale(0.5f, 0.5f)
                 .setShouldFade(true)
                 .setZIndex(Z.leaves)
                 .setDuration(0.3f));

@@ -29,6 +29,9 @@ import java.util.Random;
  */
 public class EnemySpawnSystem extends IteratingSystem {
 
+    private static float elapsedTime = 0f;
+    private static float homingChance = 0.1f;
+
     private static float LeftCometSpawnFrequency = 0.4f;
     private static float RightCometSpawnFrequency = 0.5f;
     private static float CometY = 50f;
@@ -54,13 +57,21 @@ public class EnemySpawnSystem extends IteratingSystem {
         leftTimer.elapsedTime += RightCometSpawnFrequency/2f;
     }
 
-    private float elapsedTime = 0f;
-
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
 
         elapsedTime += deltaTime;
+
+        if(elapsedTime > 300f) {
+            homingChance = 0.5f;
+        }if(elapsedTime > 120f) {
+            homingChance = 0.4f;
+        }else if(elapsedTime > 60f){
+            homingChance = 0.3f;
+        }else if(elapsedTime > 30f){
+            homingChance = 0.2f;
+        }
 
 //        for(EnemySpawn spawn: EnemySpawns.getLevelOneSpawns()){
 //            if(!spawn.hasSpawned && spawn.spawnTime <= elapsedTime){
@@ -89,9 +100,12 @@ public class EnemySpawnSystem extends IteratingSystem {
         //Spawn Asteroids
         if(asteroidTimer.doesTriggerThisStep(deltaTime)){
             float xVel = asteroidX < 0f ? AsteroidXVelocity : -AsteroidXVelocity;
-            EnemyType eType = EnemyType.values()[r.nextInt(EnemyType.values().length)];
+            float rnd = r.nextFloat();
+            EnemyType eType = rnd < 0.5f ? EnemyType.ASTEROID_A :
+                              rnd < 0.8f ? EnemyType.ASTEROID_B : EnemyType.ASTEROID_C;
             generateAsteroid(eType, asteroidX, AsteroidY, xVel, AsteroidYVelocity);
-            asteroidX = asteroidX < 0f ? AsteroidRightX : AsteroidLeftX;
+            //Randomize left and right
+            asteroidX =  r.nextFloat() < 0.5f ? AsteroidRightX : AsteroidLeftX;
         }
     }
 
@@ -136,6 +150,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 health = Health.AsteroidA;
                 assColor = Colors.BROWN_ASTEROID;
 
+                strat = stratWeight < (homingChance/4f) ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed)
                         .setParticleTextures(Assets.getFrags())
                         .setStrategy(strat)
@@ -147,7 +162,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 size = 3.75f;
                 health = Health.AsteroidB;
                 assColor = Colors.BLUE_ASTEROID;
-                strat = stratWeight < 0.05f ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
+                strat = stratWeight < (homingChance/2f) ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 3f)
                     .setParticleTextures(Assets.getFrags())
                     .setStrategy(strat)
@@ -160,7 +175,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 health = Health.AsteroidC;
                 assColor = Colors.PURPLE_ASTEROID;
 
-                strat = stratWeight < 0.2f ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
+                strat = stratWeight < homingChance ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 float spawnRate = r.nextFloat() < 0.1f ? 10f: 4f;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 5f)
                     .setParticleTextures(Assets.getFrags())
@@ -174,10 +189,11 @@ public class EnemySpawnSystem extends IteratingSystem {
                 health = Health.AsteroidA;
                 assColor = Colors.BROWN_ASTEROID;
 
+                strat = stratWeight < (homingChance/4f) ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed)
                         .setParticleTextures(Assets.getFrags())
                         .setStrategy(strat)
-                        .setSpawnRate(2f);
+                        .setSpawnRate(1f);
                 break;
         }
 
