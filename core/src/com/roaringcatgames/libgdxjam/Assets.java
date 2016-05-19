@@ -278,6 +278,10 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-death");
     }
 
+    public static Array<TextureAtlas.AtlasRegion> getWreckedCat(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("cat/death");
+    }
+
     private static Array<TextureAtlas.AtlasRegion> shipParts;
     public static TextureAtlas.AtlasRegion getShipPart(int index){
         if(shipParts == null){

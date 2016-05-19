@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.values.Colors;
 import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.values.Health;
@@ -23,6 +24,7 @@ import java.util.Random;
  */
 public class EnemyFiringSystem extends IteratingSystem {
 
+    private Vector2 spawnVelocity = new Vector2(0f, 0f);
     private Array<Entity> spawners;
     private ComponentMapper<EnemyComponent> em;
     private ComponentMapper<SpawnerComponent> sm;
@@ -51,6 +53,8 @@ public class EnemyFiringSystem extends IteratingSystem {
         r = new Random();
     }
 
+
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -74,8 +78,8 @@ public class EnemyFiringSystem extends IteratingSystem {
                 switch (sc.strategy) {
                     case ALL_DIRECTIONS:
                         for (Vector2 base : baseVectors) {
-                            Vector2 spawnVel = VectorUtils.rotateVector(base.cpy(), tc.rotation);
-                            spawnVel.scl(sc.particleSpeed);
+                            spawnVelocity.set(VectorUtils.rotateVector(base.cpy(), tc.rotation));
+                            spawnVelocity.scl(sc.particleSpeed);
                             int target = r.nextInt(sc.particleTextures.size);
 
                             Entity frag = engine.createEntity();
@@ -93,7 +97,7 @@ public class EnemyFiringSystem extends IteratingSystem {
                                     .setPosition(tc.position.x, tc.position.y, Z.enemyParticle)
                                     .setTint(fragColor));
                             frag.add(VelocityComponent.create(engine)
-                                    .setSpeed(spawnVel.x, spawnVel.y));
+                                    .setSpeed(spawnVelocity.x, spawnVelocity.y));
                             frag.add(RotationComponent.create(engine)
                                     .setRotationSpeed(sc.particleSpeed * 10f));
                             frag.add(CircleBoundsComponent.create(engine)
@@ -108,6 +112,36 @@ public class EnemyFiringSystem extends IteratingSystem {
                         break;
                     case RANDOM_DIRECTIONS:
 
+                        break;
+                    case HOMING_TO_PLAYER:
+                        spawnVelocity.set(App.playerLastPosition.cpy().sub(tc.position.x, tc.position.y));
+                        int target = r.nextInt(sc.particleTextures.size);
+                        Entity frag = engine.createEntity();
+                        frag.add(HealthComponent.create(engine)
+                                .setMaxHealth(Health.AsteroidFrag)
+                                .setMaxHealth(Health.AsteroidFrag));
+                        frag.add(EnemyComponent.create(engine)
+                                .setEnemyType(EnemyType.ASTEROID_FRAG)
+                                .setEnemyColor(parentColor));
+                        frag.add(WhenOffScreenComponent.create(engine)
+                                .setHasBeenOnScreen(true));
+                        frag.add(TextureComponent.create(engine)
+                                .setRegion(sc.particleTextures.get(target)));
+                        frag.add(TransformComponent.create(engine)
+                                .setPosition(tc.position.x, tc.position.y, Z.enemyParticle)
+                                .setTint(fragColor));
+                        frag.add(VelocityComponent.create(engine)
+                                .setSpeed(spawnVelocity.x, spawnVelocity.y));
+                        frag.add(RotationComponent.create(engine)
+                                .setRotationSpeed(sc.particleSpeed * 10f));
+                        frag.add(CircleBoundsComponent.create(engine)
+                                .setCircle(tc.position.x,
+                                        tc.position.y,
+                                        0.375f));
+                        frag.add(ProjectileComponent.create(engine)
+                                .setDamage(Damage.asteroidRock));
+                        frag.add(KinematicComponent.create(engine));
+                        engine.addEntity(frag);
                         break;
                 }
             }

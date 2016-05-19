@@ -43,7 +43,7 @@ public class HealthPackSystem extends IteratingSystem {
                     BoundsComponent packBounds = bm.get(pack);
                     if (playerBounds.bounds.overlaps(packBounds.bounds)) {
                         HealthPackComponent packPack = hpm.get(pack);
-                        playerHealth.health += packPack.health;
+                        playerHealth.health = Math.min(playerHealth.maxHealth, playerHealth.health + packPack.health);
                         getEngine().removeEntity(pack);
                     }
                 }

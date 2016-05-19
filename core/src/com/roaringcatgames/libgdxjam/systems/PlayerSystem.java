@@ -188,10 +188,16 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             init();
         }
 
+
         StateComponent sc = sm.get(player);
         TransformComponent tc = tm.get(player);
         StateComponent fsc = sm.get(flames);
         TransformComponent ftc = tm.get(flames);
+
+        //Keep our player position
+        if(tc != null){
+            App.playerLastPosition.set(tc.position.x, tc.position.y);
+        }
 
         String state = "DEFAULT";
         String flameState;

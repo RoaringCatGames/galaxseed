@@ -88,7 +88,7 @@ public class BackgroundSystem extends IteratingSystem {
         planets = new Array<>();
         planets.add(new BackgroundSticker(10f, 30f, 0f, Assets.getPluto()));
         planets.add(new BackgroundSticker(5f, 62f, 0f, Assets.getNeptune()));
-        planets.add(new BackgroundSticker(9.5f, 110f, 0f, Assets.getUranus()));
+        planets.add(new BackgroundSticker(10f, 110f, 0f, Assets.getUranus()));
         planets.add(new BackgroundSticker(10f, 165f, 0f, Assets.getSaturn()));
         planets.add(new BackgroundSticker(10f, 240f, 0f, Assets.getJupiterBottom()));
         planets.add(new BackgroundSticker(10f, 284.22f, 0f, Assets.getJupiterTop()));

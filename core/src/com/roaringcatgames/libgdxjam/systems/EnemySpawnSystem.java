@@ -62,36 +62,37 @@ public class EnemySpawnSystem extends IteratingSystem {
 
         elapsedTime += deltaTime;
 
-        for(EnemySpawn spawn: EnemySpawns.getLevelOneSpawns()){
-            if(!spawn.hasSpawned && spawn.spawnTime <= elapsedTime){
-                if(spawn.enemyType == EnemyType.COMET){
-                    generateComet(spawn.startPosition.x, spawn.startPosition.y);
-                }else {
-                    generateAsteroid(spawn.enemyType, spawn.startPosition.x, spawn.startPosition.y,
-                            spawn.speed.x, spawn.speed.y);
-                }
+//        for(EnemySpawn spawn: EnemySpawns.getLevelOneSpawns()){
+//            if(!spawn.hasSpawned && spawn.spawnTime <= elapsedTime){
+//                if(spawn.enemyType == EnemyType.COMET){
+//                    generateComet(spawn.startPosition.x, spawn.startPosition.y);
+//                }else {
+//                    generateAsteroid(spawn.enemyType, spawn.startPosition.x, spawn.startPosition.y,
+//                            spawn.speed.x, spawn.speed.y);
+//                }
+//
+//                spawn.hasSpawned = true;
+//            }
+//        }
 
-                spawn.hasSpawned = true;
-            }
+        //Spawn Comets
+        if(leftTimer.doesTriggerThisStep(deltaTime)) {
+            float leftPosition = (CometXRange * r.nextFloat());
+            generateComet(leftPosition, CometY);
         }
 
-//        //Spawn Comets
-//        if(leftTimer.doesTriggerThisStep(deltaTime)) {
-//            float leftPosition = (CometXRange * r.nextFloat());
-//            generateComet(leftPosition, CometY);
-//        }
-//
-//        if(rightTimer.doesTriggerThisStep(deltaTime)){
-//            float rightPosition = (CometXRange * r.nextFloat()) + (App.W - CometXRange);
-//            generateComet(rightPosition, CometY);
-//        }
+        if(rightTimer.doesTriggerThisStep(deltaTime)){
+            float rightPosition = (CometXRange * r.nextFloat()) + (App.W - CometXRange);
+            generateComet(rightPosition, CometY);
+        }
 
-//        //Spawn Asteroids
-//        if(asteroidTimer.doesTriggerThisStep(deltaTime)){
-//            float xVel = asteroidX < 0f ? AsteroidXVelocity : -AsteroidXVelocity;
-//            generateAsteroid(asteroidX, AsteroidY, xVel, AsteroidYVelocity);
-//            asteroidX = asteroidX < 0f ? AsteroidRightX : AsteroidLeftX;
-//        }
+        //Spawn Asteroids
+        if(asteroidTimer.doesTriggerThisStep(deltaTime)){
+            float xVel = asteroidX < 0f ? AsteroidXVelocity : -AsteroidXVelocity;
+            EnemyType eType = EnemyType.values()[r.nextInt(EnemyType.values().length)];
+            generateAsteroid(eType, asteroidX, AsteroidY, xVel, AsteroidYVelocity);
+            asteroidX = asteroidX < 0f ? AsteroidRightX : AsteroidLeftX;
+        }
     }
 
     @Override
@@ -118,11 +119,13 @@ public class EnemySpawnSystem extends IteratingSystem {
 
 
         SpawnerComponent spawner = SpawnerComponent.create(engine);
-        float cnt = r.nextFloat();
+        float stratWeight = r.nextFloat();
         float size;
         float health;
         TextureRegion tr;
         //EnemyType eType;
+        SpawnStrategy strat = SpawnStrategy.ALL_DIRECTIONS;
+
         EnemyColor eColor;
         Color assColor;
         switch(eType){
@@ -135,7 +138,7 @@ public class EnemySpawnSystem extends IteratingSystem {
 
                 spawner.setParticleSpeed(AsteroidFragSpeed)
                         .setParticleTextures(Assets.getFrags())
-                        .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                        .setStrategy(strat)
                         .setSpawnRate(1f);
                 break;
             case ASTEROID_B:
@@ -144,10 +147,10 @@ public class EnemySpawnSystem extends IteratingSystem {
                 size = 3.75f;
                 health = Health.AsteroidB;
                 assColor = Colors.BLUE_ASTEROID;
-
+                strat = stratWeight < 0.05f ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 3f)
                     .setParticleTextures(Assets.getFrags())
-                    .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                    .setStrategy(strat)
                     .setSpawnRate(2.5f);
                 break;
             case ASTEROID_C:
@@ -157,10 +160,11 @@ public class EnemySpawnSystem extends IteratingSystem {
                 health = Health.AsteroidC;
                 assColor = Colors.PURPLE_ASTEROID;
 
+                strat = stratWeight < 0.2f ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 float spawnRate = r.nextFloat() < 0.1f ? 10f: 4f;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 5f)
                     .setParticleTextures(Assets.getFrags())
-                    .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                    .setStrategy(strat)
                     .setSpawnRate(spawnRate);
                 break;
             default:
@@ -172,7 +176,7 @@ public class EnemySpawnSystem extends IteratingSystem {
 
                 spawner.setParticleSpeed(AsteroidFragSpeed)
                         .setParticleTextures(Assets.getFrags())
-                        .setStrategy(SpawnStrategy.ALL_DIRECTIONS)
+                        .setStrategy(strat)
                         .setSpawnRate(2f);
                 break;
         }

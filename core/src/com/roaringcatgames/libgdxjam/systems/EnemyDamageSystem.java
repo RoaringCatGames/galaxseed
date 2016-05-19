@@ -189,19 +189,19 @@ public class EnemyDamageSystem extends IteratingSystem {
                                 break;
                             case ASTEROID_A:
                                 attachTreeCover(enemy, Animations.getAsteroidA());
-                                generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
+                                if(r.nextFloat() < 0.2f) {
+                                    generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
+                                }
                                 break;
                             case ASTEROID_B:
                                 attachTreeCover(enemy, Animations.getAsteroidB());
-                                if(r.nextFloat() < 0.5f){
+                                if(r.nextFloat() < 0.33f){
                                     generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
                                 }
                                 break;
                             case ASTEROID_C:
                                 attachTreeCover(enemy, Animations.getAsteroidC());
-                                if(r.nextFloat() < 1f){
-                                    generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.FERTILIZER);
-                                }
+                                generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.FERTILIZER);
                                 break;
                         }
 
@@ -216,9 +216,9 @@ public class EnemyDamageSystem extends IteratingSystem {
                         }
 
                         enemy.add(TweenComponent.create(getEngine())
-                            .addTween(Tween.to(enemy, K2EntityTweenAccessor.COLOR, 2f)
-                                    .target(Colors.PLANTED_GREEN.r, Colors.PLANTED_GREEN.g, Colors.PLANTED_GREEN.b)
-                                .ease(TweenEquations.easeInOutSine)));
+                                .addTween(Tween.to(enemy, K2EntityTweenAccessor.COLOR, 2f)
+                                        .target(Colors.PLANTED_GREEN.r, Colors.PLANTED_GREEN.g, Colors.PLANTED_GREEN.b)
+                                        .ease(TweenEquations.easeInOutSine)));
 
                     }
 
@@ -365,18 +365,16 @@ public class EnemyDamageSystem extends IteratingSystem {
                 .setTarget(enemy)
                 .setBaseRotation(baseRotation));
 
-//        Vector2 minSpeeds = offsetVec.cpy().nor().scl(1f, 1f);
-//        Vector2 maxSpeeds = offsetVec.cpy().nor().scl(4f, 6f);
         plant.add(ParticleEmitterComponent.create(engine)
-            .setParticleImages(Assets.getLeafFrames())
-            .setParticleLifespans(0.1f, 0.2f)
-            .setSpawnRate(100f)
-            .setAngleRange(0f, 360f)
-            .setParticleMinMaxScale(0.5f, 0.5f)
-            .setSpeed(2f, 3f)
-            .setShouldFade(true)
-            .setZIndex(Z.leaves)
-            .setDuration(0.3f));
+                .setParticleImages(Assets.getLeafFrames())
+                .setParticleLifespans(0.1f, 0.2f)
+                .setSpawnRate(100f)
+                .setAngleRange(0f, 360f)
+                .setParticleMinMaxScale(0.5f, 0.5f)
+                .setSpeed(2f, 3f)
+                .setShouldFade(true)
+                .setZIndex(Z.leaves)
+                .setDuration(0.3f));
 
         getEngine().addEntity(plant);
     }

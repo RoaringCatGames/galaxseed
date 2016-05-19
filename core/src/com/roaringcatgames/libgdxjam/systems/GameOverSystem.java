@@ -26,27 +26,31 @@ import com.roaringcatgames.libgdxjam.screens.IScreenDispatcher;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Z;
 
+import java.util.Random;
+
 /**
  * Created by barry on 3/2/16 @ 8:43 PM.
  */
 public class GameOverSystem extends IteratingSystem implements InputProcessor {
 
+    private Random r = new Random();
     private Entity gameOverText;
     private Entity restartButton;
     private Entity rawry;
-    private Vector2[] shipPartEndPositions = new Vector2[]{
-            new Vector2(30f, 15f), //a
-            new Vector2(30f, 10f), //b
-            new Vector2(30f, 5f),  //c
-            new Vector2(30f, -5f), //d
-            new Vector2(20f, -10f),//e
-            new Vector2(15f, -10f),//f
-            new Vector2(5f, -10f), //g
-            new Vector2(-5f, -10f),//h
-            new Vector2(-5f, 30f), //i
-            new Vector2(0f, 40f)   //j
+    private Array<Vector2> shipPartEndPositions = new Array<>();
+//            new Vector2(30f, 15f), //a
+//            new Vector2(30f, 10f), //b
+//            new Vector2(30f, 5f),  //c
+//            new Vector2(30f, -5f), //d
+//            new Vector2(20f, -10f),//e
+//            new Vector2(15f, -10f),//f
+//            new Vector2(5f, -10f), //g
+//            new Vector2(-5f, -10f),//h
+//            new Vector2(-5f, 30f), //i
+//            new Vector2(0f, 40f)   //j
+//    };
 
-    };
+    Array<Vector2> randomEdgePoints = new Array<>();
     private Music endSong;
     private OrthographicCamera cam;
     private IScreenDispatcher dispatcher;
@@ -63,6 +67,43 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
         endSong = Assets.getGameOverMusic();
         this.cam = cam;
         this.dispatcher = dispatcher;
+
+        randomEdgePoints.addAll(getRandomEdgePoints(20, false));
+        shipPartEndPositions.addAll(getRandomEdgePoints(10, true));
+
+        for(int i=0;i<20;i++){
+            if(i%2!=0){
+                //sides
+                boolean isLeft = r.nextFloat() < 0.5f;
+                float x = isLeft ? 0f:App.W;
+                randomEdgePoints.add(new Vector2(x, K2MathUtil.getRandomInRange(0f, App.H)));
+            }else{
+                //top/bottom
+                boolean isTop = r.nextFloat() < 0.5f;
+                float y = isTop ? 0f:App.H;
+                randomEdgePoints.add(new Vector2(K2MathUtil.getRandomInRange(0f, App.W), y));
+            }
+        }
+    }
+
+
+    private Array<Vector2> getRandomEdgePoints(int numberOfPoints, boolean areOffScreen){
+        Array<Vector2> points = new Array<>();
+        float adjust = areOffScreen ? 10f :0f;
+        for(int i=0;i<numberOfPoints;i++){
+            if(i%2==0){
+                //sides
+                boolean isLeft = r.nextFloat() < 0.5f;
+                float x = isLeft ? 0f-adjust:App.W + adjust;
+                points.add(new Vector2(x, K2MathUtil.getRandomInRange(0f, App.H)));
+            }else{
+                //top/bottom
+                boolean isTop = r.nextFloat() < 0.5f;
+                float y = isTop ? 0f-adjust:App.H+adjust;
+                points.add(new Vector2(K2MathUtil.getRandomInRange(0f, App.W), y));
+            }
+        }
+        return points;
     }
 
     @Override
@@ -134,14 +175,16 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 rawry.add(AnimationComponent.create(engine)
                         .addAnimation("DEFAULT", Animations.getRawry()));
 
-                Timeline secondTL = Timeline.createSequence()
-                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_XY, 8f)
-                                .target(20f, 10f).ease(TweenEquations.easeNone))
-                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_XY, 8f)
-                                .target(10f, 0f).ease(TweenEquations.easeNone))
-                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_XY, 8f)
-                                .target(-4f, 30f).ease(TweenEquations.easeNone))
-                        .repeatYoyo(10, 0f);
+
+
+
+                Timeline secondTL = Timeline.createSequence();
+                for(Vector2 target:randomEdgePoints) {
+                    secondTL.push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_XY, 8f)
+                            .target(target.x, target.y).ease(TweenEquations.easeNone));
+                }
+                secondTL.repeatYoyo(10, 0f);
+
                 Timeline tl = Timeline.createParallel()
                         .push(Tween.to(rawry, K2EntityTweenAccessor.SCALE, 5f)
                                 .target(0.25f, 0.25f).ease(TweenEquations.easeOutSine))
@@ -167,7 +210,8 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                         .setParticleImage(Assets.getSmoke()));
                 engine.addEntity(rawry);
 
-                for(int i=0;i< shipPartEndPositions.length;i++){
+
+                for(int i=0;i< shipPartEndPositions.size;i++){
                     Entity shipPart = engine.createEntity();
                     shipPart.add(TextureComponent.create(engine)
                             .setRegion(Assets.getShipPart(i)));
@@ -178,8 +222,8 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                             .setScale(0.5f, 0.5f));
                     shipPart.add(WhenOffScreenComponent.create(engine));
                     shipPart.add(TweenComponent.create(engine)
-                            .addTween(Tween.to(shipPart, K2EntityTweenAccessor.POSITION_XY, K2MathUtil.getRandomInRange(15f, 25f))
-                                    .target(shipPartEndPositions[i].x, shipPartEndPositions[i].y)
+                            .addTween(Tween.to(shipPart, K2EntityTweenAccessor.POSITION_XY, K2MathUtil.getRandomInRange(5f, 25f))
+                                    .target(shipPartEndPositions.get(i).x, shipPartEndPositions.get(i).y)
                                     .ease(TweenEquations.easeOutExpo)));
                     shipPart.add(ParticleEmitterComponent.create(engine)
                             .setSpawnRate(100f)

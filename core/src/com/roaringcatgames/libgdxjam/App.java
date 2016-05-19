@@ -23,7 +23,9 @@ public class App {
     }
     public static LifeInSpace game;
 
-    public static Vector2 playerLastPosition = new Vector2();
+    //Initial position
+    //Bad form with a public global, but whatever here
+    public static Vector2 playerLastPosition = new Vector2(W/2f, 7f);
 
     private static float timeSpentSlow = 0f;
     public static void setTimeSpentSlow(float tss){
@@ -52,5 +54,8 @@ public class App {
         return state;
     }
 
+    public static Vector2 getPlayerLastPosition(){
+        return playerLastPosition;
+    }
 
 }

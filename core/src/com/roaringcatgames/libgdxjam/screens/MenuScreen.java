@@ -10,8 +10,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
@@ -43,12 +45,17 @@ public class MenuScreen extends LazyInitScreen {
 
     private Music menuSong;
     private Entity plant, p, l, a, y, swipeTutorial;
+    private ObjectMap<String, Boolean> readyMap = new ObjectMap<>();
 
     public MenuScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
         super();
         this.batch = batch;
         this.dispatcher = dispatcher;
         this.touchPoint = new Vector3();
+        readyMap.put("p", false);
+        readyMap.put("l", false);
+        readyMap.put("a", false);
+        readyMap.put("y", false);
     }
 
 
@@ -65,8 +72,8 @@ public class MenuScreen extends LazyInitScreen {
         menuSong = Assets.getGameOverMusic();
 
         Vector3 playerPosition = new Vector3(
-                cam.position.x,
-                7f,
+                App.playerLastPosition.x,
+                App.playerLastPosition.y,
                 Z.player);
 
 
@@ -233,18 +240,25 @@ public class MenuScreen extends LazyInitScreen {
             }
         }
 
-        if(isReady(p) && isReady(l) && isReady(a) && isReady(y)){
+        if(isReady(p, "p") && isReady(l, "l") && isReady(a, "a") && isReady(y, "y")){
             menuSong.stop();
             //FUCKING GROSS. What is this, Unity??
-            TransformComponent tc = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(TransformComponent.class);
-            App.playerLastPosition.set(tc.position.x, tc.position.y);
+            //TransformComponent tc = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(TransformComponent.class);
+            //App.playerLastPosition.set(tc.position.x, tc.position.y);
             dispatcher.endCurrentScreen();
         }
     }
 
-    private boolean isReady(Entity p){
+    private boolean isReady(Entity p, String key){
+        if(readyMap.get(key)){
+            return true;
+        }
+
         ParticleEmitterComponent pec = p.getComponent(ParticleEmitterComponent.class);
-        return p.isScheduledForRemoval() || p.getComponents().size() == 0 || (pec != null && pec.elapsedTime > 2f);
+        boolean isReady = p.isScheduledForRemoval() || p.getComponents().size() == 0 || (pec != null && pec.elapsedTime > 2f);
+        readyMap.put(key, isReady);
+
+        return isReady;
     }
 
     @Override
