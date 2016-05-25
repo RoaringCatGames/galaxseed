@@ -72,8 +72,8 @@ public class MenuScreen extends LazyInitScreen {
         menuSong = Assets.getGameOverMusic();
 
         Vector3 playerPosition = new Vector3(
-                App.playerLastPosition.x,
-                App.playerLastPosition.y,
+                App.W/2f,
+                App.H/5f,
                 Z.player);
 
 
@@ -211,6 +211,8 @@ public class MenuScreen extends LazyInitScreen {
         menuSong.setVolume(Volume.MENU_MUSIC);
         menuSong.setLooping(true);
         menuSong.play();
+
+        App.playerLastPosition.set(App.W/2f, App.H/5f);
     }
 
     boolean treeLeafing = false;

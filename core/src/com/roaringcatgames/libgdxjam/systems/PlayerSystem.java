@@ -27,6 +27,7 @@ import com.roaringcatgames.libgdxjam.values.Z;
  */
 public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
+    private float enhancedMovementScale = 2f;
     private Array<Vector2> muzzlePositions = new Array<>();
 
     private boolean isInitialized = false;
@@ -97,7 +98,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                 .setScale(initialScale, initialScale));
 
             player.add(BoundsComponent.create(engine)
-                    .setBounds(0f, 0f, 1f, 1.5f));
+                    .setBounds(0f, 0f, 0.5f, 0.5f));
 
             player.add(TextureComponent.create(engine));
             player.add(AnimationComponent.create(engine)
@@ -180,9 +181,12 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         App.game.multiplexer.removeProcessor(this);
     }
 
+    Vector3 positionShift = new Vector3();
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+
+        positionShift.set(0f, 0f, 0f);
 
         if(!isInitialized){
             init();
@@ -204,7 +208,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         boolean isLooping = true;
 
         if(App.getState() != GameState.GAME_OVER){
-            tc.position.add(currentPositionChange);
+            tc.position.add(positionShift.add(currentPositionChange).scl(enhancedMovementScale));
 
             /**********************
              * Set Animation State
@@ -343,12 +347,13 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
         if(pointer == 0) {
+
             currentPositionChange.set(screenX, screenY, 0f);
             currentPositionChange = cam.unproject(currentPositionChange);
-            Vector3 newTouchPosition = currentPositionChange.cpy();
-
+            //Gdx.app.log("Player System", "ScreenXY (" + screenX + ", " + screenY + ") Unprojected: (" + currentPositionChange.x + ", " + currentPositionChange.y + ")");
+            //Vector3 newTouchPosition = currentPositionChange.cpy();
             currentPositionChange.sub(touchPoint);
-            touchPoint.set(newTouchPosition);
+            touchPoint.add(currentPositionChange);
         }
         return false;
     }
