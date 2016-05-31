@@ -241,7 +241,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                             .setPosition(App.W / 2f, App.H / 2f, Z.gameOver));
                     gameOverText.add(TextComponent.create(engine)
                             .setFont(largeFont)
-                            .setText("GAME OVER"));
+                            .setText("GAME OVER: " + Gdx.graphics.getDensity()));
 
                     getEngine().addEntity(gameOverText);
                 }
