@@ -15,12 +15,8 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.components.GunComponent;
-import com.roaringcatgames.libgdxjam.components.PlayerComponent;
-import com.roaringcatgames.libgdxjam.values.GameState;
-import com.roaringcatgames.libgdxjam.values.Health;
-import com.roaringcatgames.libgdxjam.values.Volume;
-import com.roaringcatgames.libgdxjam.values.Z;
+import com.roaringcatgames.libgdxjam.components.*;
+import com.roaringcatgames.libgdxjam.values.*;
 
 /**
  * Created by barry on 12/29/15 @ 8:07 PM.
@@ -70,12 +66,12 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             }
         }else {
             this.muzzlePositions.add(new Vector2(-0.5f, 1.6f));
-            this.muzzlePositions.add(new Vector2(-0.906f, 0.881f));
-            this.muzzlePositions.add(new Vector2(-1.312f, 0.3f));
+//            this.muzzlePositions.add(new Vector2(-0.906f, 0.881f));
+//            this.muzzlePositions.add(new Vector2(-1.312f, 0.3f));
 
             this.muzzlePositions.add(new Vector2(0.5f, 1.6f));
-            this.muzzlePositions.add(new Vector2(0.906f, 0.881f));
-            this.muzzlePositions.add(new Vector2(1.312f, 0.3f));
+//            this.muzzlePositions.add(new Vector2(0.906f, 0.881f));
+//            this.muzzlePositions.add(new Vector2(1.312f, 0.3f));
         }
     }
 
@@ -121,12 +117,16 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(VelocityComponent.create(engine)
                     .setSpeed(0f, 0f));
 
+            player.add(WeaponComponent.create(engine)
+                .setWeaponLevel(WeaponLevel.LEVEL_1)
+                .setWeaponType(WeaponType.GUN_SEEDS));
 
             //generateMuzzles
             Animation muzzleAni = Animations.getMuzzle();
             for(Vector2 muzzlePos:muzzlePositions){
                 Entity muzzle = engine.createEntity();
-                muzzle.add(GunComponent.create(engine));
+                muzzle.add(GunComponent.create(engine)
+                    .setFiringRate(Rates.seedGunTimeBetween));
                 muzzle.add(FollowerComponent.create(engine)
                     .setOffset(muzzlePos.x*initialScale, muzzlePos.y*initialScale)
                     .setTarget(player)

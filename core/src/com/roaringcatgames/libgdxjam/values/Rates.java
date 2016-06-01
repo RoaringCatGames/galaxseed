@@ -5,6 +5,6 @@ package com.roaringcatgames.libgdxjam.values;
  */
 public class Rates {
 
-    public static final float firingRate = 6f;
-    public static final float timeBetweenShots = 1f/firingRate;
+    public static final float seedGunTimeBetween = 1f/6f;
+    public static final float seedGatlingGunTimeBetween = 1f/24f;
 }

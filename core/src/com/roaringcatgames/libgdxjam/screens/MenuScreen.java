@@ -89,9 +89,9 @@ public class MenuScreen extends LazyInitScreen {
         //Custom Systems
         Vector2[] muzzlePositions = new Vector2[]{
                 new Vector2(-0.5f, 1.6f),
-                new Vector2(-0.906f, 0.881f),
+                //new Vector2(-0.906f, 0.881f),
                 new Vector2(0.5f, 1.6f),
-                new Vector2(0.906f, 0.881f)
+                //new Vector2(0.906f, 0.881f)
         };
 
         Vector2 minBounds = new Vector2(0f, 0f);

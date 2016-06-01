@@ -104,6 +104,7 @@
             engine.addSystem(new ScoreSystem());
             engine.addSystem(new ShakeSystem());
             engine.addSystem(new OscillationSystem());
+            engine.addSystem(new PowerUpSystem());
 
 
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();

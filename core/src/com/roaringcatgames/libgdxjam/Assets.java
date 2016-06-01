@@ -1,6 +1,5 @@
 package com.roaringcatgames.libgdxjam;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -9,10 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
-import javax.xml.soap.Text;
-
 /**
- * Created by barry on 12/22/15 @ 7:32 PM.
+ * Accessor for our Asset Manager and all of our Assets. Handles
+ * asset load order.
  */
 public class Assets {
 
@@ -35,7 +33,7 @@ public class Assets {
         am.load(PLAYER_HIT_MEDIUM_SFX, SOUND);
         am.load(PLAYER_HIT_HEAVY_SFX, SOUND);
         am.load(PLANET_POP_SFX, SOUND);
-        am.load(FIRING_MUSIC, MUSIC);
+        am.load(FIRING_SFX, SOUND);
         am.load(FLYING_MUSIC, MUSIC);
 
 //        am.load(SEED_PLANT_SFX, SOUND);
@@ -413,9 +411,6 @@ public class Assets {
     public static Music getGameOverMusic(){
         return am.get(GAME_OVER_MUSIC, MUSIC);
     }
-    public static Music getFiringMusic(){
-        return am.get(FIRING_MUSIC, MUSIC);
-    }
     public static Music getFlyingMusic(){
         return am.get(FLYING_MUSIC, MUSIC);
     }
@@ -437,6 +432,10 @@ public class Assets {
 
     public static Sound getPlayerHitHeavy(){
         return am.get(PLAYER_HIT_HEAVY_SFX, SOUND);
+    }
+
+    public static Sound getSeedFiring() {
+        return am.get(FIRING_SFX, SOUND);
     }
 
     /////////////
@@ -469,7 +468,7 @@ public class Assets {
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
     private static final String BG_MUSIC = "music/metamorphosis-oga.mp3";
     private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
-    private static final String FIRING_MUSIC = "music/firing.mp3";
+    private static final String FIRING_SFX = "sfx/seed-fire.mp3";
     private static final String FLYING_MUSIC = "music/flying.mp3";
 
     private static final String PLANET_POP_SFX = "sfx/planet-pop.mp3";

@@ -5,15 +5,13 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.Damage;
-import com.roaringcatgames.libgdxjam.values.Rates;
 import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 
@@ -25,9 +23,9 @@ public class FiringSystem extends IteratingSystem {
     private float lastFireTime = 0f;
     private float timeElapsed = 0f;
     private float bulletSpeed = 20f;
-    private Music firingMusic;
+    private Sound firingSFX;
     private ComponentMapper<TransformComponent> tm;
-    private ComponentMapper<GunComponent> mm;
+    private ComponentMapper<GunComponent> gm;
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<AnimationComponent> am;
 
@@ -37,10 +35,10 @@ public class FiringSystem extends IteratingSystem {
     public FiringSystem(){
         super(Family.one(PlayerComponent.class, GunComponent.class).get());
         tm = ComponentMapper.getFor(TransformComponent.class);
-        mm = ComponentMapper.getFor(GunComponent.class);
+        gm = ComponentMapper.getFor(GunComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
         am = ComponentMapper.getFor(AnimationComponent.class);
-        firingMusic = Assets.getFiringMusic();
+        firingSFX = Assets.getSeedFiring();
     }
 
     @Override
@@ -48,28 +46,28 @@ public class FiringSystem extends IteratingSystem {
         super.update(deltaTime);
         if(player != null) {
             StateComponent sc = player.getComponent(StateComponent.class);
-            if(!firingMusic.isPlaying()){
-                firingMusic.setVolume(Volume.FIRING_MUSIC);
-                firingMusic.setLooping(true);
-                firingMusic.play();
-            }
 
             if(sc.get() != "DEFAULT") {
                 timeElapsed += deltaTime;
 
-                if (timeElapsed - lastFireTime >= Rates.timeBetweenShots) {
+                boolean isFiring = false;
+                for(Entity m:muzzles){
+                    StateComponent mState = sm.get(m);
+                    GunComponent gc = gm.get(m);
 
-                    lastFireTime = timeElapsed;
-
-                    for(Entity m:muzzles){
-                        StateComponent mState = sm.get(m);
+                    if(timeElapsed - gc.lastFireTime >= gc.firingRate) {
                         mState.set("FIRING");
                         FollowerComponent follower = m.getComponent(FollowerComponent.class);
                         generateBullet(follower.offset.x, follower.offset.y, 0f, bulletSpeed);
+                        gc.lastFireTime = timeElapsed;
+                        isFiring = true;
                     }
                 }
+                if(isFiring){
+                    this.firingSFX.play(Volume.FIRING_SFX);
+                }
             }else{
-                firingMusic.stop();
+
                 for(Entity m:muzzles){
                     StateComponent mState = sm.get(m);
                     if(mState.get() != "DEFAULT") {
@@ -87,7 +85,7 @@ public class FiringSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
-        if(mm.has(entity)){
+        if(gm.has(entity)){
             muzzles.add(entity);
         }else {
             if (player != null) {

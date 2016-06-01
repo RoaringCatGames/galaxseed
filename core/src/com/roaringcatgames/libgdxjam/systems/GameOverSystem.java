@@ -135,7 +135,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
     @Override
     protected void processEntity(Entity player, float deltaTime) {
         StateComponent sc = sm.get(player);
-        TransformComponent tc = K2ComponentMappers.tm.get(player);
+        TransformComponent tc = K2ComponentMappers.transform.get(player);
 
 
         if (App.getState() == GameState.GAME_OVER) {

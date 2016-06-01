@@ -21,6 +21,7 @@ public class Z {
     public static final float treeCover = 43f;
     public static final float healthGlow = 42f;
     public static final float healthPack = 41f;
+    public static final float powerUp = 41f;
     public static final float seed = 40;
     public static final float leaves = 39f;
     public static final float explosion = 30f;
@@ -38,6 +39,7 @@ public class Z {
     public static float healthLeaf = 1f;
     public static final float gameOver = 0f;
     public static final float tutorial = 0f;
+
 
 
 }

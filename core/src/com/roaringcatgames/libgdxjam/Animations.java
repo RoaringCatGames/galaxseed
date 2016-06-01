@@ -93,7 +93,7 @@ public class Animations {
         shipFlying = new Animation(1f/12f, Assets.getShipFlyingFrames());
         shipFlyingLeft = new Animation(1f/6f, Assets.getShipFlyingLeftFrames());
         shipFlyingRight = new Animation(1f/6f, Assets.getShipFlyingRightFrames());
-        muzzle = new Animation(Rates.timeBetweenShots/6f, Assets.getMuzzleFrames());
+        muzzle = new Animation(Rates.seedGunTimeBetween, Assets.getMuzzleFrames());
         flamesIdle = new Animation(1f/9f, Assets.getIdleFlamesFrames());
         flames = new Animation(1f/9f, Assets.getFlamesFrames());
         shipDeath = new Animation(1f/6f, Assets.getShipDeathFrames());

@@ -190,6 +190,7 @@ public class EnemyDamageSystem extends IteratingSystem {
                                 break;
                             case ASTEROID_A:
                                 attachTreeCover(enemy, Animations.getAsteroidA());
+                                generateUpgradePowerUp(enemyTfm.position.x, enemyTfm.position.y);
                                 if(r.nextFloat() < 0.2f) {
                                     generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
                                 }
@@ -291,6 +292,34 @@ public class EnemyDamageSystem extends IteratingSystem {
                         .ease(TweenEquations.easeInOutBounce)
                         .repeatYoyo(Tween.INFINITY, 0)));
         engine.addEntity(glow);
+    }
+
+    private void generateUpgradePowerUp(float x, float y){
+
+        PooledEngine engine = (PooledEngine) getEngine();
+        Entity powerUp = engine.createEntity();
+        powerUp.add(TransformComponent.create(engine)
+                .setPosition(x, y, Z.powerUp)
+                .setScale(1f, 1f));
+        powerUp.add(TweenComponent.create(engine)
+                .addTween(Tween.to(powerUp, K2EntityTweenAccessor.SCALE, 0.5f)
+                        .target(1.25f, 1.25f)
+                        .ease(TweenEquations.easeInOutBounce)
+                        .repeatYoyo(Tween.INFINITY, 0)));
+        powerUp.add(VelocityComponent.create(engine)
+                .setSpeed(0f, healthPackSpeed));
+        powerUp.add(TextureComponent.create(engine));
+
+//        powerUp.add(AnimationComponent.create(engine)
+//                .addAnimation("DEFAULT", ani));
+//        powerUp.add(StateComponent.create(engine)
+//                .set("DEFAULT")
+//                .setLooping(true));
+        powerUp.add(PowerUpComponent.create(engine)
+                .setPowerUpType(PowerUpComponent.PowerUpType.UPGRADE));
+        powerUp.add(BoundsComponent.create(engine)
+                .setBounds(0f, 0f, 1f, 1f));
+        engine.addEntity(powerUp);
     }
 
     private void attachTreeCover(Entity enemy, Animation ani) {

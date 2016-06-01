@@ -185,8 +185,8 @@ public class PlayerDamageSystem extends IteratingSystem {
                 .addAnimation("DEFAULT", impactAni));
         engine.addEntity(explosion);
 
-        if(!K2ComponentMappers.twm.has(player) ||
-            K2ComponentMappers.twm.get(player).timeline.isFinished()) {
+        if(!K2ComponentMappers.tween.has(player) ||
+            K2ComponentMappers.tween.get(player).timeline.isFinished()) {
             player.add(TweenComponent.create(engine)
                     .setTimeline(Timeline.createSequence()
                             .push(Tween.to(player, K2EntityTweenAccessor.COLOR, 0.05f)

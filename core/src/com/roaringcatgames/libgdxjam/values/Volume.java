@@ -8,7 +8,7 @@ public class Volume {
     public static final float FLYING_MUSIC = 1f;
 
     public static final float MENU_MUSIC = 1f;
-    public static final float FIRING_MUSIC = 0.1f;
+    public static final float FIRING_SFX = 0.1f;
     public static final float HIT_SFX = 0.3f;
     public static final float PLANT_SFX = 0.5f;
     public static final float POP_SFX = 1f;
