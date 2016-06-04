@@ -53,6 +53,7 @@ public class Animations {
     private static Animation gatlingSmoke;
 
     private static Animation aura;
+    private static Animation auraFinal;
 
     private static Animation flamesIdle;
     private static Animation flames;
@@ -109,7 +110,8 @@ public class Animations {
         gatlingMuzzle = new Animation(1f/144f, Assets.getGatlingMuzzle());
         gatlingSmoke = new Animation(1f/144f, Assets.getGatlingSmoke());
 
-        aura = new Animation(1f/12f, Assets.getAuraFrames());
+        aura = new Animation(1f/6f, Assets.getAuraFrames());
+        auraFinal = new Animation(1f/6f, Assets.getAuraFinalFrames());
 
         flamesIdle = new Animation(1f/9f, Assets.getIdleFlamesFrames());
         flames = new Animation(1f/9f, Assets.getFlamesFrames());
@@ -266,6 +268,10 @@ public class Animations {
 
     public static Animation getAura() {
         return aura;
+    }
+
+    public static Animation getAuraFinal() {
+        return auraFinal;
     }
 
     public static Animation getFlamesIdle() {

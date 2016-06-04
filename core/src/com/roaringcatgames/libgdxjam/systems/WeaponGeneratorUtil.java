@@ -44,9 +44,9 @@ public class WeaponGeneratorUtil {
         muzzlePositions.add(new Vector2(1.512f, 0f));
 
         auraSizes.add(new Vector2(0f, 2f));
-        auraSizes.add(new Vector2(0.1666f, 3f));
-        auraSizes.add(new Vector2(0.3332f, 4f));
-        auraSizes.add(new Vector2(0.5f, 5f));
+        auraSizes.add(new Vector2(0.1f, 3f));
+        auraSizes.add(new Vector2(0.2f, 4f));
+        auraSizes.add(new Vector2(0.3f, 5f));
     }
 
     public static void clearWeapon(Engine engine){
@@ -218,8 +218,9 @@ public class WeaponGeneratorUtil {
                 .setPosition(0f, 0f, Z.pollenAura)
                 .setScale(auraScale, auraScale));
 
+        Animation auraAni = pc.weaponLevel == WeaponLevel.LEVEL_4 ? Animations.getAuraFinal() : Animations.getAura();
         aura.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", Animations.getAura()));
+                .addAnimation("DEFAULT", auraAni));
         aura.add(StateComponent.create(engine)
                 .set("DEFAULT")
                 .setLooping(true));
@@ -228,6 +229,22 @@ public class WeaponGeneratorUtil {
         aura.add(FollowerComponent.create(engine)
                 .setTarget(player)
                 .setMode(FollowMode.STICKY));
+
+        if(pc.weaponLevel == WeaponLevel.LEVEL_4){
+            aura.add(ParticleEmitterComponent.create(engine)
+                .setSpeed(0.5f, 1f)
+                .setParticleImages(Assets.getDandyParticles())
+                .setSpawnType(ParticleSpawnType.RANDOM_IN_BOUNDS)
+                .setParticleLifespans(0.5f, 1f)
+                .setSpawnRange(auraSizes.get(3).y/2f, auraSizes.get(3).y/2f)
+                .setShouldLoop(true)
+                .setZIndex(Z.dandyParticles)
+                .setAngleRange(0f, 360f)
+                .setParticleMinMaxScale(0.5f, 1f)
+                .setShouldFade(true)
+                .setSpawnRate(15f));
+        }
+
         engine.addEntity(aura);
     }
 }

@@ -394,6 +394,12 @@ public class Assets {
     public static Array<? extends TextureRegion> getAuraFrames(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/aura");
     }
+    public static Array<? extends TextureRegion> getAuraFinalFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/aura-final");
+    }
+    public static Array<? extends TextureRegion> getDandyParticles(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/dandy-particle");
+    }
 
     /////////////
     //Life

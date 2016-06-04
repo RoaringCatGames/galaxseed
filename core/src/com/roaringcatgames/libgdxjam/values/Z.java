@@ -15,7 +15,8 @@ public class Z {
     public static final float gatlingGuns = 60f;
     public static final float gatlingMuzzle = 59f;
     public static final float gatlingSmoke = 58f;
-    public static final float pollenAura = 57;
+    public static final float pollenAura = 57f;
+    public static final float dandyParticles = 56f;
     public static final float flames = 51f;
     public static final float player = 50f;
     public static final float muzzleFlash = 49f;
@@ -42,5 +43,6 @@ public class Z {
     public static float healthLeaf = 1f;
     public static final float gameOver = 0f;
     public static final float tutorial = 0f;
+
 
 }
