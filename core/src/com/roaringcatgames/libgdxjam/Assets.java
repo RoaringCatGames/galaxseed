@@ -164,6 +164,10 @@ public class Assets {
     }
 
 
+    public static Array<TextureAtlas.AtlasRegion> getUpgradeFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("pickups/upgrade");
+    }
+
     //////////////
     //BG
     //////////////
@@ -367,6 +371,14 @@ public class Assets {
 
     public static Array<? extends TextureRegion> getMuzzleFrames() {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("muzzleflash/muzzle");
+    }
+
+    public static Array<? extends TextureRegion> getGatlingIdle(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/gatling-idle");
+    }
+
+    public static Array<? extends TextureRegion> getGatlingFiring(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/gatling-firing");
     }
 
     /////////////

@@ -47,9 +47,15 @@ public class Animations {
     private static Animation shipFlyingLeft;
     private static Animation shipFlyingRight;
     private static Animation muzzle;
+    private static Animation gatlingIdle;
+    private static Animation gatlingFiring;
+
     private static Animation flamesIdle;
     private static Animation flames;
+
     private static Animation shipDeath;
+
+    private static Animation upgrade;
 
     private static Animation rawry;
 
@@ -93,10 +99,15 @@ public class Animations {
         shipFlying = new Animation(1f/12f, Assets.getShipFlyingFrames());
         shipFlyingLeft = new Animation(1f/6f, Assets.getShipFlyingLeftFrames());
         shipFlyingRight = new Animation(1f/6f, Assets.getShipFlyingRightFrames());
-        muzzle = new Animation(Rates.seedGunTimeBetween, Assets.getMuzzleFrames());
+        muzzle = new Animation(1f/12f, Assets.getMuzzleFrames());
+        gatlingIdle = new Animation(1f/9f, Assets.getGatlingIdle());
+        gatlingFiring = new Animation(1f/9f, Assets.getGatlingFiring());
+
         flamesIdle = new Animation(1f/9f, Assets.getIdleFlamesFrames());
         flames = new Animation(1f/9f, Assets.getFlamesFrames());
         shipDeath = new Animation(1f/6f, Assets.getShipDeathFrames());
+
+        upgrade = new Animation(1f/9f, Assets.getUpgradeFrames());
 
         rawry = new Animation(1f / 30f, Assets.getWreckedCat(), Animation.PlayMode.LOOP_PINGPONG);
     }
@@ -229,6 +240,14 @@ public class Animations {
         return muzzle;
     }
 
+    public static Animation getGatlingIdle() {
+        return gatlingIdle;
+    }
+
+    public static Animation getGatlingFiring() {
+        return gatlingFiring;
+    }
+
     public static Animation getFlamesIdle() {
         return flamesIdle;
     }
@@ -241,6 +260,9 @@ public class Animations {
         return shipDeath;
     }
 
+    public static Animation getUpgrade(){
+        return upgrade;
+    }
     public static Animation getRawry(){
         return rawry;
     }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Pool;
  */
 public class GunComponent implements Component, Pool.Poolable{
 
-    public float firingRate = 1f;
+    public float timeBetweenShots = 1f;
     public float lastFireTime = 0f;
 
     public static GunComponent create(Engine engine){
@@ -21,8 +21,8 @@ public class GunComponent implements Component, Pool.Poolable{
         }
     }
 
-    public GunComponent setFiringRate(float rate){
-        this.firingRate = rate;
+    public GunComponent setTimeBetweenShots(float rate){
+        this.timeBetweenShots = rate;
         return this;
     }
 
@@ -33,7 +33,7 @@ public class GunComponent implements Component, Pool.Poolable{
 
     @Override
     public void reset(){
-        this.firingRate = 1f;
+        this.timeBetweenShots = 1f;
         this.lastFireTime = 0f;
     }
 

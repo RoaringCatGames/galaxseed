@@ -1,6 +1,5 @@
 package com.roaringcatgames.libgdxjam.systems;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
@@ -33,6 +32,8 @@ public class PowerUpSystem extends IteratingSystem {
         this.muzzlePositions.add(new Vector2(0.906f, 0.881f));
         this.muzzlePositions.add(new Vector2(-1.312f, 0.3f));
         this.muzzlePositions.add(new Vector2(1.312f, 0.3f));
+        this.muzzlePositions.add(new Vector2(-1.612f, 0.1f));
+        this.muzzlePositions.add(new Vector2(1.612f, 0.1f));
     }
 
     @Override
@@ -73,27 +74,31 @@ public class PowerUpSystem extends IteratingSystem {
 
                     if(wc.weaponLevel == WeaponLevel.LEVEL_2){
                         //Add 2 more guns
-                        addGun(playerTransform, engine, muzzlePositions.get(0).x, muzzlePositions.get(0).y);
-                        addGun(playerTransform, engine, muzzlePositions.get(1).x, muzzlePositions.get(1).y);
+                        addGun(playerTransform, engine, muzzlePositions.get(0).x, muzzlePositions.get(0).y, Rates.seedGunTimeBetween);
+                        addGun(playerTransform, engine, muzzlePositions.get(1).x, muzzlePositions.get(1).y, Rates.seedGunTimeBetween);
 
                     }else if(wc.weaponLevel == WeaponLevel.LEVEL_3){
                         //Add 2 more guns
-                        addGun(playerTransform, engine, muzzlePositions.get(2).x, muzzlePositions.get(2).y);
-                        addGun(playerTransform, engine, muzzlePositions.get(3).x, muzzlePositions.get(3).y);
+                        addGun(playerTransform, engine, muzzlePositions.get(2).x, muzzlePositions.get(2).y, Rates.seedGunTimeBetween);
+                        addGun(playerTransform, engine, muzzlePositions.get(3).x, muzzlePositions.get(3).y, Rates.seedGunTimeBetween);
                     }else{
                         //Add Gatling guns
                         Gdx.app.log("PowerUpSystem", "Upgrading to level 4!");
+                        addGun(playerTransform, engine, muzzlePositions.get(4).x, muzzlePositions.get(4).y, Rates.seedGatlingGunTimeBetween, true);
+                        addGun(playerTransform, engine, muzzlePositions.get(5).x, muzzlePositions.get(5).y, Rates.seedGatlingGunTimeBetween, true);
                     }
                     break;
             }
         }
     }
 
-    private void addGun(TransformComponent playerTransform, PooledEngine engine, float x, float y) {
+    private void addGun(TransformComponent playerTransform, PooledEngine engine,
+                        float x, float y, float timeBetweenShots, boolean...hasGun) {
+
         Animation muzzleAni = Animations.getMuzzle();
         Entity muzzle = engine.createEntity();
         muzzle.add(GunComponent.create(engine)
-                .setFiringRate(Rates.seedGunTimeBetween));
+                .setTimeBetweenShots(timeBetweenShots));
         muzzle.add(FollowerComponent.create(engine)
                 .setOffset(x * playerTransform.scale.x, y * playerTransform.scale.y)
                 .setTarget(player)
@@ -109,6 +114,26 @@ public class PowerUpSystem extends IteratingSystem {
                 .setScale(playerTransform.scale.x * 0.5f, playerTransform.scale.y * 0.5f)
                 .setOpacity(0.8f));
         getEngine().addEntity(muzzle);
+
+        if(hasGun != null && hasGun.length == 1 && hasGun[0]){
+            Entity gun = engine.createEntity();
+            gun.add(DecorationComponent.create(engine));
+            gun.add(TransformComponent.create(engine)
+                .setPosition(playerTransform.position.x, playerTransform.position.y, Z.gatlingGuns)
+                .setScale(playerTransform.scale.x, playerTransform.scale.y));
+            gun.add(FollowerComponent.create(engine)
+                .setTarget(player)
+                .setOffset(x*playerTransform.scale.x, y * playerTransform.scale.y)
+                .setMode(FollowMode.STICKY));
+            gun.add(AnimationComponent.create(engine)
+                .addAnimation("DEFAULT", Animations.getGatlingIdle())
+                .addAnimation("FIRING", Animations.getGatlingFiring()));
+            gun.add(TextureComponent.create(engine));
+            gun.add(StateComponent.create(engine)
+                .set("DEFAULT")
+                .setLooping(true));
+            engine.addEntity(gun);
+        }
     }
 
     @Override

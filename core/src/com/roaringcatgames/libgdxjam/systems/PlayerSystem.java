@@ -126,7 +126,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             for(Vector2 muzzlePos:muzzlePositions){
                 Entity muzzle = engine.createEntity();
                 muzzle.add(GunComponent.create(engine)
-                    .setFiringRate(Rates.seedGunTimeBetween));
+                    .setTimeBetweenShots(Rates.seedGunTimeBetween));
                 muzzle.add(FollowerComponent.create(engine)
                     .setOffset(muzzlePos.x*initialScale, muzzlePos.y*initialScale)
                     .setTarget(player)

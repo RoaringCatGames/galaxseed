@@ -19,9 +19,7 @@
     import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
     import com.roaringcatgames.libgdxjam.App;
     import com.roaringcatgames.libgdxjam.Assets;
-    import com.roaringcatgames.libgdxjam.components.EnemyComponent;
-    import com.roaringcatgames.libgdxjam.components.HealthPackComponent;
-    import com.roaringcatgames.libgdxjam.components.PlayerComponent;
+    import com.roaringcatgames.libgdxjam.components.*;
     import com.roaringcatgames.libgdxjam.data.EnemySpawns;
     import com.roaringcatgames.libgdxjam.systems.*;
     import com.roaringcatgames.libgdxjam.values.GameState;
@@ -112,13 +110,18 @@
             engine.addSystem(enemyDmgSystem);
             engine.addSystem(playerDmgSystem);
             engine.addSystem(new ExplosionSystem());
-            engine.addSystem(new FollowerSystem(Family.one(EnemyComponent.class, HealthPackComponent.class, PlayerComponent.class).get()));
+            engine.addSystem(new FollowerSystem(Family.one(EnemyComponent.class,
+                    HealthPackComponent.class,
+                    PlayerComponent.class,
+                    GunComponent.class,
+                    DecorationComponent.class).get()));
 
             GameOverSystem gameOverSystem = new GameOverSystem(cam, dispatcher);
             gameOverSystem.setProcessing(false);
             engine.addSystem(gameOverSystem);
             engine.addSystem(new FadingSystem());
             engine.addSystem(new HealthPackSystem());
+            engine.addSystem(new DecorationSystem());
 
             //Extension Systems
             engine.addSystem(renderingSystem);

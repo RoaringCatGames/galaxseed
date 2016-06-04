@@ -310,11 +310,11 @@ public class EnemyDamageSystem extends IteratingSystem {
                 .setSpeed(0f, healthPackSpeed));
         powerUp.add(TextureComponent.create(engine));
 
-//        powerUp.add(AnimationComponent.create(engine)
-//                .addAnimation("DEFAULT", ani));
-//        powerUp.add(StateComponent.create(engine)
-//                .set("DEFAULT")
-//                .setLooping(true));
+        powerUp.add(AnimationComponent.create(engine)
+                .addAnimation("DEFAULT", Animations.getUpgrade()));
+        powerUp.add(StateComponent.create(engine)
+                .set("DEFAULT")
+                .setLooping(true));
         powerUp.add(PowerUpComponent.create(engine)
                 .setPowerUpType(PowerUpComponent.PowerUpType.UPGRADE));
         powerUp.add(BoundsComponent.create(engine)

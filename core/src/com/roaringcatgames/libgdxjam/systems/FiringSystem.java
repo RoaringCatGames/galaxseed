@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.Assets;
@@ -54,25 +55,31 @@ public class FiringSystem extends IteratingSystem {
                 for(Entity m:muzzles){
                     StateComponent mState = sm.get(m);
                     GunComponent gc = gm.get(m);
+                    AnimationComponent ac = am.get(m);
 
-                    if(timeElapsed - gc.lastFireTime >= gc.firingRate) {
+                    if(timeElapsed - gc.lastFireTime >= gc.timeBetweenShots) {
                         mState.set("FIRING");
+                        mState.setLooping(false);
                         FollowerComponent follower = m.getComponent(FollowerComponent.class);
                         generateBullet(follower.offset.x, follower.offset.y, 0f, bulletSpeed);
                         gc.lastFireTime = timeElapsed;
+
                         isFiring = true;
+                    }else if(!"DEFAULT".equals(mState.get()) && ac.animations.get(mState.get()).isAnimationFinished(mState.time)){
+                        mState.set("DEFAULT");
+                        K2ComponentMappers.texture.get(m).setRegion(null);
                     }
                 }
+
                 if(isFiring){
                     this.firingSFX.play(Volume.FIRING_SFX);
                 }
             }else{
-
                 for(Entity m:muzzles){
                     StateComponent mState = sm.get(m);
                     if(mState.get() != "DEFAULT") {
                         mState.set("DEFAULT");
-                        m.getComponent(TextureComponent.class).setRegion(null);
+                        K2ComponentMappers.texture.get(m).setRegion(null);
                     }
                 }
             }

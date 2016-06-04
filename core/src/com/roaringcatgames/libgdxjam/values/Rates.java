@@ -1,7 +1,7 @@
 package com.roaringcatgames.libgdxjam.values;
 
 /**
- * Created by barry on 3/25/16 @ 4:01 PM.
+ * Static class to handle Rates
  */
 public class Rates {
 
