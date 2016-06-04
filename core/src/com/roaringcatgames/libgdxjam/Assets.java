@@ -391,6 +391,10 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/smoke-particle");
     }
 
+    public static Array<? extends TextureRegion> getAuraFrames(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/aura");
+    }
+
     /////////////
     //Life
     /////////////

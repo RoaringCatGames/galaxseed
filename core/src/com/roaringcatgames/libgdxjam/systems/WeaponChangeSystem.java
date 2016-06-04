@@ -1,19 +1,13 @@
 package com.roaringcatgames.libgdxjam.systems;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Array;
-import com.roaringcatgames.kitten2d.ashley.components.*;
-import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
-import com.roaringcatgames.libgdxjam.components.*;
-
-import java.util.Map;
+import com.roaringcatgames.libgdxjam.components.Mappers;
+import com.roaringcatgames.libgdxjam.components.PlayerComponent;
+import com.roaringcatgames.libgdxjam.components.WeaponType;
 
 /**
  *
@@ -21,48 +15,48 @@ import java.util.Map;
 public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
     @Override
-    public void update(float deltaTime) {
-        super.update(deltaTime);
-
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+        App.game.multiplexer.addProcessor(this);
     }
 
     @Override
     public boolean keyDown(int keycode) {
 
         if(keycode == Input.Keys.NUM_1){
-            //Apply GUN SEED
+
+            switchWeapon(WeaponType.GUN_SEEDS);
         }else if(keycode == Input.Keys.NUM_2){
-            //Clear current Guns
-            Entity player = getEngine().getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
-            ImmutableArray<Entity> currentGunEntities = getEngine().getEntitiesFor(Family.one(GunComponent.class, WeaponDecorationComponent.class).get());
 
-            PlayerComponent pc = Mappers.player.get(player);
-            pc.setWeaponType(WeaponType.POLLEN_AURA);
-            pc.setWeaponLevel(App.getCurrentWeaponLevel(WeaponType.POLLEN_AURA));
-
-            for(Entity e:currentGunEntities){
-                getEngine().removeEntity(e);
-            }
-
-            //Apply Aura
-            PooledEngine engine = (PooledEngine)getEngine();
-            Entity aura = engine.createEntity();
-            aura.add(PollenAuraComponent.create(engine));
-            aura.add(TextureComponent.create(engine));
-            aura.add(AnimationComponent.create(engine));
-                //.addAnimation("DEFAULT", Animations.getPollenAura()))
-            aura.add(CircleBoundsComponent.create(engine)
-                .setCircle(0f, 0f, 3f));
-            aura.add(FollowerComponent.create(engine)
-                .setTarget(player)
-                .setMode(FollowMode.STICKY));
-            engine.addEntity(aura);
-
-
+            switchWeapon(WeaponType.POLLEN_AURA);
         }else if(keycode == Input.Keys.NUM_3){
-            //APply helicopter seed
+
+            switchWeapon(WeaponType.HELICOPTER_SEEDS);
         }
         return false;
+    }
+
+    private void switchWeapon(WeaponType wt){
+        Entity player = getEngine().getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
+
+        PlayerComponent pc = Mappers.player.get(player);
+        pc.setWeaponType(wt);
+        pc.setWeaponLevel(App.getCurrentWeaponLevel(wt));
+
+        WeaponGeneratorUtil.clearWeapon(getEngine());
+        PooledEngine engine = (PooledEngine)getEngine();
+        switch(wt){
+            case POLLEN_AURA:
+                WeaponGeneratorUtil.generateAura(player, engine);
+                break;
+            case GUN_SEEDS:
+                WeaponGeneratorUtil.generateSeedGuns(player, engine);
+                break;
+            case HELICOPTER_SEEDS:
+                //
+                break;
+        }
+
     }
 
     @Override
