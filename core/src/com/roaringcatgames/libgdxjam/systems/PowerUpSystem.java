@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -61,7 +60,6 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
     public void update(float deltaTime) {
         super.update(deltaTime);
         if(player != null && App.getState() != GameState.GAME_OVER) {
-            TransformComponent playerTransform = K2ComponentMappers.transform.get(player);
             BoundsComponent playerBounds = K2ComponentMappers.bounds.get(player);
 
             for (Entity pu : powerUps) {
@@ -70,7 +68,7 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
                     PowerUpComponent pc = Mappers.powerUp.get(pu);
                     switch(pc.powerUpType){
                         case UPGRADE:
-                            upgradeWeapon(playerTransform);
+                            upgradeWeapon();
                             break;
 
                     }
@@ -82,7 +80,7 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
     }
 
 
-    private void upgradeWeapon(TransformComponent playerTransform) {
+    private void upgradeWeapon() {
         PlayerComponent playerComponent = Mappers.player.get(player);
         PooledEngine engine = (PooledEngine)getEngine();
         //Update WeaponLevel
@@ -90,30 +88,15 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
             playerComponent.weaponLevel = playerComponent.weaponLevel == WeaponLevel.LEVEL_1 ? WeaponLevel.LEVEL_2 :
                     playerComponent.weaponLevel == WeaponLevel.LEVEL_2 ? WeaponLevel.LEVEL_3 :
                             WeaponLevel.LEVEL_4;
+            App.setCurrentWeaponLevel(playerComponent.weaponType, playerComponent.weaponLevel);
+
+            WeaponGeneratorUtil.clearWeapon(engine);
             switch(playerComponent.weaponType){
                 case GUN_SEEDS:
-
-                    if(playerComponent.weaponLevel == WeaponLevel.LEVEL_2){
-                        //Add 2 more guns
-                        addGun(playerTransform, engine, muzzlePositions.get(0).x, muzzlePositions.get(0).y, Rates.SEED_GUN_TIME_BETWEEN);
-                        addGun(playerTransform, engine, muzzlePositions.get(1).x, muzzlePositions.get(1).y, Rates.SEED_GUN_TIME_BETWEEN);
-
-                    }else if(playerComponent.weaponLevel == WeaponLevel.LEVEL_3){
-                        //Add 2 more guns
-                        addGun(playerTransform, engine, muzzlePositions.get(2).x, muzzlePositions.get(2).y, Rates.SEED_GUN_TIME_BETWEEN);
-                        addGun(playerTransform, engine, muzzlePositions.get(3).x, muzzlePositions.get(3).y, Rates.SEED_GUN_TIME_BETWEEN);
-                    }else{
-                        //Add Gatling guns
-                        Gdx.app.log("PowerUpSystem", "Upgrading to level 4!");
-                        addGun(playerTransform, engine,
-                               muzzlePositions.get(4).x,
-                               muzzlePositions.get(4).y,
-                               Rates.SEED_GUN_GATLING_TIME_BETWEEN, true);
-                        addGun(playerTransform, engine,
-                               muzzlePositions.get(5).x,
-                               muzzlePositions.get(5).y,
-                               Rates.SEED_GUN_GATLING_TIME_BETWEEN, true);
-                    }
+                    WeaponGeneratorUtil.generateSeedGuns(player, engine);
+                    break;
+                case POLLEN_AURA:
+                    WeaponGeneratorUtil.generateAura(player, engine);
                     break;
             }
         }
@@ -193,18 +176,18 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
                     .setOffset(x * playerTransform.scale.x, (y * playerTransform.scale.y) - 0.6f)
                     .setMode(FollowMode.STICKY));
             smoke.add(ParticleEmitterComponent.create(engine)
-                .setShouldFade(true)
-                .setAngleRange(150f, 210f)
-                .setShouldLoop(true)
-                .setSpawnRate(20f)
-                .setParticleImages(Assets.getGatlingSmokeParticles())
-                .setParticleLifespans(0.2f, 0.4f)
-                .setParticleMinMaxScale(0.3f, 0.7f)
-                .setSpawnType(ParticleSpawnType.RANDOM_IN_BOUNDS)
-                .setSpeed(1f, 2f)
-                .setZIndex(Z.gatlingSmoke)
-                .setSpawnRange(0.2f, 0.2f)
-                .setPaused(true));
+                    .setShouldFade(true)
+                    .setAngleRange(150f, 210f)
+                    .setShouldLoop(true)
+                    .setSpawnRate(20f)
+                    .setParticleImages(Assets.getGatlingSmokeParticles())
+                    .setParticleLifespans(0.2f, 0.4f)
+                    .setParticleMinMaxScale(0.3f, 0.7f)
+                    .setSpawnType(ParticleSpawnType.RANDOM_IN_BOUNDS)
+                    .setSpeed(1f, 2f)
+                    .setZIndex(Z.gatlingSmoke)
+                    .setSpawnRange(0.2f, 0.2f)
+                    .setPaused(true));
             smoke.add(StateComponent.create(engine)
                     .set("DEFAULT")
                     .setLooping(true));
@@ -215,9 +198,6 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
           if(Mappers.player.has(entity)){
-              if(player == null) {
-                  Gdx.app.log("PowerupSystem", "Found Player");
-              }
               this.player = entity;
           }else {
               powerUps.add(entity);
@@ -226,11 +206,9 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        Gdx.app.log("PowerUpSystem", "Key Pressed:" + keycode);
         if(keycode == Input.Keys.SPACE){
             if(player != null) {
-                Gdx.app.log("PowerUpSystem", "Upgrad called" + Mappers.player.has(player));
-                upgradeWeapon(K2ComponentMappers.transform.get(player));
+                upgradeWeapon();
             }
         }
         return false;

@@ -119,28 +119,31 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(VelocityComponent.create(engine)
                     .setSpeed(0f, 0f));
 
+
+            WeaponGeneratorUtil.generateSeedGuns(player, engine);
             //generateMuzzles
-            Animation muzzleAni = Animations.getMuzzle();
-            for(Vector2 muzzlePos:muzzlePositions){
-                Entity muzzle = engine.createEntity();
-                muzzle.add(GunComponent.create(engine)
-                    .setTimeBetweenShots(Rates.SEED_GUN_TIME_BETWEEN));
-                muzzle.add(FollowerComponent.create(engine)
-                    .setOffset(muzzlePos.x*initialScale, muzzlePos.y*initialScale)
-                    .setTarget(player)
-                    .setMode(FollowMode.STICKY));
-                muzzle.add(TextureComponent.create(engine));
-                muzzle.add(AnimationComponent.create(engine)
-                    .addAnimation("FIRING", muzzleAni));
-                muzzle.add(StateComponent.create(engine)
-                    .set("DEFAULT")
-                    .setLooping(false));
-                muzzle.add(TransformComponent.create(engine)
-                    .setPosition(initialPosition.x, initialPosition.y, Z.muzzleFlash)
-                    .setScale(initialScale*0.5f, initialScale*0.5f)
-                    .setOpacity(0.8f));
-                engine.addEntity(muzzle);
-            }
+
+//            Animation muzzleAni = Animations.getMuzzle();
+//            for(Vector2 muzzlePos:muzzlePositions){
+//                Entity muzzle = engine.createEntity();
+//                muzzle.add(GunComponent.create(engine)
+//                    .setTimeBetweenShots(Rates.SEED_GUN_TIME_BETWEEN));
+//                muzzle.add(FollowerComponent.create(engine)
+//                    .setOffset(muzzlePos.x*initialScale, muzzlePos.y*initialScale)
+//                    .setTarget(player)
+//                    .setMode(FollowMode.STICKY));
+//                muzzle.add(TextureComponent.create(engine));
+//                muzzle.add(AnimationComponent.create(engine)
+//                    .addAnimation("FIRING", muzzleAni));
+//                muzzle.add(StateComponent.create(engine)
+//                    .set("DEFAULT")
+//                    .setLooping(false));
+//                muzzle.add(TransformComponent.create(engine)
+//                    .setPosition(initialPosition.x, initialPosition.y, Z.muzzleFlash)
+//                    .setScale(initialScale*0.5f, initialScale*0.5f)
+//                    .setOpacity(0.8f));
+//                engine.addEntity(muzzle);
+//            }
 
 
 

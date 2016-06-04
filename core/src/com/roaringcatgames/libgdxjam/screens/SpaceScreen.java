@@ -103,6 +103,7 @@
             engine.addSystem(new ShakeSystem());
             engine.addSystem(new OscillationSystem());
             engine.addSystem(new PowerUpSystem());
+            engine.addSystem(new WeaponChangeSystem());
 
 
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
