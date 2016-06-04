@@ -18,6 +18,7 @@ import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
+import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Rates;
@@ -173,8 +174,8 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
                     .setOffset(x * playerTransform.scale.x, y * playerTransform.scale.y)
                     .setMode(FollowMode.STICKY));
             gun.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", Animations.getGatlingIdle())
-                .addAnimation("FIRING", Animations.getGatlingFiring()));
+                    .addAnimation("DEFAULT", Animations.getGatlingIdle())
+                    .addAnimation("FIRING", Animations.getGatlingFiring()));
             gun.add(TextureComponent.create(engine));
             gun.add(StateComponent.create(engine)
                     .set("DEFAULT")
@@ -189,11 +190,21 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
 
             smoke.add(FollowerComponent.create(engine)
                     .setTarget(player)
-                    .setOffset(x * playerTransform.scale.x, (y * playerTransform.scale.y)-0.6f)
+                    .setOffset(x * playerTransform.scale.x, (y * playerTransform.scale.y) - 0.6f)
                     .setMode(FollowMode.STICKY));
-            smoke.add(AnimationComponent.create(engine)
-                    .addAnimation("FIRING", Animations.getGatlingSmoke()));
-            smoke.add(TextureComponent.create(engine));
+            smoke.add(ParticleEmitterComponent.create(engine)
+                .setShouldFade(true)
+                .setAngleRange(150f, 210f)
+                .setShouldLoop(true)
+                .setSpawnRate(20f)
+                .setParticleImages(Assets.getGatlingSmokeParticles())
+                .setParticleLifespans(0.2f, 0.4f)
+                .setParticleMinMaxScale(0.3f, 0.7f)
+                .setSpawnType(ParticleSpawnType.RANDOM_IN_BOUNDS)
+                .setSpeed(1f, 2f)
+                .setZIndex(Z.gatlingSmoke)
+                .setSpawnRange(0.2f, 0.2f)
+                .setPaused(true));
             smoke.add(StateComponent.create(engine)
                     .set("DEFAULT")
                     .setLooping(true));
@@ -204,6 +215,9 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
           if(Mappers.player.has(entity)){
+              if(player == null) {
+                  Gdx.app.log("PowerupSystem", "Found Player");
+              }
               this.player = entity;
           }else {
               powerUps.add(entity);
@@ -215,7 +229,7 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
         Gdx.app.log("PowerUpSystem", "Key Pressed:" + keycode);
         if(keycode == Input.Keys.SPACE){
             if(player != null) {
-                Gdx.app.log("PowerUpSystem", "Upgrad called");
+                Gdx.app.log("PowerUpSystem", "Upgrad called" + Mappers.player.has(player));
                 upgradeWeapon(K2ComponentMappers.transform.get(player));
             }
         }

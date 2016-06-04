@@ -83,7 +83,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             flames = engine.createEntity();
 
 
-
+            Gdx.app.log("PlayerSystem", "Creating Player");
             player.add(KinematicComponent.create(engine));
             player.add(PlayerComponent.create(engine)
                 .setWeaponLevel(WeaponLevel.LEVEL_1)

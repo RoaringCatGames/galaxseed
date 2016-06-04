@@ -104,8 +104,8 @@ public class Animations {
         muzzle = new Animation((1f/8f)/6f, Assets.getMuzzleFrames());
         gatlingIdle = new Animation(1f/9f, Assets.getGatlingIdle());
         gatlingFiring = new Animation(1f/9f, Assets.getGatlingFiring());
-        gatlingMuzzle = new Animation((1f/24f)/6f, Assets.getGatlingMuzzle());
-        gatlingSmoke = new Animation(1f/12f, Assets.getGatlingSmoke());
+        gatlingMuzzle = new Animation(1f/144f, Assets.getGatlingMuzzle());
+        gatlingSmoke = new Animation(1f/144f, Assets.getGatlingSmoke());
 
         flamesIdle = new Animation(1f/9f, Assets.getIdleFlamesFrames());
         flames = new Animation(1f/9f, Assets.getFlamesFrames());

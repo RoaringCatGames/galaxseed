@@ -387,6 +387,9 @@ public class Assets {
     public static Array<? extends TextureRegion> getGatlingSmoke(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/smoke");
     }
+    public static Array<? extends TextureRegion> getGatlingSmokeParticles(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/smoke-particle");
+    }
 
     /////////////
     //Life

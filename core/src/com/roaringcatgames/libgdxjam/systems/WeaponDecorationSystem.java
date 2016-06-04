@@ -42,6 +42,10 @@ public class WeaponDecorationSystem extends IteratingSystem {
                     } else if (!isFiring && !isDecoDefault) {
                         decoState.set("DEFAULT");
                     }
+
+                    if(K2ComponentMappers.particleEmitter.has(deco)){
+                        K2ComponentMappers.particleEmitter.get(deco).setPaused(!isFiring);
+                    }
                 }else{
                     getEngine().removeEntity(deco);
                 }

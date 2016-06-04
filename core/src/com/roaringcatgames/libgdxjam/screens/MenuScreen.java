@@ -32,7 +32,7 @@ import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
- * Created by barry on 12/22/15 @ 5:51 PM.
+ * Screen to bring the player into the game
  */
 public class MenuScreen extends LazyInitScreen {
 
@@ -250,9 +250,6 @@ public class MenuScreen extends LazyInitScreen {
 
         if(isReady(p, "p") && isReady(l, "l") && isReady(a, "a") && isReady(y, "y")){
             menuSong.stop();
-            //FUCKING GROSS. What is this, Unity??
-            //TransformComponent tc = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(TransformComponent.class);
-            //App.playerLastPosition.set(tc.position.x, tc.position.y);
             dispatcher.endCurrentScreen();
         }
     }

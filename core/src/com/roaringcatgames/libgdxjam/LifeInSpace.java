@@ -46,8 +46,10 @@ public class LifeInSpace extends Game {
         Gdx.gl.glClearColor(r, g, b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
         Screen nextScreen = screenDispatcher.getNextScreen();
         if(nextScreen != getScreen()){
+            multiplexer.clear();
             setScreen(nextScreen);
         }
 
