@@ -111,7 +111,7 @@ public class Animations {
         flames = new Animation(1f/9f, Assets.getFlamesFrames());
         shipDeath = new Animation(1f/6f, Assets.getShipDeathFrames());
 
-        upgrade = new Animation(1f/9f, Assets.getUpgradeFrames());
+        upgrade = new Animation(1f/6f, Assets.getUpgradeFrames());
 
         rawry = new Animation(1f / 30f, Assets.getWreckedCat(), Animation.PlayMode.LOOP_PINGPONG);
     }
