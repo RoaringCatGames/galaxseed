@@ -143,95 +143,86 @@ public class EnemyDamageSystem extends IteratingSystem {
         HealthComponent hc;
         //int scoredPoints = 0;
 
-        switch(ec.enemyType) {
-//            case ASTEROID_FRAG:
-//                getEngine().removeEntity(bullet);
-//                getEngine().removeEntity(enemy);
-//                break;
+        hc = hm.get(enemy);
+        if(hc.health > 0f) {
+            attachPlant(bullet, enemy, ec.enemyType == EnemyType.COMET);
+            if (scoreCard != null) {
+                scoreCard.setScore(scoreCard.score + 1);
+            }
 
-            default:
-                hc = hm.get(enemy);
-                if(hc.health > 0f) {
-                    attachPlant(bullet, enemy, ec.enemyType == EnemyType.COMET);
-                    if (scoreCard != null) {
-                        scoreCard.setScore(scoreCard.score + 1);
-                    }
-
-                    float startHealth = hc.health;
-                    applyHealthChange(bullet, hc);
+            float startHealth = hc.health;
+            applyHealthChange(bullet, hc);
 
 
-                    if (startHealth > 0f && hc.health <= 0f) {
-                        TransformComponent enemyTfm = tm.get(enemy);
-                        switch (ec.enemyType) {
-                            case ASTEROID_FRAG:
-                            case COMET:
-                                if(stm.has(enemy)){
-                                    StateComponent sc = stm.get(enemy);
-                                    sc.setLooping(false);
-                                    sc.set("FULL");
-                                }
-                                if(pfm.has(enemy)){
-                                    PathFollowComponent pfc = pfm.get(enemy);
-                                    pfc.setSpeed(pfc.speed/2f);
-                                    pfc.setFacingPath(false);
-                                }else if (vm.has(enemy)) {
-                                    VelocityComponent vc = vm.get(enemy);
-                                    vc.speed.scl(0.5f);
-                                }
-
-                                float rotR = r.nextFloat();
-                                float rotSpeed = (20f*rotR) + 20f;
-                                if(rotR >0.5f){
-                                    rotSpeed *= -1f;
-                                }
-                                enemy.add(RotationComponent.create(getEngine())
-                                    .setRotationSpeed(rotSpeed));
-                                break;
-                            case ASTEROID_A:
-                                attachTreeCover(enemy, Animations.getAsteroidA());
-                                generateUpgradePowerUp(enemyTfm.position.x, enemyTfm.position.y);
-                                if(r.nextFloat() < 0.2f) {
-                                    generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
-                                }
-                                break;
-                            case ASTEROID_B:
-                                attachTreeCover(enemy, Animations.getAsteroidB());
-                                if(r.nextFloat() < 0.33f){
-                                    generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
-                                }
-                                break;
-                            case ASTEROID_C:
-                                attachTreeCover(enemy, Animations.getAsteroidC());
-                                generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.FERTILIZER);
-                                break;
-                            default:
-                                Gdx.app.log("EnemyType", "EnemyType:" + ec.enemyType);
-                                break;
+            if (startHealth > 0f && hc.health <= 0f) {
+                TransformComponent enemyTfm = tm.get(enemy);
+                switch (ec.enemyType) {
+                    case ASTEROID_FRAG:
+                    case COMET:
+                        if(stm.has(enemy)){
+                            StateComponent sc = stm.get(enemy);
+                            sc.setLooping(false);
+                            sc.set("FULL");
+                        }
+                        if(pfm.has(enemy)){
+                            PathFollowComponent pfc = pfm.get(enemy);
+                            pfc.setSpeed(pfc.speed/2f);
+                            pfc.setFacingPath(false);
+                        }else if (vm.has(enemy)) {
+                            VelocityComponent vc = vm.get(enemy);
+                            vc.speed.scl(0.5f);
                         }
 
-                        //ec.setDamaging(false);
-                        if (sm.has(enemy)) {
-                            sm.get(enemy).setPaused(true);
-                            if (vm.has(enemy)) {
-                                VelocityComponent vc = vm.get(enemy);
-                                vc.speed.scl(1.6f);
-                            }else{
-                                Gdx.app.log("EnemyDamageSystem", "Enemy doesn't have Velocity!");
-                            }
-                            popSfx.play(Volume.POP_SFX);
+                        float rotR = r.nextFloat();
+                        float rotSpeed = (20f*rotR) + 20f;
+                        if(rotR >0.5f){
+                            rotSpeed *= -1f;
                         }
-
-                        enemy.add(TweenComponent.create(getEngine())
-                                .addTween(Tween.to(enemy, K2EntityTweenAccessor.COLOR, 2f)
-                                        .target(Colors.PLANTED_GREEN.r, Colors.PLANTED_GREEN.g, Colors.PLANTED_GREEN.b)
-                                        .ease(TweenEquations.easeInOutSine)));
-
-                    }
-
-                    getEngine().removeEntity(bullet);
+                        enemy.add(RotationComponent.create(getEngine())
+                            .setRotationSpeed(rotSpeed));
+                        break;
+                    case ASTEROID_A:
+                        attachTreeCover(enemy, Animations.getAsteroidA());
+                        generateUpgradePowerUp(enemyTfm.position.x, enemyTfm.position.y);
+                        if(r.nextFloat() < 0.2f) {
+                            generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
+                        }
+                        break;
+                    case ASTEROID_B:
+                        attachTreeCover(enemy, Animations.getAsteroidB());
+                        if(r.nextFloat() < 0.33f){
+                            generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
+                        }
+                        break;
+                    case ASTEROID_C:
+                        attachTreeCover(enemy, Animations.getAsteroidC());
+                        generateHealthPack(enemyTfm.position.x, enemyTfm.position.y, HealthPackType.FERTILIZER);
+                        break;
+                    default:
+                        Gdx.app.log("EnemyType", "EnemyType:" + ec.enemyType);
+                        break;
                 }
-                break;
+
+                //ec.setDamaging(false);
+                if (sm.has(enemy)) {
+                    sm.get(enemy).setPaused(true);
+                    if (vm.has(enemy)) {
+                        VelocityComponent vc = vm.get(enemy);
+                        vc.speed.scl(1.6f);
+                    }else{
+                        Gdx.app.log("EnemyDamageSystem", "Enemy doesn't have Velocity!");
+                    }
+                    popSfx.play(Volume.POP_SFX);
+                }
+
+                enemy.add(TweenComponent.create(getEngine())
+                        .addTween(Tween.to(enemy, K2EntityTweenAccessor.COLOR, 2f)
+                                .target(Colors.PLANTED_GREEN.r, Colors.PLANTED_GREEN.g, Colors.PLANTED_GREEN.b)
+                                .ease(TweenEquations.easeInOutSine)));
+
+            }
+
+            getEngine().removeEntity(bullet);
         }
     }
 

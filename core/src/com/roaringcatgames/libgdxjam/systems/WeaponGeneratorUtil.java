@@ -18,6 +18,7 @@ import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
+import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.values.Rates;
 import com.roaringcatgames.libgdxjam.values.Z;
 
@@ -199,15 +200,20 @@ public class WeaponGeneratorUtil {
         TransformComponent playerPos = K2ComponentMappers.transform.get(player);
         float auraScale = playerPos.scale.x + auraSizes.get(0).x;
         float auraRadius = auraSizes.get(0).y;
+        float dps = Damage.auraLevelOne;
         if(pc.weaponLevel == WeaponLevel.LEVEL_2){
             auraScale += auraSizes.get(1).x;
             auraRadius = auraSizes.get(1).y;
+            dps = Damage.auraLevelTwo;
         }else if(pc.weaponLevel == WeaponLevel.LEVEL_3){
             auraScale += auraSizes.get(2).x;
             auraRadius = auraSizes.get(2).y;
+            dps = Damage.auraLevelThree;
+
         }else if(pc.weaponLevel == WeaponLevel.LEVEL_4){
             auraScale += auraSizes.get(3).x;
             auraRadius = auraSizes.get(3).y;
+            dps = Damage.auraLevelFour;
         }
 
         //Apply Aura
@@ -229,6 +235,8 @@ public class WeaponGeneratorUtil {
         aura.add(FollowerComponent.create(engine)
                 .setTarget(player)
                 .setMode(FollowMode.STICKY));
+        aura.add(DamageComponent.create(engine)
+            .setDPS(dps));
 
         if(pc.weaponLevel == WeaponLevel.LEVEL_4){
             aura.add(ParticleEmitterComponent.create(engine)

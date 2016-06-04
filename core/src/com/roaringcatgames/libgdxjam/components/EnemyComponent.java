@@ -6,13 +6,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Pool;
 
 /**
- * Created by barry on 1/10/16 @ 7:36 PM.
+ * Component to track enemy data
  */
 public class EnemyComponent implements Component, Pool.Poolable {
 
     public EnemyType enemyType = EnemyType.ASTEROID_FRAG;
     public EnemyColor enemyColor = EnemyColor.BROWN;
     public boolean isDamaging = true;
+    public boolean isPollenated = false;
 
     public static EnemyComponent create(PooledEngine engine) {
         return engine.createComponent(EnemyComponent.class);
@@ -33,9 +34,15 @@ public class EnemyComponent implements Component, Pool.Poolable {
         return this;
     }
 
+    public EnemyComponent setPollenated(boolean pollenated){
+        this.isPollenated = pollenated;
+        return this;
+    }
+
     @Override
     public void reset() {
         enemyType = EnemyType.ASTEROID_FRAG;
         isDamaging = true;
+        isPollenated = false;
     }
 }

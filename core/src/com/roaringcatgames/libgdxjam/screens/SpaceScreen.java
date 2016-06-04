@@ -109,6 +109,7 @@
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
             PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();
             engine.addSystem(enemyDmgSystem);
+            engine.addSystem(new PollenAuraSystem());
             engine.addSystem(playerDmgSystem);
             engine.addSystem(new ExplosionSystem());
             engine.addSystem(new FollowerSystem(Family.one(EnemyComponent.class,
