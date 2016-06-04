@@ -2,10 +2,13 @@ package com.roaringcatgames.libgdxjam;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.roaringcatgames.libgdxjam.components.WeaponLevel;
+import com.roaringcatgames.libgdxjam.components.WeaponType;
 import com.roaringcatgames.libgdxjam.values.GameState;
 
 /**
- * Created by barry on 12/22/15 @ 7:31 PM.
+ * The Global State items that we're okay with tracking in one spot
  */
 public class App {
 
@@ -28,14 +31,33 @@ public class App {
     public static Vector2 playerLastPosition = new Vector2(W/2f, 7f);
 
     private static float timeSpentSlow = 0f;
+
+
+    private static boolean isSlowed = false;
+
+
+    private static GameState state = GameState.MENU;
+
+
+    public static Vector2 getPlayerLastPosition(){
+        return playerLastPosition;
+    }
+
+
+    private static ObjectMap<WeaponType, WeaponLevel> currentWeaponLevels = new ObjectMap<>();
+
+    static {
+        currentWeaponLevels.put(WeaponType.GUN_SEEDS, WeaponLevel.LEVEL_1);
+        currentWeaponLevels.put(WeaponType.POLLEN_AURA, WeaponLevel.LEVEL_1);
+        currentWeaponLevels.put(WeaponType.HELICOPTER_SEEDS, WeaponLevel.LEVEL_1);
+    }
+
     public static void setTimeSpentSlow(float tss){
         timeSpentSlow = tss;
     }
     public static float getTimeSpentSlow(){
         return timeSpentSlow;
     }
-
-    private static boolean isSlowed = false;
     public static void setSlowed(boolean newSlowed){
         isSlowed = newSlowed;
         if(isSlowed){
@@ -45,8 +67,6 @@ public class App {
     public static boolean isSlowed(){
         return isSlowed;
     }
-
-    private static GameState state = GameState.MENU;
     public static void setState(GameState newState){
         state = newState;
     }
@@ -54,8 +74,10 @@ public class App {
         return state;
     }
 
-    public static Vector2 getPlayerLastPosition(){
-        return playerLastPosition;
+    public static WeaponLevel getCurrentWeaponLevel(WeaponType wt){
+        return currentWeaponLevels.get(wt);
     }
-
+    public static void setCurrentWeaponLevel(WeaponType wt, WeaponLevel lvl){
+        currentWeaponLevels.put(wt, lvl);
+    }
 }

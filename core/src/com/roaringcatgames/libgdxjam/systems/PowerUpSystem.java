@@ -90,6 +90,8 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
             playerComponent.weaponLevel = playerComponent.weaponLevel == WeaponLevel.LEVEL_1 ? WeaponLevel.LEVEL_2 :
                     playerComponent.weaponLevel == WeaponLevel.LEVEL_2 ? WeaponLevel.LEVEL_3 :
                             WeaponLevel.LEVEL_4;
+            App.setCurrentWeaponLevel(playerComponent.weaponType, playerComponent.weaponLevel);
+
             switch(playerComponent.weaponType){
                 case GUN_SEEDS:
 
