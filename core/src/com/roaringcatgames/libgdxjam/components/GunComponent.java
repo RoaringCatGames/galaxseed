@@ -6,12 +6,13 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool;
 
 /**
- * Created by barry on 3/25/16 @ 3:43 PM.
+ * Defines the properties of a gun.
  */
 public class GunComponent implements Component, Pool.Poolable{
 
     public float timeBetweenShots = 1f;
     public float lastFireTime = 0f;
+    public float bulletSpeed = 20f;
 
     public static GunComponent create(Engine engine){
         if(engine instanceof PooledEngine){
@@ -31,10 +32,16 @@ public class GunComponent implements Component, Pool.Poolable{
         return this;
     }
 
+    public GunComponent setBulletSpeed(float speed){
+        this.bulletSpeed = speed;
+        return this;
+    }
+
     @Override
     public void reset(){
         this.timeBetweenShots = 1f;
         this.lastFireTime = 0f;
+        this.bulletSpeed = 20f;
     }
 
 }

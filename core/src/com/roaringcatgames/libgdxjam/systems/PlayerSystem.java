@@ -85,7 +85,9 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
 
             player.add(KinematicComponent.create(engine));
-            player.add(PlayerComponent.create(engine));
+            player.add(PlayerComponent.create(engine)
+                .setWeaponLevel(WeaponLevel.LEVEL_1)
+                .setWeaponType(WeaponType.GUN_SEEDS));
             player.add(HealthComponent.create(engine)
                 .setHealth(Health.Player)
                 .setMaxHealth(Health.Player));
@@ -117,16 +119,12 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(VelocityComponent.create(engine)
                     .setSpeed(0f, 0f));
 
-            player.add(WeaponComponent.create(engine)
-                .setWeaponLevel(WeaponLevel.LEVEL_1)
-                .setWeaponType(WeaponType.GUN_SEEDS));
-
             //generateMuzzles
             Animation muzzleAni = Animations.getMuzzle();
             for(Vector2 muzzlePos:muzzlePositions){
                 Entity muzzle = engine.createEntity();
                 muzzle.add(GunComponent.create(engine)
-                    .setTimeBetweenShots(Rates.seedGunTimeBetween));
+                    .setTimeBetweenShots(Rates.SEED_GUN_TIME_BETWEEN));
                 muzzle.add(FollowerComponent.create(engine)
                     .setOffset(muzzlePos.x*initialScale, muzzlePos.y*initialScale)
                     .setTarget(player)

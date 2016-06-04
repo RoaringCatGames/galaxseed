@@ -3,7 +3,7 @@ package com.roaringcatgames.libgdxjam.components;
 import com.badlogic.ashley.core.ComponentMapper;
 
 /**
- * Created by barry on 5/31/16 @ 7:12 PM.
+ * Keep a set of ComponentMappers
  */
 public class Mappers {
 
@@ -20,6 +20,5 @@ public class Mappers {
     public static ComponentMapper<ProjectileComponent> projectile = ComponentMapper.getFor(ProjectileComponent.class);
     public static ComponentMapper<ScoreComponent> score = ComponentMapper.getFor(ScoreComponent.class);
     public static ComponentMapper<SpawnerComponent> spawner = ComponentMapper.getFor(SpawnerComponent.class);
-    public static ComponentMapper<WeaponComponent> weapon = ComponentMapper.getFor(WeaponComponent.class);
     public static ComponentMapper<WhenOffScreenComponent> whenOffScreen = ComponentMapper.getFor(WhenOffScreenComponent.class);
 }
