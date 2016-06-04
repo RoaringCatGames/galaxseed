@@ -114,14 +114,14 @@
                     HealthPackComponent.class,
                     PlayerComponent.class,
                     GunComponent.class,
-                    DecorationComponent.class).get()));
+                    WeaponDecorationComponent.class).get()));
 
             GameOverSystem gameOverSystem = new GameOverSystem(cam, dispatcher);
             gameOverSystem.setProcessing(false);
             engine.addSystem(gameOverSystem);
             engine.addSystem(new FadingSystem());
             engine.addSystem(new HealthPackSystem());
-            engine.addSystem(new DecorationSystem());
+            engine.addSystem(new WeaponDecorationSystem());
 
             //Extension Systems
             engine.addSystem(renderingSystem);
@@ -130,7 +130,7 @@
             PathFollowSystem pathFollowSystem = new PathFollowSystem();
             engine.addSystem(pathFollowSystem);
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
-            //engine.addSystem(new FPSSystem(Assets.get48Font(), new Vector2(App.W - 3f, 3f), 10));
+            engine.addSystem(new FPSSystem(Assets.get48Font(), new Vector2(App.W - 3f, 3f), 10));
             App.game.multiplexer.addProcessor(this);
 
             playingOnlySystems.add(movementSystem);

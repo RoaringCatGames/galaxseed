@@ -117,14 +117,14 @@ public class PlayerDamageSystem extends IteratingSystem {
 
 
         //SHAKE Player WHEN HIT!!!
-        if(sm.has(player)) {
-            ShakeComponent sc = sm.get(player);
-            if(sc.isPaused){
-                sc.setCurrentTime(0f);
-                sc.setPaused(false);
-                sc.setDuration(shakeTime);
-            }
-        }
+//        if(sm.has(player)) {
+//            ShakeComponent sc = sm.get(player);
+//            if(sc.isPaused){
+//                sc.setCurrentTime(0f);
+//                sc.setPaused(false);
+//                sc.setDuration(shakeTime);
+//            }
+//        }
 
         boolean leftFirst = true;
         for(Entity leaf:healthLeaves){
@@ -185,18 +185,18 @@ public class PlayerDamageSystem extends IteratingSystem {
                 .addAnimation("DEFAULT", impactAni));
         engine.addEntity(explosion);
 
-        if(!K2ComponentMappers.tween.has(player) ||
-            K2ComponentMappers.tween.get(player).timeline.isFinished()) {
-            player.add(TweenComponent.create(engine)
-                    .setTimeline(Timeline.createSequence()
-                            .push(Tween.to(player, K2EntityTweenAccessor.COLOR, 0.05f)
-                                    .target(Color.RED.r, Color.RED.g, Color.RED.b)
-                                    .ease(TweenEquations.easeOutSine)
-                                    .repeatYoyo(2, 0))
-                            .push(Tween.to(player, K2EntityTweenAccessor.COLOR, 0.05f)
-                                    .target(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b)
-                                    .ease(TweenEquations.easeOutSine))));
-        }
+//        if(!K2ComponentMappers.tween.has(player) ||
+//            K2ComponentMappers.tween.get(player).timeline.isFinished()) {
+//            player.add(TweenComponent.create(engine)
+//                    .setTimeline(Timeline.createSequence()
+//                            .push(Tween.to(player, K2EntityTweenAccessor.COLOR, 0.05f)
+//                                    .target(Color.RED.r, Color.RED.g, Color.RED.b)
+//                                    .ease(TweenEquations.easeOutSine)
+//                                    .repeatYoyo(2, 0))
+//                            .push(Tween.to(player, K2EntityTweenAccessor.COLOR, 0.05f)
+//                                    .target(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b)
+//                                    .ease(TweenEquations.easeOutSine))));
+//        }
 
         //Remove Entity
         engine.removeEntity(proj);

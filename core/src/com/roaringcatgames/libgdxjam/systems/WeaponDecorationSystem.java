@@ -6,20 +6,20 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.StateComponent;
-import com.roaringcatgames.libgdxjam.components.DecorationComponent;
+import com.roaringcatgames.libgdxjam.components.WeaponDecorationComponent;
 import com.roaringcatgames.libgdxjam.components.Mappers;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 
 /**
  * System to handle the Decorations on fully leveled Guns
  */
-public class DecorationSystem extends IteratingSystem {
+public class WeaponDecorationSystem extends IteratingSystem {
 
     private Entity player;
     private Array<Entity> decorations = new Array<>();
 
-    public DecorationSystem(){
-        super(Family.one(PlayerComponent.class, DecorationComponent.class).get());
+    public WeaponDecorationSystem(){
+        super(Family.one(PlayerComponent.class, WeaponDecorationComponent.class).get());
     }
 
     @Override
@@ -30,16 +30,24 @@ public class DecorationSystem extends IteratingSystem {
             StateComponent playerState = K2ComponentMappers.state.get(player);
 
             boolean isFiring = !"DEFAULT".equals(playerState.get());
-
+            boolean isDead = "DEAD".equals(playerState.get());
 
             for (Entity deco : decorations) {
-                StateComponent decoState = K2ComponentMappers.state.get(deco);
-                boolean isDecoDefault = "DEFAULT".equals(decoState.get());
+                if(!isDead){
+                    StateComponent decoState = K2ComponentMappers.state.get(deco);
+                    boolean isDecoDefault = "DEFAULT".equals(decoState.get());
 
-                if (isFiring && isDecoDefault) {
-                    decoState.set("FIRING");
-                } else if (!isFiring && !isDecoDefault) {
-                    decoState.set("DEFAULT");
+                    if (isFiring && isDecoDefault) {
+                        decoState.set("FIRING");
+                    } else if (!isFiring && !isDecoDefault) {
+                        decoState.set("DEFAULT");
+                    }
+
+                    if(K2ComponentMappers.particleEmitter.has(deco)){
+                        K2ComponentMappers.particleEmitter.get(deco).setPaused(!isFiring);
+                    }
+                }else{
+                    getEngine().removeEntity(deco);
                 }
             }
 

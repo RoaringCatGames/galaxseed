@@ -17,7 +17,7 @@ import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
- * Created by barry on 1/3/16 @ 1:14 AM.
+ * Controls firing of Guns
  */
 public class FiringSystem extends IteratingSystem {
 
