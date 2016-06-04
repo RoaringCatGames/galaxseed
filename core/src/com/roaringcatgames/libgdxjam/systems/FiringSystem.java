@@ -21,9 +21,7 @@ import com.roaringcatgames.libgdxjam.values.Z;
  */
 public class FiringSystem extends IteratingSystem {
 
-    private float lastFireTime = 0f;
     private float timeElapsed = 0f;
-    private float bulletSpeed = 20f;
     private Sound firingSFX;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<GunComponent> gm;
@@ -48,6 +46,7 @@ public class FiringSystem extends IteratingSystem {
         if(player != null) {
             StateComponent sc = player.getComponent(StateComponent.class);
 
+            //Fire all the time.
             if(sc.get() != "DEFAULT") {
                 timeElapsed += deltaTime;
 
@@ -61,7 +60,7 @@ public class FiringSystem extends IteratingSystem {
                         mState.set("FIRING");
                         mState.setLooping(false);
                         FollowerComponent follower = m.getComponent(FollowerComponent.class);
-                        generateBullet(follower.offset.x, follower.offset.y, 0f, bulletSpeed);
+                        generateBullet(follower.offset.x, follower.offset.y, 0f, gc.bulletSpeed);
                         gc.lastFireTime = timeElapsed;
 
                         isFiring = true;

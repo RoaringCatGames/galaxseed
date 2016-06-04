@@ -27,7 +27,7 @@ public class PowerUpSystem extends IteratingSystem {
 
     public PowerUpSystem(){
         super(Family.all(BoundsComponent.class)
-                .one(PlayerComponent.class, WeaponComponent.class, PowerUpComponent.class).get());
+                .one(PlayerComponent.class, PowerUpComponent.class).get());
         this.muzzlePositions.add(new Vector2(-0.906f, 0.881f));
         this.muzzlePositions.add(new Vector2(0.906f, 0.881f));
         this.muzzlePositions.add(new Vector2(-1.312f, 0.3f));
@@ -42,6 +42,7 @@ public class PowerUpSystem extends IteratingSystem {
         if(player != null) {
             TransformComponent playerTransform = K2ComponentMappers.transform.get(player);
             BoundsComponent playerBounds = K2ComponentMappers.bounds.get(player);
+
             for (Entity pu : powerUps) {
                 BoundsComponent powerUpBounds = K2ComponentMappers.bounds.get(pu);
                 if(powerUpBounds.bounds.overlaps(playerBounds.bounds)){
@@ -62,30 +63,30 @@ public class PowerUpSystem extends IteratingSystem {
 
 
     private void upgradeWeapon(TransformComponent playerTransform) {
-        WeaponComponent wc = Mappers.weapon.get(player);
+        PlayerComponent playerComponent = Mappers.player.get(player);
         PooledEngine engine = (PooledEngine)getEngine();
         //Update WeaponLevel
-        if(wc.weaponLevel != WeaponLevel.LEVEL_4){
-            wc.weaponLevel = wc.weaponLevel == WeaponLevel.LEVEL_1 ? WeaponLevel.LEVEL_2 :
-                    wc.weaponLevel == WeaponLevel.LEVEL_2 ? WeaponLevel.LEVEL_3 :
+        if(playerComponent.weaponLevel != WeaponLevel.LEVEL_4){
+            playerComponent.weaponLevel = playerComponent.weaponLevel == WeaponLevel.LEVEL_1 ? WeaponLevel.LEVEL_2 :
+                    playerComponent.weaponLevel == WeaponLevel.LEVEL_2 ? WeaponLevel.LEVEL_3 :
                             WeaponLevel.LEVEL_4;
-            switch(wc.weaponType){
+            switch(playerComponent.weaponType){
                 case GUN_SEEDS:
 
-                    if(wc.weaponLevel == WeaponLevel.LEVEL_2){
+                    if(playerComponent.weaponLevel == WeaponLevel.LEVEL_2){
                         //Add 2 more guns
-                        addGun(playerTransform, engine, muzzlePositions.get(0).x, muzzlePositions.get(0).y, Rates.seedGunTimeBetween);
-                        addGun(playerTransform, engine, muzzlePositions.get(1).x, muzzlePositions.get(1).y, Rates.seedGunTimeBetween);
+                        addGun(playerTransform, engine, muzzlePositions.get(0).x, muzzlePositions.get(0).y, Rates.SEED_GUN_TIME_BETWEEN);
+                        addGun(playerTransform, engine, muzzlePositions.get(1).x, muzzlePositions.get(1).y, Rates.SEED_GUN_TIME_BETWEEN);
 
-                    }else if(wc.weaponLevel == WeaponLevel.LEVEL_3){
+                    }else if(playerComponent.weaponLevel == WeaponLevel.LEVEL_3){
                         //Add 2 more guns
-                        addGun(playerTransform, engine, muzzlePositions.get(2).x, muzzlePositions.get(2).y, Rates.seedGunTimeBetween);
-                        addGun(playerTransform, engine, muzzlePositions.get(3).x, muzzlePositions.get(3).y, Rates.seedGunTimeBetween);
+                        addGun(playerTransform, engine, muzzlePositions.get(2).x, muzzlePositions.get(2).y, Rates.SEED_GUN_TIME_BETWEEN);
+                        addGun(playerTransform, engine, muzzlePositions.get(3).x, muzzlePositions.get(3).y, Rates.SEED_GUN_TIME_BETWEEN);
                     }else{
                         //Add Gatling guns
                         Gdx.app.log("PowerUpSystem", "Upgrading to level 4!");
-                        addGun(playerTransform, engine, muzzlePositions.get(4).x, muzzlePositions.get(4).y, Rates.seedGatlingGunTimeBetween, true);
-                        addGun(playerTransform, engine, muzzlePositions.get(5).x, muzzlePositions.get(5).y, Rates.seedGatlingGunTimeBetween, true);
+                        addGun(playerTransform, engine, muzzlePositions.get(4).x, muzzlePositions.get(4).y, Rates.SEED_GUN_GATLING_TIME_BETWEEN, true);
+                        addGun(playerTransform, engine, muzzlePositions.get(5).x, muzzlePositions.get(5).y, Rates.SEED_GUN_GATLING_TIME_BETWEEN, true);
                     }
                     break;
             }
@@ -95,10 +96,25 @@ public class PowerUpSystem extends IteratingSystem {
     private void addGun(TransformComponent playerTransform, PooledEngine engine,
                         float x, float y, float timeBetweenShots, boolean...hasGun) {
 
+        boolean isGatling = hasGun != null && hasGun.length == 1 && hasGun[0];
+
+        float lastSynchronizedFireTime = 0f;
+        if(!isGatling) {
+            for (Entity m : engine.getEntitiesFor(Family.all(GunComponent.class).get())) {
+                GunComponent gc = Mappers.gun.get(m);
+                if (gc.lastFireTime > lastSynchronizedFireTime) {
+                    lastSynchronizedFireTime = gc.lastFireTime;
+                }
+            }
+        }
+
+
         Animation muzzleAni = Animations.getMuzzle();
         Entity muzzle = engine.createEntity();
         muzzle.add(GunComponent.create(engine)
-                .setTimeBetweenShots(timeBetweenShots));
+                .setTimeBetweenShots(timeBetweenShots)
+                .setLastFireTime(lastSynchronizedFireTime)
+                .setBulletSpeed(isGatling ? Rates.SEED_GUN_GATLING_BULLET_SPEED : Rates.SEED_GUN_BULLET_SPEED));
         muzzle.add(FollowerComponent.create(engine)
                 .setOffset(x * playerTransform.scale.x, y * playerTransform.scale.y)
                 .setTarget(player)
@@ -115,16 +131,16 @@ public class PowerUpSystem extends IteratingSystem {
                 .setOpacity(0.8f));
         getEngine().addEntity(muzzle);
 
-        if(hasGun != null && hasGun.length == 1 && hasGun[0]){
+        if(isGatling){
             Entity gun = engine.createEntity();
             gun.add(DecorationComponent.create(engine));
             gun.add(TransformComponent.create(engine)
                 .setPosition(playerTransform.position.x, playerTransform.position.y, Z.gatlingGuns)
                 .setScale(playerTransform.scale.x, playerTransform.scale.y));
             gun.add(FollowerComponent.create(engine)
-                .setTarget(player)
-                .setOffset(x*playerTransform.scale.x, y * playerTransform.scale.y)
-                .setMode(FollowMode.STICKY));
+                    .setTarget(player)
+                    .setOffset(x * playerTransform.scale.x, y * playerTransform.scale.y)
+                    .setMode(FollowMode.STICKY));
             gun.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", Animations.getGatlingIdle())
                 .addAnimation("FIRING", Animations.getGatlingFiring()));
