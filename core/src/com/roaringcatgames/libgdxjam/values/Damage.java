@@ -1,13 +1,13 @@
 package com.roaringcatgames.libgdxjam.values;
 
 /**
- * Created by barry on 1/12/16 @ 8:03 PM.
+ * Defines the damage various items apply on hits
  */
 public class Damage {
 
-    public static final int comet = 15;
-    public static final int asteroidRock = 10;
-    public static final int asteroid = 30;
+    public static final int comet = 200;//15;
+    public static final int asteroidRock = 200;//10;
+    public static final int asteroid = 200;//30;
 
     public static final int seed = 1;
 }

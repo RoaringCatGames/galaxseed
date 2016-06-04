@@ -1,24 +1,32 @@
 package com.roaringcatgames.libgdxjam.systems;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
+import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
+import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.components.*;
+import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Rates;
 import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
  * System to recognize and apply power-up pick-ups
  */
-public class PowerUpSystem extends IteratingSystem {
+public class PowerUpSystem extends IteratingSystem implements InputProcessor {
 
     private Entity player;
     private Array<Entity> powerUps = new Array<>();
@@ -32,14 +40,26 @@ public class PowerUpSystem extends IteratingSystem {
         this.muzzlePositions.add(new Vector2(0.906f, 0.881f));
         this.muzzlePositions.add(new Vector2(-1.312f, 0.3f));
         this.muzzlePositions.add(new Vector2(1.312f, 0.3f));
-        this.muzzlePositions.add(new Vector2(-1.612f, 0.1f));
-        this.muzzlePositions.add(new Vector2(1.612f, 0.1f));
+        this.muzzlePositions.add(new Vector2(-1.512f, 0f));
+        this.muzzlePositions.add(new Vector2(1.512f, 0f));
+    }
+
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+        App.game.multiplexer.addProcessor(this);
+    }
+
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        App.game.multiplexer.removeProcessor(this);
     }
 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        if(player != null) {
+        if(player != null && App.getState() != GameState.GAME_OVER) {
             TransformComponent playerTransform = K2ComponentMappers.transform.get(player);
             BoundsComponent playerBounds = K2ComponentMappers.bounds.get(player);
 
@@ -58,7 +78,6 @@ public class PowerUpSystem extends IteratingSystem {
             }
         }
         this.powerUps.clear();
-        this.player = null;
     }
 
 
@@ -85,8 +104,14 @@ public class PowerUpSystem extends IteratingSystem {
                     }else{
                         //Add Gatling guns
                         Gdx.app.log("PowerUpSystem", "Upgrading to level 4!");
-                        addGun(playerTransform, engine, muzzlePositions.get(4).x, muzzlePositions.get(4).y, Rates.SEED_GUN_GATLING_TIME_BETWEEN, true);
-                        addGun(playerTransform, engine, muzzlePositions.get(5).x, muzzlePositions.get(5).y, Rates.SEED_GUN_GATLING_TIME_BETWEEN, true);
+                        addGun(playerTransform, engine,
+                               muzzlePositions.get(4).x,
+                               muzzlePositions.get(4).y,
+                               Rates.SEED_GUN_GATLING_TIME_BETWEEN, true);
+                        addGun(playerTransform, engine,
+                               muzzlePositions.get(5).x,
+                               muzzlePositions.get(5).y,
+                               Rates.SEED_GUN_GATLING_TIME_BETWEEN, true);
                     }
                     break;
             }
@@ -108,15 +133,17 @@ public class PowerUpSystem extends IteratingSystem {
             }
         }
 
-
-        Animation muzzleAni = Animations.getMuzzle();
+        Animation muzzleAni = isGatling ? Animations.getGatlingMuzzle() : Animations.getMuzzle();
+        float zMuzzle = isGatling ? Z.gatlingMuzzle : Z.muzzleFlash;
+        float yAddOff = isGatling ? 0.7f : 0f;
+        float muzzleScaleAdd = isGatling ? 1f : 0.5f;
         Entity muzzle = engine.createEntity();
         muzzle.add(GunComponent.create(engine)
                 .setTimeBetweenShots(timeBetweenShots)
                 .setLastFireTime(lastSynchronizedFireTime)
                 .setBulletSpeed(isGatling ? Rates.SEED_GUN_GATLING_BULLET_SPEED : Rates.SEED_GUN_BULLET_SPEED));
         muzzle.add(FollowerComponent.create(engine)
-                .setOffset(x * playerTransform.scale.x, y * playerTransform.scale.y)
+                .setOffset(x * playerTransform.scale.x, yAddOff + (y * playerTransform.scale.y))
                 .setTarget(player)
                 .setMode(FollowMode.STICKY));
         muzzle.add(TextureComponent.create(engine));
@@ -126,17 +153,21 @@ public class PowerUpSystem extends IteratingSystem {
                 .set("DEFAULT")
                 .setLooping(false));
         muzzle.add(TransformComponent.create(engine)
-                .setPosition(playerTransform.position.x, playerTransform.position.y, Z.muzzleFlash)
-                .setScale(playerTransform.scale.x * 0.5f, playerTransform.scale.y * 0.5f)
+                .setPosition(playerTransform.position.x, playerTransform.position.y, zMuzzle)
+                .setScale(playerTransform.scale.x * muzzleScaleAdd, playerTransform.scale.y * muzzleScaleAdd)
                 .setOpacity(0.8f));
         getEngine().addEntity(muzzle);
 
         if(isGatling){
             Entity gun = engine.createEntity();
-            gun.add(DecorationComponent.create(engine));
+            gun.add(WeaponDecorationComponent.create(engine));
             gun.add(TransformComponent.create(engine)
                 .setPosition(playerTransform.position.x, playerTransform.position.y, Z.gatlingGuns)
-                .setScale(playerTransform.scale.x, playerTransform.scale.y));
+                .setScale(1f, 1f));
+            gun.add(TweenComponent.create(engine)
+                .addTween(Tween.to(gun, K2EntityTweenAccessor.SCALE, 0.5f)
+                        .target(playerTransform.scale.x, playerTransform.scale.y)
+                        .ease(TweenEquations.easeInOutElastic)));
             gun.add(FollowerComponent.create(engine)
                     .setTarget(player)
                     .setOffset(x * playerTransform.scale.x, y * playerTransform.scale.y)
@@ -146,9 +177,27 @@ public class PowerUpSystem extends IteratingSystem {
                 .addAnimation("FIRING", Animations.getGatlingFiring()));
             gun.add(TextureComponent.create(engine));
             gun.add(StateComponent.create(engine)
-                .set("DEFAULT")
-                .setLooping(true));
+                    .set("DEFAULT")
+                    .setLooping(true));
             engine.addEntity(gun);
+
+            Entity smoke = engine.createEntity();
+            smoke.add(WeaponDecorationComponent.create(engine));
+            smoke.add(TransformComponent.create(engine)
+                    .setPosition(0f, 0f, Z.gatlingSmoke)
+                    .setScale(1f, 1f));
+
+            smoke.add(FollowerComponent.create(engine)
+                    .setTarget(player)
+                    .setOffset(x * playerTransform.scale.x, (y * playerTransform.scale.y)-0.6f)
+                    .setMode(FollowMode.STICKY));
+            smoke.add(AnimationComponent.create(engine)
+                    .addAnimation("FIRING", Animations.getGatlingSmoke()));
+            smoke.add(TextureComponent.create(engine));
+            smoke.add(StateComponent.create(engine)
+                    .set("DEFAULT")
+                    .setLooping(true));
+            engine.addEntity(smoke);
         }
     }
 
@@ -159,5 +208,52 @@ public class PowerUpSystem extends IteratingSystem {
           }else {
               powerUps.add(entity);
           }
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        Gdx.app.log("PowerUpSystem", "Key Pressed:" + keycode);
+        if(keycode == Input.Keys.SPACE){
+            if(player != null) {
+                Gdx.app.log("PowerUpSystem", "Upgrad called");
+                upgradeWeapon(K2ComponentMappers.transform.get(player));
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }

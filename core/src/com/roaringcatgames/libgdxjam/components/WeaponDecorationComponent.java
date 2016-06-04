@@ -8,13 +8,13 @@ import com.badlogic.gdx.utils.Pool;
 /**
  * Component to mark items as Decorations
  */
-public class DecorationComponent implements Component, Pool.Poolable {
+public class WeaponDecorationComponent implements Component, Pool.Poolable {
 
-    public static DecorationComponent create(Engine engine){
+    public static WeaponDecorationComponent create(Engine engine){
         if(engine instanceof PooledEngine){
-            return ((PooledEngine)engine).createComponent(DecorationComponent.class);
+            return ((PooledEngine)engine).createComponent(WeaponDecorationComponent.class);
         }else{
-            return new DecorationComponent();
+            return new WeaponDecorationComponent();
         }
     }
     @Override

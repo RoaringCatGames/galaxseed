@@ -19,7 +19,7 @@ import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.*;
 
 /**
- * Created by barry on 12/29/15 @ 8:07 PM.
+ * System to initialize and manage the Player state
  */
 public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
@@ -96,7 +96,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                 .setScale(initialScale, initialScale));
 
             player.add(BoundsComponent.create(engine)
-                    .setBounds(0f, 0f, 0.5f, 0.5f));
+                    .setBounds(0f, 0f, 0.25f, 0.25f));
 
             player.add(TextureComponent.create(engine));
             player.add(AnimationComponent.create(engine)

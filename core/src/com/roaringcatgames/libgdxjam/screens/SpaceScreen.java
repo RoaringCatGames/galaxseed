@@ -114,14 +114,14 @@
                     HealthPackComponent.class,
                     PlayerComponent.class,
                     GunComponent.class,
-                    DecorationComponent.class).get()));
+                    WeaponDecorationComponent.class).get()));
 
             GameOverSystem gameOverSystem = new GameOverSystem(cam, dispatcher);
             gameOverSystem.setProcessing(false);
             engine.addSystem(gameOverSystem);
             engine.addSystem(new FadingSystem());
             engine.addSystem(new HealthPackSystem());
-            engine.addSystem(new DecorationSystem());
+            engine.addSystem(new WeaponDecorationSystem());
 
             //Extension Systems
             engine.addSystem(renderingSystem);

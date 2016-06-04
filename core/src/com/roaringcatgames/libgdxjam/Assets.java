@@ -380,6 +380,13 @@ public class Assets {
     public static Array<? extends TextureRegion> getGatlingFiring(){
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/gatling-firing");
     }
+    public static Array<? extends TextureRegion> getGatlingMuzzle(){
+        //Such a friendly flash, just wants to cuddle
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/nuzzle");
+    }
+    public static Array<? extends TextureRegion> getGatlingSmoke(){
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/smoke");
+    }
 
     /////////////
     //Life

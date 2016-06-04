@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.roaringcatgames.libgdxjam.values.Rates;
 
 /**
- * Created by barry on 4/26/16 @ 8:23 PM.
+ * One place to initialize and build up all of our animations
  */
 public class Animations {
 
@@ -49,6 +49,8 @@ public class Animations {
     private static Animation muzzle;
     private static Animation gatlingIdle;
     private static Animation gatlingFiring;
+    private static Animation gatlingMuzzle;
+    private static Animation gatlingSmoke;
 
     private static Animation flamesIdle;
     private static Animation flames;
@@ -99,9 +101,11 @@ public class Animations {
         shipFlying = new Animation(1f/12f, Assets.getShipFlyingFrames());
         shipFlyingLeft = new Animation(1f/6f, Assets.getShipFlyingLeftFrames());
         shipFlyingRight = new Animation(1f/6f, Assets.getShipFlyingRightFrames());
-        muzzle = new Animation(1f/12f, Assets.getMuzzleFrames());
+        muzzle = new Animation((1f/8f)/6f, Assets.getMuzzleFrames());
         gatlingIdle = new Animation(1f/9f, Assets.getGatlingIdle());
         gatlingFiring = new Animation(1f/9f, Assets.getGatlingFiring());
+        gatlingMuzzle = new Animation((1f/24f)/6f, Assets.getGatlingMuzzle());
+        gatlingSmoke = new Animation(1f/12f, Assets.getGatlingSmoke());
 
         flamesIdle = new Animation(1f/9f, Assets.getIdleFlamesFrames());
         flames = new Animation(1f/9f, Assets.getFlamesFrames());
@@ -248,6 +252,14 @@ public class Animations {
         return gatlingFiring;
     }
 
+    public static Animation getGatlingMuzzle() {
+        return gatlingMuzzle;
+    }
+
+    public static Animation getGatlingSmoke() {
+        return gatlingSmoke;
+    }
+
     public static Animation getFlamesIdle() {
         return flamesIdle;
     }
@@ -263,6 +275,7 @@ public class Animations {
     public static Animation getUpgrade(){
         return upgrade;
     }
+
     public static Animation getRawry(){
         return rawry;
     }

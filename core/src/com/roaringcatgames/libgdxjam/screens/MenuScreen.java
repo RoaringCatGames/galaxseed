@@ -108,6 +108,12 @@ public class MenuScreen extends LazyInitScreen {
         engine.addSystem(new ParticleSystem());
         engine.addSystem(new ShakeSystem());
         engine.addSystem(new MoveToSystem());
+
+
+        engine.addSystem(new PowerUpSystem());
+        engine.addSystem(new TweenSystem());
+        engine.addSystem(new WeaponDecorationSystem());
+
         //Extension Systems
         engine.addSystem(renderingSystem);
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));

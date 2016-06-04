@@ -1,7 +1,7 @@
 package com.roaringcatgames.libgdxjam.values;
 
 /**
- * Created by barry on 1/10/16 @ 7:50 PM.
+ * Holds Z indexes for all entities
  */
 public class Z {
 
@@ -13,6 +13,8 @@ public class Z {
     public static final float speedLine = 94f;
 
     public static final float gatlingGuns = 60f;
+    public static final float gatlingMuzzle = 59f;
+    public static final float gatlingSmoke = 58f;
     public static final float flames = 51f;
     public static final float player = 50f;
     public static final float muzzleFlash = 49f;
