@@ -369,6 +369,14 @@ public class Assets {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/SeedFly");
     }
 
+    public static TextureRegion getHelicopterSeed() {
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("guns/heli");
+    }
+
+    public static TextureRegion getFinalHelicopterSeed() {
+        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("gun/final");
+    }
+
     public static Array<? extends TextureRegion> getMuzzleFrames() {
         return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("muzzleflash/muzzle");
     }
@@ -507,4 +515,6 @@ public class Assets {
     private static final String PLAYER_HIT_LIGHT_SFX = "sfx/player-hit-light.mp3";
     private static final String PLAYER_HIT_MEDIUM_SFX = "sfx/player-hit-medium.mp3";
     private static final String PLAYER_HIT_HEAVY_SFX = "sfx/player-hit-heavy.mp3";
+
+
 }

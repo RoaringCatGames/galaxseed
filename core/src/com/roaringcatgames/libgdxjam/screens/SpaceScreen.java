@@ -80,6 +80,7 @@
             engine.addSystem(movementSystem);
             engine.addSystem(new RotationSystem());
             engine.addSystem(new BoundsSystem());
+            engine.addSystem(new MultiBoundsSystem());
             engine.addSystem(new AnimationSystem());
             engine.addSystem(new TweenSystem());
 

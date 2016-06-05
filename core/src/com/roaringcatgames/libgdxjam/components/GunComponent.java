@@ -43,5 +43,4 @@ public class GunComponent implements Component, Pool.Poolable{
         this.lastFireTime = 0f;
         this.bulletSpeed = 20f;
     }
-
 }
