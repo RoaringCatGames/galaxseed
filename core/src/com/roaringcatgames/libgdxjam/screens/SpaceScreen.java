@@ -127,6 +127,7 @@
             engine.addSystem(new FadingSystem());
             engine.addSystem(new HealthPackSystem());
             engine.addSystem(new WeaponDecorationSystem());
+            engine.addSystem(new MessageSystem());
 
             //Extension Systems
             engine.addSystem(renderingSystem);

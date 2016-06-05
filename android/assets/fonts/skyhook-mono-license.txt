@@ -1,0 +1,26 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf470
+{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl380\sa280\partightenfactor0
+
+\f0\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 FONTOMTYPE STANDARD END-USER LICENSE AGREEMENT:\
+IMPORTANT-READ CAREFULLY: This End-User License Agreement (\'93EULA\'94) is a legal agreement between you (either an individual or a single entity) and FontomType for the typeface(s) delivered with this EULA. By installing, copying, or otherwise using this typeface, you agree to be bound by the terms of this EULA. If you do not agree to the terms of this EULA, do not install, copy or otherwise use this typeface.\
+1. ALLOWED USES\cb1 \uc0\u8232 \cb3 You may use the licensed fonts to create any kind of work including, but not limited, to printed media, web pages, photographs, movies and clothing.\
+\pard\pardeftab720\sl380\sa280\partightenfactor0
+\cf2 \cb1 \uc0\u8232 \cb3 2. USES REQUIRING SEPERATE SPECIAL LICENSE\cb1 \uc0\u8232 \cb3 The use of the licensed fonts for any political or religious material requires the purchase of an additional special license. Please contact FontomType and request the additional license with brief description of your intended use.\
+\cb1 \uc0\u8232 \cb3 3. FORBIDDEN USES\cb1 \uc0\u8232 \cb3 It is forbidden to produce any material with the licensed font that is racist or criminal in nature and/or illegal by law.\
+\cb1 \uc0\u8232 \cb3 4. NUMBERS OF USERS\cb1 \uc0\u8232 \cb3 Only the licensee is allowed to use the licensed fonts. The licensee may however provide the fonts to a third party like specified in 5. Third Parties. In case of the licensee being more than one individual the maximum number of users is not restricted - provided all users of the fonts belong to the same registered company or registered association that licensed the fonts and any material using the fonts must be of that company or associations behalf.\
+\cb1 \uc0\u8232 \cb3 5. THIRD PARTIES\cb1 \uc0\u8232 \cb3 You may provide the font to a graphic designer, printer or other service bureau that is working on your behalf only if they agree to use the font exclusively for your work, agree to the terms of this license, and retain no copies of the font on completion of the work. You may not provide the font or make it accessible to any other third parties, except for embedding described in 6. Embedding.\
+\cb1 \uc0\u8232 \cb3 6. EMBEDDING\
+6a. Electronic Document Embedding\cb1 \uc0\u8232 \cb3 You may embed the licensed fonts into any document you send to third parties. Such documents may be viewed and printed (but not edited) by the recipients.\
+6b. Web Embedding\cb1 \uc0\u8232 \cb3 You may embed the licensed fonts into a web site only if the licensed fonts are free fonts ($0.00 license fee). However you must take care of the highest level of protection of the embedded fonts.\
+6c. Hardware and Software Embedding\cb1 \uc0\u8232 \cb3 You may not under any circumstances embed the licensed fonts into software or hardware products in which the fonts will be used by the purchasers of such products. Such use requires a different license. Please contact FontomType and request the additional license with brief description of your intended use.\
+\cb1 \uc0\u8232 \cb3 7. MODIFICATIONS\cb1 \uc0\u8232 \cb3 You may only modify, adapt, reverse engineer, decompile, disassemble the licensed fonts or create derivative works based on the licensed fonts themselves after prior written permission from FontomType.\
+\cb1 \uc0\u8232 \cb3 8. COPYRIGHT\cb1 \uc0\u8232 \cb3 The fonts and the accompanying materials are copyrighted and contain proprietary information and trade secrets belonging to FontomType. Unauthorized copying of the product even if modified, merged, or included with other software, or of the written materials, is expressly forbidden. You may be held legally responsible for any infringement of FontomType\'92s lectual property rights that is caused or encouraged by your failure to abide by the terms of this Agreement.\
+\cb1 \uc0\u8232 \cb3 9. TERMINATION\cb1 \uc0\u8232 \cb3 This Agreement is effective until terminated. This Agreement will terminate automatically without notice from FontomType if you fail to comply with any provision contained herein. Upon termination, you must destroy the written materials, the product, and all copies of them, in part and in whole, including modified copies, if any.\
+\cb1 \uc0\u8232 \cb3 10. PRODUCT UPGRADES\cb1 \uc0\u8232 \cb3 FontomType may, from time to time, update the product. Product upgrade pricing may apply.\
+\cb1 \uc0\u8232 \cb3 11. DISCLAIMER \cb1 \uc0\u8232 \cb3 The entire risk as to the quality and performance of the Product rests upon you. FontomType do not warrants that the functions contained in the product will meet your requirements or that the operation of the software will be uninterrupted or error free.\
+}

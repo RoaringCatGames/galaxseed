@@ -23,7 +23,7 @@ import com.roaringcatgames.libgdxjam.values.*;
  */
 public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
-    private float enhancedMovementScale = 1f; //2f;
+    private float enhancedMovementScale = Gdx.graphics.getDensity() > 1f ? 2f : 1f; //2f;
 
     private boolean isInitialized = false;
     private Entity player;

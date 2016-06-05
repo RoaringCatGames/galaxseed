@@ -49,7 +49,5 @@ public class Z {
     public static float healthLeaf = 1f;
     public static final float gameOver = 0f;
     public static final float tutorial = 0f;
-
-
-
+    public static final float message = 0f;
 }

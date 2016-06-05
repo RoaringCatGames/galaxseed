@@ -5,11 +5,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.components.*;
-import com.roaringcatgames.libgdxjam.values.Damage;
 
 /**
  * System to apply damage to Enemies via helicopter Seeds
@@ -17,11 +18,12 @@ import com.roaringcatgames.libgdxjam.values.Damage;
 public class HelicopterSeedSystem extends IteratingSystem{
     private Array<Entity> enemies = new Array<>();
     private Array<Entity> heliSeeds = new Array<>();
-    private Entity aura;
     private ScoreComponent scoreCard;
+    private Entity player;
+    private Vector2 ricochetDirection = new Vector2();
 
     public HelicopterSeedSystem(){
-        super(Family.one(EnemyComponent.class, HelicopterSeedComponent.class).get());
+        super(Family.one(PlayerComponent.class, EnemyComponent.class, HelicopterSeedComponent.class).get());
     }
 
     @Override
@@ -34,6 +36,11 @@ public class HelicopterSeedSystem extends IteratingSystem{
     public void update(float deltaTime) {
         super.update(deltaTime);
         PooledEngine engine = (PooledEngine)getEngine();
+
+        ImmutableArray<Entity> scores = engine.getEntitiesFor(Family.all(ScoreComponent.class).get());
+        if(scores != null && scores.size() > 0){
+            scoreCard = scores.first().getComponent(ScoreComponent.class);
+        }
 
         for(Entity h:heliSeeds){
             MultiBoundsComponent seedBounds = K2ComponentMappers.multiBounds.get(h);
@@ -51,6 +58,25 @@ public class HelicopterSeedSystem extends IteratingSystem{
                             eHealth.setHealth(newHealth);
                             for (int i = 0; i < plants; i++) {
                                 EnemyDamageUtil.attachPlant(engine, b.circle, e, ec.enemyType == EnemyType.COMET);
+                            }
+
+                            if (scoreCard != null) {
+                                scoreCard.setScore(scoreCard.score + plants);
+                            }
+
+                            TransformComponent playerPos = K2ComponentMappers.transform.get(player);
+                            if(playerPos != null){
+                                if(K2ComponentMappers.velocity.has(e)) {
+                                    VelocityComponent vc = K2ComponentMappers.velocity.get(e);
+                                    ricochetDirection.set(eBounds.circle.x, eBounds.circle.y);
+                                    ricochetDirection.sub(playerPos.position.x, playerPos.position.y);
+                                    ricochetDirection.nor().scl(Math.abs(vc.speed.x), Math.abs(vc.speed.y));
+                                    vc.speed.set(ricochetDirection);
+                                }else{
+                                    PathFollowComponent pfc = K2ComponentMappers.pathFollow.get(e);
+                                    pfc.setSpeed(pfc.speed*-1f);
+                                }
+
                             }
 
                             if (eHealth.health == 0f){
@@ -86,8 +112,10 @@ public class HelicopterSeedSystem extends IteratingSystem{
                 enemies.add(entity);
             }
 
-        }else{
+        }else if(Mappers.helicopterSeed.has(entity)) {
             heliSeeds.add(entity);
+        }else{
+            player = entity;
         }
     }
 }

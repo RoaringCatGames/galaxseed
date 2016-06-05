@@ -31,7 +31,7 @@ import com.roaringcatgames.libgdxjam.values.Z;
 import java.util.Random;
 
 /**
- * Created by barry on 3/2/16 @ 8:43 PM.
+ * Handles the game over resolutions
  */
 public class GameOverSystem extends IteratingSystem implements InputProcessor {
 
@@ -241,7 +241,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                             .setPosition(App.W / 2f, App.H / 2f, Z.gameOver));
                     gameOverText.add(TextComponent.create(engine)
                             .setFont(largeFont)
-                            .setText("GAME OVER: " + Gdx.graphics.getDensity()));
+                            .setText("GAME OVER"));
 
                     getEngine().addEntity(gameOverText);
                 }

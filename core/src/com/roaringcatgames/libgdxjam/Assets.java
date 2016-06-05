@@ -468,6 +468,13 @@ public class Assets {
 
 
     /////////////
+    //Messages
+    /////////////
+    public static TextureAtlas.AtlasRegion getTutorialMessage(){
+        return getCachedRegion(SPRITE_ATLAS, "messages/plant-avoid");
+    }
+
+    /////////////
     //Music
     /////////////
     public static Music getMenuMusic(){
@@ -545,10 +552,10 @@ public class Assets {
     }
 
 
-    private static final String FONT_32 = "fonts/phosphate-32.fnt";
-    private static final String FONT_48 = "fonts/phosphate-48.fnt";
-    private static final String FONT_64 = "fonts/phosphate-64.fnt";
-    private static final String FONT_128 = "fonts/phosphate-128.fnt";
+    private static final String FONT_32 = "fonts/skyhook-32.fnt";
+    private static final String FONT_48 = "fonts/skyhook-48.fnt";
+    private static final String FONT_64 = "fonts/skyhook-64.fnt";
+    private static final String FONT_128 = "fonts/skyhook-128.fnt";
     private static final String LOADING_ATLAS = "animations/loading.atlas";
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";

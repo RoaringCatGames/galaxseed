@@ -1,9 +1,9 @@
 package com.roaringcatgames.libgdxjam.systems;
 
 import com.badlogic.ashley.core.*;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.components.Mappers;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
@@ -13,6 +13,8 @@ import com.roaringcatgames.libgdxjam.components.WeaponType;
  *
  */
 public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
+
+    private WeaponType lastWeaponType = WeaponType.POLLEN_AURA;
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -37,24 +39,28 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     }
 
     private void switchWeapon(WeaponType wt){
-        Entity player = getEngine().getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
+        ImmutableArray<Entity> players = getEngine().getEntitiesFor(Family.all(PlayerComponent.class).get());
 
-        PlayerComponent pc = Mappers.player.get(player);
-        pc.setWeaponType(wt);
-        pc.setWeaponLevel(App.getCurrentWeaponLevel(wt));
+        if(players.size() > 0) {
+            Entity player = players.first();
 
-        WeaponGeneratorUtil.clearWeapon(getEngine());
-        PooledEngine engine = (PooledEngine)getEngine();
-        switch(wt){
-            case POLLEN_AURA:
-                WeaponGeneratorUtil.generateAura(player, engine);
-                break;
-            case GUN_SEEDS:
-                WeaponGeneratorUtil.generateSeedGuns(player, engine);
-                break;
-            case HELICOPTER_SEEDS:
-                WeaponGeneratorUtil.generateHelicopterGuns(player, engine);
-                break;
+            PlayerComponent pc = Mappers.player.get(player);
+            pc.setWeaponType(wt);
+            pc.setWeaponLevel(App.getCurrentWeaponLevel(wt));
+
+            WeaponGeneratorUtil.clearWeapon(getEngine());
+            PooledEngine engine = (PooledEngine) getEngine();
+            switch (wt) {
+                case POLLEN_AURA:
+                    WeaponGeneratorUtil.generateAura(player, engine);
+                    break;
+                case GUN_SEEDS:
+                    WeaponGeneratorUtil.generateSeedGuns(player, engine);
+                    break;
+                case HELICOPTER_SEEDS:
+                    WeaponGeneratorUtil.generateHelicopterGuns(player, engine);
+                    break;
+            }
         }
 
     }
@@ -71,6 +77,17 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(lastWeaponType == WeaponType.POLLEN_AURA){
+            switchWeapon(WeaponType.HELICOPTER_SEEDS);
+            lastWeaponType = WeaponType.HELICOPTER_SEEDS;
+        }else if(lastWeaponType == WeaponType.HELICOPTER_SEEDS){
+            switchWeapon(WeaponType.GUN_SEEDS);
+            lastWeaponType = WeaponType.GUN_SEEDS;
+        }else{
+            switchWeapon(WeaponType.POLLEN_AURA);
+            lastWeaponType = WeaponType.POLLEN_AURA;
+        }
+
         return false;
     }
 

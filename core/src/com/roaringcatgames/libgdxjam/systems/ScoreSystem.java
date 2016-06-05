@@ -44,7 +44,7 @@ public class ScoreSystem extends IteratingSystem {
         plantGrowth.add(TextureComponent.create(pe)
             .setRegion(animationFrames.get(0)));
         plantGrowth.add(TransformComponent.create(pe)
-                .setPosition(1f, 1.5f, Z.score)
+                .setPosition(1f, 2f, Z.score)
                 .setScale(0.5f, 0.5f));
         engine.addEntity(plantGrowth);
 
@@ -54,7 +54,7 @@ public class ScoreSystem extends IteratingSystem {
                 .setText("Score: 00000")
                 .setFont(fnt));
         scoreCard.add(TransformComponent.create(pe)
-                .setPosition(5f, 1.5f, Z.score));
+                .setPosition(5f, 2f, Z.score));
         scoreCard.add(ScoreComponent.create(pe)
                 .setScore(0));
         engine.addEntity(scoreCard);
