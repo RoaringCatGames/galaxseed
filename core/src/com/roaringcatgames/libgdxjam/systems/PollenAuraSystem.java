@@ -1,22 +1,18 @@
 package com.roaringcatgames.libgdxjam.systems;
 
 import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.components.*;
-import com.roaringcatgames.libgdxjam.components.EnemyComponent;
-import com.roaringcatgames.libgdxjam.components.EnemyType;
-import com.roaringcatgames.libgdxjam.components.Mappers;
-import com.roaringcatgames.libgdxjam.components.PollenAuraComponent;
+import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.Colors;
-import com.roaringcatgames.libgdxjam.values.Damage;
-import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Rates;
 
 /**
@@ -26,6 +22,7 @@ public class PollenAuraSystem extends IteratingSystem {
 
     private Array<Entity> enemies = new Array<>();
     private Entity aura;
+    private ScoreComponent scoreCard;
 
     public PollenAuraSystem(){
         super(Family.one(EnemyComponent.class, PollenAuraComponent.class).get());
@@ -37,6 +34,12 @@ public class PollenAuraSystem extends IteratingSystem {
         super.update(deltaTime);
 
         if(aura != null) {
+
+            ImmutableArray<Entity> scores = getEngine().getEntitiesFor(Family.all(ScoreComponent.class).get());
+            if(scores != null && scores.size() > 0){
+                scoreCard = scores.first().getComponent(ScoreComponent.class);
+            }
+
             CircleBoundsComponent auraBounds = K2ComponentMappers.circleBounds.get(aura);
             DamageComponent auraDamage = K2ComponentMappers.damage.get(aura);
 
@@ -63,11 +66,16 @@ public class PollenAuraSystem extends IteratingSystem {
                     ec.setPollenated(false);
                     //Restore
                     scaleVelocity(e, enemyVel, 1f/Rates.AURA_SLOWDOWN_RATE);
-//                    e.add(TweenComponent.create(getEngine())
-//                            .addTween(Tween.to(e, K2EntityTweenAccessor.COLOR, 0.3f)
-//                                    .target(Colors.POLLENATED_HIGHLIGHT.r,
-//                                            Colors.POLLENATED_HIGHLIGHT.g,
-//                                            Colors.POLLENATED_HIGHLIGHT.b)));
+                    Color c = Colors.PLAIN_WHITE;
+
+                    if(ec.enemyType != EnemyType.COMET){
+                        c = ec.enemyColor == EnemyColor.BROWN ? Colors.BROWN_ASTEROID :
+                            ec.enemyColor == EnemyColor.BLUE ? Colors.BLUE_ASTEROID : Colors.PURPLE_ASTEROID;
+                    }
+
+                    e.add(TweenComponent.create(getEngine())
+                            .addTween(Tween.to(e, K2EntityTweenAccessor.COLOR, 0.3f)
+                                    .target(c.r, c.g, c.b)));
                 }
 
 
@@ -78,8 +86,13 @@ public class PollenAuraSystem extends IteratingSystem {
                     int healthAfter = (int)Math.ceil(eh.health);
 
                     if(healthAfter < healthBefore){
-                        for(int i=0;i< (healthBefore-healthAfter);i++){
+                        int points = (healthBefore-healthAfter);
+                        for(int i=0;i<points;i++){
                             EnemyDamageUtil.attachPlant((PooledEngine)getEngine(), aura, e, ec.enemyType == EnemyType.COMET);
+                        }
+
+                        if (scoreCard != null) {
+                            scoreCard.setScore(scoreCard.score + points);
                         }
                     }
 
