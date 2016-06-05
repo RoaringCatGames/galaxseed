@@ -14,6 +14,7 @@ import com.roaringcatgames.libgdxjam.components.EnemyComponent;
 import com.roaringcatgames.libgdxjam.components.EnemyType;
 import com.roaringcatgames.libgdxjam.components.Mappers;
 import com.roaringcatgames.libgdxjam.components.PollenAuraComponent;
+import com.roaringcatgames.libgdxjam.values.Colors;
 import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.values.Health;
 import com.roaringcatgames.libgdxjam.values.Rates;
@@ -50,6 +51,11 @@ public class PollenAuraSystem extends IteratingSystem {
 
                 if(!ec.isPollenated && isInAura){
                     ec.setPollenated(true);
+                    e.add(TweenComponent.create(getEngine())
+                        .addTween(Tween.to(e, K2EntityTweenAccessor.COLOR, 0.3f)
+                            .target(Colors.POLLENATED_HIGHLIGHT.r,
+                                    Colors.POLLENATED_HIGHLIGHT.g,
+                                    Colors.POLLENATED_HIGHLIGHT.b)));
                     //Quarter the Speed
                     scaleVelocity(e, enemyVel, Rates.AURA_SLOWDOWN_RATE);
 
@@ -57,6 +63,11 @@ public class PollenAuraSystem extends IteratingSystem {
                     ec.setPollenated(false);
                     //Restore
                     scaleVelocity(e, enemyVel, 1f/Rates.AURA_SLOWDOWN_RATE);
+//                    e.add(TweenComponent.create(getEngine())
+//                            .addTween(Tween.to(e, K2EntityTweenAccessor.COLOR, 0.3f)
+//                                    .target(Colors.POLLENATED_HIGHLIGHT.r,
+//                                            Colors.POLLENATED_HIGHLIGHT.g,
+//                                            Colors.POLLENATED_HIGHLIGHT.b)));
                 }
 
 
