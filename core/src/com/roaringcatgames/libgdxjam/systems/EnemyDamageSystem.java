@@ -85,11 +85,12 @@ public class EnemyDamageSystem extends IteratingSystem {
     private void processCollision(Entity bullet, Entity enemy){
 
         EnemyComponent ec = Mappers.enemy.get(enemy);
+        CircleBoundsComponent bulletBounds = K2ComponentMappers.circleBounds.get(bullet);
         HealthComponent hc;
 
         hc = K2ComponentMappers.health.get(enemy);
         if(hc.health > 0f) {
-            EnemyDamageUtil.attachPlant((PooledEngine)getEngine(), bullet, enemy, ec.enemyType == EnemyType.COMET);
+            EnemyDamageUtil.attachPlant((PooledEngine)getEngine(), bulletBounds.circle, enemy, ec.enemyType == EnemyType.COMET);
             if (scoreCard != null) {
                 scoreCard.setScore(scoreCard.score + 1);
             }

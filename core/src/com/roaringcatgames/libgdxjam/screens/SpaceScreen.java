@@ -80,6 +80,7 @@
             engine.addSystem(movementSystem);
             engine.addSystem(new RotationSystem());
             engine.addSystem(new BoundsSystem());
+            engine.addSystem(new MultiBoundsSystem());
             engine.addSystem(new AnimationSystem());
             engine.addSystem(new TweenSystem());
 
@@ -104,6 +105,8 @@
             engine.addSystem(new OscillationSystem());
             engine.addSystem(new PowerUpSystem());
             engine.addSystem(new WeaponChangeSystem());
+            engine.addSystem(new HelicopterSeedSystem());
+            engine.addSystem(new StatusSystem());
 
 
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();

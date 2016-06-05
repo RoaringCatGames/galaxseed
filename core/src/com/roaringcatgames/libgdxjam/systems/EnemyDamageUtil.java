@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
@@ -218,12 +219,12 @@ public class EnemyDamageUtil {
     }
 
 
-    public static void attachPlant(PooledEngine engine, Entity damageSource, Entity enemy, boolean isComet) {
+    public static void attachPlant(PooledEngine engine, Circle damageSource, Entity enemy, boolean isComet) {
 
-        CircleBoundsComponent bb = K2ComponentMappers.circleBounds.get(damageSource);
+        //CircleBoundsComponent bb = K2ComponentMappers.circleBounds.get(damageSource);
         CircleBoundsComponent eb = K2ComponentMappers.circleBounds.get(enemy);
         TransformComponent et = K2ComponentMappers.transform.get(enemy);
-        bulletPos.set(bb.circle.x, bb.circle.y);
+        bulletPos.set(damageSource.x, damageSource.y);//bb.circle.x, bb.circle.y);
         enemyPos.set(eb.circle.x, eb.circle.y);
 
         Vector2 outVec;

@@ -100,6 +100,31 @@ public class WeaponGeneratorUtil {
         }
     }
 
+    public static void generateHelicopterGuns(Entity player, PooledEngine engine){
+        PlayerComponent pc = Mappers.player.get(player);
+        TransformComponent tc = K2ComponentMappers.transform.get(player);
+
+        if(pc.weaponLevel != WeaponLevel.LEVEL_4){
+            Entity heliGun = engine.createEntity();
+            heliGun.add(GunComponent.create(engine)
+                .setBulletSpeed(Rates.HELI_GUN_BULLET_SPEED)
+                .setTimeBetweenShots(Rates.HELI_GUN_TIME_BETWEEN));
+            heliGun.add(TransformComponent.create(engine)
+                .setPosition(tc.position.x, tc.position.y, Z.heliGun));
+            heliGun.add(FollowerComponent.create(engine)
+                .setTarget(player)
+                .setMode(FollowMode.STICKY)
+                .setOffset(2f, 0f));
+            engine.addEntity(heliGun);
+
+        }else{
+
+        }
+
+
+    }
+
+
     private static void addGun(Entity player, PooledEngine engine,
                         float x, float y, float timeBetweenShots, boolean...hasGun) {
 

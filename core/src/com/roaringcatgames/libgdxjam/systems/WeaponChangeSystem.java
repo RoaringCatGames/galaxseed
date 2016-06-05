@@ -53,7 +53,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
                 WeaponGeneratorUtil.generateSeedGuns(player, engine);
                 break;
             case HELICOPTER_SEEDS:
-                //
+                WeaponGeneratorUtil.generateHelicopterGuns(player, engine);
                 break;
         }
 

@@ -88,7 +88,7 @@ public class PollenAuraSystem extends IteratingSystem {
                     if(healthAfter < healthBefore){
                         int points = (healthBefore-healthAfter);
                         for(int i=0;i<points;i++){
-                            EnemyDamageUtil.attachPlant((PooledEngine)getEngine(), aura, e, ec.enemyType == EnemyType.COMET);
+                            EnemyDamageUtil.attachPlant((PooledEngine)getEngine(), auraBounds.circle, e, ec.enemyType == EnemyType.COMET);
                         }
 
                         if (scoreCard != null) {
