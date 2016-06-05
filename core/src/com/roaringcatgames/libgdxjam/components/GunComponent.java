@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Pool;
  */
 public class GunComponent implements Component, Pool.Poolable{
 
+    public float timeElapsed = 0f;
     public float timeBetweenShots = 1f;
     public float lastFireTime = 0f;
     public float bulletSpeed = 20f;

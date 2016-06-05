@@ -82,6 +82,9 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
 
     private void upgradeWeapon() {
         PlayerComponent playerComponent = Mappers.player.get(player);
+        if(playerComponent == null){
+            return;
+        }
         PooledEngine engine = (PooledEngine)getEngine();
         //Update WeaponLevel
         if(playerComponent.weaponLevel != WeaponLevel.LEVEL_4){
@@ -97,6 +100,9 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
                     break;
                 case POLLEN_AURA:
                     WeaponGeneratorUtil.generateAura(player, engine);
+                    break;
+                case HELICOPTER_SEEDS:
+                    WeaponGeneratorUtil.generateHelicopterGuns(player, engine);
                     break;
             }
         }

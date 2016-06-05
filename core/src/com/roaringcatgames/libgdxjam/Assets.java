@@ -390,7 +390,7 @@ public class Assets {
     private static TextureRegion finalHeliSeed;
     public static TextureRegion getFinalHelicopterSeed() {
         if(finalHeliSeed == null) {
-            finalHeliSeed = getCachedRegion(ANI_ATLAS, "gun/final");
+            finalHeliSeed = getCachedRegion(ANI_ATLAS, "guns/final");
         }
         return finalHeliSeed;
     }
@@ -416,6 +416,13 @@ public class Assets {
     public static Array<? extends TextureRegion> getGatlingSmokeParticles(){
         return getCachedAnimationFrames(ANI_ATLAS, "guns/smoke-particle");
     }
+    public static Array<? extends TextureRegion> getCannonIdle(){
+        return getCachedAnimationFrames(ANI_ATLAS, "guns/cannon-idle");
+    }
+    public static Array<? extends TextureRegion> getCannonFiring(){
+        return getCachedAnimationFrames(ANI_ATLAS, "guns/cannon-firing");
+    }
+
 
     public static Array<? extends TextureRegion> getAuraFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "guns/aura");
@@ -545,7 +552,7 @@ public class Assets {
     private static final String LOADING_ATLAS = "animations/loading.atlas";
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
-    private static final String BG_MUSIC = "music/metamorphosis-oga.mp3";
+    private static final String BG_MUSIC = "music/bgmusic.mp3";
     private static final String MENU_MUISC = "music/title.mp3";
     private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
     private static final String FIRING_SFX = "sfx/seed-fire.mp3";

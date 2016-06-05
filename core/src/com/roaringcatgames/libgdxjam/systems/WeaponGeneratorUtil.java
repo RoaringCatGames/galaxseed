@@ -118,7 +118,47 @@ public class WeaponGeneratorUtil {
             engine.addEntity(heliGun);
 
         }else{
+            Entity leftGun = engine.createEntity();
+            leftGun.add(GunComponent.create(engine)
+                    .setBulletSpeed(Rates.HELI_GUN_BULLET_SPEED)
+                    .setTimeBetweenShots(Rates.HELI_GUN_TIME_BETWEEN)
+                    .setLastFireTime(0f));
+            leftGun.add(StateComponent.create(engine)
+                .set("DEFAULT")
+                .setLooping(false));
+            leftGun.add(TextureComponent.create(engine));
+            leftGun.add(AnimationComponent.create(engine)
+                .addAnimation("DEFAULT", Animations.getCannonIdle())
+                .addAnimation("FIRING", Animations.getCannonFiring()));
+            leftGun.add(TransformComponent.create(engine)
+                    .setPosition(tc.position.x, tc.position.y, Z.heliGun)
+                    .setScale(tc.scale.x, tc.scale.y));
+            leftGun.add(FollowerComponent.create(engine)
+                    .setTarget(player)
+                    .setMode(FollowMode.STICKY)
+                    .setOffset(-0.75f, -0.25f));
+            engine.addEntity(leftGun);
 
+            Entity rightGun = engine.createEntity();
+            rightGun.add(StateComponent.create(engine)
+                    .set("DEFAULT")
+                    .setLooping(false));
+            rightGun.add(TextureComponent.create(engine));
+            rightGun.add(AnimationComponent.create(engine)
+                    .addAnimation("DEFAULT", Animations.getCannonIdle())
+                    .addAnimation("FIRING", Animations.getCannonFiring()));
+            rightGun.add(GunComponent.create(engine)
+                    .setBulletSpeed(Rates.HELI_GUN_BULLET_SPEED)
+                    .setTimeBetweenShots(Rates.HELI_GUN_TIME_BETWEEN)
+                    .setLastFireTime(Rates.HELI_GUN_TIME_BETWEEN/2f));
+            rightGun.add(TransformComponent.create(engine)
+                    .setPosition(tc.position.x, tc.position.y, Z.heliGun)
+                    .setScale(tc.scale.x, tc.scale.y));
+            rightGun.add(FollowerComponent.create(engine)
+                    .setTarget(player)
+                    .setMode(FollowMode.STICKY)
+                    .setOffset(0.75f, -0.25f));
+            engine.addEntity(rightGun);
         }
 
 
