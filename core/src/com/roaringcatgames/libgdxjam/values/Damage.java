@@ -11,8 +11,8 @@ public class Damage {
 
     public static final int seed = 1;
 
-    public static final float auraLevelOne = 0.5f;
-    public static final float auraLevelTwo = 0.75f;
-    public static final float auraLevelThree = 1f;
-    public static final float auraLevelFour = 2f;
+    public static final float auraLevelOne = 3f;
+    public static final float auraLevelTwo = 5f;
+    public static final float auraLevelThree = 7f;
+    public static final float auraLevelFour = 10f;
 }

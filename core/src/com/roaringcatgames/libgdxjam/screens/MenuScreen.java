@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -24,7 +23,7 @@ import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.MenuItemComponent;
-import com.roaringcatgames.libgdxjam.components.PlayerComponent;
+import com.roaringcatgames.libgdxjam.components.WeaponType;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 import com.roaringcatgames.libgdxjam.systems.*;
 import com.roaringcatgames.libgdxjam.values.Health;
@@ -40,7 +39,6 @@ public class MenuScreen extends LazyInitScreen {
     private SpriteBatch batch;
     private PooledEngine engine;
     private OrthographicCamera cam;
-    private Vector3 touchPoint;
     private Viewport viewport;
 
     private Music menuSong;
@@ -51,7 +49,6 @@ public class MenuScreen extends LazyInitScreen {
         super();
         this.batch = batch;
         this.dispatcher = dispatcher;
-        this.touchPoint = new Vector3();
         readyMap.put("p", false);
         readyMap.put("l", false);
         readyMap.put("a", false);
@@ -87,19 +84,13 @@ public class MenuScreen extends LazyInitScreen {
         engine.addSystem(new MenuStartSystem());
 
         //Custom Systems
-        Vector2[] muzzlePositions = new Vector2[]{
-                new Vector2(-0.5f, 1.6f),
-                //new Vector2(-0.906f, 0.881f),
-                new Vector2(0.5f, 1.6f),
-                //new Vector2(0.906f, 0.881f)
-        };
 
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false, true));
         engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
-        engine.addSystem(new PlayerSystem(playerPosition, 0.5f, cam, muzzlePositions));
+        engine.addSystem(new PlayerSystem(playerPosition, 0.5f, cam, WeaponType.GUN_SEEDS));
         engine.addSystem(new FiringSystem());
         engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
         engine.addSystem(new BulletSystem());
@@ -108,6 +99,7 @@ public class MenuScreen extends LazyInitScreen {
         engine.addSystem(new ParticleSystem());
         engine.addSystem(new ShakeSystem());
         engine.addSystem(new MoveToSystem());
+        engine.addSystem(new PollenAuraSystem());
 
 
         engine.addSystem(new PowerUpSystem());

@@ -44,10 +44,10 @@ public class WeaponGeneratorUtil {
         muzzlePositions.add(new Vector2(-1.512f, 0f));
         muzzlePositions.add(new Vector2(1.512f, 0f));
 
-        auraSizes.add(new Vector2(0f, 2f));
-        auraSizes.add(new Vector2(0.1f, 3f));
-        auraSizes.add(new Vector2(0.2f, 4f));
-        auraSizes.add(new Vector2(0.3f, 5f));
+        auraSizes.add(new Vector2(0.2f, 3.5f));
+        auraSizes.add(new Vector2(0.3f, 4.5f));
+        auraSizes.add(new Vector2(0.4f, 5f));
+        auraSizes.add(new Vector2(0.5f, 5.5f));
     }
 
     public static void clearWeapon(Engine engine){

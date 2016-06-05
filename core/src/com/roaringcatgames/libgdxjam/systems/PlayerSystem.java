@@ -24,13 +24,13 @@ import com.roaringcatgames.libgdxjam.values.*;
 public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private float enhancedMovementScale = 2f;
-    private Array<Vector2> muzzlePositions = new Array<>();
 
     private boolean isInitialized = false;
     private Entity player;
     private Entity flames;
     private Vector3 initialPosition;
     private float initialScale;
+    private WeaponType initialWeapon;
 
     private Vector2 controlOrigin;
 
@@ -46,7 +46,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private OrthographicCamera cam;
 
-    public PlayerSystem(Vector3 initialPosition, float initialScale, OrthographicCamera cam, Vector2...muzzlePositions){
+    public PlayerSystem(Vector3 initialPosition, float initialScale, OrthographicCamera cam, WeaponType initialWeapon){
         super(Family.all(PlayerComponent.class).get());
         this.initialPosition = initialPosition;
         this.initialScale = initialScale;
@@ -60,19 +60,8 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
         this.controlOrigin = new Vector2();
 
-        if(muzzlePositions != null && muzzlePositions .length > 0){
-            for(Vector2 muzzle:muzzlePositions){
-                this.muzzlePositions.add(muzzle);
-            }
-        }else {
-            this.muzzlePositions.add(new Vector2(-0.5f, 1.6f));
-//            this.muzzlePositions.add(new Vector2(-0.906f, 0.881f));
-//            this.muzzlePositions.add(new Vector2(-1.312f, 0.3f));
+        this.initialWeapon = initialWeapon;
 
-            this.muzzlePositions.add(new Vector2(0.5f, 1.6f));
-//            this.muzzlePositions.add(new Vector2(0.906f, 0.881f));
-//            this.muzzlePositions.add(new Vector2(1.312f, 0.3f));
-        }
     }
 
     private void init(){
@@ -87,7 +76,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(KinematicComponent.create(engine));
             player.add(PlayerComponent.create(engine)
                 .setWeaponLevel(WeaponLevel.LEVEL_1)
-                .setWeaponType(WeaponType.GUN_SEEDS));
+                .setWeaponType(initialWeapon));
             player.add(HealthComponent.create(engine)
                 .setHealth(Health.Player)
                 .setMaxHealth(Health.Player));
@@ -119,34 +108,14 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             player.add(VelocityComponent.create(engine)
                     .setSpeed(0f, 0f));
 
-
-            WeaponGeneratorUtil.generateSeedGuns(player, engine);
-            //generateMuzzles
-
-//            Animation muzzleAni = Animations.getMuzzle();
-//            for(Vector2 muzzlePos:muzzlePositions){
-//                Entity muzzle = engine.createEntity();
-//                muzzle.add(GunComponent.create(engine)
-//                    .setTimeBetweenShots(Rates.SEED_GUN_TIME_BETWEEN));
-//                muzzle.add(FollowerComponent.create(engine)
-//                    .setOffset(muzzlePos.x*initialScale, muzzlePos.y*initialScale)
-//                    .setTarget(player)
-//                    .setMode(FollowMode.STICKY));
-//                muzzle.add(TextureComponent.create(engine));
-//                muzzle.add(AnimationComponent.create(engine)
-//                    .addAnimation("FIRING", muzzleAni));
-//                muzzle.add(StateComponent.create(engine)
-//                    .set("DEFAULT")
-//                    .setLooping(false));
-//                muzzle.add(TransformComponent.create(engine)
-//                    .setPosition(initialPosition.x, initialPosition.y, Z.muzzleFlash)
-//                    .setScale(initialScale*0.5f, initialScale*0.5f)
-//                    .setOpacity(0.8f));
-//                engine.addEntity(muzzle);
-//            }
-
-
-
+            switch(initialWeapon){
+                case GUN_SEEDS:
+                    WeaponGeneratorUtil.generateSeedGuns(player, engine);
+                    break;
+                case POLLEN_AURA:
+                    WeaponGeneratorUtil.generateAura(player, engine);
+                    break;
+            }
 
             getEngine().addEntity(player);
 
