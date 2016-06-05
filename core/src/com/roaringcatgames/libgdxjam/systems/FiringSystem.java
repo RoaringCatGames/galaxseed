@@ -55,15 +55,14 @@ public class FiringSystem extends IteratingSystem {
             boolean isGunSeeds = pc.weaponType == WeaponType.GUN_SEEDS;
             //Fire all the time.
             if(sc.get() != "DEFAULT") {
-                timeElapsed += deltaTime;
 
                 boolean isFiring = false;
                 for(Entity m:muzzles){
                     StateComponent mState = sm.get(m);
                     GunComponent gc = gm.get(m);
                     AnimationComponent ac = am.get(m);
-
-                    if(timeElapsed - gc.lastFireTime >= gc.timeBetweenShots) {
+                    gc.timeElapsed += deltaTime;
+                    if(gc.timeElapsed - gc.lastFireTime >= gc.timeBetweenShots) {
 
                         FollowerComponent follower = K2ComponentMappers.follower.get(m);
                         if(isGunSeeds) {
@@ -73,7 +72,7 @@ public class FiringSystem extends IteratingSystem {
                         }else{
                             generateHelicopterSeed(follower.offset.x, follower.offset.y, 0f, gc.bulletSpeed);
                         }
-                        gc.lastFireTime = timeElapsed;
+                        gc.lastFireTime = gc.timeElapsed;
 
                         isFiring = true;
                     }else if(isGunSeeds &&
@@ -144,26 +143,55 @@ public class FiringSystem extends IteratingSystem {
         getEngine().addEntity(bullet);
     }
 
+    private Array<Float> xBounds = new Array<>();
     private void generateHelicopterSeed(float xOffset, float yOffset, float xVel, float yVel){
         PooledEngine engine = (PooledEngine)getEngine();
         TransformComponent playerPos = K2ComponentMappers.transform.get(player);
+        PlayerComponent playerComp = Mappers.player.get(player);
+        xBounds.clear();
+
+        float scale = 0.3f;
+        float originOffset = -2f;
+        xBounds.add(0f);
+        xBounds.add(0.5f);
+        xBounds.add(1f);
+//        xBounds.add(1.5f);
+//        xBounds.add(2f);
+
+        if(playerComp.weaponLevel == WeaponLevel.LEVEL_2){
+            scale = 0.5f;
+            originOffset = -2f;
+            xBounds.add(1.5f);
+            xBounds.add(2f);
+        }else if(playerComp.weaponLevel == WeaponLevel.LEVEL_3 ||
+                 playerComp.weaponLevel == WeaponLevel.LEVEL_4){
+            scale = 0.7f;
+            originOffset = -2f;
+            xBounds.add(2.5f);
+        }
+
         //Generate Bullets here
         Entity heliSeed = engine.createEntity();
         heliSeed.add(WhenOffScreenComponent.create(engine));
         heliSeed.add(KinematicComponent.create(engine));
         heliSeed.add(TransformComponent.create(engine)
                 .setPosition(playerPos.position.x + xOffset, playerPos.position.y + yOffset, Z.helicopterSeed)
-                .setScale(0.5f, 0.5f)
+                .setScale(scale, scale)
                 .setRotation(-90f)
-                .setOriginOffset(-2f, 0f));
-        heliSeed.add(MultiBoundsComponent.create(engine)
-                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 0, 0f))
-                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 0.5f, 0f))
-                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 1f, 0f))
-                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 1.5f, 0f))
-                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 2f, 0f)));
+                .setOriginOffset(originOffset, 0f));
+        MultiBoundsComponent mbc = MultiBoundsComponent.create(engine);
+        for(Float x:xBounds){
+            mbc.addBound(new Bound(new Circle(0f, 0f, 0.25f), x, 0f));
+        }
+        heliSeed.add(mbc);
+//                MultiBoundsComponent.create(engine)
+//                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 0, 0f))
+//                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 0.5f, 0f))
+//                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 1f, 0f))
+//                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 1.5f, 0f))
+//                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 2f, 0f)));
         heliSeed.add(TextureComponent.create(engine)
-            .setRegion(Assets.getHelicopterSeed()));
+                .setRegion(Assets.getHelicopterSeed()));
         heliSeed.add(DamageComponent.create(engine)
                 .setDPS(Damage.helicopterSeed));
         heliSeed.add(HelicopterSeedComponent.create(getEngine()));

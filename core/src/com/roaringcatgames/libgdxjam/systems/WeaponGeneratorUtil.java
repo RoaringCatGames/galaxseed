@@ -118,7 +118,30 @@ public class WeaponGeneratorUtil {
             engine.addEntity(heliGun);
 
         }else{
-
+            Entity leftGun = engine.createEntity();
+            leftGun.add(GunComponent.create(engine)
+                    .setBulletSpeed(Rates.HELI_GUN_BULLET_SPEED)
+                    .setTimeBetweenShots(Rates.HELI_GUN_TIME_BETWEEN)
+                    .setLastFireTime(0f));
+            leftGun.add(TransformComponent.create(engine)
+                    .setPosition(tc.position.x, tc.position.y, Z.heliGun));
+            leftGun.add(FollowerComponent.create(engine)
+                    .setTarget(player)
+                    .setMode(FollowMode.STICKY)
+                    .setOffset(0f, 0f));
+            engine.addEntity(leftGun);
+            Entity rightGun = engine.createEntity();
+            rightGun.add(GunComponent.create(engine)
+                    .setBulletSpeed(Rates.HELI_GUN_BULLET_SPEED)
+                    .setTimeBetweenShots(Rates.HELI_GUN_TIME_BETWEEN)
+                    .setLastFireTime(Rates.HELI_GUN_TIME_BETWEEN/2f));
+            rightGun.add(TransformComponent.create(engine)
+                    .setPosition(tc.position.x, tc.position.y, Z.heliGun));
+            rightGun.add(FollowerComponent.create(engine)
+                    .setTarget(player)
+                    .setMode(FollowMode.STICKY)
+                    .setOffset(4f, 0f));
+            engine.addEntity(rightGun);
         }
 
 

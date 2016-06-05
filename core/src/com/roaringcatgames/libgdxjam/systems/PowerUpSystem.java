@@ -98,6 +98,9 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
                 case POLLEN_AURA:
                     WeaponGeneratorUtil.generateAura(player, engine);
                     break;
+                case HELICOPTER_SEEDS:
+                    WeaponGeneratorUtil.generateHelicopterGuns(player, engine);
+                    break;
             }
         }
     }
