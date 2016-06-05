@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class Colors {
 
+    public static final Color PLAIN_WHITE = new Color(0xFFFFFFFF);
     public static final Color PURPLE_ASTEROID = new Color(0x7f509FFF);
     public static final Color BLUE_ASTEROID = new Color(0x58B9DFFF);
     public static final Color BROWN_ASTEROID = new Color(0xE5AEA3FF);
