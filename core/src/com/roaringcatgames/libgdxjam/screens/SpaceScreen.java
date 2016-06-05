@@ -105,6 +105,8 @@
             engine.addSystem(new OscillationSystem());
             engine.addSystem(new PowerUpSystem());
             engine.addSystem(new WeaponChangeSystem());
+            engine.addSystem(new HelicopterSeedSystem());
+            engine.addSystem(new StatusSystem());
 
 
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();

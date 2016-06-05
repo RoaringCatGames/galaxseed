@@ -145,7 +145,6 @@ public class FiringSystem extends IteratingSystem {
     }
 
     private void generateHelicopterSeed(float xOffset, float yOffset, float xVel, float yVel){
-        Gdx.app.log("FiringSystem", "Firing Heli Seed");
         PooledEngine engine = (PooledEngine)getEngine();
         TransformComponent playerPos = K2ComponentMappers.transform.get(player);
         //Generate Bullets here

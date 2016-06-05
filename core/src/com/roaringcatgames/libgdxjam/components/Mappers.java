@@ -1,5 +1,6 @@
 package com.roaringcatgames.libgdxjam.components;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 
 /**
@@ -21,4 +22,6 @@ public class Mappers {
     public static ComponentMapper<ScoreComponent> score = ComponentMapper.getFor(ScoreComponent.class);
     public static ComponentMapper<SpawnerComponent> spawner = ComponentMapper.getFor(SpawnerComponent.class);
     public static ComponentMapper<WhenOffScreenComponent> whenOffScreen = ComponentMapper.getFor(WhenOffScreenComponent.class);
+    public static ComponentMapper<HelicopterSeedComponent> helicopterSeed = ComponentMapper.getFor(HelicopterSeedComponent.class);
+    public static ComponentMapper<StatusComponent> status = ComponentMapper.getFor(StatusComponent.class);
 }

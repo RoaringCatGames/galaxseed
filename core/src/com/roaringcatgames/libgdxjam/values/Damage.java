@@ -15,5 +15,5 @@ public class Damage {
     public static final float auraLevelTwo = 5f;
     public static final float auraLevelThree = 7f;
     public static final float auraLevelFour = 10f;
-    public static final float helicopterSeed = 4f;
+    public static final float helicopterSeed = 2f;
 }
