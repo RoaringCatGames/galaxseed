@@ -1,6 +1,7 @@
 package com.roaringcatgames.libgdxjam;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.roaringcatgames.kitten2d.ashley.components.AnimationComponent;
 import com.roaringcatgames.libgdxjam.values.Rates;
 
 /**
@@ -51,6 +52,9 @@ public class Animations {
     private static Animation gatlingFiring;
     private static Animation gatlingMuzzle;
     private static Animation gatlingSmoke;
+
+    private static Animation cannonIdle;
+    private static Animation cannonFiring;
 
     private static Animation aura;
     private static Animation auraFinal;
@@ -109,6 +113,9 @@ public class Animations {
         gatlingFiring = new Animation(1f/9f, Assets.getGatlingFiring());
         gatlingMuzzle = new Animation(1f/144f, Assets.getGatlingMuzzle());
         gatlingSmoke = new Animation(1f/144f, Assets.getGatlingSmoke());
+
+        cannonIdle = new Animation(1f, Assets.getCannonIdle());
+        cannonFiring = new Animation(1f/12f, Assets.getCannonFiring());
 
         aura = new Animation(1f/6f, Assets.getAuraFrames());
         auraFinal = new Animation(1f/6f, Assets.getAuraFinalFrames());
@@ -264,6 +271,14 @@ public class Animations {
 
     public static Animation getGatlingSmoke() {
         return gatlingSmoke;
+    }
+
+    public static Animation getCannonIdle() {
+        return cannonIdle;
+    }
+
+    public static Animation getCannonFiring() {
+        return cannonFiring;
     }
 
     public static Animation getAura() {

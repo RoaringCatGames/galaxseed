@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
@@ -70,12 +71,15 @@ public class FiringSystem extends IteratingSystem {
                             mState.setLooping(false);
                             generateBullet(follower.offset.x, follower.offset.y, 0f, gc.bulletSpeed);
                         }else{
-                            generateHelicopterSeed(follower.offset.x, follower.offset.y, 0f, gc.bulletSpeed);
+                            if(mState != null){
+                                mState.set("FIRING");
+                            }
+                            generateHelicopterSeed(follower.offset.x, follower.offset.y, 0f, gc.bulletSpeed, follower.offset.x < 0f);
                         }
                         gc.lastFireTime = gc.timeElapsed;
 
                         isFiring = true;
-                    }else if(isGunSeeds &&
+                    }else if(mState != null &&
                              !"DEFAULT".equals(mState.get()) && ac.animations.get(mState.get()).isAnimationFinished(mState.time)){
 
                         mState.set("DEFAULT");
@@ -144,7 +148,7 @@ public class FiringSystem extends IteratingSystem {
     }
 
     private Array<Float> xBounds = new Array<>();
-    private void generateHelicopterSeed(float xOffset, float yOffset, float xVel, float yVel){
+    private void generateHelicopterSeed(float xOffset, float yOffset, float xVel, float yVel, boolean isLeft){
         PooledEngine engine = (PooledEngine)getEngine();
         TransformComponent playerPos = K2ComponentMappers.transform.get(player);
         PlayerComponent playerComp = Mappers.player.get(player);
@@ -152,53 +156,57 @@ public class FiringSystem extends IteratingSystem {
 
         float scale = 0.3f;
         float originOffset = -2f;
+        float rotation = -120f;
+        float rotationSpeed = isLeft ? -360f : 360f;
+        TextureRegion tr = playerComp.weaponLevel == WeaponLevel.LEVEL_4 ? Assets.getFinalHelicopterSeed() :
+                                                                           Assets.getHelicopterSeed();
         xBounds.add(0f);
         xBounds.add(0.5f);
         xBounds.add(1f);
-//        xBounds.add(1.5f);
-//        xBounds.add(2f);
 
         if(playerComp.weaponLevel == WeaponLevel.LEVEL_2){
-            scale = 0.5f;
+            scale = 0.4f;
             originOffset = -2f;
             xBounds.add(1.5f);
             xBounds.add(2f);
         }else if(playerComp.weaponLevel == WeaponLevel.LEVEL_3 ||
                  playerComp.weaponLevel == WeaponLevel.LEVEL_4){
-            scale = 0.7f;
+            scale = 0.5f;
             originOffset = -2f;
-            xBounds.add(2.5f);
+            xBounds.add(1.5f);
+            xBounds.add(2f);
         }
+
+        float scaleY = isLeft ? -1f*scale : scale;
+
+        if(playerComp.weaponLevel == WeaponLevel.LEVEL_4){
+            xOffset -= originOffset;
+        }
+
 
         //Generate Bullets here
         Entity heliSeed = engine.createEntity();
         heliSeed.add(WhenOffScreenComponent.create(engine));
         heliSeed.add(KinematicComponent.create(engine));
         heliSeed.add(TransformComponent.create(engine)
-                .setPosition(playerPos.position.x + xOffset, playerPos.position.y + yOffset, Z.helicopterSeed)
-                .setScale(scale, scale)
-                .setRotation(-90f)
+                .setPosition(playerPos.position.x + xOffset, playerPos.position.y, Z.helicopterSeed)
+                .setScale(scale, scaleY)
+                .setRotation(rotation)
                 .setOriginOffset(originOffset, 0f));
         MultiBoundsComponent mbc = MultiBoundsComponent.create(engine);
         for(Float x:xBounds){
             mbc.addBound(new Bound(new Circle(0f, 0f, 0.25f), x, 0f));
         }
         heliSeed.add(mbc);
-//                MultiBoundsComponent.create(engine)
-//                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 0, 0f))
-//                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 0.5f, 0f))
-//                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 1f, 0f))
-//                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 1.5f, 0f))
-//                .addBound(new Bound(new Circle(0f, 0f, 0.25f), 2f, 0f)));
         heliSeed.add(TextureComponent.create(engine)
-                .setRegion(Assets.getHelicopterSeed()));
+                .setRegion(tr));
         heliSeed.add(DamageComponent.create(engine)
                 .setDPS(Damage.helicopterSeed));
         heliSeed.add(HelicopterSeedComponent.create(getEngine()));
         heliSeed.add(VelocityComponent.create(engine)
                 .setSpeed(xVel, yVel));
         heliSeed.add(RotationComponent.create(engine)
-            .setRotationSpeed(360f));
+            .setRotationSpeed(rotationSpeed));
         getEngine().addEntity(heliSeed);
     }
 }
