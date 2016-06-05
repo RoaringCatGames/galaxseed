@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 
 /**
  * Accessor for our Asset Manager and all of our Assets. Handles
@@ -25,6 +26,7 @@ public class Assets {
         am.load(ANI_ATLAS, TEXTURE_ATLAS);
         am.load(BG_MUSIC, MUSIC);
         am.load(GAME_OVER_MUSIC, MUSIC);
+        am.load(MENU_MUISC, MUSIC);
         am.load(FONT_32, BITMAP_FONT);
         am.load(FONT_48, BITMAP_FONT);
         am.load(FONT_64, BITMAP_FONT);
@@ -42,6 +44,7 @@ public class Assets {
 
         return am;
     }
+
 
     /***
      * SAFE IMMEDIATELY after am.load() is called
@@ -62,110 +65,110 @@ public class Assets {
      * @return AtlasRegion for the moon sprite.
      */
     public static TextureAtlas.AtlasRegion getTitleImage(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/Title");
+        return getCachedRegion(ANI_ATLAS, "cherry title/Title");
     }
 
     public static TextureAtlas.AtlasRegion getGalaxTitleImage(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/galax");
+        return getCachedRegion(ANI_ATLAS, "cherry title/galax");
     }
     public static TextureAtlas.AtlasRegion getSeedTitleImage(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("cherry title/seed");
+        return getCachedRegion(ANI_ATLAS, "cherry title/seed");
     }
 
     public static Array<TextureAtlas.AtlasRegion> getTitleTreeFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("cherry title/cherry-title");
+        return getCachedAnimationFrames(ANI_ATLAS, "cherry title/cherry-title");
     }
     public static Array<TextureAtlas.AtlasRegion> getTitleTreeLeafFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("cherry title/cherry-title-leaf");
+        return getCachedAnimationFrames(ANI_ATLAS, "cherry title/cherry-title-leaf");
     }
     /***
      * SAFE IMMEDIATELY after am.load() is called
      * @return AtlasRegion for the bg Tile sprite.
      */
     public static TextureAtlas.AtlasRegion getBgATile(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("SpaceBG-a");
+        return getCachedRegion(SPRITE_ATLAS, "SpaceBG-a");
     }
     public static TextureAtlas.AtlasRegion getBgBTile(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("SpaceBG-b");
+        return getCachedRegion(SPRITE_ATLAS, "SpaceBG-b");
     }
     public static TextureAtlas.AtlasRegion getBgClearTileA(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("stars-a");
+        return getCachedRegion(SPRITE_ATLAS, "stars-a");
     }
     public static TextureAtlas.AtlasRegion getBgClearTileB(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("stars-b");
+        return getCachedRegion(SPRITE_ATLAS, "stars-b");
     }
     public static TextureAtlas.AtlasRegion getBgClearTileC(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("stars-c");
+        return getCachedRegion(SPRITE_ATLAS, "stars-c");
     }
     public static TextureAtlas.AtlasRegion getGalaxyA(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("galaxy-a");
+        return getCachedRegion(SPRITE_ATLAS, "galaxy-a");
     }
     public static TextureAtlas.AtlasRegion getGalaxyB(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("galaxy-b");
+        return getCachedRegion(SPRITE_ATLAS, "galaxy-b");
     }
     public static TextureAtlas.AtlasRegion getGalaxyC(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("galaxy-c");
+        return getCachedRegion(SPRITE_ATLAS, "galaxy-c");
     }
     public static TextureAtlas.AtlasRegion getGasCluster(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("GasCluster");
+        return getCachedRegion(SPRITE_ATLAS, "GasCluster");
     }
     public static TextureAtlas.AtlasRegion getGasClusterA(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("GasCluster-a");
+        return getCachedRegion(SPRITE_ATLAS, "GasCluster-a");
     }
     public static TextureAtlas.AtlasRegion getGasClusterB(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("GasCluster-b");
+        return getCachedRegion(SPRITE_ATLAS, "GasCluster-b");
     }
 
     public static TextureAtlas.AtlasRegion getPluto(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/pluto");
+        return getCachedRegion(SPRITE_ATLAS, "planets/pluto");
     }
     public static TextureAtlas.AtlasRegion getNeptune(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/neptune");
+        return getCachedRegion(SPRITE_ATLAS, "planets/neptune");
     }
     public static TextureAtlas.AtlasRegion getUranus(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/uranus");
+        return getCachedRegion(SPRITE_ATLAS, "planets/uranus");
     }
     public static TextureAtlas.AtlasRegion getSaturn(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/saturn");
+        return getCachedRegion(SPRITE_ATLAS, "planets/saturn");
     }
     public static TextureAtlas.AtlasRegion getJupiterBottom(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/jupiter-b");
+        return getCachedRegion(SPRITE_ATLAS, "planets/jupiter-b");
     }
     public static TextureAtlas.AtlasRegion getJupiterTop(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/jupiter-t");
+        return getCachedRegion(SPRITE_ATLAS, "planets/jupiter-t");
     }
     public static TextureAtlas.AtlasRegion getMars(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/mars");
+        return getCachedRegion(SPRITE_ATLAS, "planets/mars");
     }
     public static TextureAtlas.AtlasRegion getMoon(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/moon");
+        return getCachedRegion(SPRITE_ATLAS, "planets/moon");
     }
     public static TextureAtlas.AtlasRegion getEarth(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("planets/earth");
+        return getCachedRegion(SPRITE_ATLAS, "planets/earth");
     }
 
     /////////////
     //PLAY
     /////////////
     public static Array<TextureAtlas.AtlasRegion> getPFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("PLAY/P");
+        return getCachedAnimationFrames(ANI_ATLAS, "PLAY/P");
     }
     public static Array<TextureAtlas.AtlasRegion> getLFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("PLAY/L");
+        return getCachedAnimationFrames(ANI_ATLAS, "PLAY/L");
     }
     public static Array<TextureAtlas.AtlasRegion> getAFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("PLAY/A");
+        return getCachedAnimationFrames(ANI_ATLAS, "PLAY/A");
     }
     public static Array<TextureAtlas.AtlasRegion> getYFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("PLAY/Y");
+        return getCachedAnimationFrames(ANI_ATLAS, "PLAY/Y");
     }
     public static Array<TextureAtlas.AtlasRegion> getSwipeFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("swipe/swipe");
+        return getCachedAnimationFrames(ANI_ATLAS, "swipe/swipe");
     }
 
 
     public static Array<TextureAtlas.AtlasRegion> getUpgradeFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("pickups/upgrade");
+        return getCachedAnimationFrames(ANI_ATLAS, "pickups/upgrade");
     }
 
     //////////////
@@ -176,17 +179,17 @@ public class Assets {
             throw new IllegalArgumentException("Speed line is bad");
         }
         String name = "speed/speed" + ((i%4) + 1);
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion(name);
+        return getCachedRegion(SPRITE_ATLAS, name);
     }
 
     public static Array<TextureAtlas.AtlasRegion> getStarAFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("stars/stara");
+        return getCachedAnimationFrames(ANI_ATLAS, "stars/stara");
     }
     public static Array<TextureAtlas.AtlasRegion> getStarBFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("stars/starb");
+        return getCachedAnimationFrames(ANI_ATLAS, "stars/starb");
     }
     public static Array<TextureAtlas.AtlasRegion> getStarCFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("stars/starc");
+        return getCachedAnimationFrames(ANI_ATLAS, "stars/starc");
     }
 
     /////////////
@@ -195,42 +198,45 @@ public class Assets {
     private static Array<TextureAtlas.AtlasRegion> frags = new Array<>();
     public static Array<TextureAtlas.AtlasRegion> getFrags(){
         if(frags.size == 0){
-            frags.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/frag-a"));
-            frags.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/frag-b"));
-            frags.add(am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/frag-c"));
+            frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-a"));
+            frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-b"));
+            frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-c"));
         }
         return frags;
     }
 
-    public static TextureAtlas.AtlasRegion getAsteroidA(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/asteroid-a"); //asteroid-a/asteroid-a");
+    public static TextureRegion getAsteroidA(){
+        return getCachedRegion(SPRITE_ATLAS, "asteroids/asteroid-a");
+
     }
     public static Array<TextureAtlas.AtlasRegion> getAsteroidAFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("asteroid-treed/asterroid-a");
+        return getCachedAnimationFrames(ANI_ATLAS, "asteroid-treed/asterroid-a");
     }
 
-    public static TextureAtlas.AtlasRegion getAsteroidB(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/asteroid-b"); //asteroid-b/asteroid-b");
+    public static TextureRegion getAsteroidB(){
+        return getCachedRegion(SPRITE_ATLAS, "asteroids/asteroid-b");
     }
     public static Array<TextureAtlas.AtlasRegion> getAsteroidBFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("asteroid-treed/asterroid-b");
+        return getCachedAnimationFrames(ANI_ATLAS, "asteroid-treed/asterroid-b");
     }
 
-    public static TextureAtlas.AtlasRegion getAsteroidC(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("asteroids/asteroid-c"); //asteroid-c/asteroid-c");
+
+    public static TextureRegion getAsteroidC(){
+        return getCachedRegion(SPRITE_ATLAS, "asteroids/asteroid-c");
+
     }
     public static Array<TextureAtlas.AtlasRegion> getAsteroidCFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("asteroid-treed/asterroid-c");
+        return getCachedAnimationFrames(ANI_ATLAS, "asteroid-treed/asterroid-c");
     }
 
     public static Array<TextureAtlas.AtlasRegion> getImpactA(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactA/impact-asteroid-a");
+        return getCachedAnimationFrames(ANI_ATLAS, "impact/ImpactA/impact-asteroid-a");
     }
     public static Array<TextureAtlas.AtlasRegion> getImpactB(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactB/impact-asteroid-b");
+        return getCachedAnimationFrames(ANI_ATLAS, "impact/ImpactB/impact-asteroid-b");
     }
     public static Array<TextureAtlas.AtlasRegion> getImpactC(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("impact/ImpactC/impact-asteroid-c");
+        return getCachedAnimationFrames(ANI_ATLAS, "impact/ImpactC/impact-asteroid-c");
     }
 
 
@@ -239,7 +245,7 @@ public class Assets {
      * @return AtlasRegions for spaceship idle animation.
      */
     public static Array<TextureAtlas.AtlasRegion> getShipIdleFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-idle");
+        return getCachedAnimationFrames(ANI_ATLAS, "ship/ship-idle");
     }
 
     ////////////
@@ -250,83 +256,87 @@ public class Assets {
      * @return AtlasRegions for spaceship flying animation.
      */
     public static Array<TextureAtlas.AtlasRegion> getShipFlyingFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-fly");
+        return getCachedAnimationFrames(ANI_ATLAS, "ship/ship-fly");
     }
     /****
      * ONLY SAFE AFTER am.update() is finished.
      * @return AtlasRegions for spaceship flying left animation.
      */
     public static Array<TextureAtlas.AtlasRegion> getShipFlyingLeftFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-fly-left");
+        return getCachedAnimationFrames(ANI_ATLAS, "ship/ship-fly-left");
     }
     /****
      * ONLY SAFE AFTER am.update() is finished.
      * @return AtlasRegions for spaceship flying right animation.
      */
     public static Array<TextureAtlas.AtlasRegion> getShipFlyingRightFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-fly-right");
+        return getCachedAnimationFrames(ANI_ATLAS, "ship/ship-fly-right");
     }
     /****
      * ONLY SAFE AFTER am.update() is finished.
      * @return AtlasRegions for ship flames.
      */
     public static Array<TextureAtlas.AtlasRegion> getFlamesFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/flames");
+        return getCachedAnimationFrames(ANI_ATLAS, "ship/flames");
     }
     public static Array<TextureAtlas.AtlasRegion> getIdleFlamesFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/propel");
+        return getCachedAnimationFrames(ANI_ATLAS, "ship/propel");
     }
     public static Array<TextureAtlas.AtlasRegion> getShipDeathFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("ship/ship-death");
+        return getCachedAnimationFrames(ANI_ATLAS, "ship/ship-death");
     }
 
     public static Array<TextureAtlas.AtlasRegion> getWreckedCat(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("cat/death");
+        return getCachedAnimationFrames(ANI_ATLAS, "cat/death");
     }
 
     private static Array<TextureAtlas.AtlasRegion> shipParts;
     public static TextureAtlas.AtlasRegion getShipPart(int index){
         if(shipParts == null){
             shipParts = new Array<>();
-            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-a"));
-            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-b"));
-            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-c"));
-            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-d"));
-            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-e"));
-            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-f"));
-            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-g"));
-            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-h"));
-            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-i"));
-            shipParts.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/piece-j"));
+            shipParts.add(getCachedRegion(ANI_ATLAS, "ship/pieces/piece-a"));
+            shipParts.add(getCachedRegion(ANI_ATLAS, "ship/pieces/piece-b"));
+            shipParts.add(getCachedRegion(ANI_ATLAS, "ship/pieces/piece-c"));
+            shipParts.add(getCachedRegion(ANI_ATLAS, "ship/pieces/piece-d"));
+            shipParts.add(getCachedRegion(ANI_ATLAS, "ship/pieces/piece-e"));
+            shipParts.add(getCachedRegion(ANI_ATLAS, "ship/pieces/piece-f"));
+            shipParts.add(getCachedRegion(ANI_ATLAS, "ship/pieces/piece-g"));
+            shipParts.add(getCachedRegion(ANI_ATLAS, "ship/pieces/piece-h"));
+            shipParts.add(getCachedRegion(ANI_ATLAS, "ship/pieces/piece-i"));
+            shipParts.add(getCachedRegion(ANI_ATLAS, "ship/pieces/piece-j"));
 
         }
         return shipParts.get(index % shipParts.size);
     }
 
-    public static TextureAtlas.AtlasRegion getSmoke(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("ship/pieces/smoke");
+    private static TextureRegion shipSmoke;
+    public static TextureRegion getSmoke(){
+        if(shipSmoke == null) {
+            shipSmoke = getCachedRegion(ANI_ATLAS, "ship/pieces/smoke");
+        }
+        return shipSmoke;
     }
 
     /////////////
     //Health Bar
     /////////////
     public static TextureAtlas.AtlasRegion getBranch(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegion("health/branch");
+        return getCachedRegion(SPRITE_ATLAS, "health/branch");
     }
     private static Array<TextureAtlas.AtlasRegion> leaves;
     public static TextureAtlas.AtlasRegion getBranchLeaf(int index){
         if(leaves == null){
             leaves = new Array<>();
-            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-a"));
-            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-b"));
-            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-c"));
-            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-d"));
-            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-e"));
-            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-f"));
-            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-g"));
-            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-h"));
-            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-i"));
-            leaves.add(am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("health/leaf-j"));
+            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-a"));
+            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-b"));
+            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-c"));
+            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-d"));
+            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-e"));
+            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-f"));
+            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-g"));
+            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-h"));
+            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-i"));
+            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-j"));
         }
         if(index < leaves.size){
             return leaves.get(index);
@@ -339,16 +349,16 @@ public class Assets {
     //Health Pack
     /////////////
     public static Array<TextureAtlas.AtlasRegion> getFertilizerFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("pickups/health");
+        return getCachedAnimationFrames(ANI_ATLAS, "pickups/health");
     }
     public static TextureAtlas.AtlasRegion getFertilizerGlow(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("pickups/health-glow");
+        return getCachedRegion(ANI_ATLAS, "pickups/health-glow");
     }
     public static Array<TextureAtlas.AtlasRegion> getWaterCanFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("pickups/health-a");
+        return getCachedAnimationFrames(ANI_ATLAS, "pickups/health-a");
     }
     public static TextureAtlas.AtlasRegion getWaterCanGlow(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("pickups/health-a-glow");
+        return getCachedRegion(ANI_ATLAS, "pickups/health-a-glow");
     }
 
     /////////////
@@ -359,92 +369,103 @@ public class Assets {
      * @return AtlasRegions for seed bullet animation
      */
     public static Array<TextureAtlas.AtlasRegion> getBulletFrames() {
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/seed");
+        return getCachedAnimationFrames(ANI_ATLAS, "bullets/seed");
     }
     /****
      * ONLY SAFE AFTER am.update() is finished.
      * @return AtlasRegions for seed bullet animation
      */
     public static Array<TextureAtlas.AtlasRegion> getBulletFlyingFrames() {
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("bullets/SeedFly");
+        return getCachedAnimationFrames(ANI_ATLAS, "bullets/SeedFly");
     }
 
+    private static TextureRegion heliSeed;
     public static TextureRegion getHelicopterSeed() {
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("guns/heli");
+        if(heliSeed == null) {
+            heliSeed = getCachedRegion(ANI_ATLAS, "guns/heli");
+        }
+        return heliSeed;
     }
 
+    private static TextureRegion finalHeliSeed;
     public static TextureRegion getFinalHelicopterSeed() {
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegion("gun/final");
+        if(finalHeliSeed == null) {
+            finalHeliSeed = getCachedRegion(ANI_ATLAS, "gun/final");
+        }
+        return finalHeliSeed;
     }
 
     public static Array<? extends TextureRegion> getMuzzleFrames() {
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("muzzleflash/muzzle");
+        return getCachedAnimationFrames(ANI_ATLAS, "muzzleflash/muzzle");
     }
 
     public static Array<? extends TextureRegion> getGatlingIdle(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/gatling-idle");
+        return getCachedAnimationFrames(ANI_ATLAS, "guns/gatling-idle");
     }
 
     public static Array<? extends TextureRegion> getGatlingFiring(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/gatling-firing");
+        return getCachedAnimationFrames(ANI_ATLAS, "guns/gatling-firing");
     }
     public static Array<? extends TextureRegion> getGatlingMuzzle(){
         //Such a friendly flash, just wants to cuddle
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/nuzzle");
+        return getCachedAnimationFrames(ANI_ATLAS, "guns/nuzzle");
     }
     public static Array<? extends TextureRegion> getGatlingSmoke(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/smoke");
+        return getCachedAnimationFrames(ANI_ATLAS, "guns/smoke");
     }
     public static Array<? extends TextureRegion> getGatlingSmokeParticles(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/smoke-particle");
+        return getCachedAnimationFrames(ANI_ATLAS, "guns/smoke-particle");
     }
 
     public static Array<? extends TextureRegion> getAuraFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/aura");
+        return getCachedAnimationFrames(ANI_ATLAS, "guns/aura");
     }
     public static Array<? extends TextureRegion> getAuraFinalFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/aura-final");
+        return getCachedAnimationFrames(ANI_ATLAS, "guns/aura-final");
     }
     public static Array<? extends TextureRegion> getDandyParticles(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("guns/dandy-particle");
+        return getCachedAnimationFrames(ANI_ATLAS, "guns/dandy-particle");
     }
 
     /////////////
     //Life
     /////////////
     public static Array<TextureAtlas.AtlasRegion> getGreenTreeFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/green");
+        return getCachedAnimationFrames(ANI_ATLAS, "trees/green");
     }
     public static Array<TextureAtlas.AtlasRegion> getPinkTreeFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/pink");
+        return getCachedAnimationFrames(ANI_ATLAS, "trees/pink");
     }
     public static Array<TextureAtlas.AtlasRegion> getPineTreeFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("trees/pine");
+        return getCachedAnimationFrames(ANI_ATLAS, "trees/pine");
     }
     public static Array<TextureAtlas.AtlasRegion> getLeafFrames(){
-        return am.get(SPRITE_ATLAS, TEXTURE_ATLAS).findRegions("leaves/leaf");
+        return getCachedAnimationFrames(SPRITE_ATLAS, "leaves/leaf");
     }
 
     /////////////
     //Comets
     /////////////
     public static Array<TextureAtlas.AtlasRegion> getRedCometFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet-b");
+        return getCachedAnimationFrames(ANI_ATLAS, "enemies/comet-b");
     }
     public static Array<TextureAtlas.AtlasRegion> getRedCometFullFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet-full-b");
+        return getCachedAnimationFrames(ANI_ATLAS, "enemies/comet-full-b");
     }
     public static Array<TextureAtlas.AtlasRegion> getBlueCometFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet-a");
+        return getCachedAnimationFrames(ANI_ATLAS, "enemies/comet-a");
     }
     public static Array<TextureAtlas.AtlasRegion> getBlueCometFullFrames(){
-        return am.get(ANI_ATLAS, TEXTURE_ATLAS).findRegions("enemies/comet-full-a");
+        return getCachedAnimationFrames(ANI_ATLAS, "enemies/comet-full-a");
     }
 
 
     /////////////
     //Music
     /////////////
+    public static Music getMenuMusic(){
+        return am.get(MENU_MUISC, MUSIC);
+    }
     public static Music getBackgroundMusic(){
         return am.get(BG_MUSIC, MUSIC);
     }
@@ -499,6 +520,24 @@ public class Assets {
     private static Class<BitmapFont> BITMAP_FONT = BitmapFont.class;
     private static Class<Sound> SOUND = Sound.class;
 
+    private static ObjectMap<String, Array<TextureAtlas.AtlasRegion>> animationsCache = new ObjectMap<>();
+    private static ObjectMap<String, TextureAtlas.AtlasRegion> spriteCache = new ObjectMap<>();
+
+    private static Array<TextureAtlas.AtlasRegion> getCachedAnimationFrames(String atlasName, String name){
+        if(!animationsCache.containsKey(name)){
+            animationsCache.put(name, am.get(atlasName, TEXTURE_ATLAS).findRegions(name));
+        }
+        return animationsCache.get(name);
+    }
+
+    private static TextureAtlas.AtlasRegion getCachedRegion(String atlasName, String name){
+        if(!spriteCache.containsKey(name)){
+            spriteCache.put(name, am.get(atlasName, TEXTURE_ATLAS).findRegion(name));
+        }
+        return spriteCache.get(name);
+    }
+
+
     private static final String FONT_32 = "fonts/phosphate-32.fnt";
     private static final String FONT_48 = "fonts/phosphate-48.fnt";
     private static final String FONT_64 = "fonts/phosphate-64.fnt";
@@ -507,6 +546,7 @@ public class Assets {
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
     private static final String BG_MUSIC = "music/metamorphosis-oga.mp3";
+    private static final String MENU_MUISC = "music/title.mp3";
     private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
     private static final String FIRING_SFX = "sfx/seed-fire.mp3";
     private static final String FLYING_MUSIC = "music/flying.mp3";

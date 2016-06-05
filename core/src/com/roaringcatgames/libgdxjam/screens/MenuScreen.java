@@ -66,7 +66,7 @@ public class MenuScreen extends LazyInitScreen {
         viewport.apply();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
-        menuSong = Assets.getGameOverMusic();
+        menuSong = Assets.getMenuMusic();
 
         Vector3 playerPosition = new Vector3(
                 App.W/2f,

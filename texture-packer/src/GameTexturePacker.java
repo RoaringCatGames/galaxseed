@@ -1,3 +1,4 @@
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 
@@ -29,6 +30,8 @@ public class GameTexturePacker {
         settings.edgePadding = false;
         settings.maxWidth = 2048;//4096;
         settings.maxHeight = 2048;//4096;
+        settings.filterMin = Texture.TextureFilter.Linear;
+        settings.filterMag = Texture.TextureFilter.Linear;
 
         // pack the images
         settings.combineSubdirectories = true;
