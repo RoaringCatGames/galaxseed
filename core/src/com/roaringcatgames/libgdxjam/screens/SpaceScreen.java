@@ -59,8 +59,6 @@
             viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
 
-            //Normally we would use a different camera, but our main camera
-            //  never moves, so we're safe to use a single one here
             OrthographicCamera guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             guiCam.position.set(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, 0f);
 

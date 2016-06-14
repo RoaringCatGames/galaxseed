@@ -3,7 +3,7 @@
 "jdk": "/Users/barry/DevTools/openjdks/openjdk-1.7.0-u80-unofficial-macosx-x86_64-image.zip",
 "executable": "GalaxSeed",
 "classpath": [
-"/Users/barry/git-repos/libgdx-jam/desktop/build/libs/desktop-1.0.jar"
+"/Users/barry/git-repos/libgdx-jam/desktop/build/libs/galaxseed-0.2.0-kfp.jar"
 ],
 "mainclass": "com.roaringcatgames.libgdxjam.desktop.DesktopLauncher",
 "vmargs": [

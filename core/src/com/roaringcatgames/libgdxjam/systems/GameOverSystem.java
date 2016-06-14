@@ -55,7 +55,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
         super(Family.all(PlayerComponent.class).get());
         this.am = ComponentMapper.getFor(AnimationComponent.class);
         this.sm = ComponentMapper.getFor(StateComponent.class);
-        endSong = Assets.getGameOverMusic();
+        endSong = Assets.getMenuMusic();
         this.cam = cam;
         this.dispatcher = dispatcher;
 
@@ -118,7 +118,6 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 bullet.getComponent(AnimationComponent.class).setPaused(true);
             }
         }else{
-
             if(endSong.isPlaying()) {
                 endSong.stop();
             }

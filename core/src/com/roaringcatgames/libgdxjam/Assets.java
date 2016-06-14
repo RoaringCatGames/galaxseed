@@ -1,6 +1,7 @@
 package com.roaringcatgames.libgdxjam;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.roaringcatgames.libgdxjam.data.SpawnList;
+import com.roaringcatgames.libgdxjam.data.SpawnListLoader;
 
 /**
  * Accessor for our Asset Manager and all of our Assets. Handles
@@ -19,6 +22,9 @@ public class Assets {
 
     public static AssetManager load(){
         am = new AssetManager();
+        am.setLoader(SpawnList.class, new SpawnListLoader(new InternalFileHandleResolver()));
+
+        am.load("levels/1-level.json", SpawnList.class);
 
         am.load(LOADING_ATLAS, TEXTURE_ATLAS);
         am.load(SPRITE_ATLAS, TEXTURE_ATLAS);

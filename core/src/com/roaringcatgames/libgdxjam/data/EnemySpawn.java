@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.libgdxjam.components.EnemyType;
 
 /**
- * Created by barry on 5/1/16 @ 3:51 PM.
+ * Model for our Enemy Spawn
  */
 public class EnemySpawn {
 
@@ -13,6 +13,9 @@ public class EnemySpawn {
     public EnemyType enemyType;
     public Vector2 startPosition = new Vector2();
     public Vector2 speed = new Vector2();
+
+    public EnemySpawn(){
+    }
 
     public EnemySpawn(float spawnTime, EnemyType eType, float xPos, float yPos, float xVel, float yVel){
         this.spawnTime = spawnTime;

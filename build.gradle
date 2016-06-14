@@ -15,7 +15,7 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '1.0'
+    version = '0.2.0-kfp'
     ext {
         appName = "libgdx-jam-2015"
         gdxVersion = '1.9.2'
@@ -24,6 +24,7 @@ allprojects {
         ashleyVersion = '1.7.2'
         aiVersion = '1.7.0'
         ashleyExtensionsVersion = '0.0.29-SNAPSHOT'
+        outputName = 'galaxseed'
     }
 
     repositories {

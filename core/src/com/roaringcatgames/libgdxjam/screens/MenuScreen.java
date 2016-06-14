@@ -68,6 +68,9 @@ public class MenuScreen extends LazyInitScreen {
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         menuSong = Assets.getMenuMusic();
 
+        OrthographicCamera guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        guiCam.position.set(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, 0f);
+
         Vector3 playerPosition = new Vector3(
                 App.W/2f,
                 App.H/5f,
@@ -108,6 +111,7 @@ public class MenuScreen extends LazyInitScreen {
 
         //Extension Systems
         engine.addSystem(renderingSystem);
+        engine.addSystem(new TextRenderingSystem(batch, guiCam, renderingSystem.getCamera()));
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
 
         float titleSpeed = 6f;
@@ -163,14 +167,23 @@ public class MenuScreen extends LazyInitScreen {
         swipeTutorial = engine.createEntity();
         swipeTutorial.add(TextureComponent.create(engine));
         swipeTutorial.add(AnimationComponent.create(engine)
-            .addAnimation("DEFAULT", Animations.getSwipeTutorial()));
+                .addAnimation("DEFAULT", Animations.getSwipeTutorial()));
         swipeTutorial.add(StateComponent.create(engine)
-            .set("DEFAULT")
-            .setLooping(true));
+                .set("DEFAULT")
+                .setLooping(true));
         swipeTutorial.add(TransformComponent.create(engine)
-            .setPosition(App.W/2f, 2f, Z.tutorial)
-            .setOpacity(0.5f));
+                .setPosition(App.W / 2f, 2f, Z.tutorial)
+                .setOpacity(0.5f));
         engine.addEntity(swipeTutorial);
+
+
+        Entity versionText = engine.createEntity();
+        versionText.add(TextComponent.create(engine)
+            .setFont(Gdx.graphics.getDensity() > 1f ? Assets.get48Font() : Assets.get32Font())
+            .setText("Version: 0.2.0-kfp"));
+        versionText.add(TransformComponent.create(engine)
+            .setPosition(App.W/2f, 2f, Z.gameOver));
+        engine.addEntity(versionText);
 
         engine.addEntity(plant);
     }

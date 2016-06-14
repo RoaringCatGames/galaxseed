@@ -1,0 +1,16 @@
+{
+  "spawns": [
+    {
+      "spawnTime": 1,
+      "enemyType": "ASTEROID_A",
+      "startPosition": {
+        "x": 25,
+        "y": 25
+      },
+      "speed": {
+        "x": -2,
+        "y": -3
+      }
+    }
+  ]
+}
