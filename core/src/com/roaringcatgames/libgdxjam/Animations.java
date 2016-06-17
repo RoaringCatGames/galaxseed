@@ -66,6 +66,13 @@ public class Animations {
 
     private static Animation upgrade;
 
+    private static Animation seedPod;
+    private static Animation seedPodOpening;
+    private static Animation helicopterPod;
+    private static Animation helicopterPodOpening;
+    private static Animation auraPod;
+    private static Animation auraPodOpening;
+
     private static Animation rawry;
 
     public static void init(){
@@ -125,6 +132,13 @@ public class Animations {
         shipDeath = new Animation(1f/6f, Assets.getShipDeathFrames());
 
         upgrade = new Animation(1f/6f, Assets.getUpgradeFrames());
+
+        seedPod = new Animation(1f/8f, Assets.getSeedPodFrames());
+        seedPodOpening = new Animation(1f/8f, Assets.getSeedPodOpeningFrames());
+        helicopterPod = new Animation(1f/8f, Assets.getHelicopterPodFrames());
+        helicopterPodOpening = new Animation(1f/8f, Assets.getHelicopterPodOpeningFrames());
+        auraPod = new Animation(1f/8f, Assets.getAuraPodFrames());
+        auraPodOpening = new Animation(1f/8f, Assets.getAuraPodOpeningFrames());
 
         rawry = new Animation(1f / 30f, Assets.getWreckedCat(), Animation.PlayMode.LOOP_PINGPONG);
     }
@@ -303,6 +317,30 @@ public class Animations {
 
     public static Animation getUpgrade(){
         return upgrade;
+    }
+
+    public static Animation getSeedPod() {
+        return seedPod;
+    }
+
+    public static Animation getSeedPodOpening() {
+        return seedPodOpening;
+    }
+
+    public static Animation getHelicopterPod() {
+        return helicopterPod;
+    }
+
+    public static Animation getHelicopterPodOpening() {
+        return helicopterPodOpening;
+    }
+
+    public static Animation getAuraPod() {
+        return auraPod;
+    }
+
+    public static Animation getAuraPodOpening() {
+        return auraPodOpening;
     }
 
     public static Animation getRawry(){

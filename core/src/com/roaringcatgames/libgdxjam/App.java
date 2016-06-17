@@ -18,7 +18,7 @@ public class App {
     public static final float H = 30f;
 
     public static float PAUSE_LENGTH = 1f;
-    public static float SLOW_SCALE = 0.3f; //30% speed
+    public static float SLOW_SCALE = 0.1f; //10% speed
 
     public static final Game Initialize(){
         game = new LifeInSpace();

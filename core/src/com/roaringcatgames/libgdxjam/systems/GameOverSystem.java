@@ -138,6 +138,9 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
 
 
         if (App.getState() == GameState.GAME_OVER) {
+            if(App.isSlowed()){
+                App.setSlowed(false);
+            }
             AnimationComponent ac = am.get(player);
             String state = "DEFAULT";
             String flameState;

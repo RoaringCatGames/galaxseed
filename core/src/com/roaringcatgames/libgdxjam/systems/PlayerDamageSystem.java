@@ -167,9 +167,9 @@ public class PlayerDamageSystem extends IteratingSystem {
                 break;
         }
 
-        if(ph.health > 0f) {
-            App.setSlowed(true);
-        }
+//        if(ph.health > 0f) {
+//            App.setSlowed(true);
+//        }
         PooledEngine engine = ((PooledEngine)getEngine());
         Entity explosion = engine.createEntity();
         explosion.add(ExplosionComponent.create(engine));

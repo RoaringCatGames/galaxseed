@@ -440,6 +440,26 @@ public class Assets {
         return getCachedAnimationFrames(ANI_ATLAS, "guns/dandy-particle");
     }
 
+    public static Array<? extends TextureRegion> getAuraPodFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod");
+    }
+    public static Array<? extends TextureRegion> getAuraPodOpeningFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod-open");
+    }
+    public static Array<? extends TextureRegion> getHelicopterPodFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod");
+    }
+    public static Array<? extends TextureRegion> getHelicopterPodOpeningFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod-open");
+    }
+    public static Array<? extends TextureRegion> getSeedPodFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod");
+    }
+    public static Array<? extends TextureRegion> getSeedPodOpeningFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod-open");
+    }
+
+
     /////////////
     //Life
     /////////////

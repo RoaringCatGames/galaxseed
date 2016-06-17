@@ -1,11 +1,12 @@
 package com.roaringcatgames.libgdxjam.values;
 
 /**
- * Created by barry on 3/2/16 @ 8:14 PM.
+ * Various states that our game can be in
  */
 public enum GameState {
     MENU,
     PLAYING,
+    WEAPON_SELECT,
     GAME_OVER,
     CREDITS
 }

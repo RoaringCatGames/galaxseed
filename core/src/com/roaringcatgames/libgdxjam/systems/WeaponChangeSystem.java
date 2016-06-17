@@ -4,22 +4,86 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
+import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.components.Mappers;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.WeaponType;
+import com.roaringcatgames.libgdxjam.values.GameState;
+import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
- *
+ * A system to manage swapping weapons.
  */
 public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
     private WeaponType lastWeaponType = WeaponType.POLLEN_AURA;
 
+    private Entity seedSelect;
+    private Entity helicpoterSelect;
+    private Entity auraSelect;
+
+    private OrthographicCamera cam;
+
+    public WeaponChangeSystem(OrthographicCamera cam){
+        this.cam = cam;
+    }
+
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         App.game.multiplexer.addProcessor(this);
+        PooledEngine pEngine = (PooledEngine)engine;
+
+        if(seedSelect == null){
+            seedSelect = pEngine.createEntity();
+            seedSelect.add(TransformComponent.create(pEngine)
+                .setPosition(App.W/4f, 0f, Z.weaponSelect)
+                .setHidden(true));
+            seedSelect.add(BoundsComponent.create(pEngine)
+                .setBounds(0f, 0f, 2f, 2f));
+            seedSelect.add(TextureComponent.create(pEngine));
+            seedSelect.add(StateComponent.create(pEngine).setLooping(false).set("DEFAULT"));
+            seedSelect.add(AnimationComponent.create(pEngine)
+                    .addAnimation("DEFAULT", Animations.getSeedPod())
+                    .addAnimation("SELECTED", Animations.getSeedPodOpening()));
+            pEngine.addEntity(seedSelect);
+        }
+
+        if(helicpoterSelect == null){
+            helicpoterSelect = pEngine.createEntity();
+            helicpoterSelect.add(TransformComponent.create(pEngine)
+                    .setPosition(2f * (App.W / 4f), 0f, Z.weaponSelect)
+                    .setHidden(true));
+            helicpoterSelect.add(BoundsComponent.create(pEngine)
+                    .setBounds(0f, 0f, 2f, 2f));
+            helicpoterSelect.add(TextureComponent.create(pEngine));
+            helicpoterSelect.add(StateComponent.create(pEngine).setLooping(false).set("DEFAULT"));
+            helicpoterSelect.add(AnimationComponent.create(pEngine)
+                    .addAnimation("DEFAULT", Animations.getHelicopterPod())
+                    .addAnimation("SELECTED", Animations.getHelicopterPodOpening()));
+            pEngine.addEntity(helicpoterSelect);
+        }
+
+        if(auraSelect == null){
+            auraSelect = pEngine.createEntity();
+            auraSelect.add(TransformComponent.create(pEngine)
+                    .setPosition(3f*(App.W/4f), 0f, Z.weaponSelect)
+                    .setHidden(true));
+            auraSelect.add(BoundsComponent.create(pEngine)
+                    .setBounds(0f, 0f, 2f, 2f));
+            auraSelect.add(StateComponent.create(pEngine).setLooping(false).set("DEFAULT"));
+            auraSelect.add(AnimationComponent.create(pEngine)
+                .addAnimation("DEFAULT", Animations.getAuraPod())
+                .addAnimation("SELECTED", Animations.getAuraPodOpening()));
+            auraSelect.add(TextureComponent.create(pEngine));
+            pEngine.addEntity(auraSelect);
+        }
     }
 
     @Override
@@ -62,8 +126,10 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
                     break;
             }
         }
-
     }
+
+
+    Vector3 touchPoint = new Vector3();
 
     @Override
     public boolean keyUp(int keycode) {
@@ -77,15 +143,23 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(lastWeaponType == WeaponType.POLLEN_AURA){
-            switchWeapon(WeaponType.HELICOPTER_SEEDS);
-            lastWeaponType = WeaponType.HELICOPTER_SEEDS;
-        }else if(lastWeaponType == WeaponType.HELICOPTER_SEEDS){
-            switchWeapon(WeaponType.GUN_SEEDS);
-            lastWeaponType = WeaponType.GUN_SEEDS;
-        }else{
-            switchWeapon(WeaponType.POLLEN_AURA);
-            lastWeaponType = WeaponType.POLLEN_AURA;
+
+        if(App.isSlowed()){
+            touchPoint.set(screenX, screenY, 0f);
+            this.cam.unproject(touchPoint);
+
+            BoundsComponent seedBounds = K2ComponentMappers.bounds.get(seedSelect);
+            BoundsComponent helicopterBounds = K2ComponentMappers.bounds.get(helicpoterSelect);
+            BoundsComponent auraBounds = K2ComponentMappers.bounds.get(auraSelect);
+            if(seedBounds.bounds.contains(touchPoint.x, touchPoint.y)){
+                switchWeapon(WeaponType.GUN_SEEDS);
+            }else if(helicopterBounds.bounds.contains(touchPoint.x, touchPoint.y)){
+                switchWeapon(WeaponType.HELICOPTER_SEEDS);
+            }else if(auraBounds.bounds.contains(touchPoint.x, touchPoint.y)){
+                switchWeapon(WeaponType.POLLEN_AURA);
+            }else{
+                App.setSlowed(false);
+            }
         }
 
         return false;
@@ -93,6 +167,16 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+        if(App.getState() != GameState.GAME_OVER && !App.isSlowed()) {
+            App.setSlowed(true);
+            //App.setState(GameState.WEAPON_SELECT);
+
+            //Show Weapon options
+            K2ComponentMappers.transform.get(seedSelect).setHidden(false);
+            K2ComponentMappers.transform.get(auraSelect).setHidden(false);
+            K2ComponentMappers.transform.get(helicpoterSelect).setHidden(false);
+        }
         return false;
     }
 

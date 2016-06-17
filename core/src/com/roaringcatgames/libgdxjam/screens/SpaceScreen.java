@@ -102,7 +102,7 @@
             engine.addSystem(new ShakeSystem());
             engine.addSystem(new OscillationSystem());
             engine.addSystem(new PowerUpSystem());
-            engine.addSystem(new WeaponChangeSystem());
+            engine.addSystem(new WeaponChangeSystem(cam));
             engine.addSystem(new HelicopterSeedSystem());
             engine.addSystem(new StatusSystem());
 
@@ -170,10 +170,10 @@
         protected void update(float deltaChange) {
             float deltaToApply = Math.min(deltaChange, App.MAX_DELTA_TICK);
             if(App.isSlowed()){
-                App.setTimeSpentSlow(App.getTimeSpentSlow() + deltaChange);
-                if(App.getTimeSpentSlow() >= App.PAUSE_LENGTH){
-                    App.setSlowed(false);
-                }
+//                App.setTimeSpentSlow(App.getTimeSpentSlow() + deltaChange);
+//                if(App.getTimeSpentSlow() >= App.PAUSE_LENGTH){
+//                    App.setSlowed(false);
+//                }
                 if(App.isSlowed()) {
                     deltaToApply *= App.SLOW_SCALE;
                 }
