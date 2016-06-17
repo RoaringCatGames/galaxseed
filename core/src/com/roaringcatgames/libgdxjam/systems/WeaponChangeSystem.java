@@ -5,7 +5,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.*;
@@ -21,8 +20,6 @@ import com.roaringcatgames.libgdxjam.values.Z;
  * A system to manage swapping weapons.
  */
 public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
-
-    private WeaponType lastWeaponType = WeaponType.POLLEN_AURA;
 
     private Entity seedSelect;
     private Entity helicpoterSelect;
@@ -170,9 +167,6 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
         if(App.getState() != GameState.GAME_OVER && !App.isSlowed()) {
             App.setSlowed(true);
-            //App.setState(GameState.WEAPON_SELECT);
-
-            //Show Weapon options
             K2ComponentMappers.transform.get(seedSelect).setHidden(false);
             K2ComponentMappers.transform.get(auraSelect).setHidden(false);
             K2ComponentMappers.transform.get(helicpoterSelect).setHidden(false);
