@@ -10,6 +10,7 @@ import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
+import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.Mappers;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.WeaponType;
@@ -24,6 +25,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     private Entity seedSelect;
     private Entity helicpoterSelect;
     private Entity auraSelect;
+    private Entity overlay;
 
     private OrthographicCamera cam;
 
@@ -80,6 +82,17 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
                 .addAnimation("SELECTED", Animations.getAuraPodOpening()));
             auraSelect.add(TextureComponent.create(pEngine));
             pEngine.addEntity(auraSelect);
+        }
+
+        if(overlay == null){
+            overlay = pEngine.createEntity();
+            overlay.add(TransformComponent.create(pEngine)
+                .setPosition(App.W/2f, App.H/2f, Z.weaponSelectOverlay)
+                .setHidden(true)
+                .setScale(App.PPM*App.W, App.H*App.PPM));
+            overlay.add(TextureComponent.create(pEngine)
+                .setRegion(Assets.getOverlay()));
+            pEngine.addEntity(overlay);
         }
     }
 
@@ -155,7 +168,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             }else if(auraBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.POLLEN_AURA);
             }else{
-                App.setSlowed(false);
+                toggleWeaponSelect(false);
             }
         }
 
@@ -166,12 +179,17 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         if(App.getState() != GameState.GAME_OVER && !App.isSlowed()) {
-            App.setSlowed(true);
-            K2ComponentMappers.transform.get(seedSelect).setHidden(false);
-            K2ComponentMappers.transform.get(auraSelect).setHidden(false);
-            K2ComponentMappers.transform.get(helicpoterSelect).setHidden(false);
+            toggleWeaponSelect(true);
         }
         return false;
+    }
+
+    private void toggleWeaponSelect(boolean isShowing) {
+        App.setSlowed(isShowing);
+        K2ComponentMappers.transform.get(seedSelect).setHidden(!isShowing);
+        K2ComponentMappers.transform.get(auraSelect).setHidden(!isShowing);
+        K2ComponentMappers.transform.get(helicpoterSelect).setHidden(!isShowing);
+        K2ComponentMappers.transform.get(overlay).setHidden(!isShowing);
     }
 
     @Override

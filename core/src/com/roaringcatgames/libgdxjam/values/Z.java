@@ -47,9 +47,11 @@ public class Z {
     public static final float score = 2f;
     public static final float debug = 2f;
     public static float healthLeaf = 1f;
+    public static final float weaponSelectOverlay = 2f;
     public static final float weaponSelect = 1f;
     public static final float gameOver = 0f;
     public static final float tutorial = 0f;
     public static final float message = 0f;
+
 
 }
