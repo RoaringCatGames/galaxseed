@@ -172,14 +172,6 @@ public class WeaponGeneratorUtil {
         boolean isGatling = hasGun != null && hasGun.length == 1 && hasGun[0];
 
         float lastSynchronizedFireTime = 0f;
-        if(!isGatling) {
-            for (Entity m : engine.getEntitiesFor(Family.all(GunComponent.class).get())) {
-                GunComponent gc = Mappers.gun.get(m);
-                if (gc.lastFireTime > lastSynchronizedFireTime) {
-                    lastSynchronizedFireTime = gc.lastFireTime;
-                }
-            }
-        }
 
         Animation muzzleAni = isGatling ? Animations.getGatlingMuzzle() : Animations.getMuzzle();
         float zMuzzle = isGatling ? Z.gatlingMuzzle : Z.muzzleFlash;
