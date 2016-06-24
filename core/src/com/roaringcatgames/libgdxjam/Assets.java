@@ -441,10 +441,10 @@ public class Assets {
     }
 
     public static Array<? extends TextureRegion> getAuraPodFrames(){
-        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod");
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/aura-closed");
     }
     public static Array<? extends TextureRegion> getAuraPodOpeningFrames(){
-        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod-open");
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/aura");
     }
     public static Array<? extends TextureRegion> getHelicopterPodFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod");
