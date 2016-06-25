@@ -43,10 +43,12 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         App.game.multiplexer.addProcessor(this);
         PooledEngine pEngine = (PooledEngine)engine;
 
+        float xPos = App.W/4f;
+        float yPos = 1.5f;
         if(seedSelect == null){
             seedSelect = pEngine.createEntity();
             seedSelect.add(TransformComponent.create(pEngine)
-                .setPosition(App.W/4f, 0f, Z.weaponSelect)
+                .setPosition(xPos, yPos, Z.weaponSelect)
                 .setHidden(true));
             seedSelect.add(BoundsComponent.create(pEngine)
                 .setBounds(0f, 0f, 2f, 2f));
@@ -57,19 +59,20 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             pEngine.addEntity(seedSelect);
 
             seedLevel = pEngine.createEntity();
-            seedSelect.add(TransformComponent.create(pEngine)
-                .setPosition(App.W/4f, 0f, Z.weaponSelect)
+            seedLevel.add(TransformComponent.create(pEngine)
+                .setPosition(xPos, yPos, Z.weaponSelect)
                 .setHidden(true));
-            seedSelect.add(TextureComponent.create(pEngine)
+            seedLevel.add(TextureComponent.create(pEngine)
                 .setRegion(Assets.getSeedLevel(1)));
-            pEngine.addEntity(seedSelect);
+            pEngine.addEntity(seedLevel);
 
         }
 
         if(helicpoterSelect == null){
+            xPos = 2f * (App.W/4f);
             helicpoterSelect = pEngine.createEntity();
             helicpoterSelect.add(TransformComponent.create(pEngine)
-                    .setPosition(2f * (App.W / 4f), 0f, Z.weaponSelect)
+                    .setPosition(xPos, yPos, Z.weaponSelect)
                     .setHidden(true));
             helicpoterSelect.add(BoundsComponent.create(pEngine)
                     .setBounds(0f, 0f, 2f, 2f));
@@ -82,7 +85,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
             helicopterLevel = pEngine.createEntity();
             helicopterLevel.add(TransformComponent.create(pEngine)
-                    .setPosition(App.W / 4f, 0f, Z.weaponSelect)
+                    .setPosition(xPos, yPos, Z.weaponSelect)
                     .setHidden(true));
             helicopterLevel.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getHelicopterLevel(1)));
@@ -90,9 +93,10 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         }
 
         if(auraSelect == null){
+            xPos = 3f*(App.W/4f);
             auraSelect = pEngine.createEntity();
             auraSelect.add(TransformComponent.create(pEngine)
-                    .setPosition(3f*(App.W/4f), 0f, Z.weaponSelect)
+                    .setPosition(xPos, yPos, Z.weaponSelect)
                     .setHidden(true));
             auraSelect.add(BoundsComponent.create(pEngine)
                     .setBounds(0f, 0f, 2f, 2f));
@@ -105,7 +109,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
             auraLevel = pEngine.createEntity();
             auraLevel.add(TransformComponent.create(pEngine)
-                    .setPosition(App.W / 4f, 0f, Z.weaponSelect)
+                    .setPosition(xPos, yPos, Z.weaponSelect)
                     .setHidden(true));
             auraLevel.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getAuraLevel(1)));
@@ -151,18 +155,17 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             PooledEngine engine = (PooledEngine) getEngine();
             switch (wt) {
                 case POLLEN_AURA:
-                    K2ComponentMappers.state.get(auraSelect).set("SELECTED");
                     WeaponGeneratorUtil.generateAura(player, engine);
                     break;
                 case GUN_SEEDS:
-                    K2ComponentMappers.state.get(seedSelect).set("SELECTED");
                     WeaponGeneratorUtil.generateSeedGuns(player, engine);
                     break;
                 case HELICOPTER_SEEDS:
-                    K2ComponentMappers.state.get(helicpoterSelect).set("SELECTED");
                     WeaponGeneratorUtil.generateHelicopterGuns(player, engine);
                     break;
             }
+
+            toggleWeaponSelect(true, wt);
         }
     }
 
@@ -241,8 +244,12 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     }
 
     private void toggleWeaponEntityData(Entity selector, boolean isShowing, boolean isAnimated){
+
         K2ComponentMappers.transform.get(selector).setHidden(!isShowing);
         K2ComponentMappers.animation.get(selector).setPaused(!isAnimated);
+        if(!isAnimated){
+            K2ComponentMappers.state.get(selector).time = 0f;
+        }
     }
 
     @Override

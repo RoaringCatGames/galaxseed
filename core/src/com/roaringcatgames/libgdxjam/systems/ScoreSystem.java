@@ -10,12 +10,13 @@ import com.roaringcatgames.kitten2d.ashley.components.ParticleEmitterComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TextComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
+import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.ScoreComponent;
 import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
- * Created by barry on 3/4/16 @ 12:57 AM.
+ * System responsible for updating score
  */
 public class ScoreSystem extends IteratingSystem {
 
@@ -39,12 +40,13 @@ public class ScoreSystem extends IteratingSystem {
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         PooledEngine pe = (PooledEngine)engine;
+        float yPos = App.H - 0.5f;
         animationFrames = Assets.getTitleTreeFrames();
         plantGrowth = pe.createEntity();
         plantGrowth.add(TextureComponent.create(pe)
             .setRegion(animationFrames.get(0)));
         plantGrowth.add(TransformComponent.create(pe)
-                .setPosition(1f, 2f, Z.score)
+                .setPosition(1f, yPos, Z.score)
                 .setScale(0.5f, 0.5f));
         engine.addEntity(plantGrowth);
 
@@ -54,7 +56,7 @@ public class ScoreSystem extends IteratingSystem {
                 .setText("Score: 00000")
                 .setFont(fnt));
         scoreCard.add(TransformComponent.create(pe)
-                .setPosition(5f, 2f, Z.score));
+                .setPosition(5f, yPos, Z.score));
         scoreCard.add(ScoreComponent.create(pe)
                 .setScore(0));
         engine.addEntity(scoreCard);

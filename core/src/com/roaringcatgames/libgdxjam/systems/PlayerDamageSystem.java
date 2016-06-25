@@ -23,10 +23,7 @@ import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
-import com.roaringcatgames.libgdxjam.values.Damage;
-import com.roaringcatgames.libgdxjam.values.Shakes;
-import com.roaringcatgames.libgdxjam.values.Volume;
-import com.roaringcatgames.libgdxjam.values.Z;
+import com.roaringcatgames.libgdxjam.values.*;
 
 /**
  * Created by barry on 1/12/16 @ 7:59 PM.
@@ -87,6 +84,10 @@ public class PlayerDamageSystem extends IteratingSystem {
                 ProjectileComponent pp = pm.get(proj);
                 processCollision(pt, ph, proj, pp);
             }
+        }
+
+        if (ph.health <= 0f && App.getState() != GameState.GAME_OVER) {
+            App.setState(GameState.GAME_OVER);
         }
 
         projectiles.clear();

@@ -105,6 +105,7 @@
             engine.addSystem(new WeaponChangeSystem(cam));
             engine.addSystem(new HelicopterSeedSystem());
             engine.addSystem(new StatusSystem());
+            //engine.addSystem(new PlayerHealthSystem(cam));
 
 
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
@@ -130,11 +131,11 @@
             //Extension Systems
             engine.addSystem(renderingSystem);
             engine.addSystem(textRenderingSystem);
-            engine.addSystem(new PlayerHealthSystem(cam));
+
             PathFollowSystem pathFollowSystem = new PathFollowSystem();
             engine.addSystem(pathFollowSystem);
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
-            engine.addSystem(new FPSSystem(Assets.get48Font(), new Vector2(App.W - 3f, 3f), 10));
+            engine.addSystem(new FPSSystem(Assets.get48Font(), new Vector2(App.W - 3f, App.H - 3f), 10));
             App.game.multiplexer.addProcessor(this);
 
             playingOnlySystems.add(movementSystem);
@@ -173,6 +174,8 @@
                 if(App.isSlowed()) {
                     deltaToApply *= App.SLOW_SCALE;
                 }
+                music.getPosition();
+
             }
             engine.update(deltaToApply);
 

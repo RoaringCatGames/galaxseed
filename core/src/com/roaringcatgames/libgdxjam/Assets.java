@@ -450,13 +450,13 @@ public class Assets {
         return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod");
     }
     public static TextureAtlas.AtlasRegion getHelicopterLevel(int lvl){
-        return getCachedRegion(ANI_ATLAS, "weapon-select/helicopter-lvl-" + lvl);
+        return getCachedRegion(ANI_ATLAS, "weapon-select/aura-lvl-" + lvl);
     }
     public static Array<? extends TextureRegion> getSeedPodFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/pod");
     }
     public static TextureAtlas.AtlasRegion getSeedLevel(int lvl){
-        return getCachedRegion(ANI_ATLAS, "weapon-select/seed-lvl-" + lvl);
+        return getCachedRegion(ANI_ATLAS, "weapon-select/aura-lvl-" + lvl);
     }
 
     public static TextureAtlas.AtlasRegion getOverlay(){
@@ -589,7 +589,7 @@ public class Assets {
     private static final String LOADING_ATLAS = "animations/loading.atlas";
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
-    private static final String BG_MUSIC = "music/nebulae.mp3";//bgmusic.mp3";
+    private static final String BG_MUSIC = "music/nebulae-slower-70.mp3";//bgmusic.mp3";
     private static final String MENU_MUISC = "music/title.mp3";
     private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
     private static final String FIRING_SFX = "sfx/seed-fire.mp3";
