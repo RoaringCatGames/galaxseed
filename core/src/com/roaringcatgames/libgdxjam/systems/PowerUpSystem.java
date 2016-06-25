@@ -185,7 +185,7 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
                     .setShouldFade(true)
                     .setAngleRange(150f, 210f)
                     .setShouldLoop(true)
-                    .setSpawnRate(20f)
+                    .setSpawnRate(2f)
                     .setParticleImages(Assets.getGatlingSmokeParticles())
                     .setParticleLifespans(0.2f, 0.4f)
                     .setParticleMinMaxScale(0.3f, 0.7f)

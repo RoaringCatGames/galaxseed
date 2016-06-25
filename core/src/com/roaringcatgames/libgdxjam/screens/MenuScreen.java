@@ -244,7 +244,7 @@ public class MenuScreen extends LazyInitScreen {
                         .setParticleImages(Assets.getLeafFrames())
                         .setShouldFade(true)
                         .setAngleRange(-110f, 110f)
-                        .setSpawnRate(60f)
+                        .setSpawnRate(2f)
                         .setParticleMinMaxScale(0.5f, 0.5f)
                         .setSpeed(2f, 4f)
                         .setZIndex(Z.titlePlantLeaves)

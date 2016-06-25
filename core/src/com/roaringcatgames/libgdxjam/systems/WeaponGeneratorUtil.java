@@ -235,7 +235,7 @@ public class WeaponGeneratorUtil {
                     .setShouldFade(true)
                     .setAngleRange(150f, 210f)
                     .setShouldLoop(true)
-                    .setSpawnRate(20f)
+                    .setSpawnRate(3f)
                     .setParticleImages(Assets.getGatlingSmokeParticles())
                     .setParticleLifespans(0.2f, 0.4f)
                     .setParticleMinMaxScale(0.3f, 0.7f)
@@ -307,7 +307,7 @@ public class WeaponGeneratorUtil {
                 .setAngleRange(0f, 360f)
                 .setParticleMinMaxScale(0.5f, 1f)
                 .setShouldFade(true)
-                .setSpawnRate(15f));
+                .setSpawnRate(2f));
         }
 
         engine.addEntity(aura);

@@ -110,7 +110,7 @@ public class MenuStartSystem extends IteratingSystem{
                 .setSpeed(15f, 20f)
                 .setZIndex(Z.leaves)
                 .setAngleRange(angle -15f, angle + 15f)
-                .setSpawnRate(1000f)
+                .setSpawnRate(17f)
                 .setParticleLifespans(0.3f, 0.5f));
         }
 
@@ -153,7 +153,7 @@ public class MenuStartSystem extends IteratingSystem{
         plant.add(ParticleEmitterComponent.create(engine)
                 .setParticleImages(Assets.getLeafFrames())
                 .setParticleLifespans(0.1f, 0.2f)
-                .setSpawnRate(100f)
+                .setSpawnRate(1.6f)
                 .setAngleRange(0f, 360f)
                 .setSpeed(2f, 3f)
                 .setShouldFade(true)

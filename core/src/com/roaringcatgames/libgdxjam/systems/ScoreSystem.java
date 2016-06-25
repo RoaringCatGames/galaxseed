@@ -81,7 +81,7 @@ public class ScoreSystem extends IteratingSystem {
             plantGrowth.add(ParticleEmitterComponent.create((PooledEngine) getEngine())
                 .setParticleLifespans(0.3f, 0.5f)
                 .setShouldFade(true)
-                .setSpawnRate(10f*(growthPosition))
+                .setSpawnRate(1f*(growthPosition))
                 .setAngleRange(-90f, 90f)
                 .setParticleImages(Assets.getLeafFrames())
                 .setDuration(0.3f)

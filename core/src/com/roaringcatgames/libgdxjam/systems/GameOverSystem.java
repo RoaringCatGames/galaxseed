@@ -191,7 +191,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                         .setRotationSpeed(45f));
 
                 rawry.add(ParticleEmitterComponent.create(engine)
-                        .setSpawnRate(100f)
+                        .setSpawnRate(1.6f)
                         .setSpeed(2f, 3f)
                         .setParticleLifespans(0.3f, 0.5f)
                         .setAngleRange(120f, 180f)
@@ -219,7 +219,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                                     .target(shipPartEndPositions.get(i).x, shipPartEndPositions.get(i).y)
                                     .ease(TweenEquations.easeOutExpo)));
                     shipPart.add(ParticleEmitterComponent.create(engine)
-                            .setSpawnRate(100f)
+                            .setSpawnRate(1.6f)
                             .setSpeed(2f, 3f)
                             .setParticleLifespans(0.3f, 0.5f)
                             .setAngleRange(120f, 180f)
