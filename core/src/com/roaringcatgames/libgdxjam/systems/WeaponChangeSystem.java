@@ -44,7 +44,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         PooledEngine pEngine = (PooledEngine)engine;
 
         float xPos = App.W/4f;
-        float yPos = 1.5f;
+        float yPos = 2f;
         if(seedSelect == null){
             seedSelect = pEngine.createEntity();
             seedSelect.add(TransformComponent.create(pEngine)
@@ -201,6 +201,8 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             }else{
                 toggleWeaponSelect(false, WeaponType.GUN_SEEDS);
             }
+
+            return true;
         }
 
         return false;
