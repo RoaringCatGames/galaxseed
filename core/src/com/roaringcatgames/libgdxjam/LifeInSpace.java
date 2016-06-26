@@ -1,17 +1,18 @@
 package com.roaringcatgames.libgdxjam;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.libgdxjam.screens.MenuScreen;
 import com.roaringcatgames.libgdxjam.screens.SpaceScreen;
 import com.roaringcatgames.libgdxjam.screens.SplashScreen;
 
-public class LifeInSpace extends Game {
+public class LifeInSpace extends Game implements IGameProcessor {
 
     public InputMultiplexer multiplexer = new InputMultiplexer();
     public AssetManager am;
@@ -19,13 +20,26 @@ public class LifeInSpace extends Game {
     private SpriteBatch batch;
     private ScreenDispatcher screenDispatcher;
 
+    private OrthographicCamera cam;
+    private OrthographicCamera guiCam;
+    private Viewport viewport;
+
     @Override
     public void create () {
         batch = new SpriteBatch();
-        screenDispatcher = new ScreenDispatcher(batch);
-        Screen splashScreen = new SplashScreen(batch, screenDispatcher);
-        Screen gameScreen = new MenuScreen(batch, screenDispatcher);
-        Screen spaceScreen = new SpaceScreen(batch, screenDispatcher);
+        cam = new OrthographicCamera(App.W, App.H);
+        viewport = new FitViewport(App.W, App.H, cam);
+        viewport.apply();
+        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
+
+        guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        guiCam.position.set(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, 0f);
+
+        screenDispatcher = new ScreenDispatcher(this);
+        Screen splashScreen = new SplashScreen(this, screenDispatcher);
+        Screen gameScreen = new MenuScreen(this, screenDispatcher);
+        Screen spaceScreen = new SpaceScreen(this, screenDispatcher);
 
         screenDispatcher.AddScreen(splashScreen);
         screenDispatcher.AddScreen(gameScreen);
@@ -54,5 +68,54 @@ public class LifeInSpace extends Game {
         }
 
         super.render();
+    }
+
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        if(viewport != null) {
+            viewport.update(width, height);
+            cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
+        }
+    }
+
+    /**
+     * IGame processor implementations
+     */
+
+    @Override
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+
+    @Override
+    public void switchScreens(String screenName) {
+
+    }
+
+    @Override
+    public void addInputProcessor(InputProcessor processor) {
+        this.multiplexer.addProcessor(processor);
+    }
+
+    @Override
+    public void removeInputProcessor(InputProcessor processor) {
+        this.multiplexer.removeProcessor(processor);
+    }
+
+    @Override
+    public OrthographicCamera getCamera() {
+        return cam;
+    }
+
+    @Override
+    public OrthographicCamera getGUICamera() {
+        return guiCam;
+    }
+
+    @Override
+    public Viewport getViewport() {
+        return viewport;
     }
 }

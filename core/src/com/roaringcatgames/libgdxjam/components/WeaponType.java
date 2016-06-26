@@ -6,5 +6,6 @@ package com.roaringcatgames.libgdxjam.components;
 public enum WeaponType {
     GUN_SEEDS,
     HELICOPTER_SEEDS,
-    POLLEN_AURA
+    POLLEN_AURA,
+    UNSELECTED
 }

@@ -16,6 +16,7 @@
     import com.badlogic.gdx.utils.viewport.FitViewport;
     import com.badlogic.gdx.utils.viewport.Viewport;
     import com.roaringcatgames.kitten2d.ashley.systems.*;
+    import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
     import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
     import com.roaringcatgames.libgdxjam.App;
     import com.roaringcatgames.libgdxjam.Assets;
@@ -31,18 +32,16 @@
      */
     public class SpaceScreen extends LazyInitScreen implements InputProcessor {
 
+        private IGameProcessor game;
         private IScreenDispatcher dispatcher;
-        private SpriteBatch batch;
         private PooledEngine engine;
-        private OrthographicCamera cam;
-        private Viewport viewport;
         private Music music;
 
         private Array<EntitySystem> playingOnlySystems;
 
-        public SpaceScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
+        public SpaceScreen(IGameProcessor game, IScreenDispatcher dispatcher) {
             super();
-            this.batch = batch;
+            this.game = game;
             this.dispatcher = dispatcher;
             this.playingOnlySystems = new Array<>();
         }
@@ -52,25 +51,17 @@
         protected void init() {
             engine = new PooledEngine();
 
-            RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
-            cam = renderingSystem.getCamera();
-            viewport = new FitViewport(20f, 30f, cam);
-            viewport.apply();
-            viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
+            RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM);
 
-            OrthographicCamera guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            guiCam.position.set(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, 0f);
-
-            TextRenderingSystem textRenderingSystem = new TextRenderingSystem(batch, guiCam, cam);
+            TextRenderingSystem textRenderingSystem = new TextRenderingSystem(game.getBatch(), game.getGUICamera(), game.getCamera());
 
             Vector3 playerPosition = new Vector3(
                     App.playerLastPosition.x,
                     App.playerLastPosition.y,
                     Z.player);
 
-            Gdx.app.log("Menu Screen", "Cam Pos: " + cam.position.x + " | " +
-                    cam.position.y + " Cam W/H: " + cam.viewportWidth + "/" + cam.viewportHeight);
+            Gdx.app.log("Menu Screen", "Cam Pos: " + game.getCamera().position.x + " | " +
+                    game.getCamera().position.y + " Cam W/H: " + game.getCamera().viewportWidth + "/" + game.getCamera().viewportHeight);
 
 
             //AshleyExtensions Systems
@@ -84,9 +75,9 @@
 
             //Custom Systems
             Vector2 minBounds = new Vector2(0f, 0f);
-            Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
+            Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
             engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-0.25f), maxBounds.cpy().scl(1.25f)));
-            engine.addSystem(new PlayerSystem(playerPosition, 0.5f, cam, WeaponType.POLLEN_AURA));
+            engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game.getCamera(), WeaponType.POLLEN_AURA));
             FiringSystem firingSystem = new FiringSystem();
             engine.addSystem(firingSystem);
             EnemySpawnSystem enemySpawnSystem = new EnemySpawnSystem();
@@ -102,7 +93,7 @@
             engine.addSystem(new ShakeSystem());
             engine.addSystem(new OscillationSystem());
             engine.addSystem(new PowerUpSystem());
-            engine.addSystem(new WeaponChangeSystem(cam));
+            engine.addSystem(new WeaponChangeSystem(game));
             engine.addSystem(new HelicopterSeedSystem());
             engine.addSystem(new StatusSystem());
             //engine.addSystem(new PlayerHealthSystem(cam));
@@ -120,7 +111,7 @@
                     GunComponent.class,
                     WeaponDecorationComponent.class).get()));
 
-            GameOverSystem gameOverSystem = new GameOverSystem(cam, dispatcher);
+            GameOverSystem gameOverSystem = new GameOverSystem(game.getCamera(), dispatcher);
             gameOverSystem.setProcessing(false);
             engine.addSystem(gameOverSystem);
             engine.addSystem(new FadingSystem());
@@ -180,6 +171,7 @@
             engine.update(deltaToApply);
 
             if(App.getState() != lastState){
+                GameState prevState = lastState;
                 lastState = App.getState();
                 if(lastState == GameState.GAME_OVER) {
                     music.stop();
@@ -189,7 +181,7 @@
                             es.setProcessing(false);
                         }
                     }
-                }else if(lastState == GameState.PLAYING){
+                }else if(lastState == GameState.PLAYING && prevState != GameState.WEAPON_SELECT){
                     music.play();
                     engine.getSystem(GameOverSystem.class).setProcessing(false);
                     for (EntitySystem es : playingOnlySystems) {
@@ -197,18 +189,16 @@
                             es.setProcessing(true);
                         }
                     }
+                }else if(prevState == GameState.WEAPON_SELECT && lastState == GameState.PLAYING){
+                    Gdx.app.log("SpaceScreen", "WEAPON_SELECT => PLAYING");
+                    App.setSlowed(false);
+                } if(lastState == GameState.WEAPON_SELECT){
+                    App.setSlowed(true);
+                    engine.getSystem(WeaponChangeSystem.class).showWeaponSelect();
                 }
             }
         }
 
-        @Override
-        public void resize(int width, int height) {
-            super.resize(width, height);
-            if(viewport != null) {
-                viewport.update(width, height);
-                cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
-            }
-        }
 
         /**************************
          * Input Processor Methods
@@ -260,9 +250,7 @@
 
         @Override
         public boolean scrolled(int amount) {
-            cam.zoom += amount;
+            game.getCamera().zoom += amount;
             return false;
         }
-
-
     }
