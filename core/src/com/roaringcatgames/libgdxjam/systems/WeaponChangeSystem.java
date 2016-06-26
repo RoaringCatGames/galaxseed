@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
@@ -32,10 +33,10 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     private Entity auraLevel;
     private Entity overlay;
 
-    private OrthographicCamera cam;
+    private IGameProcessor game;
 
-    public WeaponChangeSystem(OrthographicCamera cam){
-        this.cam = cam;
+    public WeaponChangeSystem(IGameProcessor game){
+        this.game = game;
     }
 
     @Override
@@ -234,7 +235,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         if(App.getState() == GameState.WEAPON_SELECT){//App.isSlowed()){
 
             touchPoint.set(screenX, screenY, 0f);
-            this.cam.unproject(touchPoint);
+            game.getViewport().unproject(touchPoint);
             PlayerComponent pc = getPlayerComponent();
 
             BoundsComponent seedBounds = K2ComponentMappers.bounds.get(seedSelect);

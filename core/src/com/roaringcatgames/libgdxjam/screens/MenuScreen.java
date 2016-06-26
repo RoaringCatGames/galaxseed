@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
+import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
@@ -36,7 +37,7 @@ import com.roaringcatgames.libgdxjam.values.Z;
 public class MenuScreen extends LazyInitScreen {
 
     private IScreenDispatcher dispatcher;
-    private SpriteBatch batch;
+    private IGameProcessor game;
     private PooledEngine engine;
     private OrthographicCamera cam;
     private Viewport viewport;
@@ -45,9 +46,9 @@ public class MenuScreen extends LazyInitScreen {
     private Entity plant, p, l, a, y, swipeTutorial;
     private ObjectMap<String, Boolean> readyMap = new ObjectMap<>();
 
-    public MenuScreen(SpriteBatch batch, IScreenDispatcher dispatcher) {
+    public MenuScreen(IGameProcessor game, IScreenDispatcher dispatcher) {
         super();
-        this.batch = batch;
+        this.game = game;
         this.dispatcher = dispatcher;
         readyMap.put("p", false);
         readyMap.put("l", false);
@@ -60,7 +61,7 @@ public class MenuScreen extends LazyInitScreen {
     protected void init() {
         engine = new PooledEngine();
 
-        RenderingSystem renderingSystem = new RenderingSystem(batch, App.PPM);
+        RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM);
         cam = renderingSystem.getCamera();
         viewport = new FitViewport(App.W, App.H, cam);//new ExtendViewport(App.W, App.H, App.W*2f, App.H*2f, cam);
         viewport.apply();
@@ -111,7 +112,7 @@ public class MenuScreen extends LazyInitScreen {
 
         //Extension Systems
         engine.addSystem(renderingSystem);
-        engine.addSystem(new TextRenderingSystem(batch, guiCam, renderingSystem.getCamera()));
+        engine.addSystem(new TextRenderingSystem(game.getBatch(), guiCam, renderingSystem.getCamera()));
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
 
         float titleSpeed = 6f;

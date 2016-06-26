@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
+import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
@@ -25,17 +26,17 @@ import java.util.Random;
  * Created by barry on 12/22/15 @ 7:27 PM.
  */
 public class SplashScreen extends LazyInitScreen {
-    SpriteBatch batch;
+    private IGameProcessor game;
     private IScreenDispatcher dispatcher;
     private PooledEngine engine;
 
     private float minSplashSuggestions = 6f;
     private float elapsedTime = 0f;
-    private OrthographicCamera cam;
+    //private OrthographicCamera cam;
     private Viewport viewport;
 
-    public SplashScreen(SpriteBatch batch, IScreenDispatcher dispatcher){
-        this.batch = batch;
+    public SplashScreen(IGameProcessor game, IScreenDispatcher dispatcher){
+        this.game = game;
         this.dispatcher = dispatcher;
     }
 
@@ -43,18 +44,18 @@ public class SplashScreen extends LazyInitScreen {
     protected void init() {
 
         engine = new PooledEngine();
-        RenderingSystem render = new RenderingSystem(batch, App.PPM);
-        cam = render.getCamera();
-        viewport = new FitViewport(20f, 30f, cam);
-        viewport.apply();
-        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
+        RenderingSystem render = new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM);
+//        cam = render.getCamera();
+//        viewport = new FitViewport(20f, 30f, cam);
+//        viewport.apply();
+//        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
 
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(render);
         Vector2 minBounds = new Vector2(0f, 0f);
-        Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
+        Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false, false));
         engine.addSystem(new MovementSystem());
