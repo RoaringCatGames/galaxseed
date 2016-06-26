@@ -86,8 +86,19 @@ public class PlayerDamageSystem extends IteratingSystem {
             }
         }
 
+
         if (ph.health <= 0f && App.getState() != GameState.GAME_OVER) {
-            App.setState(GameState.GAME_OVER);
+            PlayerComponent pc = Mappers.player.get(player);
+            App.toggleWeapon(pc.weaponType, false);
+            pc.weaponType = WeaponType.UNSELECTED;
+            WeaponGeneratorUtil.clearWeapon(getEngine());
+            if(App.hasAvailableWeapons()){
+                //DO SOMETHING TO SWITCH WEAPONS
+                App.setState(GameState.WEAPON_SELECT);
+                ph.health = Health.Player;
+            }else {
+                App.setState(GameState.GAME_OVER);
+            }
         }
 
         projectiles.clear();

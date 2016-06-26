@@ -136,8 +136,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
         StateComponent sc = sm.get(player);
         TransformComponent tc = K2ComponentMappers.transform.get(player);
 
-
-        if (App.getState() == GameState.GAME_OVER) {
+        if(App.getState() == GameState.GAME_OVER) {
             if(App.isSlowed()){
                 App.setSlowed(false);
             }

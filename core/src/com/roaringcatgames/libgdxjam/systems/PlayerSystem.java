@@ -177,7 +177,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         String flameState;
         boolean isLooping = true;
 
-        if(App.getState() != GameState.GAME_OVER){
+        if(App.getState() == GameState.PLAYING || App.getState() == GameState.MENU){
             tc.position.add(positionShift.add(currentPositionChange).scl(enhancedMovementScale));
 
             /**********************

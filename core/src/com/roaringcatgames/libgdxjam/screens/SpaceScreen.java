@@ -180,6 +180,7 @@
             engine.update(deltaToApply);
 
             if(App.getState() != lastState){
+                GameState prevState = lastState;
                 lastState = App.getState();
                 if(lastState == GameState.GAME_OVER) {
                     music.stop();
@@ -189,7 +190,7 @@
                             es.setProcessing(false);
                         }
                     }
-                }else if(lastState == GameState.PLAYING){
+                }else if(lastState == GameState.PLAYING && prevState != GameState.WEAPON_SELECT){
                     music.play();
                     engine.getSystem(GameOverSystem.class).setProcessing(false);
                     for (EntitySystem es : playingOnlySystems) {
@@ -197,6 +198,12 @@
                             es.setProcessing(true);
                         }
                     }
+                }else if(prevState == GameState.WEAPON_SELECT && lastState == GameState.PLAYING){
+                    Gdx.app.log("SpaceScreen", "WEAPON_SELECT => PLAYING");
+                    App.setSlowed(false);
+                } if(lastState == GameState.WEAPON_SELECT){
+                    App.setSlowed(true);
+                    engine.getSystem(WeaponChangeSystem.class).showWeaponSelect();
                 }
             }
         }
@@ -263,6 +270,4 @@
             cam.zoom += amount;
             return false;
         }
-
-
     }

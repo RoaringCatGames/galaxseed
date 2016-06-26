@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.roaringcatgames.libgdxjam.components.WeaponLevel;
+import com.roaringcatgames.libgdxjam.components.WeaponState;
 import com.roaringcatgames.libgdxjam.components.WeaponType;
 import com.roaringcatgames.libgdxjam.values.GameState;
 
@@ -44,12 +45,12 @@ public class App {
     }
 
 
-    private static ObjectMap<WeaponType, WeaponLevel> currentWeaponLevels = new ObjectMap<>();
+    private static ObjectMap<WeaponType, WeaponState> currentWeaponLevels = new ObjectMap<>();
 
     static {
-        currentWeaponLevels.put(WeaponType.GUN_SEEDS, WeaponLevel.LEVEL_1);
-        currentWeaponLevels.put(WeaponType.POLLEN_AURA, WeaponLevel.LEVEL_1);
-        currentWeaponLevels.put(WeaponType.HELICOPTER_SEEDS, WeaponLevel.LEVEL_1);
+        currentWeaponLevels.put(WeaponType.GUN_SEEDS, new WeaponState(WeaponLevel.LEVEL_1, false));
+        currentWeaponLevels.put(WeaponType.POLLEN_AURA, new WeaponState(WeaponLevel.LEVEL_1, false));
+        currentWeaponLevels.put(WeaponType.HELICOPTER_SEEDS, new WeaponState(WeaponLevel.LEVEL_1, false));
     }
 
     public static void setTimeSpentSlow(float tss){
@@ -75,9 +76,27 @@ public class App {
     }
 
     public static WeaponLevel getCurrentWeaponLevel(WeaponType wt){
-        return currentWeaponLevels.get(wt);
+        return currentWeaponLevels.get(wt).level;
     }
     public static void setCurrentWeaponLevel(WeaponType wt, WeaponLevel lvl){
-        currentWeaponLevels.put(wt, lvl);
+        currentWeaponLevels.get(wt).level = lvl;
+    }
+
+    public static void toggleWeapon(WeaponType wt, boolean isEnabled){
+        currentWeaponLevels.get(wt).isDisabled = !isEnabled;
+    }
+
+    public static boolean isWeaponEnabled(WeaponType wt){
+        return !currentWeaponLevels.get(wt).isDisabled;
+    }
+
+    public static boolean hasAvailableWeapons(){
+        boolean isAvailable = false;
+        for(WeaponType key:currentWeaponLevels.keys()){
+            if(!currentWeaponLevels.get(key).isDisabled){
+                isAvailable = true;
+            }
+        }
+        return isAvailable;
     }
 }
