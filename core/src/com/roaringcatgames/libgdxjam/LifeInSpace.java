@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.libgdxjam.screens.MenuScreen;
+import com.roaringcatgames.libgdxjam.screens.OptionScreen;
 import com.roaringcatgames.libgdxjam.screens.SpaceScreen;
 import com.roaringcatgames.libgdxjam.screens.SplashScreen;
 
@@ -18,7 +19,6 @@ public class LifeInSpace extends Game implements IGameProcessor {
     public AssetManager am;
 
     private SpriteBatch batch;
-    private ScreenDispatcher screenDispatcher;
 
     private OrthographicCamera cam;
     private OrthographicCamera guiCam;
@@ -34,21 +34,14 @@ public class LifeInSpace extends Game implements IGameProcessor {
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
 
         guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        guiCam.position.set(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, 0f);
+        guiCam.position.set(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0f);
 
-        screenDispatcher = new ScreenDispatcher(this);
-        Screen splashScreen = new SplashScreen(this, screenDispatcher);
-        Screen gameScreen = new MenuScreen(this, screenDispatcher);
-        Screen spaceScreen = new SpaceScreen(this, screenDispatcher);
 
-        screenDispatcher.AddScreen(splashScreen);
-        screenDispatcher.AddScreen(gameScreen);
-        screenDispatcher.AddScreen(spaceScreen);
 
         //NOTE: We force finishLoading of the Loading Frames
         //  so we can count on it.
         am = Assets.load();
-        setScreen(splashScreen);
+        setScreen(new SplashScreen(this));
         Gdx.input.setInputProcessor(multiplexer);
     }
 
@@ -59,13 +52,6 @@ public class LifeInSpace extends Game implements IGameProcessor {
         float b = 27/255f;
         Gdx.gl.glClearColor(r, g, b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
-        Screen nextScreen = screenDispatcher.getNextScreen();
-        if(nextScreen != getScreen()){
-            multiplexer.clear();
-            setScreen(nextScreen);
-        }
 
         super.render();
     }
@@ -91,7 +77,20 @@ public class LifeInSpace extends Game implements IGameProcessor {
 
     @Override
     public void switchScreens(String screenName) {
-
+        switch(screenName){
+            case "OPTIONS":
+                multiplexer.clear();
+                this.setScreen(new OptionScreen(this));
+                break;
+            case "MENU":
+                multiplexer.clear();
+                this.setScreen(new MenuScreen(this));
+                break;
+            case "GAME":
+                multiplexer.clear();
+                this.setScreen(new SpaceScreen(this));
+                break;
+        }
     }
 
     @Override

@@ -253,8 +253,6 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
                 WeaponType currentType = pc.weaponType;
                 toggleWeaponSelect(false, currentType);
             }
-
-            return true;
         }
 
         return false;

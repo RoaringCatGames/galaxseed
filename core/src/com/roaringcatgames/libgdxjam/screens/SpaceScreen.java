@@ -33,16 +33,14 @@
     public class SpaceScreen extends LazyInitScreen implements InputProcessor {
 
         private IGameProcessor game;
-        private IScreenDispatcher dispatcher;
         private PooledEngine engine;
         private Music music;
 
         private Array<EntitySystem> playingOnlySystems;
 
-        public SpaceScreen(IGameProcessor game, IScreenDispatcher dispatcher) {
+        public SpaceScreen(IGameProcessor game) {
             super();
             this.game = game;
-            this.dispatcher = dispatcher;
             this.playingOnlySystems = new Array<>();
         }
 
@@ -111,7 +109,7 @@
                     GunComponent.class,
                     WeaponDecorationComponent.class).get()));
 
-            GameOverSystem gameOverSystem = new GameOverSystem(game.getCamera(), dispatcher);
+            GameOverSystem gameOverSystem = new GameOverSystem(game);
             gameOverSystem.setProcessing(false);
             engine.addSystem(gameOverSystem);
             engine.addSystem(new FadingSystem());

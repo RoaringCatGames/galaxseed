@@ -36,24 +36,24 @@ import com.roaringcatgames.libgdxjam.values.Z;
  */
 public class MenuScreen extends LazyInitScreen {
 
-    private IScreenDispatcher dispatcher;
+    private static final float MAX_FLY_TIME = 1.25f;
+
     private IGameProcessor game;
     private PooledEngine engine;
-    private OrthographicCamera cam;
-    private Viewport viewport;
 
     private Music menuSong;
-    private Entity plant, p, l, a, y, swipeTutorial;
+    private Entity plant, playTarget, optionsTarget, p, l, a, y, swipeTutorial;
     private ObjectMap<String, Boolean> readyMap = new ObjectMap<>();
 
-    public MenuScreen(IGameProcessor game, IScreenDispatcher dispatcher) {
+    public MenuScreen(IGameProcessor game) {
         super();
         this.game = game;
-        this.dispatcher = dispatcher;
-        readyMap.put("p", false);
-        readyMap.put("l", false);
-        readyMap.put("a", false);
-        readyMap.put("y", false);
+        readyMap.put("options", false);
+        readyMap.put("play", false);
+//        readyMap.put("p", false);
+//        readyMap.put("l", false);
+//        readyMap.put("a", false);
+//        readyMap.put("y", false);
     }
 
 
@@ -62,22 +62,12 @@ public class MenuScreen extends LazyInitScreen {
         engine = new PooledEngine();
 
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM);
-        cam = renderingSystem.getCamera();
-        viewport = new FitViewport(App.W, App.H, cam);//new ExtendViewport(App.W, App.H, App.W*2f, App.H*2f, cam);
-        viewport.apply();
-        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         menuSong = Assets.getMenuMusic();
-
-        OrthographicCamera guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        guiCam.position.set(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, 0f);
 
         Vector3 playerPosition = new Vector3(
                 App.W/2f,
                 App.H/5f,
                 Z.player);
-
-
 
         //AshleyExtensions Systems
         engine.addSystem(new MovementSystem());
@@ -90,11 +80,11 @@ public class MenuScreen extends LazyInitScreen {
         //Custom Systems
 
         Vector2 minBounds = new Vector2(0f, 0f);
-        Vector2 maxBounds = new Vector2(cam.viewportWidth, cam.viewportHeight);
+        Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false, true));
         engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
-        engine.addSystem(new PlayerSystem(playerPosition, 0.5f, cam, WeaponType.GUN_SEEDS));
+        engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game.getCamera(), WeaponType.GUN_SEEDS));
         engine.addSystem(new FiringSystem());
         engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
         engine.addSystem(new BulletSystem());
@@ -112,7 +102,7 @@ public class MenuScreen extends LazyInitScreen {
 
         //Extension Systems
         engine.addSystem(renderingSystem);
-        engine.addSystem(new TextRenderingSystem(game.getBatch(), guiCam, renderingSystem.getCamera()));
+        engine.addSystem(new TextRenderingSystem(game.getBatch(), game.getGUICamera(), renderingSystem.getCamera()));
         engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
 
         float titleSpeed = 6f;
@@ -148,22 +138,29 @@ public class MenuScreen extends LazyInitScreen {
                 .setScale(0.85f, 0.85f));
 
 
+
+
         float xPos = 3f;
         float yPos = 18f;
-        p = createPlayAsteroid(xPos, yPos, Animations.getpMenu());
-        engine.addEntity(p);
-        xPos += 4.5f;
+        playTarget = createPlayAsteroid(xPos, yPos, Animations.getpMenu());
+        engine.addEntity(playTarget);
+        optionsTarget = createPlayAsteroid(xPos + 13.5f, yPos, Animations.getyMenu());
+        engine.addEntity(optionsTarget);
 
-        l = createPlayAsteroid(xPos, yPos, Animations.getlMenu());
-        engine.addEntity(l);
-        xPos += 4.5f;
-
-        a = createPlayAsteroid(xPos, yPos, Animations.getaMenu());
-        engine.addEntity(a);
-        xPos += 4.5f;
-
-        y = createPlayAsteroid(xPos, yPos, Animations.getyMenu());
-        engine.addEntity(y);
+//        p = createPlayAsteroid(xPos, yPos, Animations.getpMenu());
+//        engine.addEntity(p);
+//        xPos += 4.5f;
+//
+//        l = createPlayAsteroid(xPos, yPos, Animations.getlMenu());
+//        engine.addEntity(l);
+//        xPos += 4.5f;
+//
+//        a = createPlayAsteroid(xPos, yPos, Animations.getaMenu());
+//        engine.addEntity(a);
+//        xPos += 4.5f;
+//
+//        y = createPlayAsteroid(xPos, yPos, Animations.getyMenu());
+//        engine.addEntity(y);
 
         swipeTutorial = engine.createEntity();
         swipeTutorial.add(TextureComponent.create(engine));
@@ -198,10 +195,10 @@ public class MenuScreen extends LazyInitScreen {
             .setHealth(Health.PlayAsteroid));
         playAsteroid.add(TextureComponent.create(engine));
         playAsteroid.add(CircleBoundsComponent.create(engine)
-            .setCircle(xPos, yPos, 2f));
+                .setCircle(xPos, yPos, 2f));
         playAsteroid.add(AnimationComponent.create(engine)
-            .addAnimation("DEFAULT", ani)
-            .setPaused(true));
+                .addAnimation("DEFAULT", ani)
+                .setPaused(true));
         playAsteroid.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos, Z.playAsteroids)
                 .setScale(0.5f, 0.5f));
@@ -209,9 +206,9 @@ public class MenuScreen extends LazyInitScreen {
                 .set("DEFAULT")
                 .setLooping(false));
         playAsteroid.add(ShakeComponent.create(engine)
-            .setSpeed(6f, 4f)
-            .setOffsets(0.4f, 0.8f)
-            .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
+                .setSpeed(6f, 4f)
+                .setOffsets(0.4f, 0.8f)
+                .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
 
         return playAsteroid;
     }
@@ -254,10 +251,20 @@ public class MenuScreen extends LazyInitScreen {
             }
         }
 
-        if(isReady(p, "p") && isReady(l, "l") && isReady(a, "a") && isReady(y, "y")){
+        if(isReady(playTarget, "play")){
             menuSong.stop();
-            dispatcher.endCurrentScreen();
+            menuSong.dispose();
+            game.switchScreens("GAME");
         }
+
+        if(isReady(optionsTarget, "options")){
+            game.switchScreens("OPTIONS");
+        }
+
+//        if(isReady(p, "p") && isReady(l, "l") && isReady(a, "a") && isReady(y, "y")){
+//            menuSong.stop();
+//            dispatcher.endCurrentScreen();
+//        }
     }
 
     private boolean isReady(Entity p, String key){
@@ -266,17 +273,9 @@ public class MenuScreen extends LazyInitScreen {
         }
 
         ParticleEmitterComponent pec = p.getComponent(ParticleEmitterComponent.class);
-        boolean isReady = p.isScheduledForRemoval() || p.getComponents().size() == 0 || (pec != null && pec.elapsedTime > 2f);
+        boolean isReady = p.isScheduledForRemoval() || p.getComponents().size() == 0 || (pec != null && pec.elapsedTime > MAX_FLY_TIME);
         readyMap.put(key, isReady);
 
         return isReady;
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        if(viewport != null) {
-            viewport.update(width, height);
-        }
     }
 }

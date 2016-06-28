@@ -10,7 +10,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -18,13 +17,13 @@ import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.BulletComponent;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
-import com.roaringcatgames.libgdxjam.screens.IScreenDispatcher;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Z;
 
@@ -36,6 +35,7 @@ import java.util.Random;
 public class GameOverSystem extends IteratingSystem implements InputProcessor {
 
     private Random r = new Random();
+    private IGameProcessor game;
     private Entity gameOverText;
     private Entity restartButton;
     private Entity rawry;
@@ -44,20 +44,19 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
     Array<Vector2> randomEdgePoints = new Array<>();
     private Music endSong;
     private OrthographicCamera cam;
-    private IScreenDispatcher dispatcher;
 
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<AnimationComponent> am;
 
     private boolean hasInitialized = false;
 
-    public GameOverSystem(OrthographicCamera cam, IScreenDispatcher dispatcher){
+    public GameOverSystem(IGameProcessor game){
         super(Family.all(PlayerComponent.class).get());
+        this.game = game;
         this.am = ComponentMapper.getFor(AnimationComponent.class);
         this.sm = ComponentMapper.getFor(StateComponent.class);
         endSong = Assets.getMenuMusic();
-        this.cam = cam;
-        this.dispatcher = dispatcher;
+        this.cam = game.getCamera();
 
         randomEdgePoints.addAll(getRandomEdgePoints(20, false));
         shipPartEndPositions.addAll(getRandomEdgePoints(10, true));
@@ -296,7 +295,8 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
 
             if (restartButton.getComponent(BoundsComponent.class).bounds.contains(touchPoint.x, touchPoint.y)) {
                 App.setState(GameState.MENU);
-                dispatcher.endCurrentScreen();
+                game.switchScreens("MENU");
+                return true;
             }
         }
         return false;

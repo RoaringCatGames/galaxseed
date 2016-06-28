@@ -4,12 +4,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
@@ -23,21 +19,17 @@ import com.roaringcatgames.libgdxjam.values.Z;
 import java.util.Random;
 
 /**
- * Created by barry on 12/22/15 @ 7:27 PM.
+ * Screen to handle displaying information while game is loading.
  */
 public class SplashScreen extends LazyInitScreen {
     private IGameProcessor game;
-    private IScreenDispatcher dispatcher;
     private PooledEngine engine;
 
-    private float minSplashSuggestions = 6f;
+    private float minSplashSeconds = 6f;
     private float elapsedTime = 0f;
-    //private OrthographicCamera cam;
-    private Viewport viewport;
 
-    public SplashScreen(IGameProcessor game, IScreenDispatcher dispatcher){
+    public SplashScreen(IGameProcessor game){
         this.game = game;
-        this.dispatcher = dispatcher;
     }
 
     @Override
@@ -45,11 +37,6 @@ public class SplashScreen extends LazyInitScreen {
 
         engine = new PooledEngine();
         RenderingSystem render = new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM);
-//        cam = render.getCamera();
-//        viewport = new FitViewport(20f, 30f, cam);
-//        viewport.apply();
-//        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        cam.position.set(cam.viewportWidth/2f, cam.viewportHeight/2f, 0);
 
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new BoundsSystem());
@@ -121,20 +108,12 @@ public class SplashScreen extends LazyInitScreen {
     protected void update(float delta) {
         elapsedTime += delta;
 
-        if(Assets.am.update() && elapsedTime >= minSplashSuggestions){
+        if(Assets.am.update() && elapsedTime >= minSplashSeconds){
             Gdx.app.log("Splash Screen", "Assets are Loaded!");
             Animations.init();
-            dispatcher.endCurrentScreen();
+            game.switchScreens("MENU");
         }else {
             engine.update(delta);
-        }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        if(viewport != null) {
-            viewport.update(width, height);
         }
     }
 }
