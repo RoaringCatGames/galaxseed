@@ -34,6 +34,8 @@ public class OptionScreen extends LazyInitScreen {
 
         //Kitten2D Systems
         engine.addSystem(new MovementSystem());
+        engine.addSystem(new BoundsSystem());
+        engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
         engine.addSystem(new TweenSystem());
         engine.addSystem(new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM));
         engine.addSystem(new TextRenderingSystem(game.getBatch(), game.getGUICamera(), game.getCamera()));
