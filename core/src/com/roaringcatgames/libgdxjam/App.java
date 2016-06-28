@@ -99,4 +99,15 @@ public class App {
         }
         return isAvailable;
     }
+
+    public static void resetWeapons() {
+        resetWeapon(WeaponType.GUN_SEEDS);
+        resetWeapon(WeaponType.POLLEN_AURA);
+        resetWeapon(WeaponType.HELICOPTER_SEEDS);
+    }
+    private static void resetWeapon(WeaponType wt){
+        WeaponState ws = currentWeaponLevels.get(wt);
+        ws.level = WeaponLevel.LEVEL_1;
+        ws.isDisabled = false;
+    }
 }

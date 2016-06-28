@@ -147,6 +147,7 @@
 
             App.setState(GameState.PLAYING);
             EnemySpawns.resetSpawns();
+            App.resetWeapons();
 
             //Start Music Playing
             music.setVolume(Volume.BG_MUSIC);
