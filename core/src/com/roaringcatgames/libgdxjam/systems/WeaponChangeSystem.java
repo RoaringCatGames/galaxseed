@@ -125,8 +125,8 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
                 .setHidden(true)
                 .setScale(App.PPM*App.W, App.H*App.PPM));
             overlay.add(TextureComponent.create(pEngine)
-                .setRegion(Assets.getOverlay()));
-            pEngine.addEntity(overlay);
+                    .setRegion(Assets.getOverlay()));
+            //pEngine.addEntity(overlay);
         }
     }
 
@@ -162,19 +162,26 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
     public void showWeaponSelect() {
         PlayerComponent pc = getPlayerComponent();
+        if(pc != null) {
+            int heliLevel = levelToInt(App.getCurrentWeaponLevel(WeaponType.HELICOPTER_SEEDS));
+            TextureComponent heliText = K2ComponentMappers.texture.get(helicopterLevel);
+            heliText.setRegion(Assets.getHelicopterLevel(heliLevel));
 
-        int heliLevel = levelToInt(App.getCurrentWeaponLevel(WeaponType.HELICOPTER_SEEDS));
-        K2ComponentMappers.texture.get(helicopterLevel).setRegion(Assets.getHelicopterLevel(heliLevel));
-        int seedLvl = levelToInt(App.getCurrentWeaponLevel(WeaponType.GUN_SEEDS));
-        K2ComponentMappers.texture.get(seedLevel).setRegion(Assets.getHelicopterLevel(seedLvl));
-        int auraLvl = levelToInt(App.getCurrentWeaponLevel(WeaponType.POLLEN_AURA));
-        K2ComponentMappers.texture.get(auraLevel).setRegion(Assets.getHelicopterLevel(auraLvl));
+            int seedLvl = levelToInt(App.getCurrentWeaponLevel(WeaponType.GUN_SEEDS));
+            K2ComponentMappers.texture.get(seedLevel).setRegion(Assets.getHelicopterLevel(seedLvl));
 
-        toggleWeaponSelect(true, pc.weaponType);
+            int auraLvl = levelToInt(App.getCurrentWeaponLevel(WeaponType.POLLEN_AURA));
+            K2ComponentMappers.texture.get(auraLevel).setRegion(Assets.getHelicopterLevel(auraLvl));
+
+            toggleWeaponSelect(true, pc.weaponType);
+        }
     }
 
     private PlayerComponent getPlayerComponent() {
         ImmutableArray<Entity> players = getEngine().getEntitiesFor(Family.all(PlayerComponent.class).get());
+        if(players == null || players.size() < 1){
+            return null;
+        }
         return Mappers.player.get(players.first());
     }
 
