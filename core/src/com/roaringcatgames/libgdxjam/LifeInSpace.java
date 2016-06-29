@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
+import com.roaringcatgames.kitten2d.gdx.helpers.IPreferenceManager;
+import com.roaringcatgames.kitten2d.gdx.helpers.K2PreferenceManager;
 import com.roaringcatgames.libgdxjam.screens.MenuScreen;
 import com.roaringcatgames.libgdxjam.screens.OptionScreen;
 import com.roaringcatgames.libgdxjam.screens.SpaceScreen;
@@ -19,10 +21,11 @@ public class LifeInSpace extends Game implements IGameProcessor {
     public AssetManager am;
 
     private SpriteBatch batch;
-
     private OrthographicCamera cam;
     private OrthographicCamera guiCam;
     private Viewport viewport;
+
+    private IPreferenceManager prefManager = new K2PreferenceManager("galaxseed_prefs");
 
     @Override
     public void create () {
@@ -116,5 +119,10 @@ public class LifeInSpace extends Game implements IGameProcessor {
     @Override
     public Viewport getViewport() {
         return viewport;
+    }
+
+    @Override
+    public IPreferenceManager getPreferenceManager() {
+        return prefManager;
     }
 }
