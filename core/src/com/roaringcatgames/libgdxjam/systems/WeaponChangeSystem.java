@@ -164,14 +164,13 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         PlayerComponent pc = getPlayerComponent();
         if(pc != null) {
             int heliLevel = levelToInt(App.getCurrentWeaponLevel(WeaponType.HELICOPTER_SEEDS));
-            TextureComponent heliText = K2ComponentMappers.texture.get(helicopterLevel);
-            heliText.setRegion(Assets.getHelicopterLevel(heliLevel));
+            K2ComponentMappers.texture.get(helicopterLevel).setRegion(Assets.getHelicopterLevel(heliLevel));
 
             int seedLvl = levelToInt(App.getCurrentWeaponLevel(WeaponType.GUN_SEEDS));
-            K2ComponentMappers.texture.get(seedLevel).setRegion(Assets.getHelicopterLevel(seedLvl));
+            K2ComponentMappers.texture.get(seedLevel).setRegion(Assets.getSeedLevel(seedLvl));
 
             int auraLvl = levelToInt(App.getCurrentWeaponLevel(WeaponType.POLLEN_AURA));
-            K2ComponentMappers.texture.get(auraLevel).setRegion(Assets.getHelicopterLevel(auraLvl));
+            K2ComponentMappers.texture.get(auraLevel).setRegion(Assets.getAuraLevel(auraLvl));
 
             toggleWeaponSelect(true, pc.weaponType);
         }

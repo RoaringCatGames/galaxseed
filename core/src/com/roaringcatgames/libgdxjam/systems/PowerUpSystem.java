@@ -87,10 +87,12 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
         }
         PooledEngine engine = (PooledEngine)getEngine();
         //Update WeaponLevel
-        if(playerComponent.weaponLevel != WeaponLevel.LEVEL_4){
+        if(playerComponent.weaponType != WeaponType.UNSELECTED &&
+                playerComponent.weaponLevel != WeaponLevel.LEVEL_4){
+
             playerComponent.weaponLevel = playerComponent.weaponLevel == WeaponLevel.LEVEL_1 ? WeaponLevel.LEVEL_2 :
-                    playerComponent.weaponLevel == WeaponLevel.LEVEL_2 ? WeaponLevel.LEVEL_3 :
-                            WeaponLevel.LEVEL_4;
+                                          playerComponent.weaponLevel == WeaponLevel.LEVEL_2 ? WeaponLevel.LEVEL_3 :
+                                                                                               WeaponLevel.LEVEL_4;
             App.setCurrentWeaponLevel(playerComponent.weaponType, playerComponent.weaponLevel);
 
             WeaponGeneratorUtil.clearWeapon(engine);
