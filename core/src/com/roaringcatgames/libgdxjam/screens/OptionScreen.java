@@ -9,10 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
-import com.roaringcatgames.kitten2d.ashley.components.CircleBoundsComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TextComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
-import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
+import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
@@ -49,9 +47,9 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private float textX = App.W/3f;
     private float buttonX = App.W - 4f;
     private float musicY = App.H - 3f;
-    private float sfxY = App.H - 5.5f;
-    private float ctrlY = App.H - 8f;
-    private float vibraY = App.H - 10.5f;
+    private float sfxY = App.H - 6f;
+    private float ctrlY = App.H - 9f;
+    private float vibraY = App.H - 12f;
 
 
 
@@ -82,6 +80,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
 
         //Kitten2D Systems
+        engine.addSystem(new ShakeSystem());
         engine.addSystem(new MovementSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
@@ -90,17 +89,18 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new TextRenderingSystem(game.getBatch(), game.getGUICamera(), game.getCamera()));
         engine.addSystem(new DebugSystem(game.getCamera()));
 
-        BitmapFont targetFont = Gdx.graphics.getDensity() > 1f ? Assets.get64Font() : Assets.get48Font();
+        BitmapFont baseFont = Gdx.graphics.getDensity() > 1f ? Assets.get64Font() : Assets.get48Font();
+        BitmapFont secondaryFont = Gdx.graphics.getDensity() > 1f ? Assets.get24Font() : Assets.get16Font();
 
         //Setup basic entities
         String musicState = game.getPreferenceManager().getStoredString(MUSIC_KEY, "On");
-        musicText = addTextEntity(textX, musicY + 0.5f, "Music " + musicState, targetFont);
+        musicText = addTextEntity(textX, musicY + 0.5f, "Music " + musicState, baseFont);
         String sfxState = game.getPreferenceManager().getStoredString(SFX_KEY, "On");
-        sfxText = addTextEntity(textX, sfxY + 0.5f, "SFX " + sfxState, targetFont);
+        sfxText = addTextEntity(textX, sfxY + 0.5f, "SFX " + sfxState, baseFont);
         String vibraState = game.getPreferenceManager().getStoredString(VIBRA_KEY, "Off");
-        vibrationText = addTextEntity(textX, vibraY + 0.5f, "Vibration " + vibraState, targetFont);
+        vibrationText = addTextEntity(textX, vibraY + 0.5f, "Vibration " + vibraState, baseFont);
         String ctrlState = game.getPreferenceManager().getStoredString(CTRL_KEY, "Steady");
-        controlText = addTextEntity(textX, ctrlY + 0.5f, "Controls " + ctrlState, targetFont);
+        controlText = addTextEntity(textX, ctrlY + 0.5f, "Controls " + ctrlState, baseFont);
 
 
 
@@ -108,6 +108,18 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         sfxSelect = addButton(buttonX, sfxY, SFX_KEY, sfxState);
         vibrationSelect = addButton(buttonX, vibraY, VIBRA_KEY, vibraState);
         controlSelect = addButton(buttonX, ctrlY, CTRL_KEY, ctrlState);
+
+
+        addTextEntity(App.W/2f,  5.5f, "Nathan Hutchens", baseFont);
+        addTextEntity(App.W/2f,  4.7f, "Music", secondaryFont);
+
+        addTextEntity(App.W/2f, 3.5f, "Loi LeMix", baseFont);
+        addTextEntity(App.W/2f, 2.7f, "Art Cat", secondaryFont);
+
+        addTextEntity(App.W/2f, 1.5f, "Barry Rowe", baseFont);
+        addTextEntity(App.W/2f, 0.7f, "Code Cat", secondaryFont);
+
+
     }
 
 
@@ -137,6 +149,10 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
                 .setRegion(getButtonRegion(key, value)));
         button.add(CircleBoundsComponent.create(engine)
                 .setCircle(0f, 0f, BUTTON_RADIUS));
+        button.add(ShakeComponent.create(engine)
+                .setSpeed(6f, 4f)
+                .setOffsets(0.2f, 0.3f)
+                .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
         engine.addEntity(button);
         return button;
     }

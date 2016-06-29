@@ -33,6 +33,8 @@ public class Assets {
         am.load(BG_MUSIC, MUSIC);
         am.load(GAME_OVER_MUSIC, MUSIC);
         am.load(MENU_MUISC, MUSIC);
+        am.load(FONT_16, BITMAP_FONT);
+        am.load(FONT_24, BITMAP_FONT);
         am.load(FONT_32, BITMAP_FONT);
         am.load(FONT_48, BITMAP_FONT);
         am.load(FONT_64, BITMAP_FONT);
@@ -575,6 +577,12 @@ public class Assets {
     /////////////
     //Fonts
     /////////////
+    public static BitmapFont get16Font() {
+        return am.get(FONT_16, BITMAP_FONT);
+    }
+    public static BitmapFont get24Font() {
+        return am.get(FONT_24, BITMAP_FONT);
+    }
     public static BitmapFont get32Font(){
         return am.get(FONT_32, BITMAP_FONT);
     }
@@ -610,7 +618,8 @@ public class Assets {
         return spriteCache.get(name);
     }
 
-
+    private static final String FONT_16 = "fonts/skyhook-16.fnt";
+    private static final String FONT_24 = "fonts/skyhook-24.fnt";
     private static final String FONT_32 = "fonts/skyhook-32.fnt";
     private static final String FONT_48 = "fonts/skyhook-48.fnt";
     private static final String FONT_64 = "fonts/skyhook-64.fnt";
