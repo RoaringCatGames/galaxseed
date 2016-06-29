@@ -1,26 +1,75 @@
 package com.roaringcatgames.libgdxjam.screens;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
+import com.roaringcatgames.kitten2d.ashley.components.CircleBoundsComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TextComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
+import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
 import com.roaringcatgames.libgdxjam.App;
+import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.systems.BackgroundSystem;
 
 /**
  * This is an {@link LazyInitScreen} implementation that will
  * handle the Options and Credits view.
  */
-public class OptionScreen extends LazyInitScreen {
+public class OptionScreen extends LazyInitScreen implements InputProcessor {
+    private final String MUSIC_KEY = "music";
+    private final String SFX_KEY = "sfx";
+    private final String VIBRA_KEY = "vibration";
+    private final String CTRL_KEY = "controls";
+    private final Vector2 touchPoint = new Vector2();
+
+    private final float BUTTON_RADIUS = 1f;
 
     private IGameProcessor game;
     private PooledEngine engine;
 
+    private Entity musicSelect;
+    private Entity musicText;
+    private Entity sfxSelect;
+    private Entity sfxText;
+    private Entity controlSelect;
+    private Entity controlText;
+    private Entity vibrationSelect;
+    private Entity vibrationText;
+
+
+    private float textX = App.W/3f;
+    private float buttonX = App.W - 4f;
+    private float musicY = App.H - 3f;
+    private float sfxY = App.H - 5.5f;
+    private float ctrlY = App.H - 8f;
+    private float vibraY = App.H - 10.5f;
+
+
+
     public OptionScreen(IGameProcessor game){
         super();
         this.game = game;
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        game.addInputProcessor(this);
+    }
+
+    @Override
+    public void hide() {
+        super.hide();
+        game.removeInputProcessor(this);
     }
 
     @Override
@@ -40,10 +89,171 @@ public class OptionScreen extends LazyInitScreen {
         engine.addSystem(new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM));
         engine.addSystem(new TextRenderingSystem(game.getBatch(), game.getGUICamera(), game.getCamera()));
         engine.addSystem(new DebugSystem(game.getCamera()));
+
+        BitmapFont targetFont = Gdx.graphics.getDensity() > 1f ? Assets.get64Font() : Assets.get48Font();
+
+        //Setup basic entities
+        String musicState = game.getPreferenceManager().getStoredString(MUSIC_KEY, "On");
+        musicText = addTextEntity(textX, musicY + 0.5f, "Music " + musicState, targetFont);
+        String sfxState = game.getPreferenceManager().getStoredString(SFX_KEY, "On");
+        sfxText = addTextEntity(textX, sfxY + 0.5f, "SFX " + sfxState, targetFont);
+        String vibraState = game.getPreferenceManager().getStoredString(VIBRA_KEY, "Off");
+        vibrationText = addTextEntity(textX, vibraY + 0.5f, "Vibration " + vibraState, targetFont);
+        String ctrlState = game.getPreferenceManager().getStoredString(CTRL_KEY, "Steady");
+        controlText = addTextEntity(textX, ctrlY + 0.5f, "Controls " + ctrlState, targetFont);
+
+
+
+        musicSelect = addButton(buttonX, musicY, MUSIC_KEY, musicState);
+        sfxSelect = addButton(buttonX, sfxY, SFX_KEY, sfxState);
+        vibrationSelect = addButton(buttonX, vibraY, VIBRA_KEY, vibraState);
+        controlSelect = addButton(buttonX, ctrlY, CTRL_KEY, ctrlState);
     }
+
+
 
     @Override
     protected void update(float deltaChange) {
         engine.update(Math.min(deltaChange, App.MAX_DELTA_TICK));
+    }
+
+
+    private Entity addTextEntity(float x, float y, String text, BitmapFont font){
+        Entity textEntity = engine.createEntity();
+        textEntity.add(TransformComponent.create(engine)
+                .setPosition(x, y));
+        textEntity.add(TextComponent.create(engine)
+                .setFont(font)
+                .setText(text));
+        engine.addEntity(textEntity);
+        return textEntity;
+    }
+
+    private Entity addButton(float x, float y, String key, String value){
+        Entity button = engine.createEntity();
+        button.add(TransformComponent.create(engine)
+                .setPosition(x, y));
+        button.add(TextureComponent.create(engine)
+                .setRegion(getButtonRegion(key, value)));
+        button.add(CircleBoundsComponent.create(engine)
+                .setCircle(0f, 0f, BUTTON_RADIUS));
+        engine.addEntity(button);
+        return button;
+    }
+
+    private TextureRegion getButtonRegion(String key, String value){
+        TextureRegion region = null;
+        switch(key){
+            case MUSIC_KEY:
+                region = value.equals("On") ? Assets.getMusicOn() : Assets.getMusicOff();
+                break;
+            case SFX_KEY:
+                region = value.equals("On") ? Assets.getSfxOn() : Assets.getSfxOff();
+                break;
+            case VIBRA_KEY:
+                region = value.equals("On") ? Assets.getVibrationOn() : Assets.getVibrationOff();
+                break;
+            case CTRL_KEY:
+                region = value.equals("Steady") ? Assets.getControlsSteady() : Assets.getControlsAmplified();
+                break;
+        }
+
+        return region;
+    }
+
+
+    /**
+     *Input Processor implementation
+     */
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        touchPoint.set(screenX, screenY);
+        game.getViewport().unproject(touchPoint);
+        if(K2ComponentMappers.circleBounds.get(musicSelect).circle.contains(touchPoint)){
+            //toggleMusic
+            String newValue = "Off";
+            String state = game.getPreferenceManager().getStoredString(MUSIC_KEY, "On");
+            if(state.equals("Off")) {
+                newValue = "On";
+            }
+
+            game.getPreferenceManager().updateString(MUSIC_KEY, newValue);
+            K2ComponentMappers.texture.get(musicSelect).setRegion(getButtonRegion(MUSIC_KEY, newValue));
+            K2ComponentMappers.text.get(musicText).setText("Music " + newValue);
+
+        }else if(K2ComponentMappers.circleBounds.get(sfxSelect).circle.contains(touchPoint)){
+            //toggle Sfx
+            String newValue = "Off";
+            String state = game.getPreferenceManager().getStoredString(SFX_KEY, "On");
+            if(state.equals("Off")) {
+                newValue = "On";
+            }
+
+            game.getPreferenceManager().updateString(SFX_KEY, newValue);
+            K2ComponentMappers.texture.get(sfxSelect).setRegion(getButtonRegion(SFX_KEY, newValue));
+            K2ComponentMappers.text.get(sfxText).setText("SFX " + newValue);
+
+        }else if(K2ComponentMappers.circleBounds.get(vibrationSelect).circle.contains(touchPoint)) {
+            //toggle Sfx
+            String newValue = "Off";
+            String state = game.getPreferenceManager().getStoredString(VIBRA_KEY, "On");
+            if(state.equals("Off")) {
+                newValue = "On";
+            }
+
+            game.getPreferenceManager().updateString(VIBRA_KEY, newValue);
+            K2ComponentMappers.texture.get(vibrationSelect).setRegion(getButtonRegion(VIBRA_KEY, newValue));
+            K2ComponentMappers.text.get(vibrationText).setText("Vibration " + newValue);
+
+        }else if(K2ComponentMappers.circleBounds.get(controlSelect).circle.contains(touchPoint)) {
+            //toggle Sfx
+            String newValue = "Amplified";
+            String state = game.getPreferenceManager().getStoredString(CTRL_KEY, "Steady");
+            if(state.equals("Amplified")) {
+                newValue = "Steady";
+            }
+
+            game.getPreferenceManager().updateString(CTRL_KEY, newValue);
+            K2ComponentMappers.texture.get(controlSelect).setRegion(getButtonRegion(CTRL_KEY, newValue));
+            K2ComponentMappers.text.get(controlText).setText("Controls " + newValue);
+
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }

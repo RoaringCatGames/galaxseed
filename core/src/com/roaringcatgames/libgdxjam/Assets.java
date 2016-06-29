@@ -504,6 +504,35 @@ public class Assets {
         return getCachedRegion(SPRITE_ATLAS, "messages/plant-avoid");
     }
 
+
+    /////////////
+    //Options
+    /////////////
+    public static TextureAtlas.AtlasRegion getMusicOn(){
+        return getCachedRegion(SPRITE_ATLAS, "options/music-on");
+    }
+    public static TextureAtlas.AtlasRegion getMusicOff(){
+        return getCachedRegion(SPRITE_ATLAS, "options/music-off");
+    }
+    public static TextureAtlas.AtlasRegion getSfxOn(){
+        return getCachedRegion(SPRITE_ATLAS, "options/sfx-on");
+    }
+    public static TextureAtlas.AtlasRegion getSfxOff(){
+        return getCachedRegion(SPRITE_ATLAS, "options/sfx-off");
+    }
+    public static TextureAtlas.AtlasRegion getVibrationOn(){
+        return getCachedRegion(SPRITE_ATLAS, "options/vibration-on");
+    }
+    public static TextureAtlas.AtlasRegion getVibrationOff(){
+        return getCachedRegion(SPRITE_ATLAS, "options/vibration-off");
+    }
+    public static TextureAtlas.AtlasRegion getControlsSteady(){
+        return getCachedRegion(SPRITE_ATLAS, "options/ctrl-steady");
+    }
+    public static TextureAtlas.AtlasRegion getControlsAmplified(){
+        return getCachedRegion(SPRITE_ATLAS, "options/ctrl-amplified");
+    }
+
     /////////////
     //Music
     /////////////
