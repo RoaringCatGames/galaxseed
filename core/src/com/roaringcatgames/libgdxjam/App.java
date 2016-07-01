@@ -3,6 +3,7 @@ package com.roaringcatgames.libgdxjam;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.roaringcatgames.kitten2d.gdx.helpers.IPreferenceManager;
 import com.roaringcatgames.libgdxjam.components.WeaponLevel;
 import com.roaringcatgames.libgdxjam.components.WeaponState;
 import com.roaringcatgames.libgdxjam.components.WeaponType;
@@ -109,5 +110,9 @@ public class App {
         WeaponState ws = currentWeaponLevels.get(wt);
         ws.level = WeaponLevel.LEVEL_1;
         ws.isDisabled = false;
+    }
+
+    public static IPreferenceManager getPrefs(){
+        return game.getPreferenceManager();
     }
 }

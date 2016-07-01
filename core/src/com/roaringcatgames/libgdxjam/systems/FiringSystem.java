@@ -15,6 +15,7 @@ import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.PrefsUtil;
 import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.Damage;
 import com.roaringcatgames.libgdxjam.values.Volume;
@@ -27,7 +28,6 @@ import java.util.Map;
  */
 public class FiringSystem extends IteratingSystem {
 
-    private float timeElapsed = 0f;
     private Sound firingSFX;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<GunComponent> gm;
@@ -87,7 +87,7 @@ public class FiringSystem extends IteratingSystem {
                     }
                 }
 
-                if(isFiring){
+                if(isFiring && PrefsUtil.areSfxEnabled()){
                     this.firingSFX.play(Volume.FIRING_SFX);
                 }
             }else if(isGunSeeds){

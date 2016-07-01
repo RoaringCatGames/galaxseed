@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -15,18 +16,15 @@ import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.PrefsUtil;
 import com.roaringcatgames.libgdxjam.systems.BackgroundSystem;
-import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
  * This is an {@link LazyInitScreen} implementation that will
  * handle the Options and Credits view.
  */
 public class OptionScreen extends LazyInitScreen implements InputProcessor {
-    private final String MUSIC_KEY = "music";
-    private final String SFX_KEY = "sfx";
-    private final String VIBRA_KEY = "vibration";
-    private final String CTRL_KEY = "controls";
+
     private final Vector2 touchPoint = new Vector2();
 
     private final float BUTTON_RADIUS = 2f;
@@ -47,6 +45,8 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private Entity loi;
     private Entity barry;
     private Entity kfp;
+
+    private Sound sfx;
 
 
     private float textX = App.W/3f;
@@ -84,6 +84,8 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     protected void init() {
         engine = new PooledEngine();
 
+        sfx = Assets.getPlayerHitLight();
+
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false, true));
@@ -103,19 +105,19 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         BitmapFont secondaryFont = Gdx.graphics.getDensity() > 1f ? Assets.get24Font() : Assets.get16Font();
 
         //Setup basic entities
-        String musicState = game.getPreferenceManager().getStoredString(MUSIC_KEY, "On");
+        String musicState = game.getPreferenceManager().getStoredString(PrefsUtil.MUSIC_KEY, "On");
         musicText = addTextEntity(textX, musicY + 0.5f, musicWords + musicState, baseFont);
-        String sfxState = game.getPreferenceManager().getStoredString(SFX_KEY, "On");
+        String sfxState = game.getPreferenceManager().getStoredString(PrefsUtil.SFX_KEY, "On");
         sfxText = addTextEntity(textX, sfxY + 0.5f, sfxWords + sfxState, baseFont);
-        String vibraState = game.getPreferenceManager().getStoredString(VIBRA_KEY, "Off");
+        String vibraState = game.getPreferenceManager().getStoredString(PrefsUtil.VIBRA_KEY, "Off");
         vibrationText = addTextEntity(textX, vibraY + 0.5f, vibraWords + vibraState, baseFont);
-        String ctrlState = game.getPreferenceManager().getStoredString(CTRL_KEY, "Off");
+        String ctrlState = game.getPreferenceManager().getStoredString(PrefsUtil.CTRL_KEY, "Off");
         controlText = addTextEntity(textX, ctrlY + 0.5f, ctrlWords + ctrlState, baseFont);
 
-        sfxButton = addButton(buttonX, sfxY, SFX_KEY, sfxState);
-        musicButton = addButton(buttonX, musicY, MUSIC_KEY, musicState);
-        vibrationSelect = addButton(buttonX, vibraY, VIBRA_KEY, vibraState);
-        controlButton = addButton(buttonX, ctrlY, CTRL_KEY, ctrlState);
+        sfxButton = addButton(buttonX, sfxY, PrefsUtil.SFX_KEY, sfxState);
+        musicButton = addButton(buttonX, musicY, PrefsUtil.MUSIC_KEY, musicState);
+        vibrationSelect = addButton(buttonX, vibraY, PrefsUtil.VIBRA_KEY, vibraState);
+        controlButton = addButton(buttonX, ctrlY, PrefsUtil.CTRL_KEY, ctrlState);
 
         backButton = addButton(App.W/2f, 10f, "BACK", null);
 
@@ -177,16 +179,16 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private TextureRegion getButtonRegion(String key, String value){
         TextureRegion region = null;
         switch(key){
-            case MUSIC_KEY:
+            case PrefsUtil.MUSIC_KEY:
                 region = value.equals("On") ? Assets.getMusicOn() : Assets.getMusicOff();
                 break;
-            case SFX_KEY:
+            case PrefsUtil.SFX_KEY:
                 region = value.equals("On") ? Assets.getSfxOn() : Assets.getSfxOff();
                 break;
-            case VIBRA_KEY:
+            case PrefsUtil.VIBRA_KEY:
                 region = value.equals("On") ? Assets.getVibrationOn() : Assets.getVibrationOff();
                 break;
-            case CTRL_KEY:
+            case PrefsUtil.CTRL_KEY:
                 region = value.equals("Off") ? Assets.getControlsSteady() : Assets.getControlsAmplified();
                 break;
             case "BACK":
@@ -224,50 +226,56 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         if(K2ComponentMappers.circleBounds.get(musicButton).circle.contains(touchPoint)){
             //toggleMusic
             String newValue = "Off";
-            String state = game.getPreferenceManager().getStoredString(MUSIC_KEY, "On");
+            String state = game.getPreferenceManager().getStoredString(PrefsUtil.MUSIC_KEY, "On");
             if(state.equals("Off")) {
                 newValue = "On";
+            }else{
+                game.pauseBgMusic();
             }
 
-            game.getPreferenceManager().updateString(MUSIC_KEY, newValue);
-            K2ComponentMappers.texture.get(musicButton).setRegion(getButtonRegion(MUSIC_KEY, newValue));
+            game.getPreferenceManager().updateString(PrefsUtil.MUSIC_KEY, newValue);
+            if(newValue.equals("On")){
+                game.playBgMusic("MENU");
+            }
+            K2ComponentMappers.texture.get(musicButton).setRegion(getButtonRegion(PrefsUtil.MUSIC_KEY, newValue));
             K2ComponentMappers.text.get(musicText).setText(musicWords + newValue);
 
         }else if(K2ComponentMappers.circleBounds.get(sfxButton).circle.contains(touchPoint)){
             //toggle Sfx
             String newValue = "Off";
-            String state = game.getPreferenceManager().getStoredString(SFX_KEY, "On");
+            String state = game.getPreferenceManager().getStoredString(PrefsUtil.SFX_KEY, "On");
             if(state.equals("Off")) {
                 newValue = "On";
+                sfx.play();
             }
 
-            game.getPreferenceManager().updateString(SFX_KEY, newValue);
-            K2ComponentMappers.texture.get(sfxButton).setRegion(getButtonRegion(SFX_KEY, newValue));
+            game.getPreferenceManager().updateString(PrefsUtil.SFX_KEY, newValue);
+            K2ComponentMappers.texture.get(sfxButton).setRegion(getButtonRegion(PrefsUtil.SFX_KEY, newValue));
             K2ComponentMappers.text.get(sfxText).setText(sfxWords + newValue);
 
         }else if(K2ComponentMappers.circleBounds.get(vibrationSelect).circle.contains(touchPoint)) {
             //toggle Sfx
             String newValue = "Off";
-            String state = game.getPreferenceManager().getStoredString(VIBRA_KEY, "On");
+            String state = game.getPreferenceManager().getStoredString(PrefsUtil.VIBRA_KEY, "On");
             if(state.equals("Off")) {
                 newValue = "On";
                 Gdx.input.vibrate(new long[] {0, 100, 100, 100, 100}, -1);
             }
 
-            game.getPreferenceManager().updateString(VIBRA_KEY, newValue);
-            K2ComponentMappers.texture.get(vibrationSelect).setRegion(getButtonRegion(VIBRA_KEY, newValue));
+            game.getPreferenceManager().updateString(PrefsUtil.VIBRA_KEY, newValue);
+            K2ComponentMappers.texture.get(vibrationSelect).setRegion(getButtonRegion(PrefsUtil.VIBRA_KEY, newValue));
             K2ComponentMappers.text.get(vibrationText).setText(vibraWords + newValue);
 
         }else if(K2ComponentMappers.circleBounds.get(controlButton).circle.contains(touchPoint)) {
             //toggle Sfx
             String newValue = "Off";
-            String state = game.getPreferenceManager().getStoredString(CTRL_KEY, "Off");
+            String state = game.getPreferenceManager().getStoredString(PrefsUtil.CTRL_KEY, "Off");
             if(state.equals("Off")) {
                 newValue = "On";
             }
 
-            game.getPreferenceManager().updateString(CTRL_KEY, newValue);
-            K2ComponentMappers.texture.get(controlButton).setRegion(getButtonRegion(CTRL_KEY, newValue));
+            game.getPreferenceManager().updateString(PrefsUtil.CTRL_KEY, newValue);
+            K2ComponentMappers.texture.get(controlButton).setRegion(getButtonRegion(PrefsUtil.CTRL_KEY, newValue));
             K2ComponentMappers.text.get(controlText).setText(ctrlWords + newValue);
 
         }else if(K2ComponentMappers.circleBounds.get(backButton).circle.contains(touchPoint)){

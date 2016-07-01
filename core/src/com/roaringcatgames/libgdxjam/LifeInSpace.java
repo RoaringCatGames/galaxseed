@@ -2,6 +2,7 @@ package com.roaringcatgames.libgdxjam;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +15,7 @@ import com.roaringcatgames.libgdxjam.screens.MenuScreen;
 import com.roaringcatgames.libgdxjam.screens.OptionScreen;
 import com.roaringcatgames.libgdxjam.screens.SpaceScreen;
 import com.roaringcatgames.libgdxjam.screens.SplashScreen;
+import com.roaringcatgames.libgdxjam.values.Volume;
 
 public class LifeInSpace extends Game implements IGameProcessor {
 
@@ -24,6 +26,7 @@ public class LifeInSpace extends Game implements IGameProcessor {
     private OrthographicCamera cam;
     private OrthographicCamera guiCam;
     private Viewport viewport;
+    private Music bgMusic;
 
     private IPreferenceManager prefManager = new K2PreferenceManager("galaxseed_prefs");
 
@@ -38,7 +41,6 @@ public class LifeInSpace extends Game implements IGameProcessor {
 
         guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         guiCam.position.set(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0f);
-
 
 
         //NOTE: We force finishLoading of the Loading Frames
@@ -104,6 +106,44 @@ public class LifeInSpace extends Game implements IGameProcessor {
     @Override
     public void removeInputProcessor(InputProcessor processor) {
         this.multiplexer.removeProcessor(processor);
+    }
+
+    @Override
+    public void pauseBgMusic() {
+        if(bgMusic != null && bgMusic.isPlaying()){
+            bgMusic.pause();
+        }
+    }
+
+    @Override
+    public void playBgMusic(String musicName) {
+        if(PrefsUtil.isMusicOn()) {
+            pauseBgMusic();
+            if (bgMusic != null) {
+                bgMusic.stop();
+            }
+
+            switch (musicName) {
+                case "MENU":
+                    bgMusic = Assets.getMenuMusic();
+                    bgMusic.setLooping(true);
+                    bgMusic.setVolume(Volume.MENU_MUSIC);
+                    break;
+                case "GAME":
+                    bgMusic = Assets.getBackgroundMusic();
+                    bgMusic.setLooping(true);
+                    bgMusic.setVolume(Volume.BG_MUSIC);
+                    break;
+                case "GAME_OVER":
+                    bgMusic = Assets.getGameOverMusic();
+                    bgMusic.setLooping(true);
+                    break;
+
+            }
+
+            Gdx.app.log("LifeInSpace", "Playing Music: " + musicName);
+            bgMusic.play();
+        }
     }
 
     @Override

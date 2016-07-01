@@ -15,6 +15,7 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.PrefsUtil;
 import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.*;
 
@@ -212,15 +213,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
                 fc.setOffset(idleFlameOffset.x * initialScale, idleFlameOffset.y * initialScale);
             }
 
-            if (flameState.equals("FLYING") && !flyingMusic.isPlaying()) {
-                flyingMusic.setLooping(true);
-                flyingMusic.setVolume(Volume.FLYING_MUSIC);
-                flyingMusic.play();
-            } else if (flyingMusic.isPlaying()) {
-                flyingMusic.stop();
-            }
-
-
             if(!state.equals(sc.get())) {
                 sc.set(state).setLooping(isLooping);
 
@@ -299,6 +291,12 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             touchPoint.set(screenX, screenY, 0f);
             touchPoint = cam.unproject(touchPoint);
             controlOrigin.set(touchPoint.x, touchPoint.y);
+
+            if(PrefsUtil.areSfxEnabled()) {
+                flyingMusic.setLooping(true);
+                flyingMusic.setVolume(Volume.FLYING_MUSIC);
+                flyingMusic.play();
+            }
         }
         return false;
     }
@@ -308,6 +306,9 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
         if(pointer == 0){
             currentPositionChange.set(0f, 0f, 0f);
+            if(flyingMusic.isPlaying()) {
+                flyingMusic.stop();
+            }
         }
         return false;
     }

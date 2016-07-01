@@ -22,15 +22,15 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.PrefsUtil;
 import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.*;
 
 /**
- * Created by barry on 1/12/16 @ 7:59 PM.
+ * System to handle player getting hit
  */
 public class PlayerDamageSystem extends IteratingSystem {
 
-    private static float SHAKE_TIME = 0.5f;
     private Entity player;
     private Entity scoreCard;
     private Array<Entity> projectiles = new Array<>();
@@ -41,14 +41,12 @@ public class PlayerDamageSystem extends IteratingSystem {
     private ComponentMapper<ProjectileComponent> pm;
     private ComponentMapper<CircleBoundsComponent> cm;
     private ComponentMapper<EnemyComponent> em;
-    private ComponentMapper<ShakeComponent> sm;
     private ComponentMapper<ScoreComponent> scm;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<HealthLeafComponent> hlm;
-    private ComponentMapper<TweenComponent> twm;
 
 
-    private Sound lightHitSfx, mediumHitSfx, heavyHitSfx;
+    private Sound mediumHitSfx, heavyHitSfx;
 
     public PlayerDamageSystem(){
         super(Family.one(ScoreComponent.class, PlayerComponent.class,
@@ -58,13 +56,10 @@ public class PlayerDamageSystem extends IteratingSystem {
         pm = ComponentMapper.getFor(ProjectileComponent.class);
         cm = ComponentMapper.getFor(CircleBoundsComponent.class);
         em = ComponentMapper.getFor(EnemyComponent.class);
-        sm = ComponentMapper.getFor(ShakeComponent.class);
         scm = ComponentMapper.getFor(ScoreComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         hlm = ComponentMapper.getFor(HealthLeafComponent.class);
-        twm = ComponentMapper.getFor(TweenComponent.class);
 
-        lightHitSfx = Assets.getPlayerHitLight();
         mediumHitSfx = Assets.getPlayerHitMedium();
         heavyHitSfx = Assets.getPlayerHitHeavy();
     }
@@ -108,35 +103,30 @@ public class PlayerDamageSystem extends IteratingSystem {
 
     private void processCollision(TransformComponent playerPos, HealthComponent ph, Entity proj, ProjectileComponent pp) {
         TransformComponent projPos = tm.get(proj);
-        float shakeTime = Shakes.TimePlayerHitLight;
         float scale = 0.5f;
         float xOffset = 0f, yOffset = 0f;
         Vector3 halfPos = playerPos.position.cpy().sub(projPos.position).scl(0.5f);
         xOffset = halfPos.x;
         yOffset = halfPos.y;
         if(pp.damage == Damage.asteroidRock) {
-            mediumHitSfx.play(Volume.PLAYER_HIT_M);
+            if(PrefsUtil.areSfxEnabled()) {
+                mediumHitSfx.play(Volume.PLAYER_HIT_M);
+            }
         }else if(pp.damage == Damage.comet){
             scale = 0.8f;
-            mediumHitSfx.play(Volume.PLAYER_HIT_M);
+            if(PrefsUtil.areSfxEnabled()) {
+                mediumHitSfx.play(Volume.PLAYER_HIT_M);
+            }
         }else if(pp.damage == Damage.asteroid){
-            heavyHitSfx.play(Volume.PLAYER_HIT_H);
-            shakeTime = Shakes.TimePlayerHitHeavy;
+            if(PrefsUtil.areSfxEnabled()) {
+                heavyHitSfx.play(Volume.PLAYER_HIT_H);
+            }
             scale = 1f;
         }
 
-        Gdx.input.vibrate(500);
-
-
-        //SHAKE Player WHEN HIT!!!
-//        if(sm.has(player)) {
-//            ShakeComponent sc = sm.get(player);
-//            if(sc.isPaused){
-//                sc.setCurrentTime(0f);
-//                sc.setPaused(false);
-//                sc.setDuration(shakeTime);
-//            }
-//        }
+        if(PrefsUtil.isVibrationOn()) {
+            Gdx.input.vibrate(500);
+        }
 
         boolean leftFirst = true;
         for(Entity leaf:healthLeaves){
@@ -179,9 +169,6 @@ public class PlayerDamageSystem extends IteratingSystem {
                 break;
         }
 
-//        if(ph.health > 0f) {
-//            App.setSlowed(true);
-//        }
         PooledEngine engine = ((PooledEngine)getEngine());
         Entity explosion = engine.createEntity();
         explosion.add(ExplosionComponent.create(engine));
@@ -196,19 +183,6 @@ public class PlayerDamageSystem extends IteratingSystem {
         explosion.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", impactAni));
         engine.addEntity(explosion);
-
-//        if(!K2ComponentMappers.tween.has(player) ||
-//            K2ComponentMappers.tween.get(player).timeline.isFinished()) {
-//            player.add(TweenComponent.create(engine)
-//                    .setTimeline(Timeline.createSequence()
-//                            .push(Tween.to(player, K2EntityTweenAccessor.COLOR, 0.05f)
-//                                    .target(Color.RED.r, Color.RED.g, Color.RED.b)
-//                                    .ease(TweenEquations.easeOutSine)
-//                                    .repeatYoyo(2, 0))
-//                            .push(Tween.to(player, K2EntityTweenAccessor.COLOR, 0.05f)
-//                                    .target(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b)
-//                                    .ease(TweenEquations.easeOutSine))));
-//        }
 
         //Remove Entity
         engine.removeEntity(proj);

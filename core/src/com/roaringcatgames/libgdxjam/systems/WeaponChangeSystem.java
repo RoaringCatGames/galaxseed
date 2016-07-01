@@ -126,7 +126,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
                 .setScale(App.PPM*App.W, App.H*App.PPM));
             overlay.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getOverlay()));
-            //pEngine.addEntity(overlay);
+            pEngine.addEntity(overlay);
         }
     }
 

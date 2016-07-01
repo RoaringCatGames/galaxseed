@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
@@ -38,11 +37,10 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
     private IGameProcessor game;
     private Entity gameOverText;
     private Entity restartButton;
-    private Entity rawry;
     private Array<Vector2> shipPartEndPositions = new Array<>();
 
     Array<Vector2> randomEdgePoints = new Array<>();
-    private Music endSong;
+    //private Music endSong;
     private OrthographicCamera cam;
 
     private ComponentMapper<StateComponent> sm;
@@ -55,7 +53,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
         this.game = game;
         this.am = ComponentMapper.getFor(AnimationComponent.class);
         this.sm = ComponentMapper.getFor(StateComponent.class);
-        endSong = Assets.getMenuMusic();
+        //endSong = Assets.getMenuMusic();
         this.cam = game.getCamera();
 
         randomEdgePoints.addAll(getRandomEdgePoints(20, false));
@@ -117,9 +115,6 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 bullet.getComponent(AnimationComponent.class).setPaused(true);
             }
         }else{
-            if(endSong.isPlaying()) {
-                endSong.stop();
-            }
             if(gameOverText != null) {
                 gameOverText.getComponent(TransformComponent.class).setHidden(true);
             }
@@ -140,23 +135,15 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 App.setSlowed(false);
             }
             AnimationComponent ac = am.get(player);
-            String state = "DEFAULT";
-            String flameState;
-            boolean isLooping = true;
             PooledEngine engine = (PooledEngine)getEngine();
 
             if (!"DEAD".equals(sc.get())) {
-                state = "DEAD";
-                isLooping = false;
-                flameState = "DEAD";
-                sc.set(state);
-                sc.setLooping(isLooping);
+                sc.set("DEAD");
+                sc.setLooping(false);
                 tc.setScale(1f, 1f);
-                //fsc.set(flameState);
 
                 //Spawn Roary
-
-                rawry = engine.createEntity();
+                Entity rawry = engine.createEntity();
                 rawry.add(TransformComponent.create(engine)
                         .setPosition(tc.position.x, tc.position.y, Z.player)
                         .setScale(0.1f, 0.1f));
@@ -261,7 +248,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 }
                 gameOverText.getComponent(TransformComponent.class).setHidden(false);
                 restartButton.getComponent(TransformComponent.class).setHidden(false);
-                endSong.play();
+                game.playBgMusic("GAME_OVER");
 
                 getEngine().removeEntity(player);
                 hasInitialized = true;

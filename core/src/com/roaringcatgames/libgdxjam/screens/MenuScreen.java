@@ -42,7 +42,7 @@ public class MenuScreen extends LazyInitScreen {
     private IGameProcessor game;
     private PooledEngine engine;
 
-    private Music menuSong;
+    //private Music menuSong;
     private Entity plant, playTarget, optionsTarget, p, l, a, y, swipeTutorial;
     private ObjectMap<String, Boolean> readyMap = new ObjectMap<>();
 
@@ -63,7 +63,7 @@ public class MenuScreen extends LazyInitScreen {
         engine = new PooledEngine();
 
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM);
-        menuSong = Assets.getMenuMusic();
+        //menuSong = Assets.getMenuMusic();
 
         Vector3 playerPosition = new Vector3(
                 App.W/2f,
@@ -204,9 +204,10 @@ public class MenuScreen extends LazyInitScreen {
     public void show() {
         super.show();
 
-        menuSong.setVolume(Volume.MENU_MUSIC);
-        menuSong.setLooping(true);
-        menuSong.play();
+        game.playBgMusic("MENU");
+//        menuSong.setVolume(Volume.MENU_MUSIC);
+//        menuSong.setLooping(true);
+//        menuSong.play();
 
         App.playerLastPosition.set(App.W/2f, App.H/5f);
     }
@@ -239,8 +240,7 @@ public class MenuScreen extends LazyInitScreen {
         }
 
         if(isReady(playTarget, "play")){
-            menuSong.stop();
-            menuSong.dispose();
+            game.pauseBgMusic();
             game.switchScreens("GAME");
         }
 

@@ -34,7 +34,7 @@
 
         private IGameProcessor game;
         private PooledEngine engine;
-        private Music music;
+        //private Music music;
 
         private Array<EntitySystem> playingOnlySystems;
 
@@ -135,7 +135,7 @@
             playingOnlySystems.add(playerDmgSystem);
             playingOnlySystems.add(pathFollowSystem);
 
-            music = Assets.getBackgroundMusic();
+            //music = Assets.getBackgroundMusic();
 
         }
 
@@ -148,9 +148,11 @@
             App.resetWeapons();
 
             //Start Music Playing
-            music.setVolume(Volume.BG_MUSIC);
-            music.setLooping(true);
-            music.play();
+            Gdx.app.log("Space Screen", "Playing Music");
+            game.playBgMusic("GAME");
+//            music.setVolume(Volume.BG_MUSIC);
+//            music.setLooping(true);
+//            music.play();
         }
 
         /**************************
@@ -164,8 +166,6 @@
                 if(App.isSlowed()) {
                     deltaToApply *= App.SLOW_SCALE;
                 }
-                music.getPosition();
-
             }
             engine.update(deltaToApply);
 
@@ -173,7 +173,7 @@
                 GameState prevState = lastState;
                 lastState = App.getState();
                 if(lastState == GameState.GAME_OVER) {
-                    music.stop();
+                    game.pauseBgMusic();
                     engine.getSystem(GameOverSystem.class).setProcessing(true);
                     for (EntitySystem es : playingOnlySystems) {
                         if(es.checkProcessing()) {
@@ -181,7 +181,6 @@
                         }
                     }
                 }else if(lastState == GameState.PLAYING && prevState != GameState.WEAPON_SELECT){
-                    music.play();
                     engine.getSystem(GameOverSystem.class).setProcessing(false);
                     for (EntitySystem es : playingOnlySystems) {
                         if(!es.checkProcessing()) {
