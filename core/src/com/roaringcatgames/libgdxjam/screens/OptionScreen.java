@@ -3,7 +3,6 @@ package com.roaringcatgames.libgdxjam.screens;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,6 +16,7 @@ import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.systems.BackgroundSystem;
+import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
  * This is an {@link LazyInitScreen} implementation that will
@@ -29,27 +29,37 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private final String CTRL_KEY = "controls";
     private final Vector2 touchPoint = new Vector2();
 
-    private final float BUTTON_RADIUS = 1f;
+    private final float BUTTON_RADIUS = 2f;
 
     private IGameProcessor game;
     private PooledEngine engine;
 
-    private Entity musicSelect;
+    private Entity musicButton;
     private Entity musicText;
-    private Entity sfxSelect;
+    private Entity sfxButton;
     private Entity sfxText;
-    private Entity controlSelect;
+    private Entity controlButton;
     private Entity controlText;
     private Entity vibrationSelect;
     private Entity vibrationText;
+    private Entity backButton;
+    private Entity nathan;
+    private Entity loi;
+    private Entity barry;
+    private Entity kfp;
 
 
     private float textX = App.W/3f;
     private float buttonX = App.W - 4f;
     private float musicY = App.H - 3f;
-    private float sfxY = App.H - 6f;
-    private float ctrlY = App.H - 9f;
-    private float vibraY = App.H - 12f;
+    private float sfxY = App.H - 6.5f;
+    private float ctrlY = App.H - 10f;
+    private float vibraY = App.H - 13.5f;
+
+    private String musicWords = "Music ";
+    private String sfxWords = "SFX ";
+    private String ctrlWords = "Control Boost ";
+    private String vibraWords = "Vibration ";
 
 
 
@@ -94,32 +104,32 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
         //Setup basic entities
         String musicState = game.getPreferenceManager().getStoredString(MUSIC_KEY, "On");
-        musicText = addTextEntity(textX, musicY + 0.5f, "Music " + musicState, baseFont);
+        musicText = addTextEntity(textX, musicY + 0.5f, musicWords + musicState, baseFont);
         String sfxState = game.getPreferenceManager().getStoredString(SFX_KEY, "On");
-        sfxText = addTextEntity(textX, sfxY + 0.5f, "SFX " + sfxState, baseFont);
+        sfxText = addTextEntity(textX, sfxY + 0.5f, sfxWords + sfxState, baseFont);
         String vibraState = game.getPreferenceManager().getStoredString(VIBRA_KEY, "Off");
-        vibrationText = addTextEntity(textX, vibraY + 0.5f, "Vibration " + vibraState, baseFont);
-        String ctrlState = game.getPreferenceManager().getStoredString(CTRL_KEY, "Steady");
-        controlText = addTextEntity(textX, ctrlY + 0.5f, "Controls " + ctrlState, baseFont);
+        vibrationText = addTextEntity(textX, vibraY + 0.5f, vibraWords + vibraState, baseFont);
+        String ctrlState = game.getPreferenceManager().getStoredString(CTRL_KEY, "Off");
+        controlText = addTextEntity(textX, ctrlY + 0.5f, ctrlWords + ctrlState, baseFont);
 
-
-
-        musicSelect = addButton(buttonX, musicY, MUSIC_KEY, musicState);
-        sfxSelect = addButton(buttonX, sfxY, SFX_KEY, sfxState);
+        sfxButton = addButton(buttonX, sfxY, SFX_KEY, sfxState);
+        musicButton = addButton(buttonX, musicY, MUSIC_KEY, musicState);
         vibrationSelect = addButton(buttonX, vibraY, VIBRA_KEY, vibraState);
-        controlSelect = addButton(buttonX, ctrlY, CTRL_KEY, ctrlState);
+        controlButton = addButton(buttonX, ctrlY, CTRL_KEY, ctrlState);
+
+        backButton = addButton(App.W/2f, 10f, "BACK", null);
 
 
-        addTextEntity(App.W/2f,  5.5f, "Nathan Hutchens", baseFont);
-        addTextEntity(App.W/2f,  4.7f, "Music", secondaryFont);
+        nathan = addTextEntity(App.W/2f,  6.5f, "Nathan Hutchens", baseFont, 8f, 1.25f, 0f, -0.25f);
+        addTextEntity(App.W/2f,  5.6f, "Music", secondaryFont);
 
-        addTextEntity(App.W/2f, 3.5f, "Loi LeMix", baseFont);
-        addTextEntity(App.W/2f, 2.7f, "Art Cat", secondaryFont);
+        loi = addTextEntity(App.W/2f, 4.5f, "Loi LeMix", baseFont, 6f, 1.25f, 0f, -0.25f);
+        addTextEntity(App.W/2f, 3.6f, "Art Cat", secondaryFont);
 
-        addTextEntity(App.W/2f, 1.5f, "Barry Rowe", baseFont);
-        addTextEntity(App.W/2f, 0.7f, "Code Cat", secondaryFont);
+        barry = addTextEntity(App.W / 2f, 2.5f, "Barry Rowe", baseFont, 6f, 1.25f, 0f, -0.25f);
+        addTextEntity(App.W / 2f, 1.6f, "Code Cat", secondaryFont);
 
-
+        kfp = addTextEntity(App.W / 2f, 0.5f, "Version: 1.0.0-#kentuckyfriedpixels", secondaryFont, 10f, 0.75f, 0f, -0.1f);
     }
 
 
@@ -130,13 +140,19 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     }
 
 
-    private Entity addTextEntity(float x, float y, String text, BitmapFont font){
+    private Entity addTextEntity(float x, float y, String text, BitmapFont font, float...bounds){
         Entity textEntity = engine.createEntity();
         textEntity.add(TransformComponent.create(engine)
                 .setPosition(x, y));
         textEntity.add(TextComponent.create(engine)
                 .setFont(font)
                 .setText(text));
+
+        if(bounds != null && bounds.length == 4){
+            textEntity.add(BoundsComponent.create(engine)
+                .setBounds(0f, 0f, bounds[0], bounds[1])
+                .setOffset(bounds[2], bounds[3]));
+        }
         engine.addEntity(textEntity);
         return textEntity;
     }
@@ -144,7 +160,8 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private Entity addButton(float x, float y, String key, String value){
         Entity button = engine.createEntity();
         button.add(TransformComponent.create(engine)
-                .setPosition(x, y));
+                .setPosition(x, y)
+                .setScale(1f, 1f));
         button.add(TextureComponent.create(engine)
                 .setRegion(getButtonRegion(key, value)));
         button.add(CircleBoundsComponent.create(engine)
@@ -170,7 +187,10 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
                 region = value.equals("On") ? Assets.getVibrationOn() : Assets.getVibrationOff();
                 break;
             case CTRL_KEY:
-                region = value.equals("Steady") ? Assets.getControlsSteady() : Assets.getControlsAmplified();
+                region = value.equals("Off") ? Assets.getControlsSteady() : Assets.getControlsAmplified();
+                break;
+            case "BACK":
+                region = Assets.getBackAsteroid();
                 break;
         }
 
@@ -201,7 +221,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touchPoint.set(screenX, screenY);
         game.getViewport().unproject(touchPoint);
-        if(K2ComponentMappers.circleBounds.get(musicSelect).circle.contains(touchPoint)){
+        if(K2ComponentMappers.circleBounds.get(musicButton).circle.contains(touchPoint)){
             //toggleMusic
             String newValue = "Off";
             String state = game.getPreferenceManager().getStoredString(MUSIC_KEY, "On");
@@ -210,10 +230,10 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
             }
 
             game.getPreferenceManager().updateString(MUSIC_KEY, newValue);
-            K2ComponentMappers.texture.get(musicSelect).setRegion(getButtonRegion(MUSIC_KEY, newValue));
-            K2ComponentMappers.text.get(musicText).setText("Music " + newValue);
+            K2ComponentMappers.texture.get(musicButton).setRegion(getButtonRegion(MUSIC_KEY, newValue));
+            K2ComponentMappers.text.get(musicText).setText(musicWords + newValue);
 
-        }else if(K2ComponentMappers.circleBounds.get(sfxSelect).circle.contains(touchPoint)){
+        }else if(K2ComponentMappers.circleBounds.get(sfxButton).circle.contains(touchPoint)){
             //toggle Sfx
             String newValue = "Off";
             String state = game.getPreferenceManager().getStoredString(SFX_KEY, "On");
@@ -222,8 +242,8 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
             }
 
             game.getPreferenceManager().updateString(SFX_KEY, newValue);
-            K2ComponentMappers.texture.get(sfxSelect).setRegion(getButtonRegion(SFX_KEY, newValue));
-            K2ComponentMappers.text.get(sfxText).setText("SFX " + newValue);
+            K2ComponentMappers.texture.get(sfxButton).setRegion(getButtonRegion(SFX_KEY, newValue));
+            K2ComponentMappers.text.get(sfxText).setText(sfxWords + newValue);
 
         }else if(K2ComponentMappers.circleBounds.get(vibrationSelect).circle.contains(touchPoint)) {
             //toggle Sfx
@@ -231,25 +251,38 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
             String state = game.getPreferenceManager().getStoredString(VIBRA_KEY, "On");
             if(state.equals("Off")) {
                 newValue = "On";
+                Gdx.input.vibrate(new long[] {0, 100, 100, 100, 100}, -1);
             }
 
             game.getPreferenceManager().updateString(VIBRA_KEY, newValue);
             K2ComponentMappers.texture.get(vibrationSelect).setRegion(getButtonRegion(VIBRA_KEY, newValue));
-            K2ComponentMappers.text.get(vibrationText).setText("Vibration " + newValue);
+            K2ComponentMappers.text.get(vibrationText).setText(vibraWords + newValue);
 
-        }else if(K2ComponentMappers.circleBounds.get(controlSelect).circle.contains(touchPoint)) {
+        }else if(K2ComponentMappers.circleBounds.get(controlButton).circle.contains(touchPoint)) {
             //toggle Sfx
-            String newValue = "Amplified";
-            String state = game.getPreferenceManager().getStoredString(CTRL_KEY, "Steady");
-            if(state.equals("Amplified")) {
-                newValue = "Steady";
+            String newValue = "Off";
+            String state = game.getPreferenceManager().getStoredString(CTRL_KEY, "Off");
+            if(state.equals("Off")) {
+                newValue = "On";
             }
 
             game.getPreferenceManager().updateString(CTRL_KEY, newValue);
-            K2ComponentMappers.texture.get(controlSelect).setRegion(getButtonRegion(CTRL_KEY, newValue));
-            K2ComponentMappers.text.get(controlText).setText("Controls " + newValue);
+            K2ComponentMappers.texture.get(controlButton).setRegion(getButtonRegion(CTRL_KEY, newValue));
+            K2ComponentMappers.text.get(controlText).setText(ctrlWords + newValue);
 
+        }else if(K2ComponentMappers.circleBounds.get(backButton).circle.contains(touchPoint)){
+            game.switchScreens("MENU");
+        }else if(K2ComponentMappers.bounds.get(nathan).bounds.contains(touchPoint)){
+            Gdx.net.openURI("http://twitter.com/TheLucidBard");
+        }else if(K2ComponentMappers.bounds.get(loi).bounds.contains(touchPoint)){
+            Gdx.net.openURI("http://twitter.com/LoiLeMix");
+        }else if(K2ComponentMappers.bounds.get(barry).bounds.contains(touchPoint)){
+            Gdx.net.openURI("http://twitter.com/barryrowe");
+        }else if(K2ComponentMappers.bounds.get(kfp).bounds.contains(touchPoint)){
+            Gdx.net.openURI("https://itch.io/jam/kentucky-fried-pixels");
         }
+
+
         return false;
     }
 

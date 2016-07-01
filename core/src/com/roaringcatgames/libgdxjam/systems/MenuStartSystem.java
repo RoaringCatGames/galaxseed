@@ -95,8 +95,8 @@ public class MenuStartSystem extends IteratingSystem{
         attachPlant(bullet, enemy);
         getEngine().removeEntity(bullet);
         if(enemyHealth.health <= 0f) {
-            AnimationComponent ani = am.get(enemy);
-            ani.setPaused(false);
+//            AnimationComponent ani = am.get(enemy);
+//            ani.setPaused(false);
             float xSpeed = K2MathUtil.getRandomInRange(8f, 15f) * (r.nextFloat() > 0.5f ? -1f : 1f);
             float ySpeed = K2MathUtil.getRandomInRange(8f, 15f) * (r.nextFloat() > 0.5f ? -1f : 1f);
             Vector2 speed = new Vector2(xSpeed, ySpeed);

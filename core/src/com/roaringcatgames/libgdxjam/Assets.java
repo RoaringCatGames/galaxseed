@@ -158,6 +158,15 @@ public class Assets {
     /////////////
     //PLAY
     /////////////
+    public static TextureAtlas.AtlasRegion getPlayAsteroid(){
+        return getCachedRegion(SPRITE_ATLAS, "options/play");
+    }
+    public static TextureAtlas.AtlasRegion getOptionsAsteroid(){
+        return getCachedRegion(SPRITE_ATLAS, "options/options");
+    }
+    public static TextureAtlas.AtlasRegion getBackAsteroid(){
+        return getCachedRegion(SPRITE_ATLAS, "options/back");
+    }
     public static Array<TextureAtlas.AtlasRegion> getPFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "PLAY/P");
     }

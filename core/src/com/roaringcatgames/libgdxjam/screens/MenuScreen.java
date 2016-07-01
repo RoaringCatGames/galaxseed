@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -140,11 +141,11 @@ public class MenuScreen extends LazyInitScreen {
 
 
 
-        float xPos = 3f;
-        float yPos = 18f;
-        playTarget = createPlayAsteroid(xPos, yPos, Animations.getpMenu());
+        float xPos = 5f;
+        float yPos = 16f;
+        playTarget = createPlayAsteroid(xPos, yPos, Assets.getPlayAsteroid());
         engine.addEntity(playTarget);
-        optionsTarget = createPlayAsteroid(xPos + 13.5f, yPos, Animations.getyMenu());
+        optionsTarget = createPlayAsteroid(xPos + 10f, yPos, Assets.getOptionsAsteroid());
         engine.addEntity(optionsTarget);
 
 //        p = createPlayAsteroid(xPos, yPos, Animations.getpMenu());
@@ -174,40 +175,26 @@ public class MenuScreen extends LazyInitScreen {
                 .setOpacity(0.5f));
         engine.addEntity(swipeTutorial);
 
-
-        Entity versionText = engine.createEntity();
-        versionText.add(TextComponent.create(engine)
-            .setFont(Gdx.graphics.getDensity() > 1f ? Assets.get48Font() : Assets.get32Font())
-            .setText("Version: 0.2.0-kfp"));
-        versionText.add(TransformComponent.create(engine)
-            .setPosition(App.W/2f, 2f, Z.gameOver));
-        engine.addEntity(versionText);
-
         engine.addEntity(plant);
     }
 
-    private Entity createPlayAsteroid(float xPos, float yPos, Animation ani) {
+    private Entity createPlayAsteroid(float xPos, float yPos, TextureRegion region) {
         Entity playAsteroid = engine.createEntity();
         playAsteroid.add(WhenOffScreenComponent.create(engine));
         playAsteroid.add(MenuItemComponent.create(engine));
         playAsteroid.add(HealthComponent.create(engine)
             .setMaxHealth(Health.PlayAsteroid)
             .setHealth(Health.PlayAsteroid));
-        playAsteroid.add(TextureComponent.create(engine));
+        playAsteroid.add(TextureComponent.create(engine)
+            .setRegion(region));
         playAsteroid.add(CircleBoundsComponent.create(engine)
-                .setCircle(xPos, yPos, 2f));
-        playAsteroid.add(AnimationComponent.create(engine)
-                .addAnimation("DEFAULT", ani)
-                .setPaused(true));
+                .setCircle(xPos, yPos, 3f));
         playAsteroid.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos, Z.playAsteroids)
-                .setScale(0.5f, 0.5f));
-        playAsteroid.add(StateComponent.create(engine)
-                .set("DEFAULT")
-                .setLooping(false));
+                .setScale(1f, 1f));
         playAsteroid.add(ShakeComponent.create(engine)
                 .setSpeed(6f, 4f)
-                .setOffsets(0.4f, 0.8f)
+                .setOffsets(0.4f, 0.6f)
                 .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
 
         return playAsteroid;
