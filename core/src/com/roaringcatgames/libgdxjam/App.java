@@ -52,6 +52,7 @@ public class App {
         currentWeaponLevels.put(WeaponType.GUN_SEEDS, new WeaponState(WeaponLevel.LEVEL_1, false));
         currentWeaponLevels.put(WeaponType.POLLEN_AURA, new WeaponState(WeaponLevel.LEVEL_1, false));
         currentWeaponLevels.put(WeaponType.HELICOPTER_SEEDS, new WeaponState(WeaponLevel.LEVEL_1, false));
+        currentWeaponLevels.put(WeaponType.UNSELECTED, new WeaponState(WeaponLevel.LEVEL_1, true));
     }
 
     public static void setTimeSpentSlow(float tss){

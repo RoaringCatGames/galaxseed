@@ -34,7 +34,6 @@
 
         private IGameProcessor game;
         private PooledEngine engine;
-        //private Music music;
 
         private Array<EntitySystem> playingOnlySystems;
 
@@ -71,16 +70,24 @@
             engine.addSystem(new AnimationSystem());
             engine.addSystem(new TweenSystem());
 
+            //Systems to control from screen
+            FiringSystem firingSystem = new FiringSystem();
+            EnemySpawnSystem enemySpawnSystem = new EnemySpawnSystem();
+            EnemyFiringSystem enemyFiringSystem = new EnemyFiringSystem();
+            EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
+            PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();
+            GameOverSystem gameOverSystem = new GameOverSystem(game);
+            gameOverSystem.setProcessing(false);
+            PathFollowSystem pathFollowSystem = new PathFollowSystem();
+
             //Custom Systems
             Vector2 minBounds = new Vector2(0f, 0f);
             Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
             engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-0.25f), maxBounds.cpy().scl(1.25f)));
-            engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game.getCamera(), WeaponType.POLLEN_AURA));
-            FiringSystem firingSystem = new FiringSystem();
+            engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game.getCamera(), WeaponType.GUN_SEEDS));
+
             engine.addSystem(firingSystem);
-            EnemySpawnSystem enemySpawnSystem = new EnemySpawnSystem();
             engine.addSystem(enemySpawnSystem);
-            EnemyFiringSystem enemyFiringSystem = new EnemyFiringSystem();
             engine.addSystem(enemyFiringSystem);
             engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
             engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
@@ -94,11 +101,8 @@
             engine.addSystem(new WeaponChangeSystem(game));
             engine.addSystem(new HelicopterSeedSystem());
             engine.addSystem(new StatusSystem());
-            //engine.addSystem(new PlayerHealthSystem(cam));
 
 
-            EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
-            PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();
             engine.addSystem(enemyDmgSystem);
             engine.addSystem(new PollenAuraSystem());
             engine.addSystem(playerDmgSystem);
@@ -109,8 +113,7 @@
                     GunComponent.class,
                     WeaponDecorationComponent.class).get()));
 
-            GameOverSystem gameOverSystem = new GameOverSystem(game);
-            gameOverSystem.setProcessing(false);
+
             engine.addSystem(gameOverSystem);
             engine.addSystem(new FadingSystem());
             engine.addSystem(new HealthPackSystem());
@@ -121,7 +124,7 @@
             engine.addSystem(renderingSystem);
             engine.addSystem(textRenderingSystem);
 
-            PathFollowSystem pathFollowSystem = new PathFollowSystem();
+
             engine.addSystem(pathFollowSystem);
             engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
             engine.addSystem(new FPSSystem(Assets.get48Font(), new Vector2(App.W - 3f, App.H - 3f), 10));
@@ -134,9 +137,6 @@
             playingOnlySystems.add(enemyDmgSystem);
             playingOnlySystems.add(playerDmgSystem);
             playingOnlySystems.add(pathFollowSystem);
-
-            //music = Assets.getBackgroundMusic();
-
         }
 
         @Override
@@ -147,12 +147,7 @@
             EnemySpawns.resetSpawns();
             App.resetWeapons();
 
-            //Start Music Playing
-            Gdx.app.log("Space Screen", "Playing Music");
             game.playBgMusic("GAME");
-//            music.setVolume(Volume.BG_MUSIC);
-//            music.setLooping(true);
-//            music.play();
         }
 
         /**************************
@@ -188,7 +183,6 @@
                         }
                     }
                 }else if(prevState == GameState.WEAPON_SELECT && lastState == GameState.PLAYING){
-                    Gdx.app.log("SpaceScreen", "WEAPON_SELECT => PLAYING");
                     App.setSlowed(false);
                 } if(lastState == GameState.WEAPON_SELECT){
                     App.setSlowed(true);
@@ -204,15 +198,6 @@
 
         @Override
         public boolean keyDown(int keycode) {
-
-            if(keycode == Input.Keys.E){
-                for(EntitySystem s:engine.getSystems()){
-                    if(s instanceof EnemySpawnSystem) {
-                        s.setProcessing(!s.checkProcessing());
-                    }
-                }
-            }
-
             return false;
         }
 
