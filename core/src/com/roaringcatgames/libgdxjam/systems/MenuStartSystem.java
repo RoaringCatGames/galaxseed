@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
@@ -21,7 +23,7 @@ import com.roaringcatgames.libgdxjam.values.Z;
 import java.util.Random;
 
 /**
- * Created by barry on 3/3/16 @ 11:43 PM.
+ * System to handle menu starting
  */
 public class MenuStartSystem extends IteratingSystem{
     private Array<Entity> bullets = new Array<>();
@@ -56,7 +58,7 @@ public class MenuStartSystem extends IteratingSystem{
         for(Entity bullet:bullets){
             CircleBoundsComponent bb = cm.get(bullet);
             for(Entity enemy:enemies){
-                if(cm.has(enemy) && tm.get(enemy).tint.a > 0f){
+                if(cm.has(enemy)){
                     CircleBoundsComponent cb = cm.get(enemy);
                     if (cb.circle.overlaps(bb.circle)) {
                         processCollision(bullet, enemy);
@@ -65,6 +67,27 @@ public class MenuStartSystem extends IteratingSystem{
             }
         }
 
+        for(Entity enemy:enemies){
+            MenuItemComponent mic = Mappers.menuItem.get(enemy);
+            if(mic.isFilled){
+                float xSpeed = K2MathUtil.getRandomInRange(8f, 15f) * (r.nextFloat() > 0.5f ? -1f : 1f);
+                float ySpeed = K2MathUtil.getRandomInRange(8f, 15f) * (r.nextFloat() > 0.5f ? -1f : 1f);
+                Vector2 speed = new Vector2(xSpeed, ySpeed);
+                float angle = (speed.angle() - 90f) + 180f;
+                enemy.add(VelocityComponent.create(getEngine())
+                        .setSpeed(xSpeed, ySpeed));
+                enemy.add(ParticleEmitterComponent.create((PooledEngine)getEngine())
+                        .setParticleImages(Assets.getLeafFrames())
+                        .setDuration(10f)
+                        .setShouldLoop(true)
+                        .setSpeed(15f, 20f)
+                        .setZIndex(Z.leaves)
+                        .setAngleRange(angle -15f, angle + 15f)
+                        .setSpawnRate(17f)
+                        .setParticleLifespans(0.3f, 0.5f));
+                enemy.remove(MenuItemComponent.class);
+            }
+        }
         enemies.clear();
         bullets.clear();
     }
@@ -75,7 +98,7 @@ public class MenuStartSystem extends IteratingSystem{
         if(!entity.isScheduledForRemoval()) {
             if (bm.has(entity)) {
                 bullets.add(entity);
-            } else {
+            } else if(Mappers.menuItem.has(entity)){
                 enemies.add(entity);
             }
         }
@@ -97,21 +120,7 @@ public class MenuStartSystem extends IteratingSystem{
         if(enemyHealth.health <= 0f) {
 //            AnimationComponent ani = am.get(enemy);
 //            ani.setPaused(false);
-            float xSpeed = K2MathUtil.getRandomInRange(8f, 15f) * (r.nextFloat() > 0.5f ? -1f : 1f);
-            float ySpeed = K2MathUtil.getRandomInRange(8f, 15f) * (r.nextFloat() > 0.5f ? -1f : 1f);
-            Vector2 speed = new Vector2(xSpeed, ySpeed);
-            float angle = (speed.angle() - 90f) + 180f;
-            enemy.add(VelocityComponent.create(getEngine())
-                .setSpeed(xSpeed, ySpeed));
-            enemy.add(ParticleEmitterComponent.create((PooledEngine)getEngine())
-                .setParticleImages(Assets.getLeafFrames())
-                .setDuration(10f)
-                .setShouldLoop(true)
-                .setSpeed(15f, 20f)
-                .setZIndex(Z.leaves)
-                .setAngleRange(angle -15f, angle + 15f)
-                .setSpawnRate(17f)
-                .setParticleLifespans(0.3f, 0.5f));
+            Mappers.menuItem.get(enemy).isFilled = true;
         }
 
     }
@@ -161,6 +170,5 @@ public class MenuStartSystem extends IteratingSystem{
                 .setDuration(0.3f));
 
         getEngine().addEntity(plant);
-
     }
 }

@@ -19,7 +19,6 @@ public class App {
     public static final float W = 20f;
     public static final float H = 30f;
 
-    public static float PAUSE_LENGTH = 1f;
     public static float SLOW_SCALE = 0.1f; //10% speed
 
     public static final Game Initialize(){
@@ -40,12 +39,6 @@ public class App {
 
     private static GameState state = GameState.MENU;
 
-
-    public static Vector2 getPlayerLastPosition(){
-        return playerLastPosition;
-    }
-
-
     private static ObjectMap<WeaponType, WeaponState> currentWeaponLevels = new ObjectMap<>();
 
     static {
@@ -55,12 +48,6 @@ public class App {
         currentWeaponLevels.put(WeaponType.UNSELECTED, new WeaponState(WeaponLevel.LEVEL_1, true));
     }
 
-    public static void setTimeSpentSlow(float tss){
-        timeSpentSlow = tss;
-    }
-    public static float getTimeSpentSlow(){
-        return timeSpentSlow;
-    }
     public static void setSlowed(boolean newSlowed){
         isSlowed = newSlowed;
         if(isSlowed){

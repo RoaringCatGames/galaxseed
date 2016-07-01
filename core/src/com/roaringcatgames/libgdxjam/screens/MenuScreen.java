@@ -3,19 +3,14 @@ package com.roaringcatgames.libgdxjam.screens;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
@@ -24,26 +19,27 @@ import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.components.Mappers;
 import com.roaringcatgames.libgdxjam.components.MenuItemComponent;
 import com.roaringcatgames.libgdxjam.components.WeaponType;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 import com.roaringcatgames.libgdxjam.systems.*;
 import com.roaringcatgames.libgdxjam.values.Health;
-import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
  * Screen to bring the player into the game
  */
-public class MenuScreen extends LazyInitScreen {
+public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
     private static final float MAX_FLY_TIME = 1.25f;
+
+    private final Vector2 touchPoint = new Vector2();
 
     private IGameProcessor game;
     private PooledEngine engine;
 
-    //private Music menuSong;
-    private Entity plant, playTarget, optionsTarget, p, l, a, y, swipeTutorial;
+    private Entity plant, playTarget, optionsTarget, swipeTutorial;
     private ObjectMap<String, Boolean> readyMap = new ObjectMap<>();
 
     public MenuScreen(IGameProcessor game) {
@@ -51,10 +47,6 @@ public class MenuScreen extends LazyInitScreen {
         this.game = game;
         readyMap.put("options", false);
         readyMap.put("play", false);
-//        readyMap.put("p", false);
-//        readyMap.put("l", false);
-//        readyMap.put("a", false);
-//        readyMap.put("y", false);
     }
 
 
@@ -63,7 +55,6 @@ public class MenuScreen extends LazyInitScreen {
         engine = new PooledEngine();
 
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM);
-        //menuSong = Assets.getMenuMusic();
 
         Vector3 playerPosition = new Vector3(
                 App.W/2f,
@@ -79,7 +70,6 @@ public class MenuScreen extends LazyInitScreen {
         engine.addSystem(new MenuStartSystem());
 
         //Custom Systems
-
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
@@ -148,21 +138,6 @@ public class MenuScreen extends LazyInitScreen {
         optionsTarget = createPlayAsteroid(xPos + 10f, yPos, Assets.getOptionsAsteroid());
         engine.addEntity(optionsTarget);
 
-//        p = createPlayAsteroid(xPos, yPos, Animations.getpMenu());
-//        engine.addEntity(p);
-//        xPos += 4.5f;
-//
-//        l = createPlayAsteroid(xPos, yPos, Animations.getlMenu());
-//        engine.addEntity(l);
-//        xPos += 4.5f;
-//
-//        a = createPlayAsteroid(xPos, yPos, Animations.getaMenu());
-//        engine.addEntity(a);
-//        xPos += 4.5f;
-//
-//        y = createPlayAsteroid(xPos, yPos, Animations.getyMenu());
-//        engine.addEntity(y);
-
         swipeTutorial = engine.createEntity();
         swipeTutorial.add(TextureComponent.create(engine));
         swipeTutorial.add(AnimationComponent.create(engine)
@@ -204,12 +179,15 @@ public class MenuScreen extends LazyInitScreen {
     public void show() {
         super.show();
 
+        game.addInputProcessor(this);
         game.playBgMusic("MENU");
-//        menuSong.setVolume(Volume.MENU_MUSIC);
-//        menuSong.setLooping(true);
-//        menuSong.play();
-
         App.playerLastPosition.set(App.W/2f, App.H/5f);
+    }
+
+    @Override
+    public void hide() {
+        super.hide();
+        game.removeInputProcessor(this);
     }
 
     boolean treeLeafing = false;
@@ -247,11 +225,6 @@ public class MenuScreen extends LazyInitScreen {
         if(isReady(optionsTarget, "options")){
             game.switchScreens("OPTIONS");
         }
-
-//        if(isReady(p, "p") && isReady(l, "l") && isReady(a, "a") && isReady(y, "y")){
-//            menuSong.stop();
-//            dispatcher.endCurrentScreen();
-//        }
     }
 
     private boolean isReady(Entity p, String key){
@@ -264,5 +237,56 @@ public class MenuScreen extends LazyInitScreen {
         readyMap.put(key, isReady);
 
         return isReady;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        touchPoint.set(screenX, screenY);
+        game.getViewport().unproject(touchPoint);
+        if(K2ComponentMappers.circleBounds.get(playTarget).circle.contains(touchPoint)){
+            if(Mappers.menuItem.has(playTarget)) {
+                Mappers.menuItem.get(playTarget).isFilled = true;
+            }
+        }else if(K2ComponentMappers.circleBounds.get(optionsTarget).circle.contains(touchPoint)){
+            if(Mappers.menuItem.has(optionsTarget)){
+                Mappers.menuItem.get(optionsTarget).isFilled = true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }
