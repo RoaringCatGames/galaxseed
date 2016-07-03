@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
@@ -24,7 +25,7 @@ import com.roaringcatgames.libgdxjam.values.*;
  */
 public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
-    private float enhancedMovementScale = Gdx.graphics.getDensity() > 1f ? 2f : 1f; //2f;
+    private float enhancedMovementScale = 2f; //2f;
 
     private boolean isInitialized = false;
     private Entity player;
@@ -45,9 +46,9 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private ComponentMapper<AnimationComponent> am;
 
 
-    private OrthographicCamera cam;
+    private IGameProcessor game;
 
-    public PlayerSystem(Vector3 initialPosition, float initialScale, OrthographicCamera cam, WeaponType initialWeapon){
+    public PlayerSystem(Vector3 initialPosition, float initialScale, IGameProcessor game, WeaponType initialWeapon){
         super(Family.all(PlayerComponent.class).get());
         this.initialPosition = initialPosition;
         this.initialScale = initialScale;
@@ -55,7 +56,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         this.sm = ComponentMapper.getFor(StateComponent.class);
         this.tm = ComponentMapper.getFor(TransformComponent.class);
         this.am = ComponentMapper.getFor(AnimationComponent.class);
-        this.cam = cam;
+        this.game = game;
 
         this.flyingMusic = Assets.getFlyingMusic();
 
@@ -179,7 +180,11 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         boolean isLooping = true;
 
         if(App.getState() == GameState.PLAYING || App.getState() == GameState.MENU){
-            tc.position.add(positionShift.add(currentPositionChange).scl(enhancedMovementScale));
+            if(PrefsUtil.isControlBoostOn()) {
+                tc.position.add(positionShift.add(currentPositionChange).scl(enhancedMovementScale));
+            }else{
+                tc.position.add(positionShift.add(currentPositionChange));
+            }
 
             /**********************
              * Set Animation State
@@ -289,7 +294,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
         if(pointer == 0){
             touchPoint.set(screenX, screenY, 0f);
-            touchPoint = cam.unproject(touchPoint);
+            touchPoint = game.getViewport().unproject(touchPoint);
             controlOrigin.set(touchPoint.x, touchPoint.y);
 
         }
@@ -315,7 +320,7 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         if(pointer == 0) {
 
             currentPositionChange.set(screenX, screenY, 0f);
-            currentPositionChange = cam.unproject(currentPositionChange);
+            currentPositionChange = game.getViewport().unproject(currentPositionChange);
             //Gdx.app.log("Player System", "ScreenXY (" + screenX + ", " + screenY + ") Unprojected: (" + currentPositionChange.x + ", " + currentPositionChange.y + ")");
             //Vector3 newTouchPosition = currentPositionChange.cpy();
             currentPositionChange.sub(touchPoint);

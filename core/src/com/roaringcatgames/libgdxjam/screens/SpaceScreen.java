@@ -92,7 +92,7 @@
             //Custom Systems
 
             engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-0.25f), maxBounds.cpy().scl(1.25f)));
-            engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game.getCamera(), WeaponType.GUN_SEEDS));
+            engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game, WeaponType.GUN_SEEDS));
 
             engine.addSystem(firingSystem);
             engine.addSystem(enemySpawnSystem);
