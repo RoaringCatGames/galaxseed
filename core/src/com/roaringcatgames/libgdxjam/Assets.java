@@ -548,6 +548,9 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getColonelCat(){
         return getCachedRegion(SPRITE_ATLAS, "options/kfp-cat");
     }
+    public static TextureAtlas.AtlasRegion getGvgIcon(){
+        return getCachedRegion(SPRITE_ATLAS, "options/gvg-logo");
+    }
 
 
     /////////////

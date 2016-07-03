@@ -139,6 +139,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         x = App.W/2f;
         nathan = addTextEntity(x, y, "Nathan H.", baseFont, 8f, 1.25f, 0f, -0.25f);
         addTextEntity(x, offY, "Music & SFX", secondaryFont);
+        addIcon(x, iconY, Assets.getGvgIcon(), 0.75f);
 
         x = (App.W/6f)*5f;
         barry = addTextEntity(x, y, "Barry R.", baseFont, 6f, 1.25f, 0f, -0.25f);
