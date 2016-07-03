@@ -220,7 +220,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 }
 
                 if(PrefsUtil.areSfxEnabled()){
-                    Assets.getExplosionSfx().play(Volume.EXPLOSTION_SFX);
+                    Assets.getExplosionSfx().play(Volume.EXPLOSION_SFX);
                 }
 
             } else if (!hasInitialized && ac.animations.get("DEAD").isAnimationFinished(sc.time)) {

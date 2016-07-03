@@ -44,6 +44,7 @@ public class Assets {
         am.load(PLAYER_HIT_HEAVY_SFX, SOUND);
         am.load(PLANET_POP_SFX, SOUND);
         am.load(EXPLOSTION_SFX, SOUND);
+        am.load(SWISH_SFX, SOUND);
         am.load(BLOOM_1_SFX, SOUND);
         am.load(BLOOM_2_SFX, SOUND);
         am.load(BLOOM_3_SFX, SOUND);
@@ -585,6 +586,10 @@ public class Assets {
         return am.get(EXPLOSTION_SFX, SOUND);
     }
 
+    public static Sound getSwishSfx(){
+        return am.get(SWISH_SFX, SOUND);
+    }
+
     public static Sound getBloomSfx(int index) {
         Sound s;
         switch(index){
@@ -666,12 +671,14 @@ public class Assets {
     private static final String LOADING_ATLAS = "animations/loading.atlas";
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
+
     private static final String BG_MUSIC = "music/nebulae-slower-70.mp3";//bgmusic.mp3";
     private static final String MENU_MUISC = "music/title.mp3";
     private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
-    private static final String FIRING_SFX = "sfx/seed-fire.mp3";
     private static final String FLYING_MUSIC = "music/flying.mp3";
 
+    private static final String FIRING_SFX = "sfx/seed-fire.mp3";
+    private static final String SWISH_SFX = "sfx/swish.mp3";
     private static final String PLANET_POP_SFX = "sfx/planet-pop.mp3";
     private static final String PLAYER_HIT_LIGHT_SFX = "sfx/player-hit-light.mp3";
     private static final String PLAYER_HIT_MEDIUM_SFX = "sfx/player-hit-medium.mp3";
