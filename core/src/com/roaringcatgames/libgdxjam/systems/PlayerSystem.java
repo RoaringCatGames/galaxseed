@@ -6,26 +6,27 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.PrefsUtil;
-import com.roaringcatgames.libgdxjam.components.*;
-import com.roaringcatgames.libgdxjam.values.*;
+import com.roaringcatgames.libgdxjam.components.PlayerComponent;
+import com.roaringcatgames.libgdxjam.components.WeaponLevel;
+import com.roaringcatgames.libgdxjam.components.WeaponType;
+import com.roaringcatgames.libgdxjam.values.GameState;
+import com.roaringcatgames.libgdxjam.values.Health;
+import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
  * System to initialize and manage the Player state
  */
 public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
-    private float enhancedMovementScale = 2f; //2f;
+    private float enhancedMovementScale = 2f;
 
     private boolean isInitialized = false;
     private Entity player;
@@ -43,7 +44,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<TransformComponent> tm;
-    private ComponentMapper<AnimationComponent> am;
 
 
     private IGameProcessor game;
@@ -55,7 +55,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
         this.sm = ComponentMapper.getFor(StateComponent.class);
         this.tm = ComponentMapper.getFor(TransformComponent.class);
-        this.am = ComponentMapper.getFor(AnimationComponent.class);
         this.game = game;
 
         this.flyingMusic = Assets.getFlyingMusic();
@@ -321,8 +320,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
             currentPositionChange.set(screenX, screenY, 0f);
             currentPositionChange = game.getViewport().unproject(currentPositionChange);
-            //Gdx.app.log("Player System", "ScreenXY (" + screenX + ", " + screenY + ") Unprojected: (" + currentPositionChange.x + ", " + currentPositionChange.y + ")");
-            //Vector3 newTouchPosition = currentPositionChange.cpy();
             currentPositionChange.sub(touchPoint);
             touchPoint.add(currentPositionChange);
         }
