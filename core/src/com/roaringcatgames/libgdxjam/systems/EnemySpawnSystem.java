@@ -25,9 +25,13 @@ import com.roaringcatgames.libgdxjam.components.*;
 import java.util.Random;
 
 /**
- * Created by barry on 1/10/16 @ 7:35 PM.
+ * System responsible for spawning enemy entities and applying their components.
  */
 public class EnemySpawnSystem extends IteratingSystem {
+
+    private static final float ASTEROID_A_PU_CHANCE = 0.1f;
+    private static final float ASTEROID_B_PU_CHANCE = 0.2f;
+    private static final float ASTEROID_C_PU_CHANCE = 0.4f;
 
     private static float elapsedTime = 0f;
     private static float homingChance = 0.1f;
@@ -101,8 +105,9 @@ public class EnemySpawnSystem extends IteratingSystem {
         if(asteroidTimer.doesTriggerThisStep(deltaTime)){
             float xVel = asteroidX < 0f ? AsteroidXVelocity : -AsteroidXVelocity;
             float rnd = r.nextFloat();
-            EnemyType eType = rnd < 0.5f ? EnemyType.ASTEROID_A :
-                              rnd < 0.8f ? EnemyType.ASTEROID_B : EnemyType.ASTEROID_C;
+            EnemyType eType = rnd < getChance(EnemyType.ASTEROID_A) ? EnemyType.ASTEROID_A :
+                              rnd < getChance(EnemyType.ASTEROID_B) ? EnemyType.ASTEROID_B :
+                                                                        EnemyType.ASTEROID_C;
             generateAsteroid(eType, asteroidX, AsteroidY, xVel, AsteroidYVelocity);
             //Randomize left and right
             asteroidX =  r.nextFloat() < 0.5f ? AsteroidRightX : AsteroidLeftX;
@@ -112,6 +117,20 @@ public class EnemySpawnSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
+    }
+
+    private float getChance(EnemyType et){
+        float chance = 0f;
+        switch(et){
+            case ASTEROID_A:
+                chance = elapsedTime < 30f ? 1f : 0.5f;
+                break;
+            case ASTEROID_B:
+                chance = elapsedTime < 60f ? 1f : 0.8f;
+                break;
+        }
+
+        return chance;
     }
 
     /*******************
@@ -140,6 +159,8 @@ public class EnemySpawnSystem extends IteratingSystem {
         //EnemyType eType;
         SpawnStrategy strat = SpawnStrategy.ALL_DIRECTIONS;
 
+        boolean shouldGeneratePowerup = false;
+
         EnemyColor eColor;
         Color assColor;
         switch(eType){
@@ -149,7 +170,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 size = 2.5f;
                 health = Health.AsteroidA;
                 assColor = Colors.BROWN_ASTEROID;
-
+                shouldGeneratePowerup = r.nextFloat() <= ASTEROID_A_PU_CHANCE;
                 strat = stratWeight < (homingChance/4f) ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed)
                         .setParticleTextures(Assets.getFrags())
@@ -162,6 +183,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 size = 3.75f;
                 health = Health.AsteroidB;
                 assColor = Colors.BLUE_ASTEROID;
+                shouldGeneratePowerup = r.nextFloat() <= ASTEROID_B_PU_CHANCE;
                 strat = stratWeight < (homingChance/2f) ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 3f)
                     .setParticleTextures(Assets.getFrags())
@@ -175,6 +197,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 health = Health.AsteroidC;
                 assColor = Colors.PURPLE_ASTEROID;
 
+                shouldGeneratePowerup = r.nextFloat() <= ASTEROID_C_PU_CHANCE;
                 strat = stratWeight < homingChance ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 float spawnRate = r.nextFloat() < 0.1f ? 10f: 4f;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 5f)
@@ -211,7 +234,8 @@ public class EnemySpawnSystem extends IteratingSystem {
             .setRegion(tr));
         enemy.add(EnemyComponent.create(engine)
             .setEnemyType(eType)
-            .setEnemyColor(eColor));
+            .setEnemyColor(eColor)
+            .setShouldGeneratePowerup(shouldGeneratePowerup));
         enemy.add(VelocityComponent.create(engine)
                 .setSpeed(xVel, yVel));
 

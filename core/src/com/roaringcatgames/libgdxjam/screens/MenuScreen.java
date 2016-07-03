@@ -32,7 +32,7 @@ import com.roaringcatgames.libgdxjam.values.Z;
  */
 public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
-    private static final float MAX_FLY_TIME = 1.25f;
+    private static final float MAX_FLY_TIME = 1f;
 
     private final Vector2 touchPoint = new Vector2();
 
@@ -75,7 +75,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false, true));
         engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
-        engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game.getCamera(), WeaponType.GUN_SEEDS));
+        engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game, WeaponType.GUN_SEEDS));
         engine.addSystem(new FiringSystem());
         engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
         engine.addSystem(new BulletSystem());
@@ -258,15 +258,20 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touchPoint.set(screenX, screenY);
         game.getViewport().unproject(touchPoint);
-        if(K2ComponentMappers.circleBounds.get(playTarget).circle.contains(touchPoint)){
-            if(Mappers.menuItem.has(playTarget)) {
+
+        CircleBoundsComponent playBounds = K2ComponentMappers.circleBounds.get(playTarget);
+        CircleBoundsComponent optionsBounds = K2ComponentMappers.circleBounds.get(optionsTarget);
+
+        if (playBounds != null && playBounds.circle.contains(touchPoint)) {
+            if (Mappers.menuItem.has(playTarget)) {
                 Mappers.menuItem.get(playTarget).isFilled = true;
             }
-        }else if(K2ComponentMappers.circleBounds.get(optionsTarget).circle.contains(touchPoint)){
-            if(Mappers.menuItem.has(optionsTarget)){
+        } else if (optionsBounds != null && optionsBounds.circle.contains(touchPoint)) {
+            if (Mappers.menuItem.has(optionsTarget)) {
                 Mappers.menuItem.get(optionsTarget).isFilled = true;
             }
         }
+
         return false;
     }
 

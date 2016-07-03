@@ -14,6 +14,7 @@ public class EnemyComponent implements Component, Pool.Poolable {
     public EnemyColor enemyColor = EnemyColor.BROWN;
     public boolean isDamaging = true;
     public boolean isPollenated = false;
+    public boolean shouldGeneratePowerup = false;
 
     public static EnemyComponent create(PooledEngine engine) {
         return engine.createComponent(EnemyComponent.class);
@@ -39,10 +40,16 @@ public class EnemyComponent implements Component, Pool.Poolable {
         return this;
     }
 
+    public EnemyComponent setShouldGeneratePowerup(boolean shouldGenerate){
+        this.shouldGeneratePowerup = shouldGenerate;
+        return this;
+    }
+
     @Override
     public void reset() {
         enemyType = EnemyType.ASTEROID_FRAG;
         isDamaging = true;
         isPollenated = false;
+        shouldGeneratePowerup = false;
     }
 }

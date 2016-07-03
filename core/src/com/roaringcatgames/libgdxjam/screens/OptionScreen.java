@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -119,19 +120,28 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         vibrationSelect = addButton(buttonX, vibraY, PrefsUtil.VIBRA_KEY, vibraState);
         controlButton = addButton(buttonX, ctrlY, PrefsUtil.CTRL_KEY, ctrlState);
 
-        backButton = addButton(App.W/2f, 10f, "BACK", null);
+        backButton = addButton(App.W / 2f, 12f, "BACK", null);
 
 
-        nathan = addTextEntity(App.W/2f,  6.5f, "Nathan Hutchens", baseFont, 8f, 1.25f, 0f, -0.25f);
-        addTextEntity(App.W/2f,  5.6f, "Music", secondaryFont);
+        float x = App.W/6f;
+        float y = 8f;
+        float offY = y-0.9f;
+        float iconY = y-4f;
+        float kfpY = 0.75f;
+        loi = addTextEntity(x, y, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
+        addTextEntity(x, offY, "Art Cat", secondaryFont);
+        addIcon(x, iconY, Assets.getArtCat(), 0.75f);
 
-        loi = addTextEntity(App.W/2f, 4.5f, "Loi LeMix", baseFont, 6f, 1.25f, 0f, -0.25f);
-        addTextEntity(App.W/2f, 3.6f, "Art Cat", secondaryFont);
+        x = App.W/2f;
+        nathan = addTextEntity(x, y, "Nathan H.", baseFont, 8f, 1.25f, 0f, -0.25f);
+        addTextEntity(x, offY, "Music & SFX", secondaryFont);
 
-        barry = addTextEntity(App.W / 2f, 2.5f, "Barry Rowe", baseFont, 6f, 1.25f, 0f, -0.25f);
-        addTextEntity(App.W / 2f, 1.6f, "Code Cat", secondaryFont);
+        x = (App.W/6f)*5f;
+        barry = addTextEntity(x, y, "Barry R.", baseFont, 6f, 1.25f, 0f, -0.25f);
+        addTextEntity(x, offY, "Code Cat", secondaryFont);
+        addIcon(x, iconY, Assets.getCodeCat(), 0.75f);
 
-        kfp = addTextEntity(App.W / 2f, 0.5f, "Version: 1.0.0-#kentuckyfriedpixels", secondaryFont, 10f, 0.75f, 0f, -0.1f);
+        kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.0.0-#kentuckyfriedpixels", secondaryFont, 10f, 0.75f, 0f, -0.1f);
     }
 
 
@@ -174,6 +184,28 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
                 .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
         engine.addEntity(button);
         return button;
+    }
+
+    private Entity addIcon(float x, float y, TextureRegion region, float...scale){
+        float scaleX = 1f, scaleY = 1f;
+
+        if(scale != null){
+            if(scale.length == 1){
+                scaleX = scale[0];
+                scaleY = scale[0];
+            }else if(scale.length == 2){
+                scaleX = scale[0];
+                scaleY = scale[1];
+            }
+        }
+        Entity icon = engine.createEntity();
+        icon.add(TransformComponent.create(engine)
+                .setPosition(x, y)
+                .setScale(scaleX, scaleY));
+        icon.add(TextureComponent.create(engine)
+                .setRegion(region));
+        engine.addEntity(icon);
+        return icon;
     }
 
     private TextureRegion getButtonRegion(String key, String value){

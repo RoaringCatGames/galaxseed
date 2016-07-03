@@ -57,7 +57,8 @@ public class FiringSystem extends IteratingSystem {
             //Fire all the time.
             if(sc.get() != "DEFAULT") {
 
-                boolean isFiring = false;
+                boolean isFiringSeed = false;
+                boolean isFiringHelicopter = false;
                 for(Entity m:muzzles){
                     StateComponent mState = sm.get(m);
                     GunComponent gc = gm.get(m);
@@ -70,15 +71,17 @@ public class FiringSystem extends IteratingSystem {
                             mState.set("FIRING");
                             mState.setLooping(false);
                             generateBullet(follower.offset.x, follower.offset.y, 0f, gc.bulletSpeed);
+                            isFiringSeed = true;
                         }else{
                             if(mState != null){
                                 mState.set("FIRING");
                             }
                             generateHelicopterSeed(follower.offset.x, follower.offset.y, 0f, gc.bulletSpeed, follower.offset.x < 0f);
+                            isFiringHelicopter = true;
                         }
                         gc.lastFireTime = gc.timeElapsed;
 
-                        isFiring = true;
+
                     }else if(mState != null &&
                              !"DEFAULT".equals(mState.get()) && ac.animations.get(mState.get()).isAnimationFinished(mState.time)){
 
@@ -87,8 +90,12 @@ public class FiringSystem extends IteratingSystem {
                     }
                 }
 
-                if(isFiring && PrefsUtil.areSfxEnabled()){
-                    this.firingSFX.play(Volume.FIRING_SFX);
+                if(PrefsUtil.areSfxEnabled()) {
+                    if (isFiringSeed) {
+                        Assets.getSeedFiring().play(Volume.FIRING_SFX);
+                    }else if(isFiringHelicopter){
+                        Assets.getSwishSfx().play(Volume.SWISH_SFX);
+                    }
                 }
             }else if(isGunSeeds){
                 for(Entity m:muzzles){

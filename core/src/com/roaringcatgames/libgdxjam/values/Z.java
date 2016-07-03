@@ -12,6 +12,7 @@ public class Z {
     public static final float bgSticker = 95f;
     public static final float speedLine = 94f;
 
+    public static final float powerUp = 70f;
     public static final float helicopterSeed = 61f;
     public static final float gatlingGuns = 60f;
     public static final float heliGun = 60f;
@@ -31,7 +32,6 @@ public class Z {
     public static final float treeCover = 43f;
     public static final float healthGlow = 42f;
     public static final float healthPack = 41f;
-    public static final float powerUp = 41f;
     public static final float seed = 40;
 
     public static final float leaves = 39f;

@@ -119,6 +119,7 @@ public class LifeInSpace extends Game implements IGameProcessor {
     public void playBgMusic(String musicName) {
         if(PrefsUtil.isMusicOn()) {
             pauseBgMusic();
+
             if (bgMusic != null) {
                 bgMusic.stop();
             }

@@ -103,4 +103,14 @@ public class App {
     public static IPreferenceManager getPrefs(){
         return game.getPreferenceManager();
     }
+
+    public static boolean canPowerUp() {
+        return hasRoomToUpgrade(WeaponType.GUN_SEEDS) ||
+                hasRoomToUpgrade(WeaponType.HELICOPTER_SEEDS) ||
+                hasRoomToUpgrade(WeaponType.POLLEN_AURA);
+    }
+
+    private static boolean hasRoomToUpgrade(WeaponType wt){
+        return isWeaponEnabled(wt) && getCurrentWeaponLevel(wt) != WeaponLevel.LEVEL_4;
+    }
 }

@@ -24,7 +24,7 @@ import java.util.Random;
 /**
  * System to apply enemy damage of bullets
  */
-public class EnemyDamageSystem extends IteratingSystem {
+public class  EnemyDamageSystem extends IteratingSystem {
 
     private Array<Entity> bullets = new Array<>();
     private Array<Entity> enemies = new Array<>();

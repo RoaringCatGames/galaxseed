@@ -2,7 +2,6 @@ package com.roaringcatgames.libgdxjam.systems;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
@@ -15,7 +14,9 @@ import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
+import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.PrefsUtil;
 import com.roaringcatgames.libgdxjam.components.EnemyComponent;
 import com.roaringcatgames.libgdxjam.components.HealthPackComponent;
 import com.roaringcatgames.libgdxjam.components.Mappers;
@@ -71,20 +72,12 @@ public class EnemyDamageUtil {
                 break;
             case ASTEROID_A:
                 attachTreeCover(engine, enemy, Animations.getAsteroidA());
-                generateUpgradePowerUp(engine, enemyTfm.position.x, enemyTfm.position.y);
-                if(r.nextFloat() < 0.2f) {
-                    generateHealthPack(engine, enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
-                }
                 break;
             case ASTEROID_B:
                 attachTreeCover(engine, enemy, Animations.getAsteroidB());
-                if(r.nextFloat() < 0.33f){
-                    generateHealthPack(engine, enemyTfm.position.x, enemyTfm.position.y, HealthPackType.WATER_CAN);
-                }
                 break;
             case ASTEROID_C:
                 attachTreeCover(engine, enemy, Animations.getAsteroidC());
-                generateHealthPack(engine, enemyTfm.position.x, enemyTfm.position.y, HealthPackType.FERTILIZER);
                 break;
             default:
                 Gdx.app.log("EnemyType", "EnemyType:" + ec.enemyType);
@@ -100,7 +93,12 @@ public class EnemyDamageUtil {
             }else{
                 Gdx.app.log("EnemyDamageSystem", "Enemy doesn't have Velocity!");
             }
-            Assets.getPlanetPopSfx().play(Volume.POP_SFX);
+
+            if(PrefsUtil.areSfxEnabled()) {
+                for(int i=0;i<3;i++) {
+                    Assets.getBloomSfx(r.nextInt(6)).play(Volume.POP_SFX);
+                }
+            }
         }
 
         enemy.add(TweenComponent.create(engine)
@@ -108,6 +106,17 @@ public class EnemyDamageUtil {
                         .target(Colors.PLANTED_GREEN.r, Colors.PLANTED_GREEN.g, Colors.PLANTED_GREEN.b)
                         .ease(TweenEquations.easeInOutSine)));
 
+        if(ec.shouldGeneratePowerup){
+            generatePowerup(engine, enemyTfm.position.x, enemyTfm.position.y);
+        }
+
+    }
+
+    private static void generatePowerup(PooledEngine engine, float x, float y){
+        if(App.canPowerUp()) {
+            Gdx.app.log("EnemyDamageUtil", "Can Power Up!");
+            generateUpgradePowerUp(engine, x, y);
+        }
     }
 
     private static void attachTreeCover(PooledEngine engine, Entity enemy, Animation ani) {
@@ -279,5 +288,9 @@ public class EnemyDamageUtil {
                 .setDuration(0.3f));
 
         engine.addEntity(plant);
+
+        if(PrefsUtil.areSfxEnabled()){
+            Assets.getBloomSfx(r.nextInt(6) + 1).play(Volume.BLOOM_TREE_SFX);
+        }
     }
 }

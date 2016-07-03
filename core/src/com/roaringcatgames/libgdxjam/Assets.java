@@ -43,12 +43,16 @@ public class Assets {
         am.load(PLAYER_HIT_MEDIUM_SFX, SOUND);
         am.load(PLAYER_HIT_HEAVY_SFX, SOUND);
         am.load(PLANET_POP_SFX, SOUND);
+        am.load(EXPLOSTION_SFX, SOUND);
+        am.load(SWISH_SFX, SOUND);
+        am.load(BLOOM_1_SFX, SOUND);
+        am.load(BLOOM_2_SFX, SOUND);
+        am.load(BLOOM_3_SFX, SOUND);
+        am.load(BLOOM_4_SFX, SOUND);
+        am.load(BLOOM_5_SFX, SOUND);
+        am.load(BLOOM_6_SFX, SOUND);
         am.load(FIRING_SFX, SOUND);
         am.load(FLYING_MUSIC, MUSIC);
-
-//        am.load(SEED_PLANT_SFX, SOUND);
-//        am.load(SEED_HIT_SFX, SOUND);
-
 
         return am;
     }
@@ -66,14 +70,6 @@ public class Assets {
     }
     public static TextureAtlas.AtlasRegion getSplashTitle(){
         return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegion("RCG");
-    }
-
-    /***
-     * SAFE IMMEDIATELY after am.load() is called
-     * @return AtlasRegion for the moon sprite.
-     */
-    public static TextureAtlas.AtlasRegion getTitleImage(){
-        return getCachedRegion(ANI_ATLAS, "cherry title/Title");
     }
 
     public static TextureAtlas.AtlasRegion getGalaxTitleImage(){
@@ -543,6 +539,13 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getControlsAmplified(){
         return getCachedRegion(SPRITE_ATLAS, "options/ctrl-amplified");
     }
+    public static TextureAtlas.AtlasRegion getArtCat(){
+        return getCachedRegion(SPRITE_ATLAS, "options/art-cat");
+    }
+    public static TextureAtlas.AtlasRegion getCodeCat(){
+        return getCachedRegion(SPRITE_ATLAS, "options/code-cat");
+    }
+
 
     /////////////
     //Music
@@ -563,10 +566,6 @@ public class Assets {
     /////////////
     //SFX
     /////////////
-    public static Sound getPlanetPopSfx(){
-        return am.get(PLANET_POP_SFX, SOUND);
-    }
-
     public static Sound getPlayerHitLight(){
         return am.get(PLAYER_HIT_LIGHT_SFX, SOUND);
     }
@@ -581,6 +580,42 @@ public class Assets {
 
     public static Sound getSeedFiring() {
         return am.get(FIRING_SFX, SOUND);
+    }
+
+    public static Sound getExplosionSfx() {
+        return am.get(EXPLOSTION_SFX, SOUND);
+    }
+
+    public static Sound getSwishSfx(){
+        return am.get(SWISH_SFX, SOUND);
+    }
+
+    public static Sound getBloomSfx(int index) {
+        Sound s;
+        switch(index){
+            case 1:
+                s = am.get(BLOOM_1_SFX, SOUND);
+                break;
+            case 2:
+                s = am.get(BLOOM_2_SFX, SOUND);
+                break;
+            case 3:
+                s = am.get(BLOOM_3_SFX, SOUND);
+                break;
+            case 4:
+                s = am.get(BLOOM_4_SFX, SOUND);
+                break;
+            case 5:
+                s = am.get(BLOOM_5_SFX, SOUND);
+                break;
+            case 6:
+                s = am.get(BLOOM_6_SFX, SOUND);
+                break;
+            default:
+                s = am.get(BLOOM_1_SFX, SOUND);
+                break;
+        }
+        return s;
     }
 
     /////////////
@@ -636,16 +671,23 @@ public class Assets {
     private static final String LOADING_ATLAS = "animations/loading.atlas";
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
-    private static final String BG_MUSIC = "music/nebulae-slower-70.mp3";//bgmusic.mp3";
+
+    private static final String BG_MUSIC = "music/nebulae.mp3";//bgmusic.mp3";
     private static final String MENU_MUISC = "music/title.mp3";
     private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
-    private static final String FIRING_SFX = "sfx/seed-fire.mp3";
     private static final String FLYING_MUSIC = "music/flying.mp3";
 
+    private static final String FIRING_SFX = "sfx/seed-fire.mp3";
+    private static final String SWISH_SFX = "sfx/swish.mp3";
     private static final String PLANET_POP_SFX = "sfx/planet-pop.mp3";
     private static final String PLAYER_HIT_LIGHT_SFX = "sfx/player-hit-light.mp3";
     private static final String PLAYER_HIT_MEDIUM_SFX = "sfx/player-hit-medium.mp3";
     private static final String PLAYER_HIT_HEAVY_SFX = "sfx/player-hit-heavy.mp3";
-
-
+    private static final String EXPLOSTION_SFX = "sfx/explosion.mp3";
+    private static final String BLOOM_1_SFX = "sfx/bloom-1.mp3";
+    private static final String BLOOM_2_SFX = "sfx/bloom-2.mp3";
+    private static final String BLOOM_3_SFX = "sfx/bloom-3.mp3";
+    private static final String BLOOM_4_SFX = "sfx/bloom-4.mp3";
+    private static final String BLOOM_5_SFX = "sfx/bloom-5.mp3";
+    private static final String BLOOM_6_SFX = "sfx/bloom-6.mp3";
 }
