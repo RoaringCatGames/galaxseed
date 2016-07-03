@@ -53,10 +53,6 @@ public class Assets {
         am.load(FIRING_SFX, SOUND);
         am.load(FLYING_MUSIC, MUSIC);
 
-//        am.load(SEED_PLANT_SFX, SOUND);
-//        am.load(SEED_HIT_SFX, SOUND);
-
-
         return am;
     }
 
@@ -73,14 +69,6 @@ public class Assets {
     }
     public static TextureAtlas.AtlasRegion getSplashTitle(){
         return am.get(LOADING_ATLAS, TEXTURE_ATLAS).findRegion("RCG");
-    }
-
-    /***
-     * SAFE IMMEDIATELY after am.load() is called
-     * @return AtlasRegion for the moon sprite.
-     */
-    public static TextureAtlas.AtlasRegion getTitleImage(){
-        return getCachedRegion(ANI_ATLAS, "cherry title/Title");
     }
 
     public static TextureAtlas.AtlasRegion getGalaxTitleImage(){
@@ -550,6 +538,13 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getControlsAmplified(){
         return getCachedRegion(SPRITE_ATLAS, "options/ctrl-amplified");
     }
+    public static TextureAtlas.AtlasRegion getArtCat(){
+        return getCachedRegion(SPRITE_ATLAS, "options/art-cat");
+    }
+    public static TextureAtlas.AtlasRegion getCodeCat(){
+        return getCachedRegion(SPRITE_ATLAS, "options/code-cat");
+    }
+
 
     /////////////
     //Music
@@ -570,10 +565,6 @@ public class Assets {
     /////////////
     //SFX
     /////////////
-    public static Sound getPlanetPopSfx(){
-        return am.get(PLANET_POP_SFX, SOUND);
-    }
-
     public static Sound getPlayerHitLight(){
         return am.get(PLAYER_HIT_LIGHT_SFX, SOUND);
     }
@@ -603,26 +594,21 @@ public class Assets {
             case 2:
                 s = am.get(BLOOM_2_SFX, SOUND);
                 break;
-
             case 3:
                 s = am.get(BLOOM_3_SFX, SOUND);
                 break;
-
             case 4:
                 s = am.get(BLOOM_4_SFX, SOUND);
                 break;
-
             case 5:
                 s = am.get(BLOOM_5_SFX, SOUND);
                 break;
-
             case 6:
                 s = am.get(BLOOM_6_SFX, SOUND);
                 break;
             default:
                 s = am.get(BLOOM_1_SFX, SOUND);
                 break;
-
         }
         return s;
     }
@@ -697,7 +683,4 @@ public class Assets {
     private static final String BLOOM_4_SFX = "sfx/bloom-4.mp3";
     private static final String BLOOM_5_SFX = "sfx/bloom-5.mp3";
     private static final String BLOOM_6_SFX = "sfx/bloom-6.mp3";
-
-
-
 }
