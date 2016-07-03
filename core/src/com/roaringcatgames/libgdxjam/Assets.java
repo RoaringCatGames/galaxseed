@@ -545,6 +545,9 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getCodeCat(){
         return getCachedRegion(SPRITE_ATLAS, "options/code-cat");
     }
+    public static TextureAtlas.AtlasRegion getColonelCat(){
+        return getCachedRegion(SPRITE_ATLAS, "options/kfp-cat");
+    }
 
 
     /////////////

@@ -1,5 +1,6 @@
 package com.roaringcatgames.libgdxjam.screens;
 
+import aurelienribon.tweenengine.Tween;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
+import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
@@ -48,6 +50,8 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private Entity kfp;
 
     private Sound sfx;
+
+    private Entity kfpCat;
 
 
     private float textX = App.W/3f;
@@ -140,6 +144,9 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         barry = addTextEntity(x, y, "Barry R.", baseFont, 6f, 1.25f, 0f, -0.25f);
         addTextEntity(x, offY, "Code Cat", secondaryFont);
         addIcon(x, iconY, Assets.getCodeCat(), 0.75f);
+
+
+        kfpCat = addIcon(App.W/2f, -3f, Assets.getColonelCat());
 
         kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.0.0-#kentuckyfriedpixels", secondaryFont, 10f, 0.75f, 0f, -0.1f);
     }
@@ -319,7 +326,11 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         }else if(K2ComponentMappers.bounds.get(barry).bounds.contains(touchPoint)){
             Gdx.net.openURI("http://twitter.com/barryrowe");
         }else if(K2ComponentMappers.bounds.get(kfp).bounds.contains(touchPoint)){
-            Gdx.net.openURI("https://itch.io/jam/kentucky-fried-pixels");
+
+            kfpCat.add(TweenComponent.create(engine)
+                .addTween(Tween.to(kfpCat, K2EntityTweenAccessor.POSITION, 2f)
+                    .target(App.W/2f, App.H/2f, 70f)));
+            //Gdx.net.openURI("https://itch.io/jam/kentucky-fried-pixels");
         }
 
 
