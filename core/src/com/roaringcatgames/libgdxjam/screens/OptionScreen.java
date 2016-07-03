@@ -130,16 +130,16 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         float kfpY = 0.75f;
         loi = addTextEntity(x, y, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
         addTextEntity(x, offY, "Art Cat", secondaryFont);
-        addIcon(x, iconY, Assets.getArtCat());
+        addIcon(x, iconY, Assets.getArtCat(), 0.75f);
 
         x = App.W/2f;
         nathan = addTextEntity(x, y, "Nathan H.", baseFont, 8f, 1.25f, 0f, -0.25f);
-        addTextEntity(x, offY, "Music", secondaryFont);
+        addTextEntity(x, offY, "Music & SFX", secondaryFont);
 
         x = (App.W/6f)*5f;
         barry = addTextEntity(x, y, "Barry R.", baseFont, 6f, 1.25f, 0f, -0.25f);
         addTextEntity(x, offY, "Code Cat", secondaryFont);
-        addIcon(x, iconY, Assets.getCodeCat());
+        addIcon(x, iconY, Assets.getCodeCat(), 0.75f);
 
         kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.0.0-#kentuckyfriedpixels", secondaryFont, 10f, 0.75f, 0f, -0.1f);
     }

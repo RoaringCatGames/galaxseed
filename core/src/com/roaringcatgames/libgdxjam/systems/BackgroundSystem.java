@@ -86,15 +86,15 @@ public class BackgroundSystem extends IteratingSystem {
         PooledEngine engine = ((PooledEngine)getEngine());
 
         planets = new Array<>();
-        planets.add(new BackgroundSticker(10f, 30f, 0f, Assets.getPluto()));
-        planets.add(new BackgroundSticker(5f, 62f, 0f, Assets.getNeptune()));
-        planets.add(new BackgroundSticker(10f, 110f, 0f, Assets.getUranus()));
-        planets.add(new BackgroundSticker(10f, 165f, 0f, Assets.getSaturn()));
-        planets.add(new BackgroundSticker(10f, 240f, 0f, Assets.getJupiterBottom()));
-        planets.add(new BackgroundSticker(10f, 284.22f, 0f, Assets.getJupiterTop()));
-        planets.add(new BackgroundSticker(17f, 405f, 0f, Assets.getMars()));
-        planets.add(new BackgroundSticker(5f, 430f, 0f, Assets.getMoon()));
-        planets.add(new BackgroundSticker(10f, 450f, 0f, Assets.getEarth()));
+        planets.add(new BackgroundSticker(10f, 40f, 0f, Assets.getPluto()));
+        planets.add(new BackgroundSticker(5f, 72f, 0f, Assets.getNeptune()));
+        planets.add(new BackgroundSticker(10f, 120f, 0f, Assets.getUranus()));
+        planets.add(new BackgroundSticker(10f, 175f, 0f, Assets.getSaturn()));
+        planets.add(new BackgroundSticker(10f, 250f, 0f, Assets.getJupiterBottom()));
+        planets.add(new BackgroundSticker(10f, 294.22f, 0f, Assets.getJupiterTop()));
+        planets.add(new BackgroundSticker(17f, 415f, 0f, Assets.getMars()));
+        planets.add(new BackgroundSticker(5f, 440f, 0f, Assets.getMoon()));
+        planets.add(new BackgroundSticker(10f, 460f, 0f, Assets.getEarth()));
 
         Entity vp = engine.createEntity();
         vp.add(BoundsComponent.create(engine)
@@ -282,30 +282,32 @@ public class BackgroundSystem extends IteratingSystem {
         }
 
         if(isUsingStickers) {
-            int yStep = 35;
-            int yIndex = 1;
-            for(BackgroundSticker bgSticker:planets){
-                float width = (bgSticker.image.getRegionWidth()/ App.PPM);
-                float height = (bgSticker.image.getRegionHeight()/App.PPM);
-
-                Entity sticker = engine.createEntity();
-                sticker.add(TransformComponent.create(engine)
-                        .setPosition(bgSticker.x, bgSticker.y, Z.bgSticker));
-                sticker.add(TextureComponent.create(engine)
-                        .setRegion(bgSticker.image));
-                sticker.add(VelocityComponent.create(engine)
-                        .setSpeed(0f, stickerSpeed));
-                sticker.add(KinematicComponent.create(engine));
-                sticker.add(BoundsComponent.create(engine)
-                    .setBounds(bgSticker.x - (width / 2f), (bgSticker.y) - (height / 2f), width, height));
-                sticker.add(WhenOffScreenComponent.create(getEngine()));
-                engine.addEntity(sticker);
-                yIndex++;
-            }
+            placePlanets();
         }
 
 
         isInitialized = true;
+    }
+
+    public void placePlanets() {
+        PooledEngine engine = (PooledEngine)getEngine();
+        for(BackgroundSticker bgSticker:planets){
+            float width = (bgSticker.image.getRegionWidth()/ App.PPM);
+            float height = (bgSticker.image.getRegionHeight()/App.PPM);
+
+            Entity sticker = engine.createEntity();
+            sticker.add(TransformComponent.create(engine)
+                    .setPosition(bgSticker.x, bgSticker.y, Z.bgSticker));
+            sticker.add(TextureComponent.create(engine)
+                    .setRegion(bgSticker.image));
+            sticker.add(VelocityComponent.create(engine)
+                    .setSpeed(0f, stickerSpeed));
+            sticker.add(KinematicComponent.create(engine));
+            sticker.add(BoundsComponent.create(engine)
+                .setBounds(bgSticker.x - (width / 2f), (bgSticker.y) - (height / 2f), width, height));
+            sticker.add(WhenOffScreenComponent.create(getEngine()));
+            engine.addEntity(sticker);
+        }
     }
 
     @Override

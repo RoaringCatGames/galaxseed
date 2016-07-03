@@ -247,11 +247,11 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             BoundsComponent seedBounds = K2ComponentMappers.bounds.get(seedSelect);
             BoundsComponent helicopterBounds = K2ComponentMappers.bounds.get(helicpoterSelect);
             BoundsComponent auraBounds = K2ComponentMappers.bounds.get(auraSelect);
-            if(seedBounds.bounds.contains(touchPoint.x, touchPoint.y)){
+            if(App.isWeaponEnabled(WeaponType.GUN_SEEDS) && seedBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.GUN_SEEDS);
-            }else if(helicopterBounds.bounds.contains(touchPoint.x, touchPoint.y)){
+            }else if(App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS) && helicopterBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.HELICOPTER_SEEDS);
-            }else if(auraBounds.bounds.contains(touchPoint.x, touchPoint.y)){
+            }else if(App.isWeaponEnabled(WeaponType.POLLEN_AURA) && auraBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.POLLEN_AURA);
             }else if(pc.weaponType != WeaponType.UNSELECTED){
                 Gdx.app.log("WeaponChangeSystem", "Touch down outside of bounds");

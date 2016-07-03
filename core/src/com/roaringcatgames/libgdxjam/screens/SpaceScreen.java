@@ -37,6 +37,10 @@
 
         private Array<EntitySystem> playingOnlySystems;
 
+        private boolean hasStarted = false;
+        private EntitySystem enemySpawnSystem;
+        private BackgroundSystem bgSystem;
+
         public SpaceScreen(IGameProcessor game) {
             super();
             this.game = game;
@@ -57,6 +61,9 @@
                     App.playerLastPosition.y,
                     Z.player);
 
+            Vector2 minBounds = new Vector2(0f, 0f);
+            Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
+
             Gdx.app.log("Menu Screen", "Cam Pos: " + game.getCamera().position.x + " | " +
                     game.getCamera().position.y + " Cam W/H: " + game.getCamera().viewportWidth + "/" + game.getCamera().viewportHeight);
 
@@ -72,17 +79,18 @@
 
             //Systems to control from screen
             FiringSystem firingSystem = new FiringSystem();
-            EnemySpawnSystem enemySpawnSystem = new EnemySpawnSystem();
+            enemySpawnSystem = new EnemySpawnSystem();
+            enemySpawnSystem.setProcessing(false);
             EnemyFiringSystem enemyFiringSystem = new EnemyFiringSystem();
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
             PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();
             GameOverSystem gameOverSystem = new GameOverSystem(game);
             gameOverSystem.setProcessing(false);
             PathFollowSystem pathFollowSystem = new PathFollowSystem();
+            bgSystem = new BackgroundSystem(minBounds, maxBounds, false, true);
 
             //Custom Systems
-            Vector2 minBounds = new Vector2(0f, 0f);
-            Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
+
             engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-0.25f), maxBounds.cpy().scl(1.25f)));
             engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game.getCamera(), WeaponType.GUN_SEEDS));
 
@@ -91,7 +99,7 @@
             engine.addSystem(enemyFiringSystem);
             engine.addSystem(new RemainInBoundsSystem(minBounds, maxBounds));
             engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
-            engine.addSystem(new BackgroundSystem(minBounds, maxBounds, true, true));
+            engine.addSystem(bgSystem);
             engine.addSystem(new ParticleSystem());
             engine.addSystem(new BulletSystem());
             engine.addSystem(new ScoreSystem());
@@ -146,8 +154,6 @@
             App.setState(GameState.PLAYING);
             EnemySpawns.resetSpawns();
             App.resetWeapons();
-
-            game.playBgMusic("GAME");
         }
 
         /**************************
@@ -177,9 +183,11 @@
                     }
                 }else if(lastState == GameState.PLAYING && prevState != GameState.WEAPON_SELECT){
                     engine.getSystem(GameOverSystem.class).setProcessing(false);
-                    for (EntitySystem es : playingOnlySystems) {
-                        if(!es.checkProcessing()) {
-                            es.setProcessing(true);
+                    if(hasStarted) {
+                        for (EntitySystem es : playingOnlySystems) {
+                            if (!es.checkProcessing()) {
+                                es.setProcessing(true);
+                            }
                         }
                     }
                 }else if(prevState == GameState.WEAPON_SELECT && lastState == GameState.PLAYING){
@@ -213,6 +221,14 @@
 
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+            if(!hasStarted){
+                bgSystem.placePlanets();
+                enemySpawnSystem.setProcessing(true);
+                game.playBgMusic("GAME");
+                hasStarted = true;
+            }
+
             return false;
         }
 
