@@ -292,11 +292,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
             touchPoint = cam.unproject(touchPoint);
             controlOrigin.set(touchPoint.x, touchPoint.y);
 
-            if(PrefsUtil.areSfxEnabled()) {
-                flyingMusic.setLooping(true);
-                flyingMusic.setVolume(Volume.FLYING_MUSIC);
-                flyingMusic.play();
-            }
         }
         return false;
     }

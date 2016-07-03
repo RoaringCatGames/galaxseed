@@ -20,10 +20,12 @@ import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.PrefsUtil;
 import com.roaringcatgames.libgdxjam.components.BulletComponent;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
 import com.roaringcatgames.libgdxjam.values.GameState;
+import com.roaringcatgames.libgdxjam.values.Volume;
 import com.roaringcatgames.libgdxjam.values.Z;
 
 import java.util.Random;
@@ -215,6 +217,10 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                             .setShouldFade(true)
                             .setParticleImage(Assets.getSmoke()));
                     engine.addEntity(shipPart);
+                }
+
+                if(PrefsUtil.areSfxEnabled()){
+                    Assets.getExplosionSfx().play(Volume.EXPLOSTION_SFX);
                 }
 
             } else if (!hasInitialized && ac.animations.get("DEAD").isAnimationFinished(sc.time)) {

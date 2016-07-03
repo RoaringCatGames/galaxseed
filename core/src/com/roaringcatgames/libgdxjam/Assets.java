@@ -43,6 +43,13 @@ public class Assets {
         am.load(PLAYER_HIT_MEDIUM_SFX, SOUND);
         am.load(PLAYER_HIT_HEAVY_SFX, SOUND);
         am.load(PLANET_POP_SFX, SOUND);
+        am.load(EXPLOSTION_SFX, SOUND);
+        am.load(BLOOM_1_SFX, SOUND);
+        am.load(BLOOM_2_SFX, SOUND);
+        am.load(BLOOM_3_SFX, SOUND);
+        am.load(BLOOM_4_SFX, SOUND);
+        am.load(BLOOM_5_SFX, SOUND);
+        am.load(BLOOM_6_SFX, SOUND);
         am.load(FIRING_SFX, SOUND);
         am.load(FLYING_MUSIC, MUSIC);
 
@@ -583,6 +590,43 @@ public class Assets {
         return am.get(FIRING_SFX, SOUND);
     }
 
+    public static Sound getExplosionSfx() {
+        return am.get(EXPLOSTION_SFX, SOUND);
+    }
+
+    public static Sound getBloomSfx(int index) {
+        Sound s;
+        switch(index){
+            case 1:
+                s = am.get(BLOOM_1_SFX, SOUND);
+                break;
+            case 2:
+                s = am.get(BLOOM_2_SFX, SOUND);
+                break;
+
+            case 3:
+                s = am.get(BLOOM_3_SFX, SOUND);
+                break;
+
+            case 4:
+                s = am.get(BLOOM_4_SFX, SOUND);
+                break;
+
+            case 5:
+                s = am.get(BLOOM_5_SFX, SOUND);
+                break;
+
+            case 6:
+                s = am.get(BLOOM_6_SFX, SOUND);
+                break;
+            default:
+                s = am.get(BLOOM_1_SFX, SOUND);
+                break;
+
+        }
+        return s;
+    }
+
     /////////////
     //Fonts
     /////////////
@@ -646,6 +690,14 @@ public class Assets {
     private static final String PLAYER_HIT_LIGHT_SFX = "sfx/player-hit-light.mp3";
     private static final String PLAYER_HIT_MEDIUM_SFX = "sfx/player-hit-medium.mp3";
     private static final String PLAYER_HIT_HEAVY_SFX = "sfx/player-hit-heavy.mp3";
+    private static final String EXPLOSTION_SFX = "sfx/explosion.mp3";
+    private static final String BLOOM_1_SFX = "sfx/bloom-1.mp3";
+    private static final String BLOOM_2_SFX = "sfx/bloom-2.mp3";
+    private static final String BLOOM_3_SFX = "sfx/bloom-3.mp3";
+    private static final String BLOOM_4_SFX = "sfx/bloom-4.mp3";
+    private static final String BLOOM_5_SFX = "sfx/bloom-5.mp3";
+    private static final String BLOOM_6_SFX = "sfx/bloom-6.mp3";
+
 
 
 }

@@ -16,6 +16,7 @@ import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.PrefsUtil;
 import com.roaringcatgames.libgdxjam.components.EnemyComponent;
 import com.roaringcatgames.libgdxjam.components.HealthPackComponent;
 import com.roaringcatgames.libgdxjam.components.Mappers;
@@ -100,7 +101,12 @@ public class EnemyDamageUtil {
             }else{
                 Gdx.app.log("EnemyDamageSystem", "Enemy doesn't have Velocity!");
             }
-            Assets.getPlanetPopSfx().play(Volume.POP_SFX);
+
+            if(PrefsUtil.areSfxEnabled()) {
+                for(int i=0;i<3;i++) {
+                    Assets.getBloomSfx(r.nextInt(6)).play(Volume.POP_SFX);
+                }
+            }
         }
 
         enemy.add(TweenComponent.create(engine)
@@ -279,5 +285,9 @@ public class EnemyDamageUtil {
                 .setDuration(0.3f));
 
         engine.addEntity(plant);
+
+        if(PrefsUtil.areSfxEnabled()){
+            Assets.getBloomSfx(r.nextInt(6) + 1).play(Volume.BLOOM_TREE_SFX);
+        }
     }
 }

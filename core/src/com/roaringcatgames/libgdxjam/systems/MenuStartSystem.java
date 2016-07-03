@@ -8,8 +8,10 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
@@ -114,12 +116,11 @@ public class MenuStartSystem extends IteratingSystem{
             return;
         }
 
-        enemyHealth.health -= dm.get(bullet).dps;
-        attachPlant(bullet, enemy);
+        //enemyHealth.health -= dm.get(bullet).dps;
+        CircleBoundsComponent bulletCircle = K2ComponentMappers.circleBounds.get(bullet);
+        EnemyDamageUtil.attachPlant((PooledEngine) getEngine(), bulletCircle.circle, enemy, false);
         getEngine().removeEntity(bullet);
         if(enemyHealth.health <= 0f) {
-//            AnimationComponent ani = am.get(enemy);
-//            ani.setPaused(false);
             Mappers.menuItem.get(enemy).isFilled = true;
         }
 

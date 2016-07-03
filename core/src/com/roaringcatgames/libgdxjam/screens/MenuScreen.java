@@ -258,15 +258,20 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touchPoint.set(screenX, screenY);
         game.getViewport().unproject(touchPoint);
-        if(K2ComponentMappers.circleBounds.get(playTarget).circle.contains(touchPoint)){
-            if(Mappers.menuItem.has(playTarget)) {
+
+        CircleBoundsComponent playBounds = K2ComponentMappers.circleBounds.get(playTarget);
+        CircleBoundsComponent optionsBounds = K2ComponentMappers.circleBounds.get(optionsTarget);
+
+        if (playBounds != null && playBounds.circle.contains(touchPoint)) {
+            if (Mappers.menuItem.has(playTarget)) {
                 Mappers.menuItem.get(playTarget).isFilled = true;
             }
-        }else if(K2ComponentMappers.circleBounds.get(optionsTarget).circle.contains(touchPoint)){
-            if(Mappers.menuItem.has(optionsTarget)){
+        } else if (optionsBounds != null && optionsBounds.circle.contains(touchPoint)) {
+            if (Mappers.menuItem.has(optionsTarget)) {
                 Mappers.menuItem.get(optionsTarget).isFilled = true;
             }
         }
+
         return false;
     }
 
