@@ -111,6 +111,6 @@ public class App {
     }
 
     private static boolean hasRoomToUpgrade(WeaponType wt){
-        return !isWeaponEnabled(wt) && getCurrentWeaponLevel(wt) != WeaponLevel.LEVEL_4;
+        return isWeaponEnabled(wt) && getCurrentWeaponLevel(wt) != WeaponLevel.LEVEL_4;
     }
 }

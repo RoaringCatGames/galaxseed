@@ -29,9 +29,9 @@ import java.util.Random;
  */
 public class EnemySpawnSystem extends IteratingSystem {
 
-    private static final float ASTEROID_A_PU_CHANCE = 0.05f;
-    private static final float ASTEROID_B_PU_CHANCE = 0.1f;
-    private static final float ASTEROID_C_PU_CHANCE = 0.15f;
+    private static final float ASTEROID_A_PU_CHANCE = 0.1f;
+    private static final float ASTEROID_B_PU_CHANCE = 0.2f;
+    private static final float ASTEROID_C_PU_CHANCE = 0.4f;
 
     private static float elapsedTime = 0f;
     private static float homingChance = 0.1f;
@@ -170,7 +170,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 size = 2.5f;
                 health = Health.AsteroidA;
                 assColor = Colors.BROWN_ASTEROID;
-                shouldGeneratePowerup = r.nextFloat() < ASTEROID_A_PU_CHANCE;
+                shouldGeneratePowerup = r.nextFloat() <= ASTEROID_A_PU_CHANCE;
                 strat = stratWeight < (homingChance/4f) ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed)
                         .setParticleTextures(Assets.getFrags())
@@ -183,7 +183,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 size = 3.75f;
                 health = Health.AsteroidB;
                 assColor = Colors.BLUE_ASTEROID;
-                shouldGeneratePowerup = r.nextFloat() < ASTEROID_B_PU_CHANCE;
+                shouldGeneratePowerup = r.nextFloat() <= ASTEROID_B_PU_CHANCE;
                 strat = stratWeight < (homingChance/2f) ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 3f)
                     .setParticleTextures(Assets.getFrags())
@@ -197,7 +197,7 @@ public class EnemySpawnSystem extends IteratingSystem {
                 health = Health.AsteroidC;
                 assColor = Colors.PURPLE_ASTEROID;
 
-                shouldGeneratePowerup = r.nextFloat() < ASTEROID_C_PU_CHANCE;
+                shouldGeneratePowerup = r.nextFloat() <= ASTEROID_C_PU_CHANCE;
                 strat = stratWeight < homingChance ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 float spawnRate = r.nextFloat() < 0.1f ? 10f: 4f;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 5f)

@@ -72,15 +72,12 @@ public class EnemyDamageUtil {
                 break;
             case ASTEROID_A:
                 attachTreeCover(engine, enemy, Animations.getAsteroidA());
-                generatePowerup(engine, enemyTfm.position.x, enemyTfm.position.y);
                 break;
             case ASTEROID_B:
                 attachTreeCover(engine, enemy, Animations.getAsteroidB());
-                generatePowerup(engine, enemyTfm.position.x, enemyTfm.position.y);
                 break;
             case ASTEROID_C:
                 attachTreeCover(engine, enemy, Animations.getAsteroidC());
-                generatePowerup(engine, enemyTfm.position.x, enemyTfm.position.y);
                 break;
             default:
                 Gdx.app.log("EnemyType", "EnemyType:" + ec.enemyType);
@@ -117,6 +114,7 @@ public class EnemyDamageUtil {
 
     private static void generatePowerup(PooledEngine engine, float x, float y){
         if(App.canPowerUp()) {
+            Gdx.app.log("EnemyDamageUtil", "Can Power Up!");
             generateUpgradePowerUp(engine, x, y);
         }
     }

@@ -672,7 +672,7 @@ public class Assets {
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
 
-    private static final String BG_MUSIC = "music/nebulae-slower-70.mp3";//bgmusic.mp3";
+    private static final String BG_MUSIC = "music/nebulae.mp3";//bgmusic.mp3";
     private static final String MENU_MUISC = "music/title.mp3";
     private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
     private static final String FLYING_MUSIC = "music/flying.mp3";

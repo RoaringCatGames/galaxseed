@@ -32,7 +32,7 @@ import com.roaringcatgames.libgdxjam.values.Z;
  */
 public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
-    private static final float MAX_FLY_TIME = 1.25f;
+    private static final float MAX_FLY_TIME = 1f;
 
     private final Vector2 touchPoint = new Vector2();
 
