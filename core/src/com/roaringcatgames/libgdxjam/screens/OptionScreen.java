@@ -20,7 +20,9 @@ import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.PrefsUtil;
+import com.roaringcatgames.libgdxjam.Sfx;
 import com.roaringcatgames.libgdxjam.systems.BackgroundSystem;
+import com.roaringcatgames.libgdxjam.values.Volume;
 
 /**
  * This is an {@link LazyInitScreen} implementation that will
@@ -54,7 +56,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private Entity kfpCat;
 
 
-    private float textX = App.W/3f;
+    private float textX = App.W/3f + 0.25f;
     private float buttonX = App.W - 4f;
     private float musicY = App.H - 3f;
     private float sfxY = App.H - 6.5f;
@@ -104,9 +106,9 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new TweenSystem());
         engine.addSystem(new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM));
         engine.addSystem(new TextRenderingSystem(game.getBatch(), game.getGUICamera(), game.getCamera()));
-        engine.addSystem(new DebugSystem(game.getCamera()));
+        //engine.addSystem(new DebugSystem(game.getCamera()));
 
-        BitmapFont baseFont = Gdx.graphics.getDensity() > 1f ? Assets.get64Font() : Assets.get48Font();
+        BitmapFont baseFont = Gdx.graphics.getDensity() > 1f ? Assets.get48Font() : Assets.get32Font();
         BitmapFont secondaryFont = Gdx.graphics.getDensity() > 1f ? Assets.get24Font() : Assets.get16Font();
 
         //Setup basic entities
@@ -128,9 +130,9 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
 
         float x = App.W/6f;
-        float y = 8f;
-        float offY = y-0.9f;
-        float iconY = y-4f;
+        float y = 8.25f;
+        float offY = y-1f;
+        float iconY = y-4.25f;
         float kfpY = 0.75f;
         loi = addTextEntity(x, y, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
         addTextEntity(x, offY, "Art Cat", secondaryFont);
@@ -239,7 +241,6 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         return region;
     }
 
-
     /**
      *Input Processor implementation
      */
@@ -279,6 +280,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
             }
             K2ComponentMappers.texture.get(musicButton).setRegion(getButtonRegion(PrefsUtil.MUSIC_KEY, newValue));
             K2ComponentMappers.text.get(musicText).setText(musicWords + newValue);
+            Sfx.playClickNoise();
 
         }else if(K2ComponentMappers.circleBounds.get(sfxButton).circle.contains(touchPoint)){
             //toggle Sfx
@@ -292,6 +294,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
             game.getPreferenceManager().updateString(PrefsUtil.SFX_KEY, newValue);
             K2ComponentMappers.texture.get(sfxButton).setRegion(getButtonRegion(PrefsUtil.SFX_KEY, newValue));
             K2ComponentMappers.text.get(sfxText).setText(sfxWords + newValue);
+            Sfx.playClickNoise();
 
         }else if(K2ComponentMappers.circleBounds.get(vibrationSelect).circle.contains(touchPoint)) {
             //toggle Sfx
@@ -306,6 +309,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
             K2ComponentMappers.texture.get(vibrationSelect).setRegion(getButtonRegion(PrefsUtil.VIBRA_KEY, newValue));
             K2ComponentMappers.text.get(vibrationText).setText(vibraWords + newValue);
 
+            Sfx.playClickNoise();
         }else if(K2ComponentMappers.circleBounds.get(controlButton).circle.contains(touchPoint)) {
             //toggle Sfx
             String newValue = "Off";
@@ -317,8 +321,10 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
             game.getPreferenceManager().updateString(PrefsUtil.CTRL_KEY, newValue);
             K2ComponentMappers.texture.get(controlButton).setRegion(getButtonRegion(PrefsUtil.CTRL_KEY, newValue));
             K2ComponentMappers.text.get(controlText).setText(ctrlWords + newValue);
+            Sfx.playClickNoise();
 
         }else if(K2ComponentMappers.circleBounds.get(backButton).circle.contains(touchPoint)){
+            Sfx.playSelectNoise();
             game.switchScreens("MENU");
         }else if(K2ComponentMappers.bounds.get(nathan).bounds.contains(touchPoint)){
             Gdx.net.openURI("http://twitter.com/TheLucidBard");

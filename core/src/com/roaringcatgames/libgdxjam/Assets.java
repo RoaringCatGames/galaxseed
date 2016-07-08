@@ -52,6 +52,9 @@ public class Assets {
         am.load(BLOOM_5_SFX, SOUND);
         am.load(BLOOM_6_SFX, SOUND);
         am.load(FIRING_SFX, SOUND);
+        am.load(SELECT_SFX, SOUND);
+        am.load(CLICK_SFX, SOUND);
+        am.load(UPGRADE_SFX, SOUND);
         am.load(FLYING_MUSIC, MUSIC);
 
         return am;
@@ -624,6 +627,16 @@ public class Assets {
         return s;
     }
 
+    public static Sound getSelectSfx(){
+        return am.get(SELECT_SFX, SOUND);
+    }
+    public static Sound getUpgradeSfx(){
+        return am.get(UPGRADE_SFX, SOUND);
+    }
+    public static Sound getClickSfx(){
+        return am.get(CLICK_SFX, SOUND);
+    }
+
     /////////////
     //Fonts
     /////////////
@@ -668,12 +681,12 @@ public class Assets {
         return spriteCache.get(name);
     }
 
-    private static final String FONT_16 = "fonts/skyhook-16.fnt";
-    private static final String FONT_24 = "fonts/skyhook-24.fnt";
-    private static final String FONT_32 = "fonts/skyhook-32.fnt";
-    private static final String FONT_48 = "fonts/skyhook-48.fnt";
-    private static final String FONT_64 = "fonts/skyhook-64.fnt";
-    private static final String FONT_128 = "fonts/skyhook-128.fnt";
+    private static final String FONT_16 = "fonts/kalibers-16.fnt";
+    private static final String FONT_24 = "fonts/kalibers-24.fnt";
+    private static final String FONT_32 = "fonts/kalibers-32.fnt";
+    private static final String FONT_48 = "fonts/kalibers-48.fnt";
+    private static final String FONT_64 = "fonts/kalibers-64.fnt";
+    private static final String FONT_128 = "fonts/kalibers-128.fnt";
     private static final String LOADING_ATLAS = "animations/loading.atlas";
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
@@ -696,4 +709,7 @@ public class Assets {
     private static final String BLOOM_4_SFX = "sfx/bloom-4.mp3";
     private static final String BLOOM_5_SFX = "sfx/bloom-5.mp3";
     private static final String BLOOM_6_SFX = "sfx/bloom-6.mp3";
+    private static final String SELECT_SFX = "sfx/select.mp3";
+    private static final String UPGRADE_SFX = "sfx/upgrade.mp3";
+    private static final String CLICK_SFX = "sfx/click.mp3";
 }

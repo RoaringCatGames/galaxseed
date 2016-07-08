@@ -134,8 +134,8 @@
 
 
             engine.addSystem(pathFollowSystem);
-            engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
-            engine.addSystem(new FPSSystem(Assets.get48Font(), new Vector2(App.W - 3f, App.H - 3f), 10));
+            //engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
+            //engine.addSystem(new FPSSystem(Assets.get48Font(), new Vector2(App.W - 3f, App.H - 3f), 10));
             App.game.multiplexer.addProcessor(this);
 
             playingOnlySystems.add(movementSystem);
@@ -249,7 +249,7 @@
 
         @Override
         public boolean scrolled(int amount) {
-            game.getCamera().zoom += amount;
+            //game.getCamera().zoom += amount;
             return false;
         }
     }

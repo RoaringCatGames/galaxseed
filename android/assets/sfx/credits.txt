@@ -1,3 +1,15 @@
 swish.mp3
 https://www.freesound.org/people/qubodup/sounds/60030/
 Creative Commons 0 License: https://creativecommons.org/publicdomain/zero/1.0/
+
+select.mp3
+http://www.freesound.org/people/GameAudio/sounds/220173/
+Creative Commons 0 License: https://creativecommons.org/publicdomain/zero/1.0/
+
+upgrade.mp3
+http://www.freesound.org/people/GameAudio/sounds/220184/
+Creative Commons 0 License: https://creativecommons.org/publicdomain/zero/1.0/
+
+click.mp3
+http://www.freesound.org/people/GameAudio/sounds/220178/
+Creative Commons 0 License: https://creativecommons.org/publicdomain/zero/1.0/
