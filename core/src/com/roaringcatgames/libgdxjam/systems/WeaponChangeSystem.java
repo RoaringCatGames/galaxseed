@@ -1,5 +1,7 @@
 package com.roaringcatgames.libgdxjam.systems;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
+import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.libgdxjam.Animations;
@@ -34,6 +37,9 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     private Entity overlay;
     private Entity iface;
 
+    private float selectY = 2f;
+    private float ifaceY = 2.39f;
+
     private IGameProcessor game;
 
     public WeaponChangeSystem(IGameProcessor game){
@@ -49,8 +55,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         if(iface == null){
             iface = pEngine.createEntity();
             iface.add(TransformComponent.create(pEngine)
-                .setPosition(App.W/2f, 2.39f, Z.weaponSelectInterface)
-                .setHidden(true));
+                .setPosition(App.W / 2f, -ifaceY, Z.weaponSelectInterface));
             iface.add(TextureComponent.create(pEngine)
                 .setRegion(Assets.getSelectInterface()));
             engine.addEntity(iface);
@@ -59,15 +64,18 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         float scale = 1f;
         float offset = 5f;
         float xPos = App.W/2f - offset;
-        float yPos = 2f;
+        float yOffset = -(ifaceY - selectY);
         if(seedSelect == null){
             seedSelect = pEngine.createEntity();
             seedSelect.add(TransformComponent.create(pEngine)
-                .setPosition(xPos, yPos, Z.weaponSelect)
-                .setScale(scale, scale)
-                .setHidden(true));
+                .setPosition(xPos, selectY, Z.weaponSelect)
+                .setScale(scale, scale));
             seedSelect.add(BoundsComponent.create(pEngine)
                 .setBounds(0f, 0f, 2f, 2f));
+            seedSelect.add(FollowerComponent.create(pEngine)
+                .setTarget(iface)
+                .setMode(FollowMode.STICKY)
+                .setOffset(-offset, yOffset));
             seedSelect.add(TextureComponent.create(pEngine));
             seedSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
             seedSelect.add(AnimationComponent.create(pEngine)
@@ -76,9 +84,12 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
             seedLevel = pEngine.createEntity();
             seedLevel.add(TransformComponent.create(pEngine)
-                .setPosition(xPos, yPos, Z.weaponSelect)
-                .setScale(scale, scale)
-                .setHidden(true));
+                .setPosition(xPos, selectY, Z.weaponSelect)
+                .setScale(scale, scale));
+            seedLevel.add(FollowerComponent.create(pEngine)
+                .setTarget(iface)
+                .setMode(FollowMode.STICKY)
+                .setOffset(-offset, yOffset));
             seedLevel.add(TextureComponent.create(pEngine)
                 .setRegion(Assets.getSeedLevel(1)));
             pEngine.addEntity(seedLevel);
@@ -89,9 +100,12 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             xPos = App.W/2f;
             helicpoterSelect = pEngine.createEntity();
             helicpoterSelect.add(TransformComponent.create(pEngine)
-                    .setPosition(xPos, yPos, Z.weaponSelect)
-                    .setScale(scale, scale)
-                    .setHidden(true));
+                    .setPosition(xPos, selectY, Z.weaponSelect)
+                    .setScale(scale, scale));
+            helicpoterSelect.add(FollowerComponent.create(pEngine)
+                .setTarget(iface)
+                .setMode(FollowMode.STICKY)
+                .setOffset(0f, yOffset));
             helicpoterSelect.add(BoundsComponent.create(pEngine)
                     .setBounds(0f, 0f, 2f, 2f));
             helicpoterSelect.add(TextureComponent.create(pEngine));
@@ -103,9 +117,12 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
             helicopterLevel = pEngine.createEntity();
             helicopterLevel.add(TransformComponent.create(pEngine)
-                    .setPosition(xPos, yPos, Z.weaponSelect)
-                    .setScale(scale, scale)
-                    .setHidden(true));
+                    .setPosition(xPos, selectY, Z.weaponSelect)
+                    .setScale(scale, scale));
+            helicopterLevel.add(FollowerComponent.create(pEngine)
+                .setTarget(iface)
+                .setMode(FollowMode.STICKY)
+                .setOffset(xPos, yOffset));
             helicopterLevel.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getHelicopterLevel(1)));
             pEngine.addEntity(helicopterLevel);
@@ -115,9 +132,12 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             xPos = (App.W/2f) + offset;
             auraSelect = pEngine.createEntity();
             auraSelect.add(TransformComponent.create(pEngine)
-                    .setPosition(xPos, yPos, Z.weaponSelect)
-                    .setScale(scale, scale)
-                    .setHidden(true));
+                    .setPosition(xPos, selectY, Z.weaponSelect)
+                    .setScale(scale, scale));
+            auraSelect.add(FollowerComponent.create(pEngine)
+                .setTarget(iface)
+                .setMode(FollowMode.STICKY)
+                .setOffset(offset, yOffset));
             auraSelect.add(BoundsComponent.create(pEngine)
                     .setBounds(0f, 0f, 2f, 2f));
             auraSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
@@ -129,9 +149,12 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
             auraLevel = pEngine.createEntity();
             auraLevel.add(TransformComponent.create(pEngine)
-                    .setPosition(xPos, yPos, Z.weaponSelect)
-                    .setScale(scale, scale)
-                    .setHidden(true));
+                    .setPosition(xPos, selectY, Z.weaponSelect)
+                    .setScale(scale, scale));
+            auraLevel.add(FollowerComponent.create(pEngine)
+                .setTarget(iface)
+                .setMode(FollowMode.STICKY)
+                .setOffset(offset, yOffset));
             auraLevel.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getAuraLevel(1)));
             pEngine.addEntity(auraLevel);
@@ -140,9 +163,9 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         if(overlay == null){
             overlay = pEngine.createEntity();
             overlay.add(TransformComponent.create(pEngine)
-                .setPosition(App.W/2f, App.H/2f, Z.weaponSelectOverlay)
-                .setHidden(true)
-                .setScale(App.PPM*App.W, App.H*App.PPM));
+                    .setPosition(App.W / 2f, App.H / 2f, Z.weaponSelectOverlay)
+                    .setHidden(true)
+                    .setScale(App.PPM * App.W, App.H * App.PPM));
             overlay.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getOverlay()));
             pEngine.addEntity(overlay);
@@ -211,18 +234,21 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     }
 
     private void toggleWeaponSelect(boolean isShowing, WeaponType currentType) {
-        boolean isShowingGun = isShowing && App.isWeaponEnabled(WeaponType.GUN_SEEDS);
-        boolean isShowingAura = isShowing && App.isWeaponEnabled(WeaponType.POLLEN_AURA);
-        boolean isShowingHeli = isShowing && App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS);
+        boolean isShowingGun = App.isWeaponEnabled(WeaponType.GUN_SEEDS);
+        boolean isShowingAura = App.isWeaponEnabled(WeaponType.POLLEN_AURA);
+        boolean isShowingHeli = App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS);
 
         toggleWeaponEntityData(seedSelect, isShowingGun, currentType == WeaponType.GUN_SEEDS);
         toggleWeaponEntityData(auraSelect, isShowingAura, currentType == WeaponType.POLLEN_AURA);
         toggleWeaponEntityData(helicpoterSelect, isShowingHeli && App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS), currentType == WeaponType.HELICOPTER_SEEDS);
-        K2ComponentMappers.transform.get(iface).setHidden(!isShowing);
+
+        float target = isShowing ? ifaceY : -ifaceY;
+        float time = isShowing ? 0.05f : 0.5f;
+        iface.add(TweenComponent.create(getEngine())
+                .addTween(Tween.to(iface, K2EntityTweenAccessor.POSITION_Y, time)
+                        .target(target)));
+
         K2ComponentMappers.transform.get(overlay).setHidden(!isShowing);
-        K2ComponentMappers.transform.get(seedLevel).setHidden(!isShowingGun);
-        K2ComponentMappers.transform.get(auraLevel).setHidden(!isShowingAura);
-        K2ComponentMappers.transform.get(helicopterLevel).setHidden(!isShowingHeli);
     }
 
     private void toggleWeaponEntityData(Entity selector, boolean isShowing, boolean isAnimated){
