@@ -92,7 +92,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         //Extension Systems
         engine.addSystem(renderingSystem);
         engine.addSystem(new TextRenderingSystem(game.getBatch(), game.getGUICamera(), renderingSystem.getCamera()));
-        engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
+        //engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
 
         float titleSpeed = 6f;
         Entity galaxTitle = engine.createEntity();

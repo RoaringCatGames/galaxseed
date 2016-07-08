@@ -106,7 +106,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new TweenSystem());
         engine.addSystem(new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM));
         engine.addSystem(new TextRenderingSystem(game.getBatch(), game.getGUICamera(), game.getCamera()));
-        engine.addSystem(new DebugSystem(game.getCamera()));
+        //engine.addSystem(new DebugSystem(game.getCamera()));
 
         BitmapFont baseFont = Gdx.graphics.getDensity() > 1f ? Assets.get48Font() : Assets.get32Font();
         BitmapFont secondaryFont = Gdx.graphics.getDensity() > 1f ? Assets.get24Font() : Assets.get16Font();

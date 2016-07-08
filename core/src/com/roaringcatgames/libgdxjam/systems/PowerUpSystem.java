@@ -48,13 +48,13 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
-        App.game.multiplexer.addProcessor(this);
+        //App.game.multiplexer.addProcessor(this);
     }
 
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
-        App.game.multiplexer.removeProcessor(this);
+        //App.game.multiplexer.removeProcessor(this);
     }
 
     @Override

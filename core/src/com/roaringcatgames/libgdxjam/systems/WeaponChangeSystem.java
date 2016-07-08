@@ -262,7 +262,6 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             }else if(App.isWeaponEnabled(WeaponType.POLLEN_AURA) && auraBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.POLLEN_AURA);
             }else if(pc.weaponType != WeaponType.UNSELECTED){
-                Gdx.app.log("WeaponChangeSystem", "Touch down outside of bounds");
                 App.setState(GameState.PLAYING);
                 WeaponType currentType = pc.weaponType;
                 toggleWeaponSelect(false, currentType);
