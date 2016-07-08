@@ -56,7 +56,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private Entity kfpCat;
 
 
-    private float textX = App.W/3f;
+    private float textX = App.W/3f + 0.25f;
     private float buttonX = App.W - 4f;
     private float musicY = App.H - 3f;
     private float sfxY = App.H - 6.5f;
@@ -108,7 +108,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new TextRenderingSystem(game.getBatch(), game.getGUICamera(), game.getCamera()));
         engine.addSystem(new DebugSystem(game.getCamera()));
 
-        BitmapFont baseFont = Gdx.graphics.getDensity() > 1f ? Assets.get64Font() : Assets.get48Font();
+        BitmapFont baseFont = Gdx.graphics.getDensity() > 1f ? Assets.get48Font() : Assets.get32Font();
         BitmapFont secondaryFont = Gdx.graphics.getDensity() > 1f ? Assets.get24Font() : Assets.get16Font();
 
         //Setup basic entities
@@ -130,9 +130,9 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
 
         float x = App.W/6f;
-        float y = 8f;
-        float offY = y-0.9f;
-        float iconY = y-4f;
+        float y = 8.25f;
+        float offY = y-1f;
+        float iconY = y-4.25f;
         float kfpY = 0.75f;
         loi = addTextEntity(x, y, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
         addTextEntity(x, offY, "Art Cat", secondaryFont);

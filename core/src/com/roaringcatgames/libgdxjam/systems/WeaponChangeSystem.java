@@ -45,12 +45,15 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         App.game.multiplexer.addProcessor(this);
         PooledEngine pEngine = (PooledEngine)engine;
 
-        float xPos = App.W/4f;
+        float scale = 1f;
+        float offset = 5f;
+        float xPos = App.W/2f - offset;
         float yPos = 2f;
         if(seedSelect == null){
             seedSelect = pEngine.createEntity();
             seedSelect.add(TransformComponent.create(pEngine)
                 .setPosition(xPos, yPos, Z.weaponSelect)
+                .setScale(scale, scale)
                 .setHidden(true));
             seedSelect.add(BoundsComponent.create(pEngine)
                 .setBounds(0f, 0f, 2f, 2f));
@@ -63,6 +66,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             seedLevel = pEngine.createEntity();
             seedLevel.add(TransformComponent.create(pEngine)
                 .setPosition(xPos, yPos, Z.weaponSelect)
+                .setScale(scale, scale)
                 .setHidden(true));
             seedLevel.add(TextureComponent.create(pEngine)
                 .setRegion(Assets.getSeedLevel(1)));
@@ -71,10 +75,11 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         }
 
         if(helicpoterSelect == null){
-            xPos = 2f * (App.W/4f);
+            xPos = App.W/2f;
             helicpoterSelect = pEngine.createEntity();
             helicpoterSelect.add(TransformComponent.create(pEngine)
                     .setPosition(xPos, yPos, Z.weaponSelect)
+                    .setScale(scale, scale)
                     .setHidden(true));
             helicpoterSelect.add(BoundsComponent.create(pEngine)
                     .setBounds(0f, 0f, 2f, 2f));
@@ -88,6 +93,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             helicopterLevel = pEngine.createEntity();
             helicopterLevel.add(TransformComponent.create(pEngine)
                     .setPosition(xPos, yPos, Z.weaponSelect)
+                    .setScale(scale, scale)
                     .setHidden(true));
             helicopterLevel.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getHelicopterLevel(1)));
@@ -95,10 +101,11 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         }
 
         if(auraSelect == null){
-            xPos = 3f*(App.W/4f);
+            xPos = (App.W/2f) + offset;
             auraSelect = pEngine.createEntity();
             auraSelect.add(TransformComponent.create(pEngine)
                     .setPosition(xPos, yPos, Z.weaponSelect)
+                    .setScale(scale, scale)
                     .setHidden(true));
             auraSelect.add(BoundsComponent.create(pEngine)
                     .setBounds(0f, 0f, 2f, 2f));
@@ -112,6 +119,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             auraLevel = pEngine.createEntity();
             auraLevel.add(TransformComponent.create(pEngine)
                     .setPosition(xPos, yPos, Z.weaponSelect)
+                    .setScale(scale, scale)
                     .setHidden(true));
             auraLevel.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getAuraLevel(1)));

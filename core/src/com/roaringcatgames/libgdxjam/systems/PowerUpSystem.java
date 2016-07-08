@@ -18,6 +18,7 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.Sfx;
 import com.roaringcatgames.libgdxjam.components.*;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Rates;
@@ -90,6 +91,7 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
         if(playerComponent.weaponType != WeaponType.UNSELECTED &&
                 playerComponent.weaponLevel != WeaponLevel.LEVEL_4){
 
+
             playerComponent.weaponLevel = playerComponent.weaponLevel == WeaponLevel.LEVEL_1 ? WeaponLevel.LEVEL_2 :
                                           playerComponent.weaponLevel == WeaponLevel.LEVEL_2 ? WeaponLevel.LEVEL_3 :
                                                                                                WeaponLevel.LEVEL_4;
@@ -107,6 +109,8 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
                     WeaponGeneratorUtil.generateHelicopterGuns(player, engine);
                     break;
             }
+
+            Sfx.playUpgradeSound();
         }
     }
 

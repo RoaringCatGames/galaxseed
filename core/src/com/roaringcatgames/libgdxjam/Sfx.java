@@ -17,4 +17,10 @@ public class Sfx {
             Assets.getSelectSfx().play(Volume.SELECT_SFX);
         }
     }
+
+    public static void playUpgradeSound(){
+        if(PrefsUtil.areSfxEnabled()){
+            Assets.getUpgradeSfx().play(Volume.UPGRADE_SFX);
+        }
+    }
 }

@@ -681,12 +681,12 @@ public class Assets {
         return spriteCache.get(name);
     }
 
-    private static final String FONT_16 = "fonts/skyhook-16.fnt";
-    private static final String FONT_24 = "fonts/skyhook-24.fnt";
-    private static final String FONT_32 = "fonts/skyhook-32.fnt";
-    private static final String FONT_48 = "fonts/skyhook-48.fnt";
-    private static final String FONT_64 = "fonts/skyhook-64.fnt";
-    private static final String FONT_128 = "fonts/skyhook-128.fnt";
+    private static final String FONT_16 = "fonts/kalibers-16.fnt";
+    private static final String FONT_24 = "fonts/kalibers-24.fnt";
+    private static final String FONT_32 = "fonts/kalibers-32.fnt";
+    private static final String FONT_48 = "fonts/kalibers-48.fnt";
+    private static final String FONT_64 = "fonts/kalibers-64.fnt";
+    private static final String FONT_128 = "fonts/kalibers-128.fnt";
     private static final String LOADING_ATLAS = "animations/loading.atlas";
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
