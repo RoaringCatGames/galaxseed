@@ -3,7 +3,7 @@
   "jdk": "/Users/barry/DevTools/openjdks/openjdk-1.7.0-u80-unofficial-windows-i586-image.zip",
   "executable": "GalaxSeed",
   "classpath": [
-    "/Users/barry/git-repos/libgdx-jam/desktop/build/libs/galaxseed-0.2.0-kfp.jar"
+    "/Users/barry/git-repos/libgdx-jam/desktop/build/libs/galaxseed-1.0.0-kfp.jar"
   ],
   "mainclass": "com.roaringcatgames.libgdxjam.desktop.DesktopLauncher",
   "vmargs": [
@@ -12,5 +12,5 @@
   "resources": [
   ],
   "minimizejre": "soft",
-  "outdir": "GALAXSEED"
+  "outdir": "GalaxSeed_win32"
 }

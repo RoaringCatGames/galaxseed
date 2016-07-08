@@ -43,15 +43,17 @@ public class Z {
     public static final float titlePlantLeaves = 33f;
     public static final float titlePlant = 32f;
 
-    public static final float health = 2f;
-    public static final float score = 2f;
-    public static final float debug = 2f;
-    public static float healthLeaf = 1f;
-    public static final float weaponSelectOverlay = 2f;
+    public static final float health = 4f;
+    public static final float score = 4f;
+    public static final float debug = 4f;
+    public static float healthLeaf = 4f;
+    public static final float weaponSelectOverlay = 3f;
+    public static final float weaponSelectInterface = 2f;
     public static final float weaponSelect = 1f;
     public static final float gameOver = 0f;
     public static final float tutorial = 0f;
     public static final float message = 0f;
+
 
 
 }

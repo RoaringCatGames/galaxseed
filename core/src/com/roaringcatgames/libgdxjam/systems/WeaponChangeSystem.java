@@ -32,6 +32,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     private Entity auraSelect;
     private Entity auraLevel;
     private Entity overlay;
+    private Entity iface;
 
     private IGameProcessor game;
 
@@ -44,6 +45,16 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         super.addedToEngine(engine);
         App.game.multiplexer.addProcessor(this);
         PooledEngine pEngine = (PooledEngine)engine;
+
+        if(iface == null){
+            iface = pEngine.createEntity();
+            iface.add(TransformComponent.create(pEngine)
+                .setPosition(App.W/2f, 2.39f, Z.weaponSelectInterface)
+                .setHidden(true));
+            iface.add(TextureComponent.create(pEngine)
+                .setRegion(Assets.getSelectInterface()));
+            engine.addEntity(iface);
+        }
 
         float scale = 1f;
         float offset = 5f;
@@ -136,6 +147,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
                     .setRegion(Assets.getOverlay()));
             pEngine.addEntity(overlay);
         }
+
     }
 
 
@@ -206,6 +218,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         toggleWeaponEntityData(seedSelect, isShowingGun, currentType == WeaponType.GUN_SEEDS);
         toggleWeaponEntityData(auraSelect, isShowingAura, currentType == WeaponType.POLLEN_AURA);
         toggleWeaponEntityData(helicpoterSelect, isShowingHeli && App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS), currentType == WeaponType.HELICOPTER_SEEDS);
+        K2ComponentMappers.transform.get(iface).setHidden(!isShowing);
         K2ComponentMappers.transform.get(overlay).setHidden(!isShowing);
         K2ComponentMappers.transform.get(seedLevel).setHidden(!isShowingGun);
         K2ComponentMappers.transform.get(auraLevel).setHidden(!isShowingAura);

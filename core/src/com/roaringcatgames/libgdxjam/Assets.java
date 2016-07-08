@@ -473,6 +473,10 @@ public class Assets {
         return getCachedRegion(SPRITE_ATLAS, "weapon-select/overlay");
     }
 
+    public static TextureAtlas.AtlasRegion getSelectInterface(){
+        return getCachedRegion(SPRITE_ATLAS, "weapon-select/interface");
+    }
+
 
     /////////////
     //Life
