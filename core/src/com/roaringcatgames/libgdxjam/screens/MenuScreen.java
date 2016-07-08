@@ -16,9 +16,7 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
-import com.roaringcatgames.libgdxjam.Animations;
-import com.roaringcatgames.libgdxjam.App;
-import com.roaringcatgames.libgdxjam.Assets;
+import com.roaringcatgames.libgdxjam.*;
 import com.roaringcatgames.libgdxjam.components.Mappers;
 import com.roaringcatgames.libgdxjam.components.MenuItemComponent;
 import com.roaringcatgames.libgdxjam.components.WeaponType;
@@ -32,7 +30,7 @@ import com.roaringcatgames.libgdxjam.values.Z;
  */
 public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
-    private static final float MAX_FLY_TIME = 1f;
+    private static final float MAX_FLY_TIME = 0.5f;
 
     private final Vector2 touchPoint = new Vector2();
 
@@ -265,10 +263,12 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         if (playBounds != null && playBounds.circle.contains(touchPoint)) {
             if (Mappers.menuItem.has(playTarget)) {
                 Mappers.menuItem.get(playTarget).isFilled = true;
+                Sfx.playSelectNoise();
             }
         } else if (optionsBounds != null && optionsBounds.circle.contains(touchPoint)) {
             if (Mappers.menuItem.has(optionsTarget)) {
                 Mappers.menuItem.get(optionsTarget).isFilled = true;
+                Sfx.playSelectNoise();
             }
         }
 

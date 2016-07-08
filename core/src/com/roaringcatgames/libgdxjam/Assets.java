@@ -52,6 +52,9 @@ public class Assets {
         am.load(BLOOM_5_SFX, SOUND);
         am.load(BLOOM_6_SFX, SOUND);
         am.load(FIRING_SFX, SOUND);
+        am.load(SELECT_SFX, SOUND);
+        am.load(CLICK_SFX, SOUND);
+        am.load(UPGRADE_SFX, SOUND);
         am.load(FLYING_MUSIC, MUSIC);
 
         return am;
@@ -624,6 +627,16 @@ public class Assets {
         return s;
     }
 
+    public static Sound getSelectSfx(){
+        return am.get(SELECT_SFX, SOUND);
+    }
+    public static Sound getUpgradeSfx(){
+        return am.get(UPGRADE_SFX, SOUND);
+    }
+    public static Sound getClickSfx(){
+        return am.get(CLICK_SFX, SOUND);
+    }
+
     /////////////
     //Fonts
     /////////////
@@ -696,4 +709,7 @@ public class Assets {
     private static final String BLOOM_4_SFX = "sfx/bloom-4.mp3";
     private static final String BLOOM_5_SFX = "sfx/bloom-5.mp3";
     private static final String BLOOM_6_SFX = "sfx/bloom-6.mp3";
+    private static final String SELECT_SFX = "sfx/select.mp3";
+    private static final String UPGRADE_SFX = "sfx/upgrade.mp3";
+    private static final String CLICK_SFX = "sfx/click.mp3";
 }
