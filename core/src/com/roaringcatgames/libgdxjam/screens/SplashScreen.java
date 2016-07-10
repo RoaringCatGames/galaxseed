@@ -51,7 +51,7 @@ public class SplashScreen extends LazyInitScreen {
 
         Entity title = engine.createEntity();
         title.add(TransformComponent.create(engine)
-                .setPosition(App.W / 2f, 15f, Z.gameOver)
+                .setPosition(App.W / 2f, App.H/2f, Z.gameOver)
                 .setScale(1f, 1f));
         title.add(TextureComponent.create(engine)
                 .setRegion(Assets.getSplashTitle()));

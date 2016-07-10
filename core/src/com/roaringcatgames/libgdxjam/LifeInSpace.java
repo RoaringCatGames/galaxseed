@@ -6,6 +6,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
@@ -34,10 +36,11 @@ public class LifeInSpace extends Game implements IGameProcessor {
     public void create () {
         batch = new SpriteBatch();
         cam = new OrthographicCamera(App.W, App.H);
-        viewport = new FitViewport(App.W, App.H, cam);
+        viewport = new ExtendViewport(App.W, App.H, cam);// new FitViewport(App.W, App.H, cam);
         viewport.apply();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
+        App.setAppWH(viewport.getWorldWidth(), viewport.getWorldHeight());
 
         guiCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         guiCam.position.set(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0f);

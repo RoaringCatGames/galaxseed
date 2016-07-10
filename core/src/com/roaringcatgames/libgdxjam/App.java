@@ -1,6 +1,7 @@
 package com.roaringcatgames.libgdxjam;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.roaringcatgames.kitten2d.gdx.helpers.IPreferenceManager;
@@ -16,16 +17,24 @@ public class App {
 
     public static final float MAX_DELTA_TICK = 1f/30f;
     public static final float PPM = 32.0f;
-    public static final float W = 20f;
-    public static final float H = 30f;
+    public static float W = 20f;
+    public static float H = 30f;
 
     public static float SLOW_SCALE = 0.1f; //10% speed
 
     public static final Game Initialize(){
         game = new LifeInSpace();
+
+        //Gdx.app.log("App", "Initializing");
         return game;
     }
     public static LifeInSpace game;
+
+
+    public static void setAppWH(float x, float y){
+        App.W = x;
+        App.H = y;
+    }
 
     //Initial position
     //Bad form with a public global, but whatever here
@@ -112,5 +121,13 @@ public class App {
 
     private static boolean hasRoomToUpgrade(WeaponType wt){
         return isWeaponEnabled(wt) && getCurrentWeaponLevel(wt) != WeaponLevel.LEVEL_4;
+    }
+
+    public static float getTotalHeight(){
+        return game.getViewport().getWorldHeight();
+    }
+
+    public static float getTotalWeight(){
+        return game.getViewport().getWorldWidth();
     }
 }
