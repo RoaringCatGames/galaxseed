@@ -122,7 +122,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             helicopterLevel.add(FollowerComponent.create(pEngine)
                 .setTarget(iface)
                 .setMode(FollowMode.STICKY)
-                .setOffset(xPos, yOffset));
+                .setOffset(0f, yOffset));
             helicopterLevel.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getHelicopterLevel(1)));
             pEngine.addEntity(helicopterLevel);
@@ -239,14 +239,31 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         boolean isShowingHeli = App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS);
 
         toggleWeaponEntityData(seedSelect, isShowingGun, currentType == WeaponType.GUN_SEEDS);
+        K2ComponentMappers.transform.get(seedLevel).setHidden(!isShowingGun);
+
         toggleWeaponEntityData(auraSelect, isShowingAura, currentType == WeaponType.POLLEN_AURA);
+        K2ComponentMappers.transform.get(auraLevel).setHidden(!isShowingAura);
+
         toggleWeaponEntityData(helicpoterSelect, isShowingHeli && App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS), currentType == WeaponType.HELICOPTER_SEEDS);
+        K2ComponentMappers.transform.get(helicopterLevel).setHidden(!isShowingHeli);
 
         float target = isShowing ? ifaceY : -ifaceY;
         float time = isShowing ? 0.05f : 0.5f;
-        iface.add(TweenComponent.create(getEngine())
-                .addTween(Tween.to(iface, K2EntityTweenAccessor.POSITION_Y, time)
-                        .target(target)));
+        TweenComponent tc = K2ComponentMappers.tween.get(iface);
+        if(tc != null) {
+            for(Tween t:tc.tweens) {
+
+                if(!t.isFinished()){
+                    t.pause();
+                    t.kill();
+                }
+            }
+        }else{
+            tc = TweenComponent.create(getEngine());
+        }
+        tc.addTween(Tween.to(iface, K2EntityTweenAccessor.POSITION_Y, time)
+                .target(target));
+        iface.add(tc);
 
         K2ComponentMappers.transform.get(overlay).setHidden(!isShowing);
     }
