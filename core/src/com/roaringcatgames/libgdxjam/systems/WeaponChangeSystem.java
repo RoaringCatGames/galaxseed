@@ -1,13 +1,9 @@
 package com.roaringcatgames.libgdxjam.systems;
 
 import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
@@ -302,7 +298,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-        if(App.getState() == GameState.WEAPON_SELECT){//App.isSlowed()){
+        if(App.getState() == GameState.WEAPON_SELECT){
 
             touchPoint.set(screenX, screenY, 0f);
             game.getViewport().unproject(touchPoint);
