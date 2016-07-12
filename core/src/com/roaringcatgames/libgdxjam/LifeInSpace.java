@@ -54,7 +54,7 @@ public class LifeInSpace extends Game implements IGameProcessor {
         setScreen(new SplashScreen(this));
         Gdx.input.setInputProcessor(multiplexer);
 
-        if(Gdx.app.getType() == Application.ApplicationType.Desktop){
+        if(App.isDesktop()){
             Cursor customCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("cursor-cat.png")), 4, 4);
             App.setActiveCursor(customCursor);
 

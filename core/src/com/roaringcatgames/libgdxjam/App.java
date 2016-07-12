@@ -1,5 +1,6 @@
 package com.roaringcatgames.libgdxjam;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Cursor;
@@ -132,6 +133,10 @@ public class App {
         return game.getViewport().getWorldWidth();
     }
 
+
+    public static boolean isDesktop(){
+        return Gdx.app.getType() == Application.ApplicationType.Desktop;
+    }
 
     private static Cursor activeCursor;
     private static Cursor hiddenCursor;
