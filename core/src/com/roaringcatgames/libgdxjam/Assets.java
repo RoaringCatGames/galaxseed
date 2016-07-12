@@ -325,6 +325,10 @@ public class Assets {
         return shipParts.get(index % shipParts.size);
     }
 
+    public static TextureAtlas.AtlasRegion getRelaunchButton(){
+        return getCachedRegion(SPRITE_ATLAS, "options/relaunch");
+    }
+
     private static TextureRegion shipSmoke;
     public static TextureRegion getSmoke(){
         if(shipSmoke == null) {
