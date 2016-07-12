@@ -289,8 +289,8 @@ public class EnemyDamageUtil {
 
         engine.addEntity(plant);
 
-        if(PrefsUtil.areSfxEnabled()){
-            Assets.getBloomSfx(r.nextInt(6) + 1).play(Volume.BLOOM_TREE_SFX);
-        }
+//        if(PrefsUtil.areSfxEnabled()){
+//            Assets.getBloomSfx(r.nextInt(6) + 1).play(Volume.BLOOM_TREE_SFX);
+//        }
     }
 }

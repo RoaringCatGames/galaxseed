@@ -56,12 +56,13 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private Entity kfpCat;
 
 
-    private float textX = App.W/3f + 0.25f;
-    private float buttonX = App.W - 4f;
-    private float musicY = App.H - 3f;
-    private float sfxY = App.H - 6.5f;
-    private float ctrlY = App.H - 10f;
-    private float vibraY = App.H - 13.5f;
+    private float textX;// = App.W/3f + 0.25f;
+    private float buttonX;// = App.W - 4f;
+    private float musicY;// = App.H - 3f;
+    private float sfxY;// = App.H - 6.5f;
+    private float ctrlY;// = App.H - 10f;
+    private float vibraY;// = App.H - 13.5f
+    private float backY;// ;
 
     private String musicWords = "Music ";
     private String sfxWords = "SFX ";
@@ -73,6 +74,18 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     public OptionScreen(IGameProcessor game){
         super();
         this.game = game;
+
+        float totalH = App.getTotalHeight();
+        textX = App.W/2f - 5f;
+        buttonX = App.W/2f + 5f;
+        musicY = totalH - 3f;
+        sfxY = totalH - 6.5f;
+        ctrlY = totalH - 10f;
+        vibraY = totalH - 13.5f;
+        backY = totalH - 17f;
+
+
+
     }
 
     @Override
@@ -126,7 +139,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         vibrationSelect = addButton(buttonX, vibraY, PrefsUtil.VIBRA_KEY, vibraState);
         controlButton = addButton(buttonX, ctrlY, PrefsUtil.CTRL_KEY, ctrlState);
 
-        backButton = addButton(App.W / 2f, 12f, "BACK", null);
+        backButton = addButton(App.W / 2f, backY, "BACK", null);
 
 
         float x = App.W/6f;

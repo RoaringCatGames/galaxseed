@@ -3,6 +3,7 @@ package com.roaringcatgames.libgdxjam.systems;
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.equations.Circ;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
@@ -242,13 +243,14 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 if(restartButton == null){
                     restartButton = engine.createEntity();
                     restartButton.add(TransformComponent.create(engine)
-                            .setPosition(App.W/2f, ((App.H/2f)-2.5f), Z.gameOver));
-                    restartButton.add(TextComponent.create(engine)
-                            .setFont(subFont)
-                            .setText("RE-LAUNCH"));
-                    restartButton.add(BoundsComponent.create(engine)
-                            .setBounds(0f, 0f, 8f, 3f)
-                            .setOffset(0f, -0.75f));
+                            .setPosition(App.W/2f, ((App.H/2f)-3.5f), Z.gameOver));
+//                    restartButton.add(TextComponent.create(engine)
+//                            .setFont(subFont)
+//                            .setText("RE-LAUNCH"));
+                    restartButton.add(TextureComponent.create(engine)
+                        .setRegion(Assets.getRelaunchButton()));
+                    restartButton.add(CircleBoundsComponent.create(engine)
+                            .setCircle(0f, 0f, 2f));
 
                     getEngine().addEntity(restartButton);
                 }
@@ -286,7 +288,9 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
             touchPoint.set(screenX, screenY, 0f);
             touchPoint = cam.unproject(touchPoint);
 
-            if (restartButton.getComponent(BoundsComponent.class).bounds.contains(touchPoint.x, touchPoint.y)) {
+            CircleBoundsComponent cbc = K2ComponentMappers.circleBounds.get(restartButton);
+
+            if (cbc != null && cbc.circle.contains(touchPoint.x, touchPoint.y)) {
                 App.setState(GameState.MENU);
                 game.switchScreens("MENU");
                 return true;

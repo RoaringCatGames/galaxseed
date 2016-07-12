@@ -15,9 +15,10 @@ public class DesktopLauncher {
 		config.addIcon("icon-32.png", Files.FileType.Internal);
 		config.title = "GalaxSeed";
 		config.height = 960;
-		config.width = 640;
+		config.width = 960;
 		config.samples = 4;
 		config.resizable = false;
+        config.fullscreen = true;
 
 		new LwjglApplication(App.Initialize(), config);
 	}

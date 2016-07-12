@@ -95,26 +95,32 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         //engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
 
         float titleSpeed = 6f;
+        float galaxX = App.W/2f - 4.6f;
+        float galaxY = App.H - 5.2f;
         Entity galaxTitle = engine.createEntity();
         galaxTitle.add(TextureComponent.create(engine)
                 .setRegion(Assets.getGalaxTitleImage()));
         galaxTitle.add(TransformComponent.create(engine)
-                .setPosition(-5.1f, 24.6f, Z.title));
+                .setPosition(-5.1f, galaxY -2f, Z.title));
         galaxTitle.add(MoveToComponent.create(engine)
                 .setSpeed(titleSpeed)
-                .setTarget(5.4f, 24.8f, Z.title));
+                .setTarget(galaxX, galaxY, Z.title));
         engine.addEntity(galaxTitle);
 
+        float seedX = App.W/2f + 4.4f;
+        float seedY = App.H - 6.2f;
         Entity seedTitle = engine.createEntity();
         seedTitle.add(TextureComponent.create(engine)
                 .setRegion(Assets.getSeedTitleImage()));
         seedTitle.add(TransformComponent.create(engine)
-                .setPosition(24.5f, 24.6f, Z.title));
+                .setPosition(App.W + 4.5f, seedY + 2f, Z.title));
         seedTitle.add(MoveToComponent.create(engine)
                 .setSpeed(titleSpeed)
-                .setTarget(14.4f, 23.8f, Z.title));
+                .setTarget(seedX, seedY, Z.title));
         engine.addEntity(seedTitle);
 
+        float plantX = App.W/2f + 0.4f;
+        float plantY = App.H - 5f;
         plant = engine.createEntity();
         plant.add(StateComponent.create(engine)
                 .setLooping(false).set("DEFAULT"));
@@ -123,14 +129,14 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
                 .addAnimation("DEFAULT", Animations.getTitleTree())
                 .addAnimation("LEAF", Animations.getTitleTreeLeaf()));
         plant.add(TransformComponent.create(engine)
-                .setPosition(10.4f, 25f, Z.titlePlant)
+                .setPosition(plantX, plantY, Z.titlePlant)
                 .setScale(0.85f, 0.85f));
 
 
 
 
-        float xPos = 5f;
-        float yPos = 16f;
+        float xPos = App.W/2f - 5f;
+        float yPos = App.H - 14f;
         playTarget = createPlayAsteroid(xPos, yPos, Assets.getPlayAsteroid());
         engine.addEntity(playTarget);
         optionsTarget = createPlayAsteroid(xPos + 10f, yPos, Assets.getOptionsAsteroid());
