@@ -43,6 +43,16 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     }
 
     @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+        PlayerComponent pc = getPlayerComponent();
+        if(pc != null) {
+            updateWeaponSelectDisplays(getPlayerComponent().weaponType);
+        }
+
+    }
+
+    @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         App.game.multiplexer.addProcessor(this);
@@ -230,18 +240,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     }
 
     private void toggleWeaponSelect(boolean isShowing, WeaponType currentType) {
-        boolean isShowingGun = App.isWeaponEnabled(WeaponType.GUN_SEEDS);
-        boolean isShowingAura = App.isWeaponEnabled(WeaponType.POLLEN_AURA);
-        boolean isShowingHeli = App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS);
-
-        toggleWeaponEntityData(seedSelect, isShowingGun, currentType == WeaponType.GUN_SEEDS);
-        K2ComponentMappers.transform.get(seedLevel).setHidden(!isShowingGun);
-
-        toggleWeaponEntityData(auraSelect, isShowingAura, currentType == WeaponType.POLLEN_AURA);
-        K2ComponentMappers.transform.get(auraLevel).setHidden(!isShowingAura);
-
-        toggleWeaponEntityData(helicpoterSelect, isShowingHeli && App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS), currentType == WeaponType.HELICOPTER_SEEDS);
-        K2ComponentMappers.transform.get(helicopterLevel).setHidden(!isShowingHeli);
+        updateWeaponSelectDisplays(currentType);
 
         float target = isShowing ? ifaceY : -ifaceY;
         float time = isShowing ? 0.05f : 0.5f;
@@ -262,6 +261,21 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         iface.add(tc);
 
         K2ComponentMappers.transform.get(overlay).setHidden(!isShowing);
+    }
+
+    private void updateWeaponSelectDisplays(WeaponType currentType) {
+        boolean isShowingGun = App.isWeaponEnabled(WeaponType.GUN_SEEDS);
+        boolean isShowingAura = App.isWeaponEnabled(WeaponType.POLLEN_AURA);
+        boolean isShowingHeli = App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS);
+
+        toggleWeaponEntityData(seedSelect, isShowingGun, currentType == WeaponType.GUN_SEEDS);
+        K2ComponentMappers.transform.get(seedLevel).setHidden(!isShowingGun);
+
+        toggleWeaponEntityData(auraSelect, isShowingAura, currentType == WeaponType.POLLEN_AURA);
+        K2ComponentMappers.transform.get(auraLevel).setHidden(!isShowingAura);
+
+        toggleWeaponEntityData(helicpoterSelect, isShowingHeli && App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS), currentType == WeaponType.HELICOPTER_SEEDS);
+        K2ComponentMappers.transform.get(helicopterLevel).setHidden(!isShowingHeli);
     }
 
     private void toggleWeaponEntityData(Entity selector, boolean isShowing, boolean isAnimated){

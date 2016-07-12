@@ -2,6 +2,7 @@ package com.roaringcatgames.libgdxjam;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.roaringcatgames.kitten2d.gdx.helpers.IPreferenceManager;
@@ -130,4 +131,17 @@ public class App {
     public static float getTotalWeight(){
         return game.getViewport().getWorldWidth();
     }
+
+
+    private static Cursor activeCursor;
+    private static Cursor hiddenCursor;
+    public static void setActiveCursor(Cursor c){
+        activeCursor = c;
+    }
+    public static void setHiddenCursor(Cursor c){
+        hiddenCursor = c;
+    }
+
+    public static Cursor getActiveCursor(){ return activeCursor; }
+    public static Cursor getHiddenCursor() { return hiddenCursor; }
 }

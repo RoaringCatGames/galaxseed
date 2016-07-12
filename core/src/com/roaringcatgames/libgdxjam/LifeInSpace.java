@@ -3,8 +3,10 @@ package com.roaringcatgames.libgdxjam;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -51,6 +53,16 @@ public class LifeInSpace extends Game implements IGameProcessor {
         am = Assets.load();
         setScreen(new SplashScreen(this));
         Gdx.input.setInputProcessor(multiplexer);
+
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop){
+            Cursor customCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("cursor-cat.png")), 4, 4);
+            App.setActiveCursor(customCursor);
+
+            Cursor hiddenCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("cursor-hidden.png")), 0, 0);
+            App.setHiddenCursor(hiddenCursor);
+
+            Gdx.graphics.setCursor(customCursor);
+        }
     }
 
     @Override
@@ -91,6 +103,7 @@ public class LifeInSpace extends Game implements IGameProcessor {
                 this.setScreen(new OptionScreen(this));
                 break;
             case "MENU":
+
                 multiplexer.clear();
                 this.setScreen(new MenuScreen(this));
                 break;

@@ -40,8 +40,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
     private Vector2 idleFlameOffset = new Vector2(0f, -2.6f);
     private Vector2 flyingFlameOffset = new Vector2(0f, -3.25f);
 
-    private Music flyingMusic;
-
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<TransformComponent> tm;
 
@@ -57,7 +55,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
         this.tm = ComponentMapper.getFor(TransformComponent.class);
         this.game = game;
 
-        this.flyingMusic = Assets.getFlyingMusic();
 
         this.controlOrigin = new Vector2();
 
@@ -305,9 +302,6 @@ public class PlayerSystem extends IteratingSystem implements InputProcessor {
 
         if(pointer == 0){
             currentPositionChange.set(0f, 0f, 0f);
-            if(flyingMusic.isPlaying()) {
-                flyingMusic.stop();
-            }
         }
         return false;
     }

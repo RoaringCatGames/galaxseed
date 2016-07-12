@@ -55,7 +55,6 @@ public class Assets {
         am.load(SELECT_SFX, SOUND);
         am.load(CLICK_SFX, SOUND);
         am.load(UPGRADE_SFX, SOUND);
-        am.load(FLYING_MUSIC, MUSIC);
 
         return am;
     }
@@ -563,6 +562,12 @@ public class Assets {
         return getCachedRegion(SPRITE_ATLAS, "options/gvg-logo");
     }
 
+    public static TextureAtlas.AtlasRegion getActiveCursor(){
+        return getCachedRegion(SPRITE_ATLAS, "cursor-cat");
+    }
+    public static TextureAtlas.AtlasRegion getHiddenCursor(){
+        return getCachedRegion(SPRITE_ATLAS, "cursor-hidden");
+    }
 
     /////////////
     //Music
@@ -575,9 +580,6 @@ public class Assets {
     }
     public static Music getGameOverMusic(){
         return am.get(GAME_OVER_MUSIC, MUSIC);
-    }
-    public static Music getFlyingMusic(){
-        return am.get(FLYING_MUSIC, MUSIC);
     }
 
     /////////////
@@ -699,10 +701,9 @@ public class Assets {
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
 
-    private static final String BG_MUSIC = "music/nebulae.mp3";//bgmusic.mp3";
+    private static final String BG_MUSIC = "music/galaxseed-bg.mp3";
     private static final String MENU_MUISC = "music/title.mp3";
-    private static final String GAME_OVER_MUSIC = "music/spacewalk.mp3";
-    private static final String FLYING_MUSIC = "music/flying.mp3";
+    private static final String GAME_OVER_MUSIC = "music/game-over.mp3";
 
     private static final String FIRING_SFX = "sfx/seed-fire.mp3";
     private static final String SWISH_SFX = "sfx/swish.mp3";
