@@ -62,6 +62,7 @@ public class Animations {
     private static Animation flamesIdle;
     private static Animation flames;
 
+    private static Animation gameOver;
     private static Animation shipDeath;
 
     private static Animation upgrade;
@@ -126,6 +127,8 @@ public class Animations {
 
         flamesIdle = new Animation(1f/9f, Assets.getIdleFlamesFrames());
         flames = new Animation(1f/9f, Assets.getFlamesFrames());
+
+        gameOver = new Animation(1f/8f, Assets.getGameOverFrames());
         shipDeath = new Animation(1f/6f, Assets.getShipDeathFrames());
 
         upgrade = new Animation(1f/6f, Assets.getUpgradeFrames());
@@ -303,6 +306,10 @@ public class Animations {
 
     public static Animation getFlames() {
         return flames;
+    }
+
+    public static Animation getGameOver(){
+        return gameOver;
     }
 
     public static Animation getShipDeath(){

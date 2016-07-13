@@ -300,6 +300,9 @@ public class Assets {
     public static Array<TextureAtlas.AtlasRegion> getShipDeathFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "ship/ship-death");
     }
+    public static Array<TextureAtlas.AtlasRegion> getGameOverFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "game-over/gameover");
+    }
 
     public static Array<TextureAtlas.AtlasRegion> getWreckedCat(){
         return getCachedAnimationFrames(ANI_ATLAS, "cat/death");

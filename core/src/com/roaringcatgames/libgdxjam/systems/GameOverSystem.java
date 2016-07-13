@@ -3,13 +3,10 @@ package com.roaringcatgames.libgdxjam.systems;
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
-import aurelienribon.tweenengine.equations.Circ;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -226,16 +223,16 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
 
             } else if (!hasInitialized && ac.animations.get("DEAD").isAnimationFinished(sc.time)) {
 
-
-                BitmapFont largeFont = Gdx.graphics.getDensity() > 1f ? Assets.get128Font() : Assets.get64Font();
-                BitmapFont subFont = Gdx.graphics.getDensity() > 1f ? Assets.get64Font() : Assets.get48Font();
                 if(gameOverText == null) {
                     gameOverText = engine.createEntity();
                     gameOverText.add(TransformComponent.create(engine)
-                            .setPosition(App.W / 2f, App.H / 2f, Z.gameOver));
-                    gameOverText.add(TextComponent.create(engine)
-                            .setFont(largeFont)
-                            .setText("GAME OVER"));
+                            .setPosition(App.W / 2f, App.H - 8f, Z.gameOver));
+                    gameOverText.add(AnimationComponent.create(engine)
+                            .addAnimation("DEFAULT", Animations.getGameOver()));
+                    gameOverText.add(TextureComponent.create(engine));
+                    gameOverText.add(StateComponent.create(engine)
+                        .setLooping(true)
+                        .set("DEFAULT"));
 
                     getEngine().addEntity(gameOverText);
                 }
@@ -244,9 +241,6 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                     restartButton = engine.createEntity();
                     restartButton.add(TransformComponent.create(engine)
                             .setPosition(App.W/2f, ((App.H/2f)-3.5f), Z.gameOver));
-//                    restartButton.add(TextComponent.create(engine)
-//                            .setFont(subFont)
-//                            .setText("RE-LAUNCH"));
                     restartButton.add(TextureComponent.create(engine)
                         .setRegion(Assets.getRelaunchButton()));
                     restartButton.add(CircleBoundsComponent.create(engine)
