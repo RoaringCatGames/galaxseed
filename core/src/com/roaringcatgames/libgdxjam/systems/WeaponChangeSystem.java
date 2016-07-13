@@ -34,7 +34,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     private Entity iface;
 
     private float selectY = 2f;
-    private float ifaceY = 2.39f;
+    private float ifaceY = 2.5f;
 
     private IGameProcessor game;
 

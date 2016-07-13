@@ -14,9 +14,9 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.values.Z;
 import com.roaringcatgames.libgdxjam.components.PlayerComponent;
 import com.roaringcatgames.libgdxjam.components.WhenOffScreenComponent;
+import com.roaringcatgames.libgdxjam.values.Z;
 
 import java.util.Random;
 
@@ -176,7 +176,7 @@ public class BackgroundSystem extends IteratingSystem {
                         .setReversed(true)
                         .setWrapOffset(offset + additionalOffest)
                         .shouldRandomPerpendicularPosition(true)
-                        .setMinMaxPos(0f, 20f)
+                        .setMinMaxPos(0f, right)
                         .setPossibleRegions(bg.galaxies));
                 galaxy.add(VelocityComponent.create(engine)
                         .setSpeed(0f, bgSpeed));
@@ -224,8 +224,8 @@ public class BackgroundSystem extends IteratingSystem {
         for(int i=0;i<speedLineCount;i++){
             Entity sl = engine.createEntity();
             int speedIndex = rnd.nextInt(5) + 1;
-            float x = K2MathUtil.getRandomInRange(0.1f, 19.8f);
-            float y = K2MathUtil.getRandomInRange(5f, 45f);
+            float x = K2MathUtil.getRandomInRange(0.1f, right - 0.2f);
+            float y = K2MathUtil.getRandomInRange(5f, top + 15f);
             TextureAtlas.AtlasRegion region = Assets.getSpeedLine(speedIndex);
             sl.add(TextureComponent.create(engine)
                 .setRegion(region));
@@ -245,7 +245,7 @@ public class BackgroundSystem extends IteratingSystem {
                 .setMode(ScreenWrapMode.VERTICAL)
                 .setReversed(true)
                 .shouldRandomPerpendicularPosition(true)
-                .setMinMaxPos(0.1f, 19.8f));
+                .setMinMaxPos(0.1f, right-0.2f));
             engine.addEntity(sl);
         }
 
@@ -253,8 +253,8 @@ public class BackgroundSystem extends IteratingSystem {
             //Stars
             for (int i = 0; i < numberOfStars; i++) {
                 Entity star = engine.createEntity();
-                float x = K2MathUtil.getRandomInRange(0.1f, 19.8f);
-                float y = K2MathUtil.getRandomInRange(0f, 45f);
+                float x = K2MathUtil.getRandomInRange(0.1f, right - 0.2f);
+                float y = K2MathUtil.getRandomInRange(0f, top + 15f);
                 float typeR = rnd.nextFloat();
                 Animation ani = typeR > 0.33f ? Animations.getStarA() :
                         typeR > 0.66f ? Animations.getStarB() :
@@ -276,7 +276,7 @@ public class BackgroundSystem extends IteratingSystem {
                         .setMode(ScreenWrapMode.VERTICAL)
                         .setReversed(true)
                         .shouldRandomPerpendicularPosition(true)
-                        .setMinMaxPos(0.1f, 19.8f));
+                        .setMinMaxPos(0.1f, right-0.2f));
                 engine.addEntity(star);
             }
         }

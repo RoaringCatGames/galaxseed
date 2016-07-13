@@ -42,7 +42,7 @@ public class SplashScreen extends LazyInitScreen {
         engine.addSystem(new BoundsSystem());
         engine.addSystem(render);
         Vector2 minBounds = new Vector2(0f, 0f);
-        Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
+        Vector2 maxBounds = new Vector2(App.W, App.H);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
         engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false, false));
         engine.addSystem(new MovementSystem());

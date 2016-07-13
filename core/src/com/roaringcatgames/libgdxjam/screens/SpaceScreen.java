@@ -62,7 +62,7 @@
                     Z.player);
 
             Vector2 minBounds = new Vector2(0f, 0f);
-            Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
+            Vector2 maxBounds = new Vector2(App.W, App.H);
 
             Gdx.app.log("Menu Screen", "Cam Pos: " + game.getCamera().position.x + " | " +
                     game.getCamera().position.y + " Cam W/H: " + game.getCamera().viewportWidth + "/" + game.getCamera().viewportHeight);
