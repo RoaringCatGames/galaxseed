@@ -128,7 +128,7 @@ public class Animations {
         flamesIdle = new Animation(1f/9f, Assets.getIdleFlamesFrames());
         flames = new Animation(1f/9f, Assets.getFlamesFrames());
 
-        gameOver = new Animation(1f/8f, Assets.getGameOverFrames());
+        gameOver = new Animation(1f/4f, Assets.getGameOverFrames());
         shipDeath = new Animation(1f/6f, Assets.getShipDeathFrames());
 
         upgrade = new Animation(1f/6f, Assets.getUpgradeFrames());

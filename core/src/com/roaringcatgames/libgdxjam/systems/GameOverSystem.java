@@ -226,7 +226,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 if(gameOverText == null) {
                     gameOverText = engine.createEntity();
                     gameOverText.add(TransformComponent.create(engine)
-                            .setPosition(App.W / 2f, App.H - 8f, Z.gameOver));
+                            .setPosition(App.W / 2f, (App.H/2f) + 3f, Z.gameOver));
                     gameOverText.add(AnimationComponent.create(engine)
                             .addAnimation("DEFAULT", Animations.getGameOver()));
                     gameOverText.add(TextureComponent.create(engine));
@@ -241,6 +241,10 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                     restartButton = engine.createEntity();
                     restartButton.add(TransformComponent.create(engine)
                             .setPosition(App.W/2f, ((App.H/2f)-3.5f), Z.gameOver));
+                    restartButton.add(ShakeComponent.create(engine)
+                        .setSpeed(6f, 4f)
+                        .setOffsets(0.4f, 0.6f)
+                        .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
                     restartButton.add(TextureComponent.create(engine)
                         .setRegion(Assets.getRelaunchButton()));
                     restartButton.add(CircleBoundsComponent.create(engine)
