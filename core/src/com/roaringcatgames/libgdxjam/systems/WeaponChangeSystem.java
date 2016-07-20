@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -18,6 +19,7 @@ import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
+import com.roaringcatgames.libgdxjam.screens.SpaceScreen;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Z;
 
@@ -343,6 +345,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
+        boolean hideCursor = true;
         if(App.getState() == GameState.WEAPON_SELECT){
 
             touchPoint.set(screenX, screenY, 0f);
@@ -354,14 +357,21 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             BoundsComponent auraBounds = K2ComponentMappers.bounds.get(auraSelect);
             if(App.isWeaponEnabled(WeaponType.GUN_SEEDS) && seedBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.GUN_SEEDS);
+                hideCursor = false;
             }else if(App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS) && helicopterBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.HELICOPTER_SEEDS);
+                hideCursor = false;
             }else if(App.isWeaponEnabled(WeaponType.POLLEN_AURA) && auraBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.POLLEN_AURA);
+                hideCursor = false;
             }else if(pc.weaponType != WeaponType.UNSELECTED){
                 App.setState(GameState.PLAYING);
                 toggleWeaponSelect(false);
             }
+        }
+
+        if(hideCursor && App.isDesktop()) {
+            Gdx.graphics.setCursor(App.getHiddenCursor());
         }
 
         return false;
