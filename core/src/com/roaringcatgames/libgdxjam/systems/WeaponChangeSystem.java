@@ -87,7 +87,14 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             }
         }else{
             //Hide
-            K2ComponentMappers.transform.get(entity).setHidden(true);
+            if(wsc.isRepresentingLevel) {
+                K2ComponentMappers.transform.get(entity).setHidden(true);
+            }else{
+                StateComponent sc = K2ComponentMappers.state.get(entity);
+                if(!"OFF".equals(sc.get())){
+                    sc.set("OFF");
+                }
+            }
         }
     }
 
@@ -142,7 +149,8 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             seedSelect.add(TextureComponent.create(pEngine));
             seedSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
             seedSelect.add(AnimationComponent.create(pEngine)
-                    .addAnimation("DEFAULT", Animations.getSeedPod()));
+                    .addAnimation("DEFAULT", Animations.getSeedPod())
+                    .addAnimation("OFF", Animations.getSeedPodOff()));
             pEngine.addEntity(seedSelect);
 
             seedLevel = pEngine.createEntity();
@@ -179,6 +187,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             helicopterSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
             helicopterSelect.add(AnimationComponent.create(pEngine)
                     .addAnimation("DEFAULT", Animations.getHelicopterPod())
+                    .addAnimation("OFF", Animations.getHelicopterPodOff())
                     .setPaused(true));
             pEngine.addEntity(helicopterSelect);
 
@@ -213,8 +222,9 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setBounds(0f, 0f, 2f, 2f));
             auraSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
             auraSelect.add(AnimationComponent.create(pEngine)
-                .addAnimation("DEFAULT", Animations.getAuraPod())
-                .setPaused(true));
+                    .addAnimation("DEFAULT", Animations.getAuraPod())
+                    .addAnimation("OFF", Animations.getAuraPodOff())
+                    .setPaused(true));
             auraSelect.add(TextureComponent.create(pEngine));
             pEngine.addEntity(auraSelect);
 

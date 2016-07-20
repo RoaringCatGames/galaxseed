@@ -71,6 +71,10 @@ public class Animations {
     private static Animation helicopterPod;
     private static Animation auraPod;
 
+    private static Animation seedPodOff;
+    private static Animation helicopterPodOff;
+    private static Animation auraPodOff;
+
     private static Animation rawry;
 
     public static void init(){
@@ -136,6 +140,10 @@ public class Animations {
         seedPod = new Animation(1f/80f, Assets.getSeedPodFrames());
         helicopterPod = new Animation(1f/80f, Assets.getHelicopterPodFrames());
         auraPod = new Animation(1f/80f, Assets.getAuraPodFrames());
+
+        seedPodOff = new Animation(1f/1f, Assets.getSeedPodOffFrames());
+        helicopterPodOff = new Animation(1f/1f, Assets.getHelicopterPodOffFrames());
+        auraPodOff = new Animation(1f/1f, Assets.getAuraPodOffFrames());
 
         rawry = new Animation(1f / 30f, Assets.getWreckedCat(), Animation.PlayMode.LOOP_PINGPONG);
     }
@@ -330,6 +338,18 @@ public class Animations {
 
     public static Animation getAuraPod() {
         return auraPod;
+    }
+
+    public static Animation getAuraPodOff() {
+        return auraPodOff;
+    }
+
+    public static Animation getSeedPodOff() {
+        return seedPodOff;
+    }
+
+    public static Animation getHelicopterPodOff() {
+        return helicopterPodOff;
     }
 
     public static Animation getRawry(){

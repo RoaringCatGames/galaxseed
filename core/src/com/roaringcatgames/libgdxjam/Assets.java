@@ -459,17 +459,26 @@ public class Assets {
     public static Array<? extends TextureRegion> getAuraPodFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/aura");
     }
+    public static Array<? extends TextureRegion> getAuraPodOffFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/aura-off");
+    }
     public static TextureAtlas.AtlasRegion getAuraLevel(int lvl){
         return getCachedRegion(ANI_ATLAS, "weapon-select/aura-lvl-" + lvl);
     }
     public static Array<? extends TextureRegion> getHelicopterPodFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/heli");
     }
+    public static Array<? extends TextureRegion> getHelicopterPodOffFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/heli-off");
+    }
     public static TextureAtlas.AtlasRegion getHelicopterLevel(int lvl){
         return getCachedRegion(ANI_ATLAS, "weapon-select/heli-lvl-" + lvl);
     }
     public static Array<? extends TextureRegion> getSeedPodFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/seed");
+    }
+    public static Array<? extends TextureRegion> getSeedPodOffFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/seed-off");
     }
     public static TextureAtlas.AtlasRegion getSeedLevel(int lvl){
         return getCachedRegion(ANI_ATLAS, "weapon-select/seed-lvl-" + lvl);
