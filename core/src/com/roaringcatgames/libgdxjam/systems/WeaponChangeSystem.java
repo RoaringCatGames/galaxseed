@@ -1,9 +1,15 @@
 package com.roaringcatgames.libgdxjam.systems;
 
 import aurelienribon.tweenengine.Tween;
-import com.badlogic.ashley.core.*;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
@@ -12,21 +18,19 @@ import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
-import com.roaringcatgames.libgdxjam.components.Mappers;
-import com.roaringcatgames.libgdxjam.components.PlayerComponent;
-import com.roaringcatgames.libgdxjam.components.WeaponLevel;
-import com.roaringcatgames.libgdxjam.components.WeaponType;
+import com.roaringcatgames.libgdxjam.components.*;
+import com.roaringcatgames.libgdxjam.screens.SpaceScreen;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Z;
 
 /**
  * A system to manage swapping weapons.
  */
-public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
+public class WeaponChangeSystem extends IteratingSystem implements InputProcessor {
 
     private Entity seedSelect;
     private Entity seedLevel;
-    private Entity helicpoterSelect;
+    private Entity helicopterSelect;
     private Entity helicopterLevel;
     private Entity auraSelect;
     private Entity auraLevel;
@@ -38,18 +42,70 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
     private IGameProcessor game;
 
+    private WeaponType currentWeapon;
+
     public WeaponChangeSystem(IGameProcessor game){
+        super(Family.all(WeaponSelectComponent.class).get());
         this.game = game;
     }
 
     @Override
     public void update(float deltaTime) {
-        super.update(deltaTime);
         PlayerComponent pc = getPlayerComponent();
-        if(pc != null) {
-            updateWeaponSelectDisplays(getPlayerComponent().weaponType);
+        if(pc != null){
+            currentWeapon = pc.weaponType;
+        }
+        super.update(deltaTime);
+    }
+
+    @Override
+    protected void processEntity(Entity entity, float deltaTime) {
+
+        WeaponSelectComponent wsc = Mappers.weaponSelect.get(entity);
+        boolean isEnabled = App.isWeaponEnabled(wsc.weaponType);
+
+
+        if(isEnabled){
+            K2ComponentMappers.transform.get(entity).setHidden(false);
+            if(wsc.isRepresentingLevel){
+                //Set the level for the thing
+                int level = levelToInt(App.getCurrentWeaponLevel(wsc.weaponType));
+                K2ComponentMappers.texture.get(entity)
+                        .setRegion(getLevelRegion(wsc.weaponType, level));
+
+            }else if(wsc.weaponType == currentWeapon) {
+                AnimationComponent ac = K2ComponentMappers.animation.get(entity);
+                if(ac.isPaused){
+                    ac.setPaused(false);
+                }
+            }else{
+                AnimationComponent ac = K2ComponentMappers.animation.get(entity);
+                if(!ac.isPaused){
+                    ac.setPaused(true);
+                    K2ComponentMappers.state.get(entity).time = 0f;
+                }
+            }
+        }else{
+            //Hide
+            K2ComponentMappers.transform.get(entity).setHidden(true);
+        }
+    }
+
+    private TextureRegion getLevelRegion(WeaponType wt, int level){
+        TextureRegion region = null;
+        switch(wt){
+            case GUN_SEEDS:
+                region = Assets.getSeedLevel(level);
+                break;
+            case HELICOPTER_SEEDS:
+                region = Assets.getHelicopterLevel(level);
+                break;
+            case POLLEN_AURA:
+                region = Assets.getAuraLevel(level);
+                break;
         }
 
+        return region;
     }
 
     @Override
@@ -73,6 +129,8 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         float yOffset = -(ifaceY - selectY);
         if(seedSelect == null){
             seedSelect = pEngine.createEntity();
+            seedSelect.add(WeaponSelectComponent.create(pEngine)
+                .setWeaponType(WeaponType.GUN_SEEDS));
             seedSelect.add(TransformComponent.create(pEngine)
                 .setPosition(xPos, selectY, Z.weaponSelect)
                 .setScale(scale, scale));
@@ -89,6 +147,9 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             pEngine.addEntity(seedSelect);
 
             seedLevel = pEngine.createEntity();
+            seedLevel.add(WeaponSelectComponent.create(pEngine)
+                    .setWeaponType(WeaponType.GUN_SEEDS)
+                    .setRepresentingLevel(true));
             seedLevel.add(TransformComponent.create(pEngine)
                 .setPosition(xPos, selectY, Z.weaponSelect)
                 .setScale(scale, scale));
@@ -102,26 +163,31 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
         }
 
-        if(helicpoterSelect == null){
+        if(helicopterSelect == null){
             xPos = App.W/2f;
-            helicpoterSelect = pEngine.createEntity();
-            helicpoterSelect.add(TransformComponent.create(pEngine)
+            helicopterSelect = pEngine.createEntity();
+            helicopterSelect.add(WeaponSelectComponent.create(engine)
+                .setWeaponType(WeaponType.HELICOPTER_SEEDS));
+            helicopterSelect.add(TransformComponent.create(pEngine)
                     .setPosition(xPos, selectY, Z.weaponSelect)
                     .setScale(scale, scale));
-            helicpoterSelect.add(FollowerComponent.create(pEngine)
+            helicopterSelect.add(FollowerComponent.create(pEngine)
                 .setTarget(iface)
                 .setMode(FollowMode.STICKY)
                 .setOffset(0f, yOffset));
-            helicpoterSelect.add(BoundsComponent.create(pEngine)
+            helicopterSelect.add(BoundsComponent.create(pEngine)
                     .setBounds(0f, 0f, 2f, 2f));
-            helicpoterSelect.add(TextureComponent.create(pEngine));
-            helicpoterSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
-            helicpoterSelect.add(AnimationComponent.create(pEngine)
+            helicopterSelect.add(TextureComponent.create(pEngine));
+            helicopterSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
+            helicopterSelect.add(AnimationComponent.create(pEngine)
                     .addAnimation("DEFAULT", Animations.getHelicopterPod())
                     .setPaused(true));
-            pEngine.addEntity(helicpoterSelect);
+            pEngine.addEntity(helicopterSelect);
 
             helicopterLevel = pEngine.createEntity();
+            helicopterLevel.add(WeaponSelectComponent.create(engine)
+                    .setWeaponType(WeaponType.HELICOPTER_SEEDS)
+                    .setRepresentingLevel(true));
             helicopterLevel.add(TransformComponent.create(pEngine)
                     .setPosition(xPos, selectY, Z.weaponSelect)
                     .setScale(scale, scale));
@@ -137,6 +203,8 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
         if(auraSelect == null){
             xPos = (App.W/2f) + offset;
             auraSelect = pEngine.createEntity();
+            auraSelect.add(WeaponSelectComponent.create(engine)
+                .setWeaponType(WeaponType.POLLEN_AURA));
             auraSelect.add(TransformComponent.create(pEngine)
                     .setPosition(xPos, selectY, Z.weaponSelect)
                     .setScale(scale, scale));
@@ -154,6 +222,9 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             pEngine.addEntity(auraSelect);
 
             auraLevel = pEngine.createEntity();
+            auraLevel.add(WeaponSelectComponent.create(engine)
+                    .setWeaponType(WeaponType.POLLEN_AURA)
+                    .setRepresentingLevel(true));
             auraLevel.add(TransformComponent.create(pEngine)
                     .setPosition(xPos, selectY, Z.weaponSelect)
                     .setScale(scale, scale));
@@ -204,24 +275,13 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
                     WeaponGeneratorUtil.generateHelicopterGuns(player, engine);
                     break;
             }
-
-            toggleWeaponSelect(true, wt);
         }
     }
 
     public void showWeaponSelect() {
         PlayerComponent pc = getPlayerComponent();
         if(pc != null) {
-            int heliLevel = levelToInt(App.getCurrentWeaponLevel(WeaponType.HELICOPTER_SEEDS));
-            K2ComponentMappers.texture.get(helicopterLevel).setRegion(Assets.getHelicopterLevel(heliLevel));
-
-            int seedLvl = levelToInt(App.getCurrentWeaponLevel(WeaponType.GUN_SEEDS));
-            K2ComponentMappers.texture.get(seedLevel).setRegion(Assets.getSeedLevel(seedLvl));
-
-            int auraLvl = levelToInt(App.getCurrentWeaponLevel(WeaponType.POLLEN_AURA));
-            K2ComponentMappers.texture.get(auraLevel).setRegion(Assets.getAuraLevel(auraLvl));
-
-            toggleWeaponSelect(true, pc.weaponType);
+            toggleWeaponSelect(true);
         }
     }
 
@@ -239,9 +299,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
                 level == WeaponLevel.LEVEL_3 ? 3 : 4;
     }
 
-    private void toggleWeaponSelect(boolean isShowing, WeaponType currentType) {
-        updateWeaponSelectDisplays(currentType);
-
+    private void toggleWeaponSelect(boolean isShowing) {
         float target = isShowing ? ifaceY : -ifaceY;
         float time = isShowing ? 0.05f : 0.5f;
         TweenComponent tc = K2ComponentMappers.tween.get(iface);
@@ -262,31 +320,6 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
 
         K2ComponentMappers.transform.get(overlay).setHidden(!isShowing);
     }
-
-    private void updateWeaponSelectDisplays(WeaponType currentType) {
-        boolean isShowingGun = App.isWeaponEnabled(WeaponType.GUN_SEEDS);
-        boolean isShowingAura = App.isWeaponEnabled(WeaponType.POLLEN_AURA);
-        boolean isShowingHeli = App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS);
-
-        toggleWeaponEntityData(seedSelect, isShowingGun, currentType == WeaponType.GUN_SEEDS);
-        K2ComponentMappers.transform.get(seedLevel).setHidden(!isShowingGun);
-
-        toggleWeaponEntityData(auraSelect, isShowingAura, currentType == WeaponType.POLLEN_AURA);
-        K2ComponentMappers.transform.get(auraLevel).setHidden(!isShowingAura);
-
-        toggleWeaponEntityData(helicpoterSelect, isShowingHeli && App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS), currentType == WeaponType.HELICOPTER_SEEDS);
-        K2ComponentMappers.transform.get(helicopterLevel).setHidden(!isShowingHeli);
-    }
-
-    private void toggleWeaponEntityData(Entity selector, boolean isShowing, boolean isAnimated){
-
-        K2ComponentMappers.transform.get(selector).setHidden(!isShowing);
-        K2ComponentMappers.animation.get(selector).setPaused(!isAnimated);
-        if(!isAnimated){
-            K2ComponentMappers.state.get(selector).time = 0f;
-        }
-    }
-
 
     /**
      * Input processor implementation
@@ -312,6 +345,7 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
+        boolean hideCursor = true;
         if(App.getState() == GameState.WEAPON_SELECT){
 
             touchPoint.set(screenX, screenY, 0f);
@@ -319,19 +353,25 @@ public class WeaponChangeSystem extends EntitySystem implements InputProcessor {
             PlayerComponent pc = getPlayerComponent();
 
             BoundsComponent seedBounds = K2ComponentMappers.bounds.get(seedSelect);
-            BoundsComponent helicopterBounds = K2ComponentMappers.bounds.get(helicpoterSelect);
+            BoundsComponent helicopterBounds = K2ComponentMappers.bounds.get(helicopterSelect);
             BoundsComponent auraBounds = K2ComponentMappers.bounds.get(auraSelect);
             if(App.isWeaponEnabled(WeaponType.GUN_SEEDS) && seedBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.GUN_SEEDS);
+                hideCursor = false;
             }else if(App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS) && helicopterBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.HELICOPTER_SEEDS);
+                hideCursor = false;
             }else if(App.isWeaponEnabled(WeaponType.POLLEN_AURA) && auraBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.POLLEN_AURA);
+                hideCursor = false;
             }else if(pc.weaponType != WeaponType.UNSELECTED){
                 App.setState(GameState.PLAYING);
-                WeaponType currentType = pc.weaponType;
-                toggleWeaponSelect(false, currentType);
+                toggleWeaponSelect(false);
             }
+        }
+
+        if(hideCursor && App.isDesktop()) {
+            Gdx.graphics.setCursor(App.getHiddenCursor());
         }
 
         return false;

@@ -140,13 +140,20 @@ public class App {
 
     private static Cursor activeCursor;
     private static Cursor hiddenCursor;
+    private static Cursor downCursor;
     public static void setActiveCursor(Cursor c){
         activeCursor = c;
     }
     public static void setHiddenCursor(Cursor c){
         hiddenCursor = c;
     }
+    public static void setDownCursor(Cursor c){
+        downCursor = c;
+    }
 
     public static Cursor getActiveCursor(){ return activeCursor; }
     public static Cursor getHiddenCursor() { return hiddenCursor; }
+    public static Cursor getDownCursor() {
+        return downCursor;
+    }
 }

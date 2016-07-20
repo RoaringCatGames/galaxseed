@@ -21,7 +21,7 @@ import com.roaringcatgames.libgdxjam.screens.SpaceScreen;
 import com.roaringcatgames.libgdxjam.screens.SplashScreen;
 import com.roaringcatgames.libgdxjam.values.Volume;
 
-public class LifeInSpace extends Game implements IGameProcessor {
+public class LifeInSpace extends Game implements IGameProcessor, InputProcessor {
 
     public InputMultiplexer multiplexer = new InputMultiplexer();
     public AssetManager am;
@@ -54,12 +54,18 @@ public class LifeInSpace extends Game implements IGameProcessor {
         setScreen(new SplashScreen(this));
         Gdx.input.setInputProcessor(multiplexer);
 
+        //Let the game handle some inputs
+        multiplexer.addProcessor(this);
+
         if(App.isDesktop()){
-            Cursor customCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("cursor-cat.png")), 4, 4);
+            Cursor customCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("cursor-cat.png")), 32, 4);
             App.setActiveCursor(customCursor);
 
             Cursor hiddenCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("cursor-hidden.png")), 0, 0);
             App.setHiddenCursor(hiddenCursor);
+
+            Cursor downCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("cursor-cat-down.png")), 32, 4);
+            App.setDownCursor(downCursor);
 
             Gdx.graphics.setCursor(customCursor);
         }
@@ -97,21 +103,20 @@ public class LifeInSpace extends Game implements IGameProcessor {
 
     @Override
     public void switchScreens(String screenName) {
+        multiplexer.clear();
+        multiplexer.addProcessor(this);
         switch(screenName){
             case "OPTIONS":
-                multiplexer.clear();
                 this.setScreen(new OptionScreen(this));
                 break;
             case "MENU":
-
-                multiplexer.clear();
                 this.setScreen(new MenuScreen(this));
                 break;
             case "GAME":
-                multiplexer.clear();
                 this.setScreen(new SpaceScreen(this));
                 break;
         }
+
     }
 
     @Override
@@ -181,5 +186,55 @@ public class LifeInSpace extends Game implements IGameProcessor {
     @Override
     public IPreferenceManager getPreferenceManager() {
         return prefManager;
+    }
+
+
+
+
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(App.isDesktop()) {
+            Gdx.graphics.setCursor(App.getDownCursor());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if(App.isDesktop()) {
+            Gdx.graphics.setCursor(App.getActiveCursor());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }

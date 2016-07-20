@@ -24,4 +24,5 @@ public class Mappers {
     public static ComponentMapper<WhenOffScreenComponent> whenOffScreen = ComponentMapper.getFor(WhenOffScreenComponent.class);
     public static ComponentMapper<HelicopterSeedComponent> helicopterSeed = ComponentMapper.getFor(HelicopterSeedComponent.class);
     public static ComponentMapper<StatusComponent> status = ComponentMapper.getFor(StatusComponent.class);
+    public static ComponentMapper<WeaponSelectComponent> weaponSelect = ComponentMapper.getFor(WeaponSelectComponent.class);
 }
