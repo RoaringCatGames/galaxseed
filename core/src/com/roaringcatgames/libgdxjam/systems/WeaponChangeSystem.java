@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -19,7 +20,6 @@ import com.roaringcatgames.libgdxjam.Animations;
 import com.roaringcatgames.libgdxjam.App;
 import com.roaringcatgames.libgdxjam.Assets;
 import com.roaringcatgames.libgdxjam.components.*;
-import com.roaringcatgames.libgdxjam.screens.SpaceScreen;
 import com.roaringcatgames.libgdxjam.values.GameState;
 import com.roaringcatgames.libgdxjam.values.Z;
 
@@ -123,10 +123,9 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             engine.addEntity(iface);
         }
 
-        float scale = 1f;
+        float scale = 0.8f;
         float offset = 5f;
         float xPos = App.W/2f - offset;
-        float yOffset = -(ifaceY - selectY);
         if(seedSelect == null){
             seedSelect = pEngine.createEntity();
             seedSelect.add(WeaponSelectComponent.create(pEngine)
@@ -139,7 +138,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             seedSelect.add(FollowerComponent.create(pEngine)
                 .setTarget(iface)
                 .setMode(FollowMode.STICKY)
-                .setOffset(-offset, yOffset));
+                .setOffset(-5.2f, -0.0499f));
             seedSelect.add(TextureComponent.create(pEngine));
             seedSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
             seedSelect.add(AnimationComponent.create(pEngine)
@@ -151,12 +150,11 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setWeaponType(WeaponType.GUN_SEEDS)
                     .setRepresentingLevel(true));
             seedLevel.add(TransformComponent.create(pEngine)
-                .setPosition(xPos, selectY, Z.weaponSelect)
-                .setScale(scale, scale));
+                .setPosition(xPos, selectY, Z.weaponSelect));
             seedLevel.add(FollowerComponent.create(pEngine)
                 .setTarget(iface)
                 .setMode(FollowMode.STICKY)
-                .setOffset(-offset, yOffset));
+                .setOffset(-4.64899f, -2.249f));
             seedLevel.add(TextureComponent.create(pEngine)
                 .setRegion(Assets.getSeedLevel(1)));
             pEngine.addEntity(seedLevel);
@@ -174,7 +172,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             helicopterSelect.add(FollowerComponent.create(pEngine)
                 .setTarget(iface)
                 .setMode(FollowMode.STICKY)
-                .setOffset(0f, yOffset));
+                .setOffset(0.2f, 0.2f));
             helicopterSelect.add(BoundsComponent.create(pEngine)
                     .setBounds(0f, 0f, 2f, 2f));
             helicopterSelect.add(TextureComponent.create(pEngine));
@@ -189,12 +187,11 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setWeaponType(WeaponType.HELICOPTER_SEEDS)
                     .setRepresentingLevel(true));
             helicopterLevel.add(TransformComponent.create(pEngine)
-                    .setPosition(xPos, selectY, Z.weaponSelect)
-                    .setScale(scale, scale));
+                    .setPosition(xPos, selectY, Z.weaponSelect));
             helicopterLevel.add(FollowerComponent.create(pEngine)
                 .setTarget(iface)
                 .setMode(FollowMode.STICKY)
-                .setOffset(0f, yOffset));
+                .setOffset(0.2f, -1.899f));
             helicopterLevel.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getHelicopterLevel(1)));
             pEngine.addEntity(helicopterLevel);
@@ -211,7 +208,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             auraSelect.add(FollowerComponent.create(pEngine)
                 .setTarget(iface)
                 .setMode(FollowMode.STICKY)
-                .setOffset(offset, yOffset));
+                .setOffset(5.75f, -0.0499f));
             auraSelect.add(BoundsComponent.create(pEngine)
                     .setBounds(0f, 0f, 2f, 2f));
             auraSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
@@ -226,12 +223,11 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setWeaponType(WeaponType.POLLEN_AURA)
                     .setRepresentingLevel(true));
             auraLevel.add(TransformComponent.create(pEngine)
-                    .setPosition(xPos, selectY, Z.weaponSelect)
-                    .setScale(scale, scale));
+                    .setPosition(xPos, selectY, Z.weaponSelect));
             auraLevel.add(FollowerComponent.create(pEngine)
                 .setTarget(iface)
                 .setMode(FollowMode.STICKY)
-                .setOffset(offset, yOffset));
+                .setOffset(5.099f, -2.249f));
             auraLevel.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getAuraLevel(1)));
             pEngine.addEntity(auraLevel);
@@ -327,8 +323,57 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
 
     Vector3 touchPoint = new Vector3();
 
+//    int target = 0;
+//    float adjust = 0.05f;
+
     @Override
     public boolean keyDown(int keycode) {
+
+//        if(keycode == Input.Keys.LEFT ||
+//                keycode == Input.Keys.RIGHT ||
+//                keycode == Input.Keys.UP ||
+//                keycode == Input.Keys.DOWN) {
+//            Entity mover = target == 0 ? seedSelect :
+//                    target == 1 ? seedLevel :
+//                    target == 2 ? helicopterSelect :
+//                    target == 3 ? helicopterLevel :
+//                    target == 4 ? auraSelect : auraLevel;
+//
+//            FollowerComponent fc = K2ComponentMappers.follower.get(mover);
+//            if (keycode == Input.Keys.LEFT) {
+//                fc.offset.add(-adjust, 0);
+//            } else if (keycode == Input.Keys.RIGHT) {
+//                fc.offset.add(adjust, 0);
+//            } else if (keycode == Input.Keys.UP) {
+//                fc.offset.add(0, adjust);
+//            } else if (keycode == Input.Keys.DOWN) {
+//                fc.offset.add(0, -adjust);
+//            }
+//        }else if(keycode == Input.Keys.NUM_0){
+//            target = 0;
+//        }else if(keycode == Input.Keys.NUM_1){
+//            target = 1;
+//        }else if(keycode == Input.Keys.NUM_2){
+//            target = 2;
+//        }else if(keycode == Input.Keys.NUM_3){
+//            target = 3;
+//        }else if(keycode == Input.Keys.NUM_4){
+//            target = 4;
+//        }else if(keycode == Input.Keys.NUM_5){
+//            target = 5;
+//        }
+//
+//        String seedXY = K2ComponentMappers.follower.get(seedSelect).offset.toString();
+//        String seedLxy = K2ComponentMappers.follower.get(seedLevel).offset.toString();
+//        String heliXY = K2ComponentMappers.follower.get(helicopterSelect).offset.toString();
+//        String heliLxy = K2ComponentMappers.follower.get(helicopterLevel).offset.toString();
+//        String auraXY = K2ComponentMappers.follower.get(auraSelect).offset.toString();
+//        String auraLXY = K2ComponentMappers.follower.get(auraLevel).offset.toString();
+//        Gdx.app.log("SELECT", "SEED: " + seedXY + "\nSEEDLVL: " + seedLxy +
+//                              "\nHELI: " + heliXY + "\nHELILVL: " + heliLxy +
+//                              "\nAURA: " + auraXY + "\nAURALVL: " + auraLXY);
+
+
         return false;
     }
 
