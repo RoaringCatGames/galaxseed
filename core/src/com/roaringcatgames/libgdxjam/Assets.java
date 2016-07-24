@@ -445,6 +445,9 @@ public class Assets {
         return getCachedAnimationFrames(ANI_ATLAS, "guns/cannon-firing");
     }
 
+    public static Array<? extends TextureRegion> getShield(){
+        return getCachedAnimationFrames(ANI_ATLAS, "shield/shield");
+    }
 
     public static Array<? extends TextureRegion> getAuraFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "guns/aura");

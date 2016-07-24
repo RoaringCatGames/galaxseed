@@ -25,4 +25,5 @@ public class Mappers {
     public static ComponentMapper<HelicopterSeedComponent> helicopterSeed = ComponentMapper.getFor(HelicopterSeedComponent.class);
     public static ComponentMapper<StatusComponent> status = ComponentMapper.getFor(StatusComponent.class);
     public static ComponentMapper<WeaponSelectComponent> weaponSelect = ComponentMapper.getFor(WeaponSelectComponent.class);
+    public static ComponentMapper<ShieldComponent> shield = ComponentMapper.getFor(ShieldComponent.class);
 }

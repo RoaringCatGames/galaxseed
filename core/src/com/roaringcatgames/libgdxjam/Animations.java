@@ -75,6 +75,8 @@ public class Animations {
     private static Animation helicopterPodOff;
     private static Animation auraPodOff;
 
+    private static Animation shield;
+
     private static Animation rawry;
 
     public static void init(){
@@ -144,6 +146,8 @@ public class Animations {
         seedPodOff = new Animation(1f/1f, Assets.getSeedPodOffFrames());
         helicopterPodOff = new Animation(1f/1f, Assets.getHelicopterPodOffFrames());
         auraPodOff = new Animation(1f/1f, Assets.getAuraPodOffFrames());
+
+        shield = new Animation(1f/6f, Assets.getShield());
 
         rawry = new Animation(1f / 30f, Assets.getWreckedCat(), Animation.PlayMode.LOOP_PINGPONG);
     }
@@ -352,6 +356,9 @@ public class Animations {
         return helicopterPodOff;
     }
 
+    public static Animation getShield(){
+        return shield;
+    }
     public static Animation getRawry(){
         return rawry;
     }

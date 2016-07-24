@@ -34,7 +34,7 @@ public class PlayerDamageSystem extends IteratingSystem {
     private Entity player;
     private Entity scoreCard;
     private Array<Entity> projectiles = new Array<>();
-    private Array<Entity> healthLeaves = new Array<>();
+    private Array<Entity> shields = new Array();
 
     private ComponentMapper<BoundsComponent> bm;
     private ComponentMapper<HealthComponent> hm;
@@ -43,14 +43,13 @@ public class PlayerDamageSystem extends IteratingSystem {
     private ComponentMapper<EnemyComponent> em;
     private ComponentMapper<ScoreComponent> scm;
     private ComponentMapper<TransformComponent> tm;
-    private ComponentMapper<HealthLeafComponent> hlm;
 
 
     private Sound mediumHitSfx, heavyHitSfx;
 
     public PlayerDamageSystem(){
         super(Family.one(ScoreComponent.class, PlayerComponent.class,
-                         ProjectileComponent.class, HealthLeafComponent.class).get());
+                ShieldComponent.class, ProjectileComponent.class).get());
         bm = ComponentMapper.getFor(BoundsComponent.class);
         hm = ComponentMapper.getFor(HealthComponent.class);
         pm = ComponentMapper.getFor(ProjectileComponent.class);
@@ -58,7 +57,6 @@ public class PlayerDamageSystem extends IteratingSystem {
         em = ComponentMapper.getFor(EnemyComponent.class);
         scm = ComponentMapper.getFor(ScoreComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
-        hlm = ComponentMapper.getFor(HealthLeafComponent.class);
 
         mediumHitSfx = Assets.getPlayerHitMedium();
         heavyHitSfx = Assets.getPlayerHitHeavy();
@@ -75,8 +73,22 @@ public class PlayerDamageSystem extends IteratingSystem {
 
         for (Entity proj : projectiles) {
             CircleBoundsComponent cb = cm.get(proj);
-            if (Intersector.overlaps(cb.circle, pb.bounds)) {
-                ProjectileComponent pp = pm.get(proj);
+            ProjectileComponent pp = pm.get(proj);
+            TransformComponent projTrans = K2ComponentMappers.transform.get(proj);
+
+            boolean didHitShield = false;
+            for(Entity shield:shields){
+                CircleBoundsComponent scb = K2ComponentMappers.circleBounds.get(shield);
+                if(cb.circle.overlaps(scb.circle)){
+                    Vector3 halfPos = pt.position.cpy().sub(pt.position).scl(0.5f);
+                    float scale = getScaleForProjectileExplosion(proj);
+                    explodeProjectile(proj, projTrans, scale, halfPos.x, halfPos.y);
+                    getEngine().removeEntity(proj);
+                    didHitShield = true;
+                }
+            }
+
+            if (!didHitShield && Intersector.overlaps(cb.circle, pb.bounds)) {
                 processCollision(pt, ph, proj, pp);
             }
         }
@@ -86,9 +98,12 @@ public class PlayerDamageSystem extends IteratingSystem {
             PlayerComponent pc = Mappers.player.get(player);
             App.toggleWeapon(pc.weaponType, false);
             pc.weaponType = WeaponType.UNSELECTED;
+            float shieldTime = 3f;
             WeaponGeneratorUtil.clearWeapon(getEngine());
             if(App.hasAvailableWeapons()){
-                //DO SOMETHING TO SWITCH WEAPONS
+                //Add Shield
+                generateShield(pt, shieldTime);
+                //Trigger Weapon Select
                 App.setState(GameState.WEAPON_SELECT);
                 ph.health = Health.Player;
             }else {
@@ -97,54 +112,47 @@ public class PlayerDamageSystem extends IteratingSystem {
         }
 
         projectiles.clear();
-        healthLeaves.clear();
+        shields.clear();
+    }
+
+    private void generateShield(TransformComponent pt, float shieldTime) {
+        Gdx.app.log("Player Damage System", "Adding shield");
+        //Add Shield
+        PooledEngine engine = ((PooledEngine) getEngine());
+        Entity e = engine.createEntity();
+        e.add(ShieldComponent.create(engine));
+        e.add(TransformComponent.create(engine)
+            .setPosition(pt.position.x, pt.position.y, Z.shield)
+            .setScale(1f, 1f));
+        e.add(FollowerComponent.create(engine)
+            .setTarget(player));
+        e.add(CircleBoundsComponent.create(engine)
+            .setCircle(pt.position.x, pt.position.y, 3f));
+        e.add(TweenComponent.create(engine)
+            .addTween(Tween.to(e, K2EntityTweenAccessor.BOUNDS_RADIUS, shieldTime)
+                    .target(0f))
+            .addTween(Tween.to(e, K2EntityTweenAccessor.SCALE, shieldTime)
+                    .target(0f, 0f)));
+        e.add(TextureComponent.create(engine));
+        e.add(AnimationComponent.create(engine)
+            .addAnimation("DEFAULT", Animations.getShield()));
+        e.add(StateComponent.create(engine)
+            .setLooping(true)
+            .set("DEFAULT"));
+        engine.addEntity(e);
     }
 
 
     private void processCollision(TransformComponent playerPos, HealthComponent ph, Entity proj, ProjectileComponent pp) {
         TransformComponent projPos = tm.get(proj);
-        float scale = 0.5f;
-        float xOffset = 0f, yOffset = 0f;
-        Vector3 halfPos = playerPos.position.cpy().sub(projPos.position).scl(0.5f);
-        xOffset = halfPos.x;
-        yOffset = halfPos.y;
-        if(pp.damage == Damage.asteroidRock) {
-            if(PrefsUtil.areSfxEnabled()) {
-                mediumHitSfx.play(Volume.PLAYER_HIT_M);
-            }
-        }else if(pp.damage == Damage.comet){
-            scale = 0.8f;
-            if(PrefsUtil.areSfxEnabled()) {
-                mediumHitSfx.play(Volume.PLAYER_HIT_M);
-            }
-        }else if(pp.damage == Damage.asteroid){
-            if(PrefsUtil.areSfxEnabled()) {
-                heavyHitSfx.play(Volume.PLAYER_HIT_H);
-            }
-            scale = 1f;
+
+
+        if(PrefsUtil.areSfxEnabled()) {
+            mediumHitSfx.play(Volume.PLAYER_HIT_M);
         }
 
         if(PrefsUtil.isVibrationOn()) {
             Gdx.input.vibrate(500);
-        }
-
-        boolean leftFirst = true;
-        for(Entity leaf:healthLeaves){
-            TransformComponent ltc = tm.get(leaf);
-            float rotOffset = K2MathUtil.getRandomInRange(4f, 8f);
-            Timeline tl = Timeline.createSequence()
-                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.0125f)
-                                .target(ltc.rotation + (leftFirst ? -rotOffset : rotOffset)))
-                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.0125f)
-                                    .target(0f))
-                        .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.0125f)
-                                .target(ltc.rotation + (leftFirst ? rotOffset : -rotOffset)))
-                    .push(Tween.to(leaf, K2EntityTweenAccessor.ROTATION, 0.0125f)
-                            .target(0f))
-                    .repeat(3, 0);
-            leaf.add(TweenComponent.create(getEngine())
-                .setTimeline(tl));
-            leftFirst = !leftFirst;
         }
 
         //Adjust Player Health
@@ -152,7 +160,23 @@ public class PlayerDamageSystem extends IteratingSystem {
         scm.get(scoreCard).score -= (projHealth.maxHealth - projHealth.health);
         ph.health = Math.max(0f, ph.health - pp.damage);
 
+        Vector3 halfPos = playerPos.position.cpy().sub(projPos.position).scl(0.5f);
+        float scale = getScaleForProjectileExplosion(proj);
+        explodeProjectile(proj, projPos, scale, halfPos.x, halfPos.y);
 
+
+    }
+
+    private float getScaleForProjectileExplosion(Entity proj) {
+        float scale = 0.5f;
+        if(Mappers.enemy.has(proj)){
+            EnemyComponent ec = Mappers.enemy.get(proj);
+            scale = ec.enemyType == EnemyType.COMET ? 0.8f : ec.enemyType != EnemyType.ASTEROID_FRAG ? 1f : 0.5f;
+        }
+        return scale;
+    }
+
+    private void explodeProjectile(Entity proj, TransformComponent projPos, float scale, float xOffset, float yOffset) {
         //Generate Explosion
         EnemyComponent ec = em.get(proj);
         ec.isDamaging = false;
@@ -194,8 +218,8 @@ public class PlayerDamageSystem extends IteratingSystem {
             projectiles.add(entity);
         }else if(scm.has(entity)) {
             scoreCard = entity;
-        }else if(hlm.has(entity)) {
-            healthLeaves.add(entity);
+        }else if(Mappers.shield.has(entity)) {
+            shields.add(entity);
         }else{
             player = entity;
         }
