@@ -25,6 +25,7 @@ public class Z {
     public static final float flames = 51f;
     public static final float player = 50f;
     public static final float muzzleFlash = 49f;
+    public static final float shield = 48f;
     public static final float enemyParticle = 46f;
     public static final float enemy = 45f;
 
