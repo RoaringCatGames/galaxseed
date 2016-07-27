@@ -29,9 +29,9 @@ import java.util.Random;
  */
 public class EnemySpawnSystem extends IteratingSystem {
 
-    private static final float ASTEROID_A_PU_CHANCE = 0.1f;
-    private static final float ASTEROID_B_PU_CHANCE = 0.2f;
-    private static final float ASTEROID_C_PU_CHANCE = 0.4f;
+    private static final float ASTEROID_A_PU_CHANCE = 0.3f;
+    private static final float ASTEROID_B_PU_CHANCE = 0.4f;
+    private static final float ASTEROID_C_PU_CHANCE = 0.6f;
 
     private static float elapsedTime = 0f;
     private static float homingChance = 0.1f;

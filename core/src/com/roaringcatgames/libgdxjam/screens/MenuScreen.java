@@ -3,6 +3,7 @@ package com.roaringcatgames.libgdxjam.screens;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -37,7 +38,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
     private IGameProcessor game;
     private PooledEngine engine;
 
-    private Entity plant, playTarget, optionsTarget, swipeTutorial;
+    private Entity plant, playTarget, optionsTarget, swipeTutorial, exitButton;
     private ObjectMap<String, Boolean> readyMap = new ObjectMap<>();
 
     public MenuScreen(IGameProcessor game) {
@@ -141,6 +142,26 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         engine.addEntity(playTarget);
         optionsTarget = createPlayAsteroid(xPos + 10f, yPos, Assets.getOptionsAsteroid());
         engine.addEntity(optionsTarget);
+
+        if(App.isDesktop()) {
+            exitButton = engine.createEntity();
+            exitButton.add(MenuItemComponent.create(engine));
+            exitButton.add(HealthComponent.create(engine)
+                    .setMaxHealth(Health.PlayAsteroid)
+                    .setHealth(Health.PlayAsteroid));
+            exitButton.add(TextureComponent.create(engine)
+                    .setRegion(Assets.getExitButton()));
+            exitButton.add(CircleBoundsComponent.create(engine)
+                    .setCircle(0f, 0f, 1.5f));
+            exitButton.add(TransformComponent.create(engine)
+                    .setPosition(App.W - 2f, App.H - 2f, Z.playAsteroids)
+                    .setScale(0.5f, 0.5f));
+            exitButton.add(ShakeComponent.create(engine)
+                    .setSpeed(6f, 4f)
+                    .setOffsets(0.4f, 0.6f)
+                    .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
+            engine.addEntity(exitButton);
+        }
 
         swipeTutorial = engine.createEntity();
         swipeTutorial.add(TextureComponent.create(engine));
@@ -266,6 +287,9 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         CircleBoundsComponent playBounds = K2ComponentMappers.circleBounds.get(playTarget);
         CircleBoundsComponent optionsBounds = K2ComponentMappers.circleBounds.get(optionsTarget);
 
+
+
+
         if (playBounds != null && playBounds.circle.contains(touchPoint)) {
             if (Mappers.menuItem.has(playTarget)) {
                 Mappers.menuItem.get(playTarget).isFilled = true;
@@ -275,6 +299,13 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
             if (Mappers.menuItem.has(optionsTarget)) {
                 Mappers.menuItem.get(optionsTarget).isFilled = true;
                 Sfx.playSelectNoise();
+            }
+        }
+
+        if(App.isDesktop()){
+            CircleBoundsComponent exitBounds = K2ComponentMappers.circleBounds.get(exitButton);
+            if(exitBounds != null && exitBounds.circle.contains(touchPoint)) {
+                Gdx.app.exit();
             }
         }
 

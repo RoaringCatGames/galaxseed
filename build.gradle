@@ -15,7 +15,7 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '1.1.0-kfp'
+    version = '1.2.0-kfp'
     ext {
         appName = "libgdx-jam-2015"
         gdxVersion = '1.9.2'

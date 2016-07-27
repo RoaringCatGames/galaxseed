@@ -37,10 +37,10 @@ public class EnemyDamageUtil {
     private static Vector2 bulletPos = new Vector2();
     private static Vector2 enemyPos = new Vector2();
 
-    private enum HealthPackType {
-        FERTILIZER,
-        WATER_CAN
-    }
+//    private enum HealthPackType {
+//        FERTILIZER,
+//        WATER_CAN
+//    }
 
     public static void processEnemyDefeated(Entity enemy, PooledEngine engine){
         TransformComponent enemyTfm = K2ComponentMappers.transform.get(enemy);

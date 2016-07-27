@@ -23,7 +23,7 @@ import java.util.Random;
 public class BackgroundSystem extends IteratingSystem {
 
     public float bgSpeed = -1f;
-    public float stickerSpeed = -10.5f;
+    public float stickerSpeed = -1.5f;
     public float bgClearSpeed = -2.5f;
     private float speedLineSpeedMin = -25f;
     private float speedLineSpeedMax = -40f;

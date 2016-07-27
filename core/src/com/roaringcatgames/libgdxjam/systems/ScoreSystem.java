@@ -40,7 +40,7 @@ public class ScoreSystem extends IteratingSystem {
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         PooledEngine pe = (PooledEngine)engine;
-        float yPos = App.getTotalHeight() - 0.6f;
+        float yPos = App.H - 1.2f;
         animationFrames = Assets.getTitleTreeFrames();
         plantGrowth = pe.createEntity();
         plantGrowth.add(TextureComponent.create(pe)

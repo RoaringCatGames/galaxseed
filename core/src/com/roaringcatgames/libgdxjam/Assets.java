@@ -351,6 +351,10 @@ public class Assets {
         return getCachedRegion(SPRITE_ATLAS, "options/relaunch");
     }
 
+    public static TextureAtlas.AtlasRegion getExitButton(){
+        return getCachedRegion(SPRITE_ATLAS, "options/exit");
+    }
+
     private static TextureRegion shipSmoke;
     public static TextureRegion getSmoke(){
         if(shipSmoke == null) {
