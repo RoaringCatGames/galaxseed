@@ -159,6 +159,9 @@ public class BackgroundSystem extends IteratingSystem {
                         galaxies.add(Assets.getGasCluster());
                         galaxies.add(Assets.getGasClusterA());
                         galaxies.add(Assets.getGasClusterB());
+                        galaxies.add(Assets.getGasClusterC());
+                        galaxies.add(Assets.getGasClusterD());
+                        galaxies.add(Assets.getGasClusterE());
                     }
                 }
 

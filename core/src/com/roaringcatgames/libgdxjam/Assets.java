@@ -124,7 +124,15 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getGasClusterB(){
         return getCachedRegion(SPRITE_ATLAS, "GasCluster-b");
     }
-
+    public static TextureAtlas.AtlasRegion getGasClusterC(){
+        return getCachedRegion(SPRITE_ATLAS, "GasCluster-c");
+    }
+    public static TextureAtlas.AtlasRegion getGasClusterD(){
+        return getCachedRegion(SPRITE_ATLAS, "GasCluster-d");
+    }
+    public static TextureAtlas.AtlasRegion getGasClusterE(){
+        return getCachedRegion(SPRITE_ATLAS, "GasCluster-e");
+    }
     public static TextureAtlas.AtlasRegion getPluto(){
         return getCachedRegion(SPRITE_ATLAS, "planets/pluto");
     }
