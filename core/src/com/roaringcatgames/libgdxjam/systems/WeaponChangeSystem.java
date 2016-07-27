@@ -133,6 +133,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         float scale = 0.8f;
         float offset = 5f;
         float xPos = App.W/2f - offset;
+        float buttonBoundSize = 3f;
         if(seedSelect == null){
             seedSelect = pEngine.createEntity();
             seedSelect.add(WeaponSelectComponent.create(pEngine)
@@ -141,7 +142,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 .setPosition(xPos, selectY, Z.weaponSelect)
                 .setScale(scale, scale));
             seedSelect.add(BoundsComponent.create(pEngine)
-                .setBounds(0f, 0f, 2f, 2f));
+                .setBounds(0f, 0f, buttonBoundSize, buttonBoundSize));
             seedSelect.add(FollowerComponent.create(pEngine)
                 .setTarget(iface)
                 .setMode(FollowMode.STICKY)
@@ -182,7 +183,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 .setMode(FollowMode.STICKY)
                 .setOffset(0.2f, 0.2f));
             helicopterSelect.add(BoundsComponent.create(pEngine)
-                    .setBounds(0f, 0f, 2f, 2f));
+                    .setBounds(0f, 0f, buttonBoundSize, buttonBoundSize));
             helicopterSelect.add(TextureComponent.create(pEngine));
             helicopterSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
             helicopterSelect.add(AnimationComponent.create(pEngine)
@@ -219,7 +220,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 .setMode(FollowMode.STICKY)
                 .setOffset(5.75f, -0.0499f));
             auraSelect.add(BoundsComponent.create(pEngine)
-                    .setBounds(0f, 0f, 2f, 2f));
+                    .setBounds(0f, 0f, buttonBoundSize, buttonBoundSize));
             auraSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
             auraSelect.add(AnimationComponent.create(pEngine)
                     .addAnimation("DEFAULT", Animations.getAuraPod())

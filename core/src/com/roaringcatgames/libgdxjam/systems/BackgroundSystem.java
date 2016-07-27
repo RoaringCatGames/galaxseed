@@ -23,7 +23,7 @@ import java.util.Random;
 public class BackgroundSystem extends IteratingSystem {
 
     public float bgSpeed = -1f;
-    public float stickerSpeed = -1.5f;
+    public float stickerSpeed = -10.5f;
     public float bgClearSpeed = -2.5f;
     private float speedLineSpeedMin = -25f;
     private float speedLineSpeedMax = -40f;
@@ -85,16 +85,33 @@ public class BackgroundSystem extends IteratingSystem {
     private void init(){
         PooledEngine engine = ((PooledEngine)getEngine());
 
+        float screenCenter = App.W/2f;
+        float leftCenter = screenCenter/2f;
+        float jupiterLeft = screenCenter + (51.53125f/3f);
+        float jupiterRight = jupiterLeft + 51.53125f;
+        float marsX = screenCenter + 7f;
+
+        float saturnLeft = screenCenter - (44.0625f);
+        float saturnRight = saturnLeft + 44.0625f;
+
         planets = new Array<>();
-        planets.add(new BackgroundSticker(10f, 40f, 0f, Assets.getPluto()));
-        planets.add(new BackgroundSticker(5f, 72f, 0f, Assets.getNeptune()));
-        planets.add(new BackgroundSticker(10f, 120f, 0f, Assets.getUranus()));
-        planets.add(new BackgroundSticker(10f, 175f, 0f, Assets.getSaturn()));
-        planets.add(new BackgroundSticker(10f, 250f, 0f, Assets.getJupiterBottom()));
-        planets.add(new BackgroundSticker(10f, 294.22f, 0f, Assets.getJupiterTop()));
-        planets.add(new BackgroundSticker(17f, 415f, 0f, Assets.getMars()));
-        planets.add(new BackgroundSticker(5f, 440f, 0f, Assets.getMoon()));
-        planets.add(new BackgroundSticker(10f, 460f, 0f, Assets.getEarth()));
+
+        planets.add(new BackgroundSticker(screenCenter, 40f, 0f, Assets.getPluto()));
+        planets.add(new BackgroundSticker(leftCenter, 72f, 0f, Assets.getNeptune()));
+        planets.add(new BackgroundSticker(screenCenter, 120f, 0f, Assets.getUranus()));
+
+        planets.add(new BackgroundSticker(saturnLeft, 175f, 0f, Assets.getSaturnOne()));
+        planets.add(new BackgroundSticker(saturnRight, 175f, 0f, Assets.getSaturnTwo()));
+
+        planets.add(new BackgroundSticker(jupiterLeft, 250f, 0f, Assets.getJupiterBottomLeft()));
+        planets.add(new BackgroundSticker(jupiterLeft, 301.53125f, 0f, Assets.getJupiterTopLeft()));
+        planets.add(new BackgroundSticker(jupiterRight, 301.53125f, 0f, Assets.getJupiterTopRight()));
+        planets.add(new BackgroundSticker(jupiterRight, 250f, 0f, Assets.getJupiterBottomrRight()));
+
+        planets.add(new BackgroundSticker(marsX, 415f, 0f, Assets.getMars()));
+        planets.add(new BackgroundSticker(leftCenter, 440f, 0f, Assets.getMoon()));
+        planets.add(new BackgroundSticker(screenCenter, 460f, 0f, Assets.getEarth()));
+        planets.add(new BackgroundSticker(screenCenter, 920f, 0f, Assets.getDonut()));
 
         Entity vp = engine.createEntity();
         vp.add(BoundsComponent.create(engine)
