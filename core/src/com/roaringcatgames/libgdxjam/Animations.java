@@ -105,8 +105,8 @@ public class Animations {
         redCometFull = new Animation(1f/12f, Assets.getRedCometFullFrames());
         blueComet = new Animation(1f/12f, Assets.getBlueCometFrames(), Animation.PlayMode.LOOP_PINGPONG);
         blueCometFull = new Animation(1f/12f, Assets.getBlueCometFullFrames());
-        healthFertilizer = new Animation(1f/4f, Assets.getFertilizerFrames());
-        healthWaterCan = new Animation(1f/4f, Assets.getWaterCanFrames());
+//        healthFertilizer = new Animation(1f/4f, Assets.getFertilizerFrames());
+//        healthWaterCan = new Animation(1f/4f, Assets.getWaterCanFrames());
 
         bullet = new Animation(1f/6f, Assets.getBulletFrames());
         bulletFlying = new Animation(1f/6f, Assets.getBulletFlyingFrames());

@@ -134,14 +134,23 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getUranus(){
         return getCachedRegion(SPRITE_ATLAS, "planets/uranus");
     }
-    public static TextureAtlas.AtlasRegion getSaturn(){
-        return getCachedRegion(SPRITE_ATLAS, "planets/saturn");
+    public static TextureAtlas.AtlasRegion getSaturnOne(){
+        return getCachedRegion(SPRITE_ATLAS, "planets/saturn-1");
     }
-    public static TextureAtlas.AtlasRegion getJupiterBottom(){
-        return getCachedRegion(SPRITE_ATLAS, "planets/jupiter-b");
+    public static TextureAtlas.AtlasRegion getSaturnTwo(){
+        return getCachedRegion(SPRITE_ATLAS, "planets/saturn-2");
     }
-    public static TextureAtlas.AtlasRegion getJupiterTop(){
-        return getCachedRegion(SPRITE_ATLAS, "planets/jupiter-t");
+    public static TextureAtlas.AtlasRegion getJupiterTopLeft(){
+        return getCachedRegion(SPRITE_ATLAS, "planets/jupiter-1");
+    }
+    public static TextureAtlas.AtlasRegion getJupiterTopRight(){
+        return getCachedRegion(SPRITE_ATLAS, "planets/jupiter-2");
+    }
+    public static TextureAtlas.AtlasRegion getJupiterBottomrRight(){
+        return getCachedRegion(SPRITE_ATLAS, "planets/jupiter-3");
+    }
+    public static TextureAtlas.AtlasRegion getJupiterBottomLeft(){
+        return getCachedRegion(SPRITE_ATLAS, "planets/jupiter-4");
     }
     public static TextureAtlas.AtlasRegion getMars(){
         return getCachedRegion(SPRITE_ATLAS, "planets/mars");
@@ -151,6 +160,9 @@ public class Assets {
     }
     public static TextureAtlas.AtlasRegion getEarth(){
         return getCachedRegion(SPRITE_ATLAS, "planets/earth");
+    }
+    public static TextureAtlas.AtlasRegion getDonut(){
+        return getCachedRegion(SPRITE_ATLAS, "planets/Donut");
     }
 
     /////////////
@@ -337,50 +349,6 @@ public class Assets {
             shipSmoke = getCachedRegion(ANI_ATLAS, "ship/pieces/smoke");
         }
         return shipSmoke;
-    }
-
-    /////////////
-    //Health Bar
-    /////////////
-    public static TextureAtlas.AtlasRegion getBranch(){
-        return getCachedRegion(SPRITE_ATLAS, "health/branch");
-    }
-    private static Array<TextureAtlas.AtlasRegion> leaves;
-    public static TextureAtlas.AtlasRegion getBranchLeaf(int index){
-        if(leaves == null){
-            leaves = new Array<>();
-            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-a"));
-            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-b"));
-            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-c"));
-            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-d"));
-            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-e"));
-            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-f"));
-            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-g"));
-            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-h"));
-            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-i"));
-            leaves.add(getCachedRegion(ANI_ATLAS, "health/leaf-j"));
-        }
-        if(index < leaves.size){
-            return leaves.get(index);
-        }else{
-            return leaves.get(0);
-        }
-    }
-
-    /////////////
-    //Health Pack
-    /////////////
-    public static Array<TextureAtlas.AtlasRegion> getFertilizerFrames(){
-        return getCachedAnimationFrames(ANI_ATLAS, "pickups/health");
-    }
-    public static TextureAtlas.AtlasRegion getFertilizerGlow(){
-        return getCachedRegion(ANI_ATLAS, "pickups/health-glow");
-    }
-    public static Array<TextureAtlas.AtlasRegion> getWaterCanFrames(){
-        return getCachedAnimationFrames(ANI_ATLAS, "pickups/health-a");
-    }
-    public static TextureAtlas.AtlasRegion getWaterCanGlow(){
-        return getCachedRegion(ANI_ATLAS, "pickups/health-a-glow");
     }
 
     /////////////
@@ -575,13 +543,6 @@ public class Assets {
     }
     public static TextureAtlas.AtlasRegion getGvgIcon(){
         return getCachedRegion(SPRITE_ATLAS, "options/gvg-logo");
-    }
-
-    public static TextureAtlas.AtlasRegion getActiveCursor(){
-        return getCachedRegion(SPRITE_ATLAS, "cursor-cat");
-    }
-    public static TextureAtlas.AtlasRegion getHiddenCursor(){
-        return getCachedRegion(SPRITE_ATLAS, "cursor-hidden");
     }
 
     /////////////
