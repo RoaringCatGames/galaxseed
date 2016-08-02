@@ -123,16 +123,36 @@ public class PlayerDamageSystem extends IteratingSystem {
         e.add(ShieldComponent.create(engine));
         e.add(TransformComponent.create(engine)
             .setPosition(pt.position.x, pt.position.y, Z.shield)
-            .setScale(1f, 1f));
+            .setScale(0.1f, 0.1f));
         e.add(FollowerComponent.create(engine)
-            .setTarget(player));
+                .setTarget(player));
         e.add(CircleBoundsComponent.create(engine)
-            .setCircle(pt.position.x, pt.position.y, 3f));
+                .setCircle(pt.position.x, pt.position.y, 3f * 0.1f));
+
+        Timeline scaleUp = Timeline.createParallel()
+                .push(
+                    Tween.to(e, K2EntityTweenAccessor.SCALE, 0.1f)
+                        .target(1f, 1f)
+                        .ease(TweenEquations.easeOutElastic))
+                .push(
+                    Tween.to(e, K2EntityTweenAccessor.BOUNDS_RADIUS, 0.1f)
+                        .target(3f, 3f)
+                        .ease(TweenEquations.easeOutElastic));
+
+        Timeline decay = Timeline.createParallel()
+                .push(
+                    Tween.to(e, K2EntityTweenAccessor.BOUNDS_RADIUS, shieldTime)
+                        .target(0f))
+                .push(
+                    Tween.to(e, K2EntityTweenAccessor.SCALE, shieldTime)
+                        .target(0f, 0f));
+
+
+        Timeline timeline = Timeline.createSequence().push(scaleUp).push(decay);
+
         e.add(TweenComponent.create(engine)
-            .addTween(Tween.to(e, K2EntityTweenAccessor.BOUNDS_RADIUS, shieldTime)
-                    .target(0f))
-            .addTween(Tween.to(e, K2EntityTweenAccessor.SCALE, shieldTime)
-                    .target(0f, 0f)));
+            .setTimeline(timeline));
+
         e.add(TextureComponent.create(engine));
         e.add(AnimationComponent.create(engine)
             .addAnimation("DEFAULT", Animations.getShield()));
