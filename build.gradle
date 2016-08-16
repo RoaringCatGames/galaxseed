@@ -17,7 +17,7 @@ allprojects {
 
     version = '1.2.0-kfp'
     ext {
-        appName = "libgdx-jam-2015"
+        appName = "GalaxSeed"
         gdxVersion = '1.9.2'
         roboVMVersion = '1.14.0'
         box2DLightsVersion = '1.4'
@@ -25,6 +25,7 @@ allprojects {
         aiVersion = '1.7.0'
         ashleyExtensionsVersion = '0.2.3-SNAPSHOT'
         outputName = 'galaxseed'
+        googlePlayServicesVersion = '9.4.0'
     }
 
     repositories {
@@ -49,11 +50,14 @@ project(":desktop") {
 
 project(":android") {
     apply plugin: "android"
+    apply plugin: 'com.android.application'
 
     configurations { natives }
 
     dependencies {
         compile project(":core")
+        compile "com.google.android.gms:play-services-ads:$googlePlayServicesVersion"
+        compile "com.google.android.gms:play-services-games:$googlePlayServicesVersion"
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"

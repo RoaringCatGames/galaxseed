@@ -70,3 +70,5 @@ ios/robovm-build
 android/assets/animations
 android/assets/sprites
 
+#general
+*.secret
