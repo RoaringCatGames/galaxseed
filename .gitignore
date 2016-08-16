@@ -70,5 +70,8 @@ ios/robovm-build
 android/assets/animations
 android/assets/sprites
 
-#general
+## AdMob
+android/google-services.json
+
+#General
 *.secret
