@@ -70,11 +70,11 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         float totalH = App.getTotalHeight();
         textX = App.W/2f - 5f;
         buttonX = App.W/2f + 5f;
-        musicY = totalH - 3f;
-        sfxY = totalH - 6.5f;
-        ctrlY = totalH - 10f;
-        vibraY = totalH - 13.5f;
-        backY = totalH - 17f;
+        musicY = totalH - 4f;
+        sfxY = totalH - 8f;
+        ctrlY = totalH - 11.5f;
+        vibraY = totalH - 15f;
+        backY = totalH - 18.5f;
 
 
 
@@ -133,31 +133,6 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
         backButton = addButton(App.W / 3f, backY, "BACK", null);
         creditsButton = addButton(2*(App.W/3f), backY, "CREDITS", null);
-
-//
-//        float x = App.W/6f;
-//        float y = 8.25f;
-//        float offY = y-1f;
-//        float iconY = y-4.25f;
-//        float kfpY = 0.75f;
-//        loi = addTextEntity(x, y, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
-//        addTextEntity(x, offY, "Art Cat", secondaryFont);
-//        addIcon(x, iconY, Assets.getArtCat(), 0.75f);
-//
-//        x = App.W/2f;
-//        nathan = addTextEntity(x, y, "Nathan H.", baseFont, 8f, 1.25f, 0f, -0.25f);
-//        addTextEntity(x, offY, "Music & SFX", secondaryFont);
-//        addIcon(x, iconY, Assets.getGvgIcon(), 0.75f);
-//
-//        x = (App.W/6f)*5f;
-//        barry = addTextEntity(x, y, "Barry R.", baseFont, 6f, 1.25f, 0f, -0.25f);
-//        addTextEntity(x, offY, "Code Cat", secondaryFont);
-//        addIcon(x, iconY, Assets.getCodeCat(), 0.75f);
-//
-//
-//        kfpCat = addIcon(App.W/2f, -3f, Assets.getColonelCat());
-//
-//        kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.0.0-#kentuckyfriedpixels", secondaryFont, 10f, 0.75f, 0f, -0.1f);
     }
 
 
@@ -221,7 +196,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
                 region = Assets.getBackAsteroid();
                 break;
             case "CREDITS":
-                region = Assets.getBackAsteroid();
+                region = Assets.getTeamAsteroid();
                 break;
         }
 

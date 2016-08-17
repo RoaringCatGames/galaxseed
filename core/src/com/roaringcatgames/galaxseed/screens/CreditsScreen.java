@@ -207,10 +207,9 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
             kfpCat.add(TweenComponent.create(engine)
                     .addTween(Tween.to(kfpCat, K2EntityTweenAccessor.POSITION, 2f)
                             .target(App.W/2f, App.H/2f, 70f)));
-            //Gdx.net.openURI("https://itch.io/jam/kentucky-fried-pixels");
         }else if(K2ComponentMappers.circleBounds.get(backButton).circle.contains(touchPoint)){
             Sfx.playSelectNoise();
-            game.switchScreens("MENU");
+            game.switchScreens("OPTIONS");
         }
         return false;
     }
