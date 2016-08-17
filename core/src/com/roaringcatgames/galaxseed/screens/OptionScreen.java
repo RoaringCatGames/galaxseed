@@ -44,15 +44,9 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private Entity vibrationSelect;
     private Entity vibrationText;
     private Entity backButton;
-    private Entity nathan;
-    private Entity loi;
-    private Entity barry;
-    private Entity kfp;
+    private Entity creditsButton;
 
     private Sound sfx;
-
-    private Entity kfpCat;
-
 
     private float textX;// = App.W/3f + 0.25f;
     private float buttonX;// = App.W - 4f;
@@ -137,32 +131,33 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         vibrationSelect = addButton(buttonX, vibraY, PrefsUtil.VIBRA_KEY, vibraState);
         controlButton = addButton(buttonX, ctrlY, PrefsUtil.CTRL_KEY, ctrlState);
 
-        backButton = addButton(App.W / 2f, backY, "BACK", null);
+        backButton = addButton(App.W / 3f, backY, "BACK", null);
+        creditsButton = addButton(2*(App.W/3f), backY, "CREDITS", null);
 
-
-        float x = App.W/6f;
-        float y = 8.25f;
-        float offY = y-1f;
-        float iconY = y-4.25f;
-        float kfpY = 0.75f;
-        loi = addTextEntity(x, y, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
-        addTextEntity(x, offY, "Art Cat", secondaryFont);
-        addIcon(x, iconY, Assets.getArtCat(), 0.75f);
-
-        x = App.W/2f;
-        nathan = addTextEntity(x, y, "Nathan H.", baseFont, 8f, 1.25f, 0f, -0.25f);
-        addTextEntity(x, offY, "Music & SFX", secondaryFont);
-        addIcon(x, iconY, Assets.getGvgIcon(), 0.75f);
-
-        x = (App.W/6f)*5f;
-        barry = addTextEntity(x, y, "Barry R.", baseFont, 6f, 1.25f, 0f, -0.25f);
-        addTextEntity(x, offY, "Code Cat", secondaryFont);
-        addIcon(x, iconY, Assets.getCodeCat(), 0.75f);
-
-
-        kfpCat = addIcon(App.W/2f, -3f, Assets.getColonelCat());
-
-        kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.0.0-#kentuckyfriedpixels", secondaryFont, 10f, 0.75f, 0f, -0.1f);
+//
+//        float x = App.W/6f;
+//        float y = 8.25f;
+//        float offY = y-1f;
+//        float iconY = y-4.25f;
+//        float kfpY = 0.75f;
+//        loi = addTextEntity(x, y, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
+//        addTextEntity(x, offY, "Art Cat", secondaryFont);
+//        addIcon(x, iconY, Assets.getArtCat(), 0.75f);
+//
+//        x = App.W/2f;
+//        nathan = addTextEntity(x, y, "Nathan H.", baseFont, 8f, 1.25f, 0f, -0.25f);
+//        addTextEntity(x, offY, "Music & SFX", secondaryFont);
+//        addIcon(x, iconY, Assets.getGvgIcon(), 0.75f);
+//
+//        x = (App.W/6f)*5f;
+//        barry = addTextEntity(x, y, "Barry R.", baseFont, 6f, 1.25f, 0f, -0.25f);
+//        addTextEntity(x, offY, "Code Cat", secondaryFont);
+//        addIcon(x, iconY, Assets.getCodeCat(), 0.75f);
+//
+//
+//        kfpCat = addIcon(App.W/2f, -3f, Assets.getColonelCat());
+//
+//        kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.0.0-#kentuckyfriedpixels", secondaryFont, 10f, 0.75f, 0f, -0.1f);
     }
 
 
@@ -207,28 +202,6 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         return button;
     }
 
-    private Entity addIcon(float x, float y, TextureRegion region, float...scale){
-        float scaleX = 1f, scaleY = 1f;
-
-        if(scale != null){
-            if(scale.length == 1){
-                scaleX = scale[0];
-                scaleY = scale[0];
-            }else if(scale.length == 2){
-                scaleX = scale[0];
-                scaleY = scale[1];
-            }
-        }
-        Entity icon = engine.createEntity();
-        icon.add(TransformComponent.create(engine)
-                .setPosition(x, y)
-                .setScale(scaleX, scaleY));
-        icon.add(TextureComponent.create(engine)
-                .setRegion(region));
-        engine.addEntity(icon);
-        return icon;
-    }
-
     private TextureRegion getButtonRegion(String key, String value){
         TextureRegion region = null;
         switch(key){
@@ -245,6 +218,9 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
                 region = value.equals("Off") ? Assets.getControlsSteady() : Assets.getControlsAmplified();
                 break;
             case "BACK":
+                region = Assets.getBackAsteroid();
+                break;
+            case "CREDITS":
                 region = Assets.getBackAsteroid();
                 break;
         }
@@ -337,18 +313,9 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         }else if(K2ComponentMappers.circleBounds.get(backButton).circle.contains(touchPoint)){
             Sfx.playSelectNoise();
             game.switchScreens("MENU");
-        }else if(K2ComponentMappers.bounds.get(nathan).bounds.contains(touchPoint)){
-            Gdx.net.openURI("http://twitter.com/TheLucidBard");
-        }else if(K2ComponentMappers.bounds.get(loi).bounds.contains(touchPoint)){
-            Gdx.net.openURI("http://twitter.com/LoiLeMix");
-        }else if(K2ComponentMappers.bounds.get(barry).bounds.contains(touchPoint)){
-            Gdx.net.openURI("http://twitter.com/barryrowe");
-        }else if(K2ComponentMappers.bounds.get(kfp).bounds.contains(touchPoint)){
-
-            kfpCat.add(TweenComponent.create(engine)
-                .addTween(Tween.to(kfpCat, K2EntityTweenAccessor.POSITION, 2f)
-                    .target(App.W/2f, App.H/2f, 70f)));
-            //Gdx.net.openURI("https://itch.io/jam/kentucky-fried-pixels");
+        }else if(K2ComponentMappers.circleBounds.get(creditsButton).circle.contains(touchPoint)){
+            Sfx.playSelectNoise();
+            game.switchScreens("CREDITS");
         }
 
 

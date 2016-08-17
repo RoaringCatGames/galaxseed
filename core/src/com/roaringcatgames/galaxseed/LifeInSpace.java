@@ -10,13 +10,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.roaringcatgames.galaxseed.screens.*;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.kitten2d.gdx.helpers.IPreferenceManager;
 import com.roaringcatgames.kitten2d.gdx.helpers.K2PreferenceManager;
-import com.roaringcatgames.galaxseed.screens.MenuScreen;
-import com.roaringcatgames.galaxseed.screens.OptionScreen;
-import com.roaringcatgames.galaxseed.screens.SpaceScreen;
-import com.roaringcatgames.galaxseed.screens.SplashScreen;
 import com.roaringcatgames.galaxseed.values.Volume;
 
 public class LifeInSpace extends Game implements IGameProcessor, InputProcessor {
@@ -119,6 +116,9 @@ public class LifeInSpace extends Game implements IGameProcessor, InputProcessor 
                     this.adController.showBannerAd(IAdController.AdPlacement.TOP);
                 }
                 this.setScreen(new OptionScreen(this));
+                break;
+            case "CREDITS":
+                this.setScreen(new CreditsScreen(this));
                 break;
             case "MENU":
                 if(this.adController != null){
