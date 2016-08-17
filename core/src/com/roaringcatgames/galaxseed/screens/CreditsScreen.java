@@ -62,31 +62,45 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
         engine.addSystem(new TweenSystem());
         engine.addSystem(new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM));
         engine.addSystem(new TextRenderingSystem(game.getBatch(), game.getGUICamera(), game.getCamera()));
+        engine.addSystem(new DebugSystem(game.getCamera()));
 
 
         BitmapFont baseFont = Gdx.graphics.getDensity() > 1f ? Assets.get48Font() : Assets.get32Font();
         BitmapFont secondaryFont = Gdx.graphics.getDensity() > 1f ? Assets.get24Font() : Assets.get16Font();
 
-        backButton = addButton(App.W / 2f, App.H - 17f, "BACK", null, Assets.getBackAsteroid());
+        backButton = addButton(App.W / 2f, 3f, "BACK", null, Assets.getBackAsteroid());
 
-        float x = App.W/6f;
-        float y = 8.25f;
+        float rcgY = App.H - 3f;
+        float loiX = App.W/2f - 3f;
+        float barryX = App.W/2f + 3f;
+        float nathanX = App.W/2f;
+        float backX = App.W/2f;
+
+        //float x = App.W/6f;
+        float y = rcgY - 4f;
         float offY = y-1f;
         float iconY = y-4.25f;
         float kfpY = 0.75f;
-        loi = addTextEntity(x, y, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
-        addTextEntity(x, offY, "Art Cat", secondaryFont);
-        addIcon(x, iconY, Assets.getArtCat(), 0.75f);
+        loi = addTextEntity(loiX, rcgY, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
+        addTextEntity(loiX, rcgY-1f, "Art Cat", secondaryFont);
+        addIcon(loiX, rcgY - 4.25f, Assets.getArtCat(), 0.75f);
 
-        x = App.W/2f;
-        nathan = addTextEntity(x, y, "Nathan H.", baseFont, 8f, 1.25f, 0f, -0.25f);
-        addTextEntity(x, offY, "Music & SFX", secondaryFont);
-        addIcon(x, iconY, Assets.getGvgIcon(), 0.75f);
+        barry = addTextEntity(barryX, rcgY, "Barry R.", baseFont, 6f, 1.25f, 0f, -0.25f);
+        addTextEntity(barryX, rcgY-1f, "Code Cat", secondaryFont);
+        addIcon(barryX, rcgY - 4.25f, Assets.getCodeCat(), 0.75f);
 
-        x = (App.W/6f)*5f;
-        barry = addTextEntity(x, y, "Barry R.", baseFont, 6f, 1.25f, 0f, -0.25f);
-        addTextEntity(x, offY, "Code Cat", secondaryFont);
-        addIcon(x, iconY, Assets.getCodeCat(), 0.75f);
+        y = y - 4f;
+        offY = y-1f;
+        iconY = y-4.25f;
+        nathan = addTextEntity(nathanX, y, "Nathan H.", baseFont, 8f, 1.25f, 0f, -0.25f);
+        addTextEntity(nathanX, offY, "Music & SFX", secondaryFont);
+        addIcon(nathanX, iconY, Assets.getGvgIcon(), 0.75f);
+
+
+        addIcon(loiX, 7f, Assets.getLibGdxIcon(), 0.5f);
+        addIcon(App.W/2f, 9f, Assets.getLMGIcon(), 0.5f);
+        addIcon(barryX, 7f, Assets.getAshleyIcon(), 0.5f);
+
 
         kfpCat = addIcon(App.W/2f, -3f, Assets.getColonelCat());
 
@@ -203,10 +217,11 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
         }else if(K2ComponentMappers.bounds.get(barry).bounds.contains(touchPoint)){
             Gdx.net.openURI("http://twitter.com/barryrowe");
         }else if(K2ComponentMappers.bounds.get(kfp).bounds.contains(touchPoint)){
-
+            Sfx.playUpgradeSound();
+            K2ComponentMappers.transform.get(kfpCat).setPosition(App.W/2f, -5f);
             kfpCat.add(TweenComponent.create(engine)
-                    .addTween(Tween.to(kfpCat, K2EntityTweenAccessor.POSITION, 2f)
-                            .target(App.W/2f, App.H/2f, 70f)));
+                    .addTween(Tween.to(kfpCat, K2EntityTweenAccessor.POSITION, 3f)
+                            .target(App.W/2f, App.H+5f, 0f)));
         }else if(K2ComponentMappers.circleBounds.get(backButton).circle.contains(touchPoint)){
             Sfx.playSelectNoise();
             game.switchScreens("OPTIONS");

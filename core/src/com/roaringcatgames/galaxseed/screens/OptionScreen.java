@@ -74,10 +74,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         sfxY = totalH - 8f;
         ctrlY = totalH - 11.5f;
         vibraY = totalH - 15f;
-        backY = totalH - 18.5f;
-
-
-
+        backY = totalH - 21f;
     }
 
     @Override
@@ -131,8 +128,8 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         vibrationSelect = addButton(buttonX, vibraY, PrefsUtil.VIBRA_KEY, vibraState);
         controlButton = addButton(buttonX, ctrlY, PrefsUtil.CTRL_KEY, ctrlState);
 
-        backButton = addButton(App.W / 3f, backY, "BACK", null);
-        creditsButton = addButton(2*(App.W/3f), backY, "CREDITS", null);
+        backButton = addButton(textX, backY, "BACK", null);
+        creditsButton = addButton(buttonX, backY, "CREDITS", null);
     }
 
 

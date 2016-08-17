@@ -188,6 +188,15 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getTeamAsteroid(){
         return getCachedRegion(SPRITE_ATLAS, "options/team");
     }
+    public static TextureAtlas.AtlasRegion getLMGIcon(){
+        return getCachedRegion(SPRITE_ATLAS, "options/lmg");
+    }
+    public static TextureAtlas.AtlasRegion getLibGdxIcon(){
+        return getCachedRegion(SPRITE_ATLAS, "options/libgdx");
+    }
+    public static TextureAtlas.AtlasRegion getAshleyIcon(){
+        return getCachedRegion(SPRITE_ATLAS, "options/ashley");
+    }
     public static Array<TextureAtlas.AtlasRegion> getPFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "PLAY/P");
     }
