@@ -1,2 +1,2 @@
-include 'desktop', 'android', 'ios', 'html', 'core', 'texture-packer'
+include 'desktop', 'android', 'ios', 'html', 'core', 'texture-packer', 'BaseGameUtils'
 

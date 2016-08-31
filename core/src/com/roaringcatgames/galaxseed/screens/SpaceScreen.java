@@ -8,6 +8,7 @@
     import com.badlogic.gdx.math.Vector2;
     import com.badlogic.gdx.math.Vector3;
     import com.badlogic.gdx.utils.Array;
+    import com.roaringcatgames.galaxseed.IGameServiceController;
     import com.roaringcatgames.kitten2d.ashley.systems.*;
     import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
     import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
@@ -24,6 +25,7 @@
     public class SpaceScreen extends LazyInitScreen implements InputProcessor {
 
         private IGameProcessor game;
+        private IGameServiceController gameServiceController;
         private PooledEngine engine;
 
         private Array<EntitySystem> playingOnlySystems;
@@ -32,9 +34,10 @@
         private EntitySystem enemySpawnSystem;
         private BackgroundSystem bgSystem;
 
-        public SpaceScreen(IGameProcessor game) {
+        public SpaceScreen(IGameProcessor game, IGameServiceController gameServices) {
             super();
             this.game = game;
+            this.gameServiceController = gameServices;
             this.playingOnlySystems = new Array<>();
         }
 
@@ -166,6 +169,13 @@
                 GameState prevState = lastState;
                 lastState = App.getState();
                 if(lastState == GameState.GAME_OVER) {
+
+                    if(gameServiceController != null){
+                        int score = engine.getSystem(ScoreSystem.class).getScore();
+                        Gdx.app.log("SPACE SCREEN", "Submitting Score: " + score);
+                        gameServiceController.submitScore(score);
+                    }
+
                     game.pauseBgMusic();
                     engine.getSystem(GameOverSystem.class).setProcessing(true);
                     for (EntitySystem es : playingOnlySystems) {

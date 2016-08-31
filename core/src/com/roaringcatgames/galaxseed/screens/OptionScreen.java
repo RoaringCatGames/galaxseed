@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.roaringcatgames.galaxseed.*;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
@@ -16,10 +17,6 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
-import com.roaringcatgames.galaxseed.App;
-import com.roaringcatgames.galaxseed.Assets;
-import com.roaringcatgames.galaxseed.PrefsUtil;
-import com.roaringcatgames.galaxseed.Sfx;
 import com.roaringcatgames.galaxseed.systems.BackgroundSystem;
 
 /**
@@ -33,6 +30,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
     private final float BUTTON_RADIUS = 2f;
 
     private IGameProcessor game;
+    private IGameServiceController gameServicesController;
     private PooledEngine engine;
 
     private Entity musicButton;
@@ -63,9 +61,10 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
 
 
-    public OptionScreen(IGameProcessor game){
+    public OptionScreen(IGameProcessor game, IGameServiceController gameServices){
         super();
         this.game = game;
+        this.gameServicesController = gameServices;
 
         float totalH = App.getTotalHeight();
         textX = App.W/2f - 5f;
@@ -284,6 +283,10 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
         }else if(K2ComponentMappers.circleBounds.get(backButton).circle.contains(touchPoint)){
             Sfx.playSelectNoise();
+            if(this.gameServicesController != null){
+                this.gameServicesController.unlockAchievement(AchievementItems.TREE_HIGH);
+                this.gameServicesController.submitScore(1);
+            }
             game.switchScreens("MENU");
         }else if(K2ComponentMappers.circleBounds.get(creditsButton).circle.contains(touchPoint)){
             Sfx.playSelectNoise();

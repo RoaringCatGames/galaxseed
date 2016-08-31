@@ -2,5 +2,5 @@
 <resources>
 
     <string name="app_name">GalaxSeed</string>
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="signin_other_error">There was an issue with sign in. Please try again later.</string>
 </resources>

@@ -137,4 +137,8 @@ public class ScoreSystem extends IteratingSystem {
                       score < 10000 ? "0" : "";
         return base += score;
     }
+
+    public int getScore(){
+        return currentScore;
+    }
 }

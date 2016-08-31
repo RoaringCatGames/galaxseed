@@ -75,3 +75,4 @@ android/google-services.json
 
 #General
 *.secret
+android/**/*ids.xml

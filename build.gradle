@@ -55,6 +55,7 @@ project(":android") {
     configurations { natives }
 
     dependencies {
+        compile project(":BaseGameUtils")
         compile project(":core")
         compile "com.google.android.gms:play-services-ads:$googlePlayServicesVersion"
         compile "com.google.android.gms:play-services-games:$googlePlayServicesVersion"

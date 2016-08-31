@@ -28,15 +28,17 @@ public class LifeInSpace extends Game implements IGameProcessor, InputProcessor 
     private Music bgMusic;
 
     private IAdController adController;
+    private IGameServiceController gameServicesController;
     private IPreferenceManager prefManager = new K2PreferenceManager("galaxseed_prefs");
 
 
     public LifeInSpace(){
         super();
     }
-    public LifeInSpace(IAdController adController){
+    public LifeInSpace(IAdController adController, IGameServiceController gameServicesController){
         super();
         this.adController = adController;
+        this.gameServicesController = gameServicesController;
     }
 
     @Override
@@ -115,7 +117,7 @@ public class LifeInSpace extends Game implements IGameProcessor, InputProcessor 
                 if(this.adController != null){
                     this.adController.showBannerAd(IAdController.AdPlacement.TOP);
                 }
-                this.setScreen(new OptionScreen(this));
+                this.setScreen(new OptionScreen(this, gameServicesController));
                 break;
             case "CREDITS":
                 this.setScreen(new CreditsScreen(this));
@@ -124,13 +126,13 @@ public class LifeInSpace extends Game implements IGameProcessor, InputProcessor 
                 if(this.adController != null){
                     this.adController.showBannerAd(IAdController.AdPlacement.TOP);
                 }
-                this.setScreen(new MenuScreen(this));
+                this.setScreen(new MenuScreen(this, gameServicesController));
                 break;
             case "GAME":
                 if(this.adController != null){
                     this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
                 }
-                this.setScreen(new SpaceScreen(this));
+                this.setScreen(new SpaceScreen(this, gameServicesController));
                 break;
         }
 

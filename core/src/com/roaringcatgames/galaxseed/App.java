@@ -24,14 +24,14 @@ public class App {
 
     public static float SLOW_SCALE = 0.1f; //10% speed
 
-    public static final Game Initialize(IAdController...adControllers){
-        if(adControllers != null && adControllers.length == 1){
-            game = new LifeInSpace(adControllers[0]);
-        }else {
-            game = new LifeInSpace();
-        }
+    public static final Game Initialize(){
+        game = new LifeInSpace();
+        return game;
+    }
 
-        //Gdx.app.log("App", "Initializing");
+    public static final Game Initialize(IAdController adController, IGameServiceController achievementController){
+        game = new LifeInSpace(adController, achievementController);
+
         return game;
     }
     public static LifeInSpace game;

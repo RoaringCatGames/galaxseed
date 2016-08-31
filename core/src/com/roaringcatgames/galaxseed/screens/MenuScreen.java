@@ -34,14 +34,19 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
     private final Vector2 touchPoint = new Vector2();
 
     private IGameProcessor game;
+    private IGameServiceController gameServicesController;
     private PooledEngine engine;
 
-    private Entity plant, playTarget, optionsTarget, swipeTutorial, exitButton;
+    private Entity plant, playTarget, optionsTarget, swipeTutorial, exitButton,
+                   signInButton, achievementsButton, leaderboardButton;
     private ObjectMap<String, Boolean> readyMap = new ObjectMap<>();
 
-    public MenuScreen(IGameProcessor game) {
+    public MenuScreen(IGameProcessor game, IGameServiceController gameServicesController) {
         super();
         this.game = game;
+        //If our game implements IAdController do the thing
+        this.gameServicesController = gameServicesController;
+
         readyMap.put("options", false);
         readyMap.put("play", false);
     }
@@ -141,6 +146,17 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         optionsTarget = createPlayAsteroid(xPos + 10f, yPos, Assets.getOptionsAsteroid());
         engine.addEntity(optionsTarget);
 
+        if(gameServicesController != null){
+
+            achievementsButton = createPlayAsteroid(App.W - 5f, 5f, Assets.getGPSAchievementIcon());
+            engine.addEntity(achievementsButton);
+            leaderboardButton = createPlayAsteroid(5f, 5f, Assets.getGPSLeaderIcon());
+            engine.addEntity(leaderboardButton);
+            //Show Sign In Button
+            signInButton = createPlayAsteroid(App.W - 5f, 5f, Assets.getGPSConnectedIcon());
+            engine.addEntity(signInButton);
+        }
+
         if(App.isDesktop()) {
             exitButton = engine.createEntity();
             exitButton.add(MenuItemComponent.create(engine));
@@ -221,6 +237,12 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
     protected void update(float deltaChange) {
         engine.update(Math.min(deltaChange, App.MAX_DELTA_TICK));
 
+        if(gameServicesController != null){
+            //Show achievements/Leaderboard items
+            K2ComponentMappers.transform.get(signInButton).setHidden(gameServicesController.isConnected());
+            K2ComponentMappers.transform.get(achievementsButton).setHidden(!gameServicesController.isConnected());
+            K2ComponentMappers.transform.get(leaderboardButton).setHidden(!gameServicesController.isConnected());
+        }
         if(!treeLeafing) {
             StateComponent sc = plant.getComponent(StateComponent.class);
             AnimationComponent ac = plant.getComponent(AnimationComponent.class);
@@ -284,7 +306,9 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
         CircleBoundsComponent playBounds = K2ComponentMappers.circleBounds.get(playTarget);
         CircleBoundsComponent optionsBounds = K2ComponentMappers.circleBounds.get(optionsTarget);
-
+        CircleBoundsComponent googleConnectBounds = K2ComponentMappers.circleBounds.get(signInButton);
+        CircleBoundsComponent achievementBounds = K2ComponentMappers.circleBounds.get(achievementsButton);
+        CircleBoundsComponent leaderBounds = K2ComponentMappers.circleBounds.get(leaderboardButton);
 
 
 
@@ -297,6 +321,20 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
             if (Mappers.menuItem.has(optionsTarget)) {
                 Mappers.menuItem.get(optionsTarget).isFilled = true;
                 Sfx.playSelectNoise();
+            }
+        } else if (googleConnectBounds != null &&
+                !K2ComponentMappers.transform.get(signInButton).isHidden &&
+                googleConnectBounds.circle.contains(touchPoint)) {
+            if(gameServicesController != null){
+                gameServicesController.connectToGameServices();
+            }
+        } else if (achievementBounds != null && achievementBounds.circle.contains(touchPoint)) {
+            if(gameServicesController != null){
+                gameServicesController.showAchievements();
+            }
+        } else if (leaderBounds != null && leaderBounds.circle.contains(touchPoint)) {
+            if(gameServicesController != null){
+                gameServicesController.showLeaderBoard();
             }
         }
 

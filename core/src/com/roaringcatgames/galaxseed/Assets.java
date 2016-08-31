@@ -219,6 +219,23 @@ public class Assets {
     }
 
     //////////////
+    //Google Play
+    //////////////
+    public static TextureAtlas.AtlasRegion getGPSConnectedIcon(){
+        return getCachedRegion(SPRITE_ATLAS, "google-play/controller");
+    }
+    public static TextureAtlas.AtlasRegion getGPSDisconnectedIcon(){
+        return getCachedRegion(SPRITE_ATLAS, "google-play/controller-off");
+    }
+    public static TextureAtlas.AtlasRegion getGPSAchievementIcon(){
+        return getCachedRegion(SPRITE_ATLAS, "google-play/badge");
+    }
+    public static TextureAtlas.AtlasRegion getGPSLeaderIcon(){
+        return getCachedRegion(SPRITE_ATLAS, "google-play/leader");
+    }
+
+
+    //////////////
     //BG
     //////////////
     public static TextureAtlas.AtlasRegion getSpeedLine(int i){

@@ -5,7 +5,7 @@
   "classpath": [
     "/Users/barry/git-repos/libgdx-jam/desktop/build/libs/galaxseed-1.2.0-kfp.jar"
   ],
-  "mainclass": "com.roaringcatgames.libgdxjam.desktop.DesktopLauncher",
+  "mainclass": "com.roaringcatgames.galaxseed.desktop.DesktopLauncher",
   "vmargs": [
     "-Xmx512m"
   ],
