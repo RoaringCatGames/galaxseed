@@ -152,12 +152,12 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
             if(game.getPreferenceManager().getStoredInt(PrefsUtil.GAME_SERVICES) == 1){
                 gameServicesController.connectToGameServices();
             }
-            achievementsButton = createPlayAsteroid(App.W - 5f, 5f, Assets.getGPSAchievementIcon());
+            achievementsButton = createGameServiceIcon(App.W - 2f, 2f, Assets.getGPSAchievementIcon(), 2f);
             engine.addEntity(achievementsButton);
-            leaderboardButton = createPlayAsteroid(5f, 5f, Assets.getGPSLeaderIcon());
+            leaderboardButton = createGameServiceIcon(App.W - 2f, 5f, Assets.getGPSLeaderIcon(), 2.5f);
             engine.addEntity(leaderboardButton);
             //Show Sign In Button
-            signInButton = createPlayAsteroid(App.W - 5f, 5f, Assets.getGPSConnectedIcon());
+            signInButton = createGameServiceIcon(App.W - 3f, 4f, Assets.getGPSConnectedIcon(), 2f);
             engine.addEntity(signInButton);
         }
 
@@ -213,6 +213,28 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         playAsteroid.add(ShakeComponent.create(engine)
                 .setSpeed(6f, 4f)
                 .setOffsets(0.4f, 0.6f)
+                .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
+
+        return playAsteroid;
+    }
+
+    private Entity createGameServiceIcon(float xPos, float yPos, TextureRegion region, float radius){
+        Entity playAsteroid = engine.createEntity();
+        //playAsteroid.add(WhenOffScreenComponent.create(engine));
+//        playAsteroid.add(MenuItemComponent.create(engine));
+//        playAsteroid.add(HealthComponent.create(engine)
+//                .setMaxHealth(Health.PlayAsteroid)
+//                .setHealth(Health.PlayAsteroid));
+        playAsteroid.add(TextureComponent.create(engine)
+                .setRegion(region));
+        playAsteroid.add(CircleBoundsComponent.create(engine)
+                .setCircle(xPos, yPos, radius));
+        playAsteroid.add(TransformComponent.create(engine)
+                .setPosition(xPos, yPos, Z.playAsteroids)
+                .setScale(1f, 1f));
+        playAsteroid.add(ShakeComponent.create(engine)
+                .setSpeed(6f, 4f)
+                .setOffsets(0.2f, 0.4f)
                 .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
 
         return playAsteroid;
