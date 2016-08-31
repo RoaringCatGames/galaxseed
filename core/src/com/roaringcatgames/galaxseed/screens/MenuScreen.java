@@ -148,6 +148,10 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
         if(gameServicesController != null){
 
+            //Automatically Connect
+            if(game.getPreferenceManager().getStoredInt(PrefsUtil.GAME_SERVICES) == 1){
+                gameServicesController.connectToGameServices();
+            }
             achievementsButton = createPlayAsteroid(App.W - 5f, 5f, Assets.getGPSAchievementIcon());
             engine.addEntity(achievementsButton);
             leaderboardButton = createPlayAsteroid(5f, 5f, Assets.getGPSLeaderIcon());
@@ -326,6 +330,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
                 !K2ComponentMappers.transform.get(signInButton).isHidden &&
                 googleConnectBounds.circle.contains(touchPoint)) {
             if(gameServicesController != null){
+                game.getPreferenceManager().updateInt(PrefsUtil.GAME_SERVICES, 1);
                 gameServicesController.connectToGameServices();
             }
         } else if (achievementBounds != null && achievementBounds.circle.contains(touchPoint)) {

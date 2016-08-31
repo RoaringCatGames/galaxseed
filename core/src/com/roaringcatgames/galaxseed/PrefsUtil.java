@@ -9,6 +9,7 @@ public class PrefsUtil {
     public static final String SFX_KEY = "sfx";
     public static final String VIBRA_KEY = "vibration";
     public static final String CTRL_KEY = "controls";
+    public static final String GAME_SERVICES = "gameservices";
 
 
     public static boolean areSfxEnabled(){

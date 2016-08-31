@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.android.gms.ads.AdRequest;
@@ -251,6 +252,7 @@ public class AndroidLauncher extends AndroidApplication implements
 
     @Override
     public void connectToGameServices() {
+
         if(!googleApiClient.isConnected()){
             mSignInClicked = true;
             googleApiClient.connect();
@@ -292,7 +294,10 @@ public class AndroidLauncher extends AndroidApplication implements
 
     @Override
     public void submitScore(int score) {
+        Gdx.app.log("ANDROID LAUNCHER", "Submitting Score: " + score);
         if(googleApiClient.isConnected()) {
+
+            Gdx.app.log("ANDROID LAUNCHER", "Connected and Sending Score!!" + score);
             Games.Leaderboards.submitScore(googleApiClient, getString(R.string.leaderboard_id), score);
         }
     }
