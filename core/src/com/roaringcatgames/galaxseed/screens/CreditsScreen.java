@@ -8,9 +8,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.roaringcatgames.galaxseed.App;
-import com.roaringcatgames.galaxseed.Assets;
-import com.roaringcatgames.galaxseed.Sfx;
+import com.roaringcatgames.galaxseed.*;
 import com.roaringcatgames.galaxseed.systems.BackgroundSystem;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
@@ -28,6 +26,7 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
     private static final float BUTTON_RADIUS = 2f;
 
     private IGameProcessor game;
+    private IGameServiceController gameServiceController;
     private PooledEngine engine;
     private Vector2 touchPoint = new Vector2();
 
@@ -38,8 +37,10 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
     private Entity kfpCat;
     private Entity backButton;
 
-    public CreditsScreen(IGameProcessor game){
+    public CreditsScreen(IGameProcessor game, IGameServiceController gameServices)
+    {
         this.game = game;
+        this.gameServiceController = gameServices;
     }
 
     /**
@@ -68,7 +69,7 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
         BitmapFont baseFont = Gdx.graphics.getDensity() > 1f ? Assets.get48Font() : Assets.get32Font();
         BitmapFont secondaryFont = Gdx.graphics.getDensity() > 1f ? Assets.get24Font() : Assets.get16Font();
 
-        backButton = addButton(App.W / 2f, 3f, "BACK", null, Assets.getBackAsteroid());
+        backButton = addButton(App.W / 2f, 5f, "BACK", null, Assets.getBackAsteroid());
 
         float rcgY = App.H - 3f;
         float loiX = App.W/2f - 3f;
@@ -80,7 +81,7 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
         float y = rcgY - 4f;
         float offY = y-1f;
         float iconY = y-4.25f;
-        float kfpY = 0.75f;
+
         loi = addTextEntity(loiX, rcgY, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
         addTextEntity(loiX, rcgY-1f, "Art Cat", secondaryFont);
         addIcon(loiX, rcgY - 4.25f, Assets.getArtCat(), 0.75f);
@@ -97,14 +98,15 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
         addIcon(nathanX, iconY, Assets.getGvgIcon(), 0.75f);
 
 
-        addIcon(loiX, 7f, Assets.getLibGdxIcon(), 0.5f);
-        addIcon(App.W/2f, 9f, Assets.getLMGIcon(), 0.5f);
-        addIcon(barryX, 7f, Assets.getAshleyIcon(), 0.5f);
+        addIcon(loiX, 9f, Assets.getLibGdxIcon(), 0.5f);
+        addIcon(App.W/2f, 11f, Assets.getLMGIcon(), 0.5f);
+        addIcon(barryX, 9f, Assets.getAshleyIcon(), 0.5f);
 
 
-        kfpCat = addIcon(App.W/2f, -3f, Assets.getColonelCat());
+        kfpCat = addIcon(-5f, App.H/2f, Assets.getColonelCat());
 
-        kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.0.0-#kentuckyfriedpixels", secondaryFont, 10f, 0.75f, 0f, -0.1f);
+        float kfpY = 1.75f;
+        kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.0.0-#kentuckyfriedpixels", secondaryFont, 10f, 1.75f, 0f, -0.1f);
     }
 
     @Override
@@ -218,10 +220,13 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
             Gdx.net.openURI("http://twitter.com/barryrowe");
         }else if(K2ComponentMappers.bounds.get(kfp).bounds.contains(touchPoint)){
             Sfx.playUpgradeSound();
-            K2ComponentMappers.transform.get(kfpCat).setPosition(App.W/2f, -5f);
+            if(gameServiceController != null){
+                this.gameServiceController.unlockAchievement(AchievementItems.KITTEN);
+            }
+            K2ComponentMappers.transform.get(kfpCat).setPosition(-5f, App.H/2f);
             kfpCat.add(TweenComponent.create(engine)
                     .addTween(Tween.to(kfpCat, K2EntityTweenAccessor.POSITION, 3f)
-                            .target(App.W/2f, App.H+5f, 0f)));
+                            .target(App.W + 5f, App.H/2f, 0f)));
         }else if(K2ComponentMappers.circleBounds.get(backButton).circle.contains(touchPoint)){
             Sfx.playSelectNoise();
             game.switchScreens("OPTIONS");

@@ -120,7 +120,7 @@ public class LifeInSpace extends Game implements IGameProcessor, InputProcessor 
                 this.setScreen(new OptionScreen(this, gameServicesController));
                 break;
             case "CREDITS":
-                this.setScreen(new CreditsScreen(this));
+                this.setScreen(new CreditsScreen(this, gameServicesController));
                 break;
             case "MENU":
                 if(this.adController != null){
