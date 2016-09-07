@@ -33,7 +33,7 @@ public class DemoSystem extends IteratingSystem {
         Entity demoBrick = engine.createEntity();
         demoBrick.add(KinematicComponent.create(engine));
         demoBrick.add(TransformComponent.create(engine)
-                .setPosition(App.W / 2f, 235f, Z.enemy)
+                .setPosition(App.W / 2f, 215f, Z.enemy)
                 .setScale(1f, 1f));
         demoBrick.add(DemoBlockComponent.create(engine));
 //        demoBrick.add(spawner);
