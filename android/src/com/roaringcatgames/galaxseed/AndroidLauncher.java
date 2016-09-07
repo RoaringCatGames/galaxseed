@@ -175,6 +175,7 @@ public class AndroidLauncher extends AndroidApplication implements
     @Override
     public void onConnected(Bundle bundle) {
         Gdx.app.log("ANDROID LAUNCHER", "CONNECTED!!");
+        //this.connectionEstablished();
     }
 
     @Override
