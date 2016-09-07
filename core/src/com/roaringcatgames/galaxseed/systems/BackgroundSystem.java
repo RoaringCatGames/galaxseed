@@ -4,18 +4,20 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.galaxseed.components.*;
+import com.roaringcatgames.galaxseed.values.Damage;
+import com.roaringcatgames.galaxseed.values.Health;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.galaxseed.Animations;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
-import com.roaringcatgames.galaxseed.components.PlayerComponent;
-import com.roaringcatgames.galaxseed.components.WhenOffScreenComponent;
 import com.roaringcatgames.galaxseed.values.Z;
 
 import java.util.Random;
@@ -303,6 +305,7 @@ public class BackgroundSystem extends IteratingSystem {
 
         if(isUsingStickers) {
             placePlanets();
+
         }
 
 

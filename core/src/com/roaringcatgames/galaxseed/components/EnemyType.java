@@ -8,5 +8,6 @@ public enum EnemyType {
     ASTEROID_A,
     ASTEROID_B,
     ASTEROID_C,
-    ASTEROID_FRAG
+    ASTEROID_FRAG,
+    DEMO_BRICK
 }

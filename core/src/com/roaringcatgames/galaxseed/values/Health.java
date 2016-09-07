@@ -15,4 +15,5 @@ public class Health {
     public static final float Player = 100f;
     public static final float HealthPackFertilizer = 10f;
     public static final float HealthPackWaterCan = 5f;
+    public static final float demoBrick = 100000f;
 }

@@ -4,7 +4,9 @@
     import com.badlogic.ashley.core.Family;
     import com.badlogic.ashley.core.PooledEngine;
     import com.badlogic.gdx.Gdx;
+    import com.badlogic.gdx.Input;
     import com.badlogic.gdx.InputProcessor;
+    import com.badlogic.gdx.graphics.Color;
     import com.badlogic.gdx.math.Vector2;
     import com.badlogic.gdx.math.Vector3;
     import com.badlogic.gdx.utils.Array;
@@ -116,6 +118,7 @@
                     WeaponDecorationComponent.class).get()));
 
 
+            engine.addSystem(new DemoSystem());
             engine.addSystem(gameOverSystem);
             engine.addSystem(new FadingSystem());
             engine.addSystem(new HealthPackSystem());

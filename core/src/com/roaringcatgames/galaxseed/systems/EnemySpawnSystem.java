@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Vector2;
+import com.roaringcatgames.galaxseed.data.EnemySpawn;
+import com.roaringcatgames.galaxseed.data.EnemySpawns;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.galaxseed.Animations;
 import com.roaringcatgames.galaxseed.App;
@@ -57,6 +59,7 @@ public class EnemySpawnSystem extends IteratingSystem {
     public EnemySpawnSystem() {
         super(Family.all(EnemyComponent.class).get());
         leftTimer.elapsedTime += RightCometSpawnFrequency/2f;
+        EnemySpawns.resetSpawns();
     }
 
     @Override

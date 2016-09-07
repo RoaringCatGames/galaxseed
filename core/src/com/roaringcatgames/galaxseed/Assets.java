@@ -738,4 +738,8 @@ public class Assets {
     private static final String SELECT_SFX = "sfx/select.mp3";
     private static final String UPGRADE_SFX = "sfx/upgrade.mp3";
     private static final String CLICK_SFX = "sfx/click.mp3";
+
+    public static TextureRegion getDemoBrick() {
+        return getCachedRegion(SPRITE_ATLAS, "options/demo");
+    }
 }
