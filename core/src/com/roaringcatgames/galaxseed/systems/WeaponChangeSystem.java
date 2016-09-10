@@ -435,7 +435,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-        if(App.getState() == GameState.PLAYING) {
+        if(pointer == 0 && App.getState() == GameState.PLAYING) {
             App.setState(GameState.WEAPON_SELECT);
             showWeaponSelect();
         }
