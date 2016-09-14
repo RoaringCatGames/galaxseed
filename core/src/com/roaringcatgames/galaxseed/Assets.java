@@ -506,7 +506,7 @@ public class Assets {
     }
 
     public static Array<? extends TextureRegion> getSelectArrowFrames(){
-        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/arrow-a");
+        return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/arrow");
     }
 
 
