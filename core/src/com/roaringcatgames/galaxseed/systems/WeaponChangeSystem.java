@@ -41,7 +41,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     private Array<Entity> arrows = new Array<>();
 
     private float selectY = 2f;
-    private float arrowY = selectY + 4f;
+    private float arrowY = selectY + 3f;
     private float ifaceY = 2.5f;
 
     private IGameProcessor game;
