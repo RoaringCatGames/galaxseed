@@ -88,7 +88,7 @@
             //Custom Systems
 
             engine.addSystem(new CleanUpSystem(maxBounds.cpy().scl(-0.25f), maxBounds.cpy().scl(1.25f)));
-            engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game, WeaponType.GUN_SEEDS));
+            engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game, WeaponType.UNSELECTED));
 
             engine.addSystem(firingSystem);
             engine.addSystem(enemySpawnSystem);
@@ -234,19 +234,11 @@
                 hasStarted = true;
             }
 
-//            if(App.isDesktop()) {
-//                Gdx.graphics.setCursor(App.getHiddenCursor());
-//            }
-
             return false;
         }
 
         @Override
         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
-//            if(App.isDesktop()) {
-//                Gdx.graphics.setCursor(App.getActiveCursor());
-//            }
             return false;
         }
 
