@@ -73,6 +73,8 @@ public class Animations {
     private static Animation helicopterPodOff;
     private static Animation auraPodOff;
 
+    private static Animation arrow;
+
     private static Animation shield;
 
     private static Animation rawry;
@@ -144,6 +146,8 @@ public class Animations {
         seedPodOff = new Animation(1f/1f, Assets.getSeedPodOffFrames());
         helicopterPodOff = new Animation(1f/1f, Assets.getHelicopterPodOffFrames());
         auraPodOff = new Animation(1f/1f, Assets.getAuraPodOffFrames());
+
+        arrow = new Animation(1f/80f, Assets.getSelectArrowFrames());
 
         shield = new Animation(1f/6f, Assets.getShield());
 
@@ -352,6 +356,10 @@ public class Animations {
 
     public static Animation getHelicopterPodOff() {
         return helicopterPodOff;
+    }
+
+    public static Animation getArrow() {
+        return arrow;
     }
 
     public static Animation getShield(){
