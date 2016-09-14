@@ -33,7 +33,6 @@ public class EnemySpawnSystem extends IteratingSystem {
     private static final float ASTEROID_B_PU_CHANCE = 0.4f;
     private static final float ASTEROID_C_PU_CHANCE = 0.6f;
 
-    private static float elapsedTime = 0f;
     private static float homingChance = 0.1f;
 
     private static float LeftCometSpawnFrequency = 0.4f;
@@ -55,6 +54,7 @@ public class EnemySpawnSystem extends IteratingSystem {
     private Timer rightTimer = new Timer(RightCometSpawnFrequency);
     private Timer asteroidTimer = new Timer(AsteroidSpawnFrequency);
     private float asteroidX = AsteroidLeftX;
+    private float elapsedTime = 0f;
 
     public EnemySpawnSystem() {
         super(Family.all(EnemyComponent.class).get());
