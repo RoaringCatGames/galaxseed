@@ -147,7 +147,7 @@ public class Animations {
         helicopterPodOff = new Animation(1f/1f, Assets.getHelicopterPodOffFrames());
         auraPodOff = new Animation(1f/1f, Assets.getAuraPodOffFrames());
 
-        arrow = new Animation(1f/80f, Assets.getSelectArrowFrames());
+        arrow = new Animation(1f/120f, Assets.getSelectArrowFrames());
 
         shield = new Animation(1f/6f, Assets.getShield());
 

@@ -41,6 +41,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     private Array<Entity> arrows = new Array<>();
 
     private float selectY = 2f;
+    private float arrowY = selectY + 4f;
     private float ifaceY = 2.5f;
 
     private IGameProcessor game;
@@ -185,7 +186,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             pEngine.addEntity(seedLevel);
 
             //Add An Arrow
-            addArrowIndicator(pEngine, xPos);
+            addArrowIndicator(pEngine, xPos-1f, 20f);
         }
 
         if(helicopterSelect == null){
@@ -224,7 +225,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setRegion(Assets.getHelicopterLevel(1)));
             pEngine.addEntity(helicopterLevel);
 
-            addArrowIndicator(pEngine, xPos);
+            addArrowIndicator(pEngine, xPos, 0f);
         }
 
         if(auraSelect == null){
@@ -263,7 +264,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setRegion(Assets.getAuraLevel(1)));
             pEngine.addEntity(auraLevel);
 
-            addArrowIndicator(pEngine, xPos);
+            addArrowIndicator(pEngine, xPos + 1f, -20f);
         }
 
         if(overlay == null){
@@ -278,10 +279,11 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         }
     }
 
-    private void addArrowIndicator(PooledEngine pEngine, float xPos) {
+    private void addArrowIndicator(PooledEngine pEngine, float xPos, float rotation) {
         Entity e = pEngine.createEntity();
         e.add(TransformComponent.create(pEngine)
-                .setPosition(xPos, selectY + 3f, Z.arrow)
+                .setPosition(xPos, arrowY, Z.arrow)
+                .setRotation(rotation)
                 .setHidden(true));
         e.add(StateComponent.create(pEngine)
             .setLooping(true)
