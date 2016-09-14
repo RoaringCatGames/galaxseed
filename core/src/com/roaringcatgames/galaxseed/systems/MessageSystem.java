@@ -2,11 +2,13 @@ package com.roaringcatgames.galaxseed.systems;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.core.*;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.galaxseed.components.Mappers;
+import com.roaringcatgames.galaxseed.components.PlayerComponent;
+import com.roaringcatgames.galaxseed.components.WeaponType;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
@@ -21,6 +23,7 @@ import com.roaringcatgames.galaxseed.values.Z;
 public class MessageSystem extends EntitySystem implements InputProcessor {
 
     private Entity tutorial;
+    private Entity weaponChoose;
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -28,16 +31,16 @@ public class MessageSystem extends EntitySystem implements InputProcessor {
 
         PooledEngine e = (PooledEngine)engine;
         tutorial = e.createEntity();
-        tutorial.add(TransformComponent.create(engine)
+        tutorial.add(TransformComponent.create(e)
                 .setPosition(App.W / 2f, App.H / 2f, Z.message)
                 .setScale(0.1f, 0.1f));
-        tutorial.add(TextureComponent.create(engine)
+        tutorial.add(TextureComponent.create(e)
             .setRegion(Assets.getTutorialMessage()));
-        tutorial.add(TweenComponent.create(engine)
+        tutorial.add(TweenComponent.create(e)
             .addTween(Tween.to(tutorial, K2EntityTweenAccessor.SCALE, 1f)
                     .target(1f, 1f)
                     .ease(TweenEquations.easeOutElastic)));
-        engine.addEntity(tutorial);
+        e.addEntity(tutorial);
 
         App.game.multiplexer.addProcessor(this);
     }
@@ -66,10 +69,32 @@ public class MessageSystem extends EntitySystem implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(tutorial != null) {
+        if(tutorial != null && weaponChoose == null){
             getEngine().removeEntity(tutorial);
-            tutorial = null;
+
+            PooledEngine e = (PooledEngine)getEngine();
+            weaponChoose = e.createEntity();
+            weaponChoose.add(TransformComponent.create(e)
+                    .setPosition(App.W / 2f, App.H / 2f, Z.message)
+                    .setScale(1f, 1f));
+            weaponChoose.add(TextureComponent.create(e)
+                    .setRegion(Assets.getWeaponChooseMessage()));
+            e.addEntity(tutorial);
+            return true;
+        }else if(weaponChoose != null){
+            ImmutableArray<Entity> players = getEngine().getEntitiesFor(Family.all(PlayerComponent.class).get());
+            if(players != null && players.size() > 0){
+                if(Mappers.player.get(players.get(0)).weaponType != WeaponType.UNSELECTED){
+                    getEngine().removeEntity(weaponChoose);
+                    tutorial = null;
+                    weaponChoose = null;
+                    return false;
+                }
+            }
+
+            return true;
         }
+
         return false;
     }
 
