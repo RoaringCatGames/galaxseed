@@ -23,7 +23,8 @@ allprojects {
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.2'
         aiVersion = '1.7.0'
-        ashleyExtensionsVersion = '0.2.3-SNAPSHOT'
+        tweenEngineVersion = '6.3.3'
+        ashleyExtensionsVersion = '0.2.4-SNAPSHOT'
         outputName = 'galaxseed'
         googlePlayServicesVersion = '9.4.0'
     }
@@ -103,6 +104,8 @@ project(":html") {
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion:sources"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion:sources"
+        compile files("../../tween-engine/java/build/api/tween-engine-api-sources.jar")
+        //compile "com.github.arcnor:universal-tween-engine:$tweenEngineVersion:sources"
         compile "com.roaringcatgames.kitten2d.ashley:ashley-extensions:$ashleyExtensionsVersion:sources"
         //compile files("../../kitten2d-systems/ashley-extensions/build/libs/ashley-extensions-${ashleyExtensionsVersion}-sources.jar")
     }
