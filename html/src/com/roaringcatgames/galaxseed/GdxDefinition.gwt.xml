@@ -4,11 +4,13 @@
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
 	<inherits name='com.badlogic.gdx.physics.box2d.box2d-gwt' />
 	<inherits name='com.badlogic.ashley_gwt' />
+	<inherits name='aurelienribon.tweenengine' />
 	<inherits name='AshleyExtensions' />
 	<inherits name='Box2DLights' />
 
 	<inherits name='LifeInSpace' />
 	<entry-point class='com.roaringcatgames.galaxseed.client.HtmlLauncher' />
-	
+	<set-property name="user.agent" value="safari"/>
+
 	<set-configuration-property name="gdx.assetpath" value="../android/assets" />
 </module>

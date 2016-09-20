@@ -9,20 +9,19 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
-import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
-import com.roaringcatgames.kitten2d.ashley.components.*;
-import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.galaxseed.Animations;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.components.*;
 import com.roaringcatgames.galaxseed.values.GameState;
 import com.roaringcatgames.galaxseed.values.Z;
+import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
+import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
+import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 
 /**
  * A system to manage swapping weapons.
@@ -30,19 +29,17 @@ import com.roaringcatgames.galaxseed.values.Z;
 public class WeaponChangeSystem extends IteratingSystem implements InputProcessor {
 
     private Entity seedSelect;
-    private Entity seedLevel;
     private Entity helicopterSelect;
-    private Entity helicopterLevel;
     private Entity auraSelect;
-    private Entity auraLevel;
     private Entity overlay;
-    private Entity iface;
+    private Entity dashboard;
 
     private Array<Entity> arrows = new Array<>();
 
     private float selectY = 2f;
-    private float arrowY = selectY + 3f;
-    private float ifaceY = 2.5f;
+    private float arrowY = selectY + 4.5f;
+    private float arrowRotateY = selectY + 4f;
+    private float dashboardY = 2.5f;
 
     private IGameProcessor game;
 
@@ -68,9 +65,6 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             K2ComponentMappers.transform.get(arrows.get(0)).setHidden(!isFirstShowing);
             K2ComponentMappers.transform.get(arrows.get(1)).setHidden(!isSecondShowing);
             K2ComponentMappers.transform.get(arrows.get(2)).setHidden(!isThirdShowing);
-
-
-
         }
         super.update(deltaTime);
     }
@@ -138,13 +132,13 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         App.game.multiplexer.addProcessor(this);
         PooledEngine pEngine = (PooledEngine)engine;
 
-        if(iface == null){
-            iface = pEngine.createEntity();
-            iface.add(TransformComponent.create(pEngine)
-                .setPosition(App.W / 2f, -ifaceY, Z.weaponSelectInterface));
-            iface.add(TextureComponent.create(pEngine)
+        if(dashboard == null){
+            dashboard = pEngine.createEntity();
+            dashboard.add(TransformComponent.create(pEngine)
+                .setPosition(App.W / 2f, -dashboardY, Z.weaponSelectInterface));
+            dashboard.add(TextureComponent.create(pEngine)
                 .setRegion(Assets.getSelectInterface()));
-            engine.addEntity(iface);
+            engine.addEntity(dashboard);
         }
 
         float scale = 0.8f;
@@ -161,24 +155,25 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             seedSelect.add(BoundsComponent.create(pEngine)
                 .setBounds(0f, 0f, buttonBoundSize, buttonBoundSize));
             seedSelect.add(FollowerComponent.create(pEngine)
-                .setTarget(iface)
+                .setTarget(dashboard)
                 .setMode(FollowMode.STICKY)
                 .setOffset(-5.2f, -0.0499f));
             seedSelect.add(TextureComponent.create(pEngine));
             seedSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
             seedSelect.add(AnimationComponent.create(pEngine)
+                    .setShouldClearOnBlankState(true)
                     .addAnimation("DEFAULT", Animations.getSeedPod())
                     .addAnimation("OFF", Animations.getSeedPodOff()));
             pEngine.addEntity(seedSelect);
 
-            seedLevel = pEngine.createEntity();
+            Entity seedLevel = pEngine.createEntity();
             seedLevel.add(WeaponSelectComponent.create(pEngine)
                     .setWeaponType(WeaponType.GUN_SEEDS)
                     .setRepresentingLevel(true));
             seedLevel.add(TransformComponent.create(pEngine)
                 .setPosition(xPos, selectY, Z.weaponSelect));
             seedLevel.add(FollowerComponent.create(pEngine)
-                .setTarget(iface)
+                .setTarget(dashboard)
                 .setMode(FollowMode.STICKY)
                 .setOffset(-4.64899f, -2.249f));
             seedLevel.add(TextureComponent.create(pEngine)
@@ -198,7 +193,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setPosition(xPos, selectY, Z.weaponSelect)
                     .setScale(scale, scale));
             helicopterSelect.add(FollowerComponent.create(pEngine)
-                .setTarget(iface)
+                .setTarget(dashboard)
                 .setMode(FollowMode.STICKY)
                 .setOffset(0.2f, 0.2f));
             helicopterSelect.add(BoundsComponent.create(pEngine)
@@ -206,19 +201,20 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             helicopterSelect.add(TextureComponent.create(pEngine));
             helicopterSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
             helicopterSelect.add(AnimationComponent.create(pEngine)
+                    .setShouldClearOnBlankState(true)
                     .addAnimation("DEFAULT", Animations.getHelicopterPod())
                     .addAnimation("OFF", Animations.getHelicopterPodOff())
                     .setPaused(true));
             pEngine.addEntity(helicopterSelect);
 
-            helicopterLevel = pEngine.createEntity();
+            Entity helicopterLevel = pEngine.createEntity();
             helicopterLevel.add(WeaponSelectComponent.create(engine)
                     .setWeaponType(WeaponType.HELICOPTER_SEEDS)
                     .setRepresentingLevel(true));
             helicopterLevel.add(TransformComponent.create(pEngine)
                     .setPosition(xPos, selectY, Z.weaponSelect));
             helicopterLevel.add(FollowerComponent.create(pEngine)
-                .setTarget(iface)
+                .setTarget(dashboard)
                 .setMode(FollowMode.STICKY)
                 .setOffset(0.2f, -1.899f));
             helicopterLevel.add(TextureComponent.create(pEngine)
@@ -237,27 +233,28 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setPosition(xPos, selectY, Z.weaponSelect)
                     .setScale(scale, scale));
             auraSelect.add(FollowerComponent.create(pEngine)
-                .setTarget(iface)
+                .setTarget(dashboard)
                 .setMode(FollowMode.STICKY)
                 .setOffset(5.75f, -0.0499f));
             auraSelect.add(BoundsComponent.create(pEngine)
                     .setBounds(0f, 0f, buttonBoundSize, buttonBoundSize));
             auraSelect.add(StateComponent.create(pEngine).setLooping(true).set("DEFAULT"));
             auraSelect.add(AnimationComponent.create(pEngine)
+                    .setShouldClearOnBlankState(true)
                     .addAnimation("DEFAULT", Animations.getAuraPod())
                     .addAnimation("OFF", Animations.getAuraPodOff())
                     .setPaused(true));
             auraSelect.add(TextureComponent.create(pEngine));
             pEngine.addEntity(auraSelect);
 
-            auraLevel = pEngine.createEntity();
+            Entity auraLevel = pEngine.createEntity();
             auraLevel.add(WeaponSelectComponent.create(engine)
                     .setWeaponType(WeaponType.POLLEN_AURA)
                     .setRepresentingLevel(true));
             auraLevel.add(TransformComponent.create(pEngine)
                     .setPosition(xPos, selectY, Z.weaponSelect));
             auraLevel.add(FollowerComponent.create(pEngine)
-                .setTarget(iface)
+                .setTarget(dashboard)
                 .setMode(FollowMode.STICKY)
                 .setOffset(5.099f, -2.249f));
             auraLevel.add(TextureComponent.create(pEngine)
@@ -281,8 +278,9 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
 
     private void addArrowIndicator(PooledEngine pEngine, float xPos, float rotation) {
         Entity e = pEngine.createEntity();
+        float y = rotation != 0f ? arrowRotateY : arrowY;
         e.add(TransformComponent.create(pEngine)
-                .setPosition(xPos, arrowY, Z.arrow)
+                .setPosition(xPos, y, Z.arrow)
                 .setRotation(rotation)
                 .setHidden(true));
         e.add(StateComponent.create(pEngine)
@@ -344,9 +342,9 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     }
 
     private void toggleWeaponSelect(boolean isShowing) {
-        float target = isShowing ? ifaceY : -ifaceY;
+        float target = isShowing ? dashboardY : -dashboardY;
         float time = isShowing ? 0.05f : 0.5f;
-        TweenComponent tc = K2ComponentMappers.tween.get(iface);
+        TweenComponent tc = K2ComponentMappers.tween.get(dashboard);
         if(tc != null) {
             for(Tween t:tc.tweens) {
 
@@ -358,9 +356,9 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         }else{
             tc = TweenComponent.create(getEngine());
         }
-        tc.addTween(Tween.to(iface, K2EntityTweenAccessor.POSITION_Y, time)
+        tc.addTween(Tween.to(dashboard, K2EntityTweenAccessor.POSITION_Y, time)
                 .target(target));
-        iface.add(tc);
+        dashboard.add(tc);
 
         K2ComponentMappers.transform.get(overlay).setHidden(!isShowing);
     }
@@ -369,7 +367,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
      * Input processor implementation
      */
 
-    Vector3 touchPoint = new Vector3();
+    private Vector3 touchPoint = new Vector3();
 
 //    int target = 0;
 //    float adjust = 0.05f;
@@ -457,7 +455,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             }else if(App.isWeaponEnabled(WeaponType.POLLEN_AURA) && auraBounds.bounds.contains(touchPoint.x, touchPoint.y)){
                 switchWeapon(WeaponType.POLLEN_AURA);
                 hideCursor = false;
-            }else if(pc.weaponType != WeaponType.UNSELECTED){
+            }else if(pc != null && pc.weaponType != WeaponType.UNSELECTED){
                 App.setState(GameState.PLAYING);
                 toggleWeaponSelect(false);
             }

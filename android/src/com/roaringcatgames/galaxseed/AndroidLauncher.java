@@ -90,7 +90,7 @@ public class AndroidLauncher extends AndroidApplication implements
         adView = new AdView(this);
         adView.setAdSize(AdSize.SMART_BANNER);
         adView.setAdUnitId(getResources().getString(R.string.banner_ad_unit_id));
-        adView.setId(R.integer.ad_view_id); // this is an arbitrary id, allows for relative positioning in createGameView()
+        adView.setId(getResources().getInteger(R.integer.ad_view_id)); // this is an arbitrary id, allows for relative positioning in createGameView()
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
