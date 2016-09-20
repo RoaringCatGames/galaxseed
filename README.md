@@ -7,6 +7,9 @@ We are currently working on finalizing our App Store integrations for LeaderBoar
 - ~~Android Leader Board Integration~~
 - ~~Android Achievement Integration~~
 - ~~Android AdMob Integration~~
+- ~~Indicate Weapon Selection More Clearly~~
+- Allow Player to Regain Lost Weapons
+- Allow Player to Regain a Power-Up Level After Losing a Weapon
 - Android In-App Purchase
 - iOS Leader Board Integration
 - iOS Achievement Integration
