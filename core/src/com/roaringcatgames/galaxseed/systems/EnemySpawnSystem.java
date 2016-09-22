@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -251,6 +252,7 @@ public class EnemySpawnSystem extends IteratingSystem {
         Animation ani = isRed ? Animations.getRedComet() : Animations.getBlueComet();
         Animation aniFull = isRed ? Animations.getRedCometFull() : Animations.getBlueCometFull();
         EnemyColor color = isRed ? EnemyColor.BROWN:EnemyColor.BLUE;
+        float health = isRed ? Health.CometSmall : Health.CometLarge;
 
         Entity enemy = engine.createEntity();
         enemy.add(WhenOffScreenComponent.create(engine));
@@ -263,12 +265,14 @@ public class EnemySpawnSystem extends IteratingSystem {
             .setScale(1f, 1f));
 
         enemy.add(HealthComponent.create(engine)
-            .setMaxHealth(Health.Comet)
-            .setMaxHealth(Health.Comet));
+            .setHealth(health)
+            .setMaxHealth(health));
 
+        float radius = isRed ? 0.4f : 0.6f;
+        float yOff = isRed ? -1.25f : -1.5f;
         enemy.add(CircleBoundsComponent.create(engine)
-            .setCircle(xPos, yPos, 0.4f)
-            .setOffset(0f, -1.25f));
+            .setCircle(xPos, yPos, radius)
+            .setOffset(0f, yOff));
 
 
         enemy.add(EnemyComponent.create(engine)

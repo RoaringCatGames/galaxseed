@@ -75,8 +75,12 @@ public class HelicopterSeedSystem extends IteratingSystem{
                                 }else{
                                     PathFollowComponent pfc = K2ComponentMappers.pathFollow.get(e);
                                     pfc.setSpeed(pfc.speed*-1f);
-                                }
 
+                                    if(eHealth.health > 0f){
+                                        pfc.setBaseRotation(pfc.baseRotation + 180f);
+                                        pfc.setSpeed(pfc.speed * 0.5f);
+                                    }
+                                }
                             }
 
                             if (eHealth.health == 0f){

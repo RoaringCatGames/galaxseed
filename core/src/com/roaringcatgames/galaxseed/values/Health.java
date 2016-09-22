@@ -1,11 +1,12 @@
 package com.roaringcatgames.galaxseed.values;
 
 /**
- * Created by barry on 3/2/16 @ 7:51 PM.
+ * Holds the Health Values in one location
  */
 public class Health {
 
-    public static final float Comet = 1f;
+    public static final float CometSmall = 1f;
+    public static final float CometLarge = 3f;
     public static final float AsteroidFrag = 1f;
     public static final float AsteroidA = 10f;
     public static final float AsteroidB = 16f;

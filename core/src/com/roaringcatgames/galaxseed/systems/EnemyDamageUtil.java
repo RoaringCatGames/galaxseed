@@ -111,7 +111,6 @@ public class EnemyDamageUtil {
 
     private static void generatePowerup(PooledEngine engine, float x, float y){
         if(App.canPowerUp()) {
-            Gdx.app.log("EnemyDamageUtil", "Can Power Up!");
             generateUpgradePowerUp(engine, x, y);
         }
     }
@@ -286,8 +285,8 @@ public class EnemyDamageUtil {
 
         engine.addEntity(plant);
 
-//        if(PrefsUtil.areSfxEnabled()){
-//            Assets.getBloomSfx(r.nextInt(6) + 1).play(Volume.BLOOM_TREE_SFX);
-//        }
+        if(PrefsUtil.areSfxEnabled()){
+            Assets.getBloomSfx(r.nextInt(6) + 1).play(Volume.BLOOM_TREE_SFX);
+        }
     }
 }

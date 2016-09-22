@@ -5,8 +5,10 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.galaxseed.values.Health;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.galaxseed.components.*;
@@ -80,7 +82,7 @@ public class  EnemyDamageSystem extends IteratingSystem {
 
         hc = K2ComponentMappers.health.get(enemy);
         if(hc.health > 0f) {
-            EnemyDamageUtil.attachPlant((PooledEngine)getEngine(), bulletBounds.circle, enemy, ec.enemyType == EnemyType.COMET);
+            EnemyDamageUtil.attachPlant((PooledEngine)getEngine(), bulletBounds.circle, enemy, (ec.enemyType == EnemyType.COMET && hc.maxHealth == Health.CometSmall));
             if (scoreCard != null) {
                 scoreCard.setScore(scoreCard.score + 1);
             }

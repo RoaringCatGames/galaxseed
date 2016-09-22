@@ -37,7 +37,7 @@ public class BulletSystem extends IteratingSystem {
         for(Entity e:bullets){
             StateComponent sc = sm.get(e);
             Animation ani = am.get(e).animations.get(sc.get());
-            if(ani != null && sc.get() == "DEFAULT" && ani.isAnimationFinished(sc.time)){
+            if(ani != null && "DEFAULT".equals(sc.get()) && ani.isAnimationFinished(sc.time)){
                 sc.set("FLYING").setLooping(true);
             }
         }
