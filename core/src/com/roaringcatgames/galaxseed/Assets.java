@@ -52,6 +52,9 @@ public class Assets {
         am.load(BLOOM_4_SFX, SOUND);
         am.load(BLOOM_5_SFX, SOUND);
         am.load(BLOOM_6_SFX, SOUND);
+        am.load(PLANET_BORN_1, SOUND);
+        am.load(PLANET_BORN_2, SOUND);
+        am.load(PLANET_BORN_3, SOUND);
         am.load(FIRING_SFX, SOUND);
         am.load(SELECT_SFX, SOUND);
         am.load(CLICK_SFX, SOUND);
@@ -634,6 +637,24 @@ public class Assets {
         return am.get(SWISH_SFX, SOUND);
     }
 
+    public static Sound getPlanetBornSfx(int index){
+        Sound s;
+        switch(index){
+            case 0:
+                s = am.get(PLANET_BORN_1, SOUND);
+                break;
+            case 1:
+                s = am.get(PLANET_BORN_2, SOUND);
+                break;
+            case 2:
+                s = am.get(PLANET_BORN_3, SOUND);
+                break;
+            default:
+                s = am.get(PLANET_BORN_1, SOUND);
+                break;
+        }
+        return s;
+    }
     public static Sound getBloomSfx(int index) {
         Sound s;
         switch(index){
@@ -743,6 +764,9 @@ public class Assets {
     private static final String BLOOM_4_SFX = "sfx/bloom-4.mp3";
     private static final String BLOOM_5_SFX = "sfx/bloom-5.mp3";
     private static final String BLOOM_6_SFX = "sfx/bloom-6.mp3";
+    private static final String PLANET_BORN_1 = "sfx/plant-born-1.mp3";
+    private static final String PLANET_BORN_2 = "sfx/plant-born-2.mp3";
+    private static final String PLANET_BORN_3 = "sfx/plant-born-3.mp3";
     private static final String SELECT_SFX = "sfx/select.mp3";
     private static final String UPGRADE_SFX = "sfx/upgrade.mp3";
     private static final String CLICK_SFX = "sfx/click.mp3";

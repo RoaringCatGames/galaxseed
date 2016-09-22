@@ -23,4 +23,10 @@ public class Sfx {
             Assets.getUpgradeSfx().play(Volume.UPGRADE_SFX);
         }
     }
+
+    public static void playPlanetBorn(int position){
+        if(PrefsUtil.areSfxEnabled()){
+            Assets.getPlanetBornSfx(position%3).play(Volume.PLANET_BORN_SFX);
+        }
+    }
 }

@@ -8,14 +8,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.roaringcatgames.galaxseed.*;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.VectorUtils;
 import com.roaringcatgames.kitten2d.ashley.components.*;
-import com.roaringcatgames.galaxseed.Animations;
-import com.roaringcatgames.galaxseed.App;
-import com.roaringcatgames.galaxseed.Assets;
-import com.roaringcatgames.galaxseed.PrefsUtil;
 import com.roaringcatgames.galaxseed.components.EnemyComponent;
 import com.roaringcatgames.galaxseed.components.Mappers;
 import com.roaringcatgames.galaxseed.components.PowerUpComponent;
@@ -91,11 +88,7 @@ public class EnemyDamageUtil {
                 Gdx.app.log("EnemyDamageSystem", "Enemy doesn't have Velocity!");
             }
 
-            if(PrefsUtil.areSfxEnabled()) {
-                for(int i=0;i<3;i++) {
-                    Assets.getBloomSfx(r.nextInt(6)).play(Volume.POP_SFX);
-                }
-            }
+            Sfx.playPlanetBorn(r.nextInt(3));
         }
 
         enemy.add(TweenComponent.create(engine)

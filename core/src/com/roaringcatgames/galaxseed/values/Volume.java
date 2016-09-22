@@ -19,4 +19,6 @@ public class Volume {
     public static final float CLICK_SFX = 1f;
     public static final float SELECT_SFX = 1f;
     public static final float UPGRADE_SFX = 1f;
+
+    public static final float PLANET_BORN_SFX = 1f;
 }
