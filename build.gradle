@@ -21,10 +21,10 @@ allprojects {
         gdxVersion = '1.9.4'
         roboVMVersion = '2.2.0'
         box2DLightsVersion = '1.4'
-        ashleyVersion = '1.7.2'
+        ashleyVersion = '1.7.3'
         aiVersion = '1.7.0'
         tweenEngineVersion = '6.3.4'
-        ashleyExtensionsVersion = '0.3.0-SNAPSHOT'
+        ashleyExtensionsVersion = '0.3.0'
         outputName = 'galaxseed'
         googlePlayServicesVersion = '9.4.0'
     }

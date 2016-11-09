@@ -53,8 +53,8 @@
             TextRenderingSystem textRenderingSystem = new TextRenderingSystem(game.getBatch(), game.getGUICamera(), game.getCamera());
 
             Vector3 playerPosition = new Vector3(
-                    App.playerLastPosition.x,
-                    App.playerLastPosition.y,
+                    App.W/2f,
+                    App.H/5f,
                     Z.player);
 
             Vector2 minBounds = new Vector2(0f, 0f);

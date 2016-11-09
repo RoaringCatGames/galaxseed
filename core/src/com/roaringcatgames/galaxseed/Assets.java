@@ -34,6 +34,8 @@ public class Assets {
         am.load(BG_MUSIC, MUSIC);
         am.load(GAME_OVER_MUSIC, MUSIC);
         am.load(MENU_MUISC, MUSIC);
+        am.load(LEVEL_SELECT_MUSIC, MUSIC);
+        am.load(ASTEROID_RACE_LEVEL_MUSIC, MUSIC);
         am.load(FONT_16, BITMAP_FONT);
         am.load(FONT_24, BITMAP_FONT);
         am.load(FONT_32, BITMAP_FONT);
@@ -175,6 +177,38 @@ public class Assets {
     }
     public static TextureAtlas.AtlasRegion getDonut(){
         return getCachedRegion(SPRITE_ATLAS, "planets/Donut");
+    }
+
+    public static TextureAtlas.AtlasRegion getLevelPlanet(int index){
+        TextureAtlas.AtlasRegion region = null;
+        switch(index){
+            case 1:
+                region =  getPluto();
+                break;
+            case 2:
+                region = getNeptune();
+                break;
+            case 3:
+                region = getUranus();
+                break;
+            case 4:
+                region = getSaturnOne();
+                break;
+            case 5:
+                region = getJupiterBottomLeft();
+                break;
+            case 6:
+                region = getMars();
+                break;
+            case 7:
+                region = getEarth();
+                break;
+            default:
+                region = getDonut();
+                break;
+        }
+
+        return region;
     }
 
     /////////////
@@ -609,6 +643,8 @@ public class Assets {
     public static Music getGameOverMusic(){
         return am.get(GAME_OVER_MUSIC, MUSIC);
     }
+    public static Music getLevelSelectMusic() { return am.get(LEVEL_SELECT_MUSIC, MUSIC); }
+    public static Music getAsteroidRaceLevelMusic() { return am.get(ASTEROID_RACE_LEVEL_MUSIC, MUSIC); }
 
     /////////////
     //SFX
@@ -750,6 +786,8 @@ public class Assets {
     private static final String BG_MUSIC = "music/galaxseed-bg.mp3";
     private static final String MENU_MUISC = "music/title.mp3";
     private static final String GAME_OVER_MUSIC = "music/game-over.mp3";
+    private static final String LEVEL_SELECT_MUSIC = "music/new-song2.mp3";
+    private static final String ASTEROID_RACE_LEVEL_MUSIC = "music/new-song1.mp3";
 
     private static final String FIRING_SFX = "sfx/seed-fire.mp3";
     private static final String SWISH_SFX = "sfx/swish.mp3";

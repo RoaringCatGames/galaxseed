@@ -25,16 +25,16 @@ public class App {
     public static float SLOW_SCALE = 0.1f; //10% speed
 
     public static final Game Initialize(){
-        game = new LifeInSpace();
+        game = new GalaxSeedGame();
         return game;
     }
 
     public static final Game Initialize(IAdController adController, IGameServiceController achievementController){
-        game = new LifeInSpace(adController, achievementController);
+        game = new GalaxSeedGame(adController, achievementController);
 
         return game;
     }
-    public static LifeInSpace game;
+    public static GalaxSeedGame game;
 
 
     public static void setAppWH(float x, float y){

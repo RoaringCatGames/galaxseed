@@ -249,7 +249,6 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
         game.addInputProcessor(this);
         game.playBgMusic("MENU");
-        App.playerLastPosition.set(App.W/2f, App.H/5f);
     }
 
     @Override
@@ -293,7 +292,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
         if(isReady(playTarget, "play")){
             game.pauseBgMusic();
-            game.switchScreens("GAME");
+            game.switchScreens("LEVEL_SELECT");
         }
 
         if(isReady(optionsTarget, "options")){

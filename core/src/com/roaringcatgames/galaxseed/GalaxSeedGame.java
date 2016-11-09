@@ -1,6 +1,9 @@
 package com.roaringcatgames.galaxseed;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Cursor;
@@ -11,12 +14,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.galaxseed.screens.*;
+import com.roaringcatgames.galaxseed.values.Songs;
+import com.roaringcatgames.galaxseed.values.Volume;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 import com.roaringcatgames.kitten2d.gdx.helpers.IPreferenceManager;
 import com.roaringcatgames.kitten2d.gdx.helpers.K2PreferenceManager;
-import com.roaringcatgames.galaxseed.values.Volume;
 
-public class LifeInSpace extends Game implements IGameProcessor, InputProcessor {
+public class GalaxSeedGame extends Game implements IGameProcessor, InputProcessor {
 
     public InputMultiplexer multiplexer = new InputMultiplexer();
     public AssetManager am;
@@ -32,10 +36,10 @@ public class LifeInSpace extends Game implements IGameProcessor, InputProcessor 
     private IPreferenceManager prefManager = new K2PreferenceManager("galaxseed_prefs");
 
 
-    public LifeInSpace(){
+    public GalaxSeedGame(){
         super();
     }
-    public LifeInSpace(IAdController adController, IGameServiceController gameServicesController){
+    public GalaxSeedGame(IAdController adController, IGameServiceController gameServicesController){
         super();
         this.adController = adController;
         this.gameServicesController = gameServicesController;
@@ -86,6 +90,8 @@ public class LifeInSpace extends Game implements IGameProcessor, InputProcessor 
         Gdx.gl.glClearColor(r, g, b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        cam.update();
+        guiCam.update();
         super.render();
     }
 
@@ -128,6 +134,12 @@ public class LifeInSpace extends Game implements IGameProcessor, InputProcessor 
                 }
                 this.setScreen(new MenuScreen(this, gameServicesController));
                 break;
+            case "LEVEL_SELECT":
+                if(this.adController != null){
+                    this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
+                }
+                this.setScreen(new LevelSelectScreen(this));
+                break;
             case "GAME":
                 if(this.adController != null){
                     this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
@@ -165,24 +177,27 @@ public class LifeInSpace extends Game implements IGameProcessor, InputProcessor 
             }
 
             switch (musicName) {
-                case "MENU":
+                case Songs.MENU:
                     bgMusic = Assets.getMenuMusic();
                     bgMusic.setLooping(true);
                     bgMusic.setVolume(Volume.MENU_MUSIC);
                     break;
-                case "GAME":
+                case Songs.GAME:
                     bgMusic = Assets.getBackgroundMusic();
                     bgMusic.setLooping(true);
                     bgMusic.setVolume(Volume.BG_MUSIC);
                     break;
-                case "GAME_OVER":
+                case Songs.GAME_OVER:
                     bgMusic = Assets.getGameOverMusic();
                     bgMusic.setLooping(true);
                     break;
-
+                case Songs.LEVEL_SELECT:
+                    bgMusic = Assets.getLevelSelectMusic();
+                    bgMusic.setLooping(true);
+                    break;
             }
 
-            Gdx.app.log("LifeInSpace", "Playing Music: " + musicName);
+            Gdx.app.log("GalaxSeedGame", "Playing Music: " + musicName);
             bgMusic.play();
         }
     }
