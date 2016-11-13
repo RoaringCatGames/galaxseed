@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.systems.BackgroundSystem;
+import com.roaringcatgames.galaxseed.systems.BackgroundSystemConfig;
 import com.roaringcatgames.galaxseed.systems.CameraPanningSystem;
 import com.roaringcatgames.galaxseed.values.Songs;
 import com.roaringcatgames.galaxseed.values.Z;
@@ -47,7 +48,8 @@ public class LevelSelectScreen extends LazyInitScreen {
         ScreenWrapSystem screenWrapSystem = new ScreenWrapSystem(minBounds, maxBounds, App.PPM);
         CameraPanningSystem cameraPanningSystem = new CameraPanningSystem(minCamBounds, maxCamBounds, game, App.PPM,  5f);
 
-        BackgroundSystem bgSystem = new BackgroundSystem(minBounds, maxBounds, false, true);
+        BackgroundSystem bgSystem = new BackgroundSystem(minBounds, maxBounds,
+                new BackgroundSystemConfig(false, false, false, false));
 
         TweenSystem tweenSystem = new TweenSystem();
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM);

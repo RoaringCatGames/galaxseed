@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
+import com.roaringcatgames.galaxseed.systems.BackgroundSystemConfig;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
@@ -44,7 +45,7 @@ public class SplashScreen extends LazyInitScreen {
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(App.W, App.H);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
-        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false, false));
+        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(false, false, true, true)));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RotationSystem());
         engine.addSystem(new FollowerSystem(Family.all(AnimationComponent.class).get()));

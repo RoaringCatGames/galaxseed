@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.galaxseed.*;
+import com.roaringcatgames.galaxseed.systems.BackgroundSystemConfig;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
@@ -96,7 +97,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
-        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, false, true));
+        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(false, true, true, true)));
 
 
         //Kitten2D Systems

@@ -4,21 +4,19 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.roaringcatgames.galaxseed.components.*;
-import com.roaringcatgames.galaxseed.values.Damage;
-import com.roaringcatgames.galaxseed.values.Health;
-import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
-import com.roaringcatgames.kitten2d.ashley.components.*;
 import com.roaringcatgames.galaxseed.Animations;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
+import com.roaringcatgames.galaxseed.components.PlayerComponent;
+import com.roaringcatgames.galaxseed.components.WhenOffScreenComponent;
 import com.roaringcatgames.galaxseed.values.Z;
+import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
+import com.roaringcatgames.kitten2d.ashley.components.*;
 
 import java.util.Random;
 
@@ -39,9 +37,9 @@ public class BackgroundSystem extends IteratingSystem {
     private float right;
     private float top;
 
-    private boolean isUsingStickers;
     private boolean isInitialized = false;
-    private boolean isUsingStars = false;
+
+    private BackgroundSystemConfig config;
 
     private Array<BackgroundSticker> planets;
 
@@ -72,7 +70,7 @@ public class BackgroundSystem extends IteratingSystem {
     }
 
 
-    public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds, boolean shouldProduceStickers, boolean shouldProduceStars){
+    public BackgroundSystem(Vector2 minBounds, Vector2 maxBounds, BackgroundSystemConfig config){
         //No components will be modified here, just need a limited class to
         //  create a family
         super(Family.all(PlayerComponent.class).get());
@@ -80,8 +78,14 @@ public class BackgroundSystem extends IteratingSystem {
         this.bottom = minBounds.y;
         this.right = maxBounds.x;
         this.top = maxBounds.y;
-        this.isUsingStickers = shouldProduceStickers;
-        this.isUsingStars = shouldProduceStars;
+        this.config = config;
+
+        if(!config.isShouldMove()){
+            bgSpeed = 0f;
+            bgClearSpeed = 0f;
+            stickerSpeed = 0f;
+            starSpeed = 0f;
+        }
     }
 
     private void init(){
@@ -203,6 +207,7 @@ public class BackgroundSystem extends IteratingSystem {
                         .setMinMaxPos(0f, right)
                         .setRandomizeTexture(true)
                         .setPossibleRegions(bg.galaxies));
+
                 galaxy.add(VelocityComponent.create(engine)
                         .setSpeed(0f, bgSpeed));
                 engine.addEntity(galaxy);
@@ -246,35 +251,37 @@ public class BackgroundSystem extends IteratingSystem {
 
 
         //Speed Lines
-        for(int i=0;i<speedLineCount;i++){
-            Entity sl = engine.createEntity();
-            int speedIndex = rnd.nextInt(5) + 1;
-            float x = K2MathUtil.getRandomInRange(0.1f, right - 0.2f);
-            float y = K2MathUtil.getRandomInRange(5f, top + 15f);
-            TextureAtlas.AtlasRegion region = Assets.getSpeedLine(speedIndex);
-            sl.add(TextureComponent.create(engine)
-                .setRegion(region));
-            sl.add(VelocityComponent.create(engine)
-                .setSpeed(0f, K2MathUtil.getRandomInRange(speedLineSpeedMin, speedLineSpeedMax)));
-            sl.add(TransformComponent.create(engine)
-                .setPosition(x, y, Z.speedLine)
-                .setScale(1f, 1f)
-                .setOpacity(speedLineOpacity));
-            sl.add(BoundsComponent.create(engine)
-                .setBounds(
-                        x - ((region.getRegionWidth() / 2f) / App.PPM),
-                        y - ((region.getRegionHeight() / 2f) / App.PPM),
-                        (region.getRegionWidth() / App.PPM),
-                        region.getRegionHeight() / App.PPM));
-            sl.add(ScreenWrapComponent.create(engine)
-                .setMode(ScreenWrapMode.VERTICAL)
-                .setReversed(true)
-                .shouldRandomPerpendicularPosition(true)
-                .setMinMaxPos(0.1f, right-0.2f));
-            engine.addEntity(sl);
+        if(config.isShouldProduceSpeedLines()) {
+            for (int i = 0; i < speedLineCount; i++) {
+                Entity sl = engine.createEntity();
+                int speedIndex = rnd.nextInt(5) + 1;
+                float x = K2MathUtil.getRandomInRange(0.1f, right - 0.2f);
+                float y = K2MathUtil.getRandomInRange(5f, top + 15f);
+                TextureAtlas.AtlasRegion region = Assets.getSpeedLine(speedIndex);
+                sl.add(TextureComponent.create(engine)
+                        .setRegion(region));
+                sl.add(VelocityComponent.create(engine)
+                        .setSpeed(0f, K2MathUtil.getRandomInRange(speedLineSpeedMin, speedLineSpeedMax)));
+                sl.add(TransformComponent.create(engine)
+                        .setPosition(x, y, Z.speedLine)
+                        .setScale(1f, 1f)
+                        .setOpacity(speedLineOpacity));
+                sl.add(BoundsComponent.create(engine)
+                        .setBounds(
+                                x - ((region.getRegionWidth() / 2f) / App.PPM),
+                                y - ((region.getRegionHeight() / 2f) / App.PPM),
+                                (region.getRegionWidth() / App.PPM),
+                                region.getRegionHeight() / App.PPM));
+                sl.add(ScreenWrapComponent.create(engine)
+                        .setMode(ScreenWrapMode.VERTICAL)
+                        .setReversed(true)
+                        .shouldRandomPerpendicularPosition(true)
+                        .setMinMaxPos(0.1f, right - 0.2f));
+                engine.addEntity(sl);
+            }
         }
 
-        if(isUsingStars) {
+        if(config.isShouldProduceStars()) {
             //Stars
             for (int i = 0; i < numberOfStars; i++) {
                 Entity star = engine.createEntity();
@@ -306,7 +313,7 @@ public class BackgroundSystem extends IteratingSystem {
             }
         }
 
-        if(isUsingStickers) {
+        if(config.isShouldProduceStickers()) {
             placePlanets();
 
         }
