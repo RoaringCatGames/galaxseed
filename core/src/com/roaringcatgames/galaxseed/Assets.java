@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.roaringcatgames.galaxseed.data.EntityList;
+import com.roaringcatgames.galaxseed.data.EntityListLoader;
 import com.roaringcatgames.galaxseed.data.SpawnList;
 import com.roaringcatgames.galaxseed.data.SpawnListLoader;
 
@@ -24,8 +26,10 @@ public class Assets {
     public static AssetManager load(){
         am = new AssetManager();
         am.setLoader(SpawnList.class, new SpawnListLoader(new InternalFileHandleResolver()));
+        am.setLoader(EntityList.class, new EntityListLoader(new InternalFileHandleResolver()));
 
         am.load("levels/1-level.json", SpawnList.class);
+        am.load("levels/level-select-layout.json", EntityList.class);
 
         am.load(LOADING_ATLAS, TEXTURE_ATLAS);
         am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
@@ -211,6 +215,11 @@ public class Assets {
         return region;
     }
 
+
+    public static EntityList getLevelSelectLayout(){
+        return am.get("levels/level-select-layout.json", EntityList.class);
+    }
+
     /////////////
     //PLAY
     /////////////
@@ -341,6 +350,14 @@ public class Assets {
         return getCachedAnimationFrames(ANI_ATLAS, "impact/ImpactC/impact-asteroid-c");
     }
 
+
+    public static Array<TextureAtlas.AtlasRegion> getAnimationFramesByName(String name){
+        return getCachedAnimationFrames(ANI_ATLAS, name);
+    }
+
+    public static TextureAtlas.AtlasRegion getSpriteByName(String name){
+        return getCachedRegion(SPRITE_ATLAS, name);
+    }
 
     /****
      * ONLY SAFE AFTER am.update() is finished.
@@ -751,10 +768,10 @@ public class Assets {
         return am.get(FONT_128, BITMAP_FONT);
     }
 
-    private static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
-    private static Class<Music> MUSIC = Music.class;
-    private static Class<BitmapFont> BITMAP_FONT = BitmapFont.class;
-    private static Class<Sound> SOUND = Sound.class;
+    public static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
+    public static Class<Music> MUSIC = Music.class;
+    public static Class<BitmapFont> BITMAP_FONT = BitmapFont.class;
+    public static Class<Sound> SOUND = Sound.class;
 
     private static ObjectMap<String, Array<TextureAtlas.AtlasRegion>> animationsCache = new ObjectMap<>();
     private static ObjectMap<String, TextureAtlas.AtlasRegion> spriteCache = new ObjectMap<>();
