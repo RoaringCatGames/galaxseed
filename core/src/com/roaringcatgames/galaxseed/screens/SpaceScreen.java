@@ -10,6 +10,7 @@
     import com.badlogic.gdx.math.Vector2;
     import com.badlogic.gdx.math.Vector3;
     import com.badlogic.gdx.utils.Array;
+    import com.roaringcatgames.galaxseed.Assets;
     import com.roaringcatgames.galaxseed.IGameServiceController;
     import com.roaringcatgames.kitten2d.ashley.systems.*;
     import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
@@ -75,7 +76,7 @@
 
             //Systems to control from screen
             FiringSystem firingSystem = new FiringSystem();
-            enemySpawnSystem = new EnemySpawnSystem();
+            enemySpawnSystem = new EnemySpawnSystem(Assets.getLevel1());
             enemySpawnSystem.setProcessing(false);
             EnemyFiringSystem enemyFiringSystem = new EnemyFiringSystem();
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();

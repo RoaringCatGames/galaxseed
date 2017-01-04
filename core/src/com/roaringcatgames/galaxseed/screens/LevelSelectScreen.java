@@ -113,7 +113,7 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         //            addStickerEntity(x, y, Assets.getLevelPlanet(item++));
         //        }
 
-        Array<Entity> entities = EntityBuilder.buildEntities(engine, Assets.getLevelSelectLayout());
+        Array<Entity> entities = EntityBuilder.buildEntities(engine, Assets.getLevel1().entities);
         Gdx.app.log("LevelSelectSystem", "Entities " + entities.size);
         for(Entity e:entities) {
             Gdx.app.log("LevelSelectSystem", "Adding Entity!!");

@@ -8,20 +8,21 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.roaringcatgames.galaxseed.components.AdjustablePositionComponent;
 import com.roaringcatgames.galaxseed.components.Mappers;
+import com.roaringcatgames.galaxseed.data.EntityBuilder;
+import com.roaringcatgames.galaxseed.data.EntityList;
+import com.roaringcatgames.galaxseed.data.entitydefs.EntityDefinition;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
-import com.roaringcatgames.kitten2d.ashley.VectorUtils;
-import com.roaringcatgames.kitten2d.ashley.components.BoundsComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 
@@ -97,6 +98,17 @@ public class AdjustPositionSystem extends IteratingSystem implements InputProces
 
      @Override
     public boolean keyDown(int keycode) {
+
+         if(keycode == Input.Keys.ENTER){
+             Array<Entity> entities = new Array<>(getEngine().getEntities().toArray());
+             EntityList eList = EntityBuilder.extractEntityList(entities);
+
+             FileHandle file = Gdx.files.local("levels/level-select-layout.json");
+             Json json = new Json();
+             json.setElementType(EntityList.class, "entities", EntityDefinition.class);
+             file.writeString(json.prettyPrint(eList), false);
+             return true;
+         }
 
          if(currentAdjustable != null) {
              AdjustablePositionComponent ac = Mappers.adjust.get(currentAdjustable);
