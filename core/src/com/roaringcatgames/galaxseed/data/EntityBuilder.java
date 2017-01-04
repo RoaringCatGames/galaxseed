@@ -2,13 +2,13 @@ package com.roaringcatgames.galaxseed.data;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.roaringcatgames.galaxseed.Assets;
-import com.roaringcatgames.galaxseed.data.entitydefs.AnimationDefinition;
-import com.roaringcatgames.galaxseed.data.entitydefs.AnimationSetDefinition;
-import com.roaringcatgames.galaxseed.data.entitydefs.EntityDefinition;
-import com.roaringcatgames.galaxseed.data.entitydefs.Transform;
+import com.roaringcatgames.galaxseed.data.entitydefs.*;
+import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.*;
 
 /**
@@ -16,10 +16,10 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
  */
 public class EntityBuilder {
 
-    public static Array<Entity> buildEntities(Engine engine, EntityList entityDefs){
+    public static Array<Entity> buildEntities(Engine engine, Array<EntityDefinition> entityDefs){
         Array<Entity> entities = new Array<>();
 
-        for(EntityDefinition def:entityDefs.entities){
+        for(EntityDefinition def:entityDefs){
             Entity e = engine.createEntity();
             boolean hasTexture = false;
             if(def.transform != null){
@@ -59,6 +59,77 @@ public class EntityBuilder {
         return entities;
     }
 
+    public static EntityList extractEntityList(Array<Entity> entities){
+        EntityList entityDefs = new EntityList();
+
+        for(Entity e:entities){
+            EntityDefinition eDef = new EntityDefinition();
+
+            if(K2ComponentMappers.transform.has(e)){
+                TransformComponent tc = K2ComponentMappers.transform.get(e);
+                eDef.transform = new Transform();
+                eDef.transform.isHidden = tc.isHidden;
+                eDef.transform.opacity = tc.tint.a;
+                eDef.transform.originOffsetX = tc.originOffset.x;
+                eDef.transform.originOffsetY = tc.originOffset.y;
+                eDef.transform.scaleX = tc.scale.x;
+                eDef.transform.scaleY = tc.scale.y;
+                eDef.transform.tint = tc.tint;
+                eDef.transform.x = tc.position.x;
+                eDef.transform.y = tc.position.y;
+                eDef.transform.z = tc.position.z;
+                eDef.transform.rotation = tc.rotation;
+            }
+
+            if(K2ComponentMappers.animation.has(e)){
+                AnimationComponent ac = K2ComponentMappers.animation.get(e);
+                StateComponent sc = K2ComponentMappers.state.get(e);
+                eDef.animationSet = new AnimationSetDefinition();
+                eDef.animationSet.isPaused = ac.isPaused;
+                eDef.animationSet.shouldLoop = sc.isLooping;
+                eDef.animationSet.shouldClearOnBlankState = ac.shouldClearOnBlankState;
+                eDef.animationSet.animations = new Array<>();
+                for(ObjectMap.Entry<String, Animation> ani : ac.animations){
+                    AnimationDefinition aniDef = new AnimationDefinition();
+                    aniDef.stateName = ani.key;
+                    aniDef.frameDuration = ani.value.getFrameDuration();
+                    aniDef.playMode = ani.value.getPlayMode();
+                    //aniDef.animationName = ????
+                    eDef.animationSet.animations.add(aniDef);
+                }
+            }else if(K2ComponentMappers.texture.has(e)){
+                TextureComponent txc = K2ComponentMappers.texture.get(e);
+                //eDef.spriteName = txc.region.
+            }
+
+            if(K2ComponentMappers.circleBounds.has(e)){
+                CircleBoundsComponent cbc = K2ComponentMappers.circleBounds.get(e);
+                Bounds boundDef = new Bounds();
+                boundDef.x = cbc.circle.x;
+                boundDef.y = cbc.circle.y;
+                boundDef.radius = cbc.circle.radius;
+                boundDef.offsetX = cbc.offset.x;
+                boundDef.offsetY = cbc.offset.y;
+                eDef.bounds = boundDef;
+            }
+
+            if(K2ComponentMappers.bounds.has(e)){
+                BoundsComponent bc = K2ComponentMappers.bounds.get(e);
+                Bounds boundDef = new Bounds();
+                boundDef.x = bc.bounds.x;
+                boundDef.y = bc.bounds.y;
+                boundDef.width = bc.bounds.width;
+                boundDef.height = bc.bounds.height;
+                boundDef.offsetX = bc.offset.x;
+                boundDef.offsetY = bc.offset.y;
+                eDef.bounds = boundDef;
+            }
+
+            entityDefs.entities.add(eDef);
+        }
+        return entityDefs;
+    }
+
     private static BoundsComponent buildBoundsComponent(Engine engine, EntityDefinition def) {
         return BoundsComponent.create(engine)
                 .setBounds(def.bounds.x, def.bounds.y, def.bounds.width, def.bounds.height)
@@ -87,9 +158,9 @@ public class EntityBuilder {
                 .setPosition(transform.x, transform.y, transform.z)
                 .setScale(transform.scaleX, transform.scaleY)
                 .setRotation(transform.rotation)
+                .setTint(transform.tint)
                 .setOpacity(transform.opacity)
                 .setOriginOffset(transform.originOffsetX, transform.originOffsetY)
-                .setTint(transform.tint)
                 .setHidden(transform.isHidden);
     }
 }

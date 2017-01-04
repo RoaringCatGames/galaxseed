@@ -2,7 +2,6 @@ package com.roaringcatgames.galaxseed.data;
 
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.galaxseed.App;
-import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.components.EnemyType;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 
@@ -14,11 +13,11 @@ import java.util.Random;
 public class EnemySpawns {
 
     private static Random r = new Random();
-    private static SpawnList levelOneSpawns;
+    private static Level levelOneSpawns;
     public static Array<EnemySpawn> getLevelOneSpawns(){
         if(levelOneSpawns == null){
-            levelOneSpawns = new SpawnList();
-            //levelOneSpawns = Assets.am.get("levels/1-level.json", SpawnList.class);
+            levelOneSpawns = new Level();
+            //levelOneSpawns = Assets.am.get("levels/1-level.json", Level.class);
             float left = -8f;
             float right = App.W + 8f;
             float topMin = (App.H + 5f) - 2f;

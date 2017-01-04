@@ -11,8 +11,10 @@ public class EnemySpawn {
     public boolean hasSpawned = false;
     public float spawnTime;
     public EnemyType enemyType;
-    public Vector2 startPosition = new Vector2();
-    public Vector2 speed = new Vector2();
+    public SpawnPosition startPosition = new SpawnPosition();
+    public SpawnPosition speed = new SpawnPosition();
+    public SpawnPosition endPoint = new SpawnPosition();
+    public SpawnPosition midBezierPoint = new SpawnPosition();
 
     public EnemySpawn(){
     }
@@ -22,5 +24,13 @@ public class EnemySpawn {
         this.enemyType = eType;
         this.startPosition.set(xPos, yPos);
         this.speed.set(xVel, yVel);
+    }
+    public EnemySpawn(float spawnTime, EnemyType eType, float xPos, float yPos, float midX, float midY, float endX, float endY, float speed){
+        this.spawnTime = spawnTime;
+        this.enemyType = eType;
+        this.startPosition.set(xPos, yPos);
+        this.midBezierPoint.set(midX, midY);
+        this.endPoint.set(endX, endY);
+        this.speed.set(speed, speed);
     }
 }

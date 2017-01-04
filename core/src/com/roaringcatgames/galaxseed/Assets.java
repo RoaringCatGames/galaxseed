@@ -4,16 +4,12 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.roaringcatgames.galaxseed.data.EntityList;
-import com.roaringcatgames.galaxseed.data.EntityListLoader;
-import com.roaringcatgames.galaxseed.data.SpawnList;
-import com.roaringcatgames.galaxseed.data.SpawnListLoader;
+import com.roaringcatgames.galaxseed.data.*;
 
 /**
  * Accessor for our Asset Manager and all of our Assets. Handles
@@ -25,11 +21,11 @@ public class Assets {
 
     public static AssetManager load(){
         am = new AssetManager();
-        am.setLoader(SpawnList.class, new SpawnListLoader(new InternalFileHandleResolver()));
-        am.setLoader(EntityList.class, new EntityListLoader(new InternalFileHandleResolver()));
+        am.setLoader(Level.class, new LevelLoader(new InternalFileHandleResolver()));
+        //am.setLoader(EntityList.class, new EntityListLoader(new InternalFileHandleResolver()));
 
-        am.load("levels/1-level.json", SpawnList.class);
-        am.load("levels/level-select-layout.json", EntityList.class);
+        am.load("levels/1-level.json", Level.class);
+        //am.load("levels/level-select-layout.json", EntityList.class);
 
         am.load(LOADING_ATLAS, TEXTURE_ATLAS);
         am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
@@ -216,9 +212,12 @@ public class Assets {
     }
 
 
-    public static EntityList getLevelSelectLayout(){
-        return am.get("levels/level-select-layout.json", EntityList.class);
+    public static Level getLevel1(){
+        return am.get("levels/1-level.json", Level.class);
     }
+//    public static EntityList getLevelSelectLayout(){
+//        return am.get("levels/level-select-layout.json", EntityList.class);
+//    }
 
     /////////////
     //PLAY
