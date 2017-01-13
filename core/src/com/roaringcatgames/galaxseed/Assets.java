@@ -1,9 +1,11 @@
 package com.roaringcatgames.galaxseed;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -311,6 +313,13 @@ public class Assets {
             frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-a"));
             frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-b"));
             frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-c"));
+            frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-d"));
+            frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-e"));
+            frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-f"));
+            frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-g"));
+            frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-h"));
+            frags.add(getCachedRegion(SPRITE_ATLAS, "asteroids/frag-i"));
+
         }
         return frags;
     }
@@ -827,5 +836,9 @@ public class Assets {
 
     public static TextureRegion getDemoBrick() {
         return getCachedRegion(SPRITE_ATLAS, "options/demo");
+    }
+
+    public static TextureRegion getLevelLayoutRef(){
+        return new TextureRegion(new Texture(Gdx.files.internal("level-layout.jpg")));
     }
 }

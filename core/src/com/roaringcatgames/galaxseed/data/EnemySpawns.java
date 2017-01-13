@@ -31,14 +31,14 @@ public class EnemySpawns {
                 float yVel = K2MathUtil.getRandomInRange(-2f, -6f);
 
                 if(i >= 20 && i%20 == 0){
-                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 1f, EnemyType.ASTEROID_C, x, y, xVel, yVel));
-                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 5f, EnemyType.ASTEROID_C, x, y, xVel, yVel));
+                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 1f, EnemyType.ASTEROID_C, x, y, xVel, yVel, true));
+                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 5f, EnemyType.ASTEROID_C, x, y, xVel, yVel, true));
                 }else if(i >= 8 && i%8 == 0){
-                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 1f, EnemyType.ASTEROID_B, x, y, xVel, yVel));
-                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 5f, EnemyType.ASTEROID_B, x, y, xVel, yVel));
+                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 1f, EnemyType.ASTEROID_B, x, y, xVel, yVel, true));
+                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 5f, EnemyType.ASTEROID_B, x, y, xVel, yVel, false));
                 }else {
-                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 1f, EnemyType.ASTEROID_A, x, y, xVel, yVel));
-                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 5f, EnemyType.ASTEROID_A, x, y, xVel, yVel));
+                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 1f, EnemyType.ASTEROID_A, x, y, xVel, yVel, false));
+                    levelOneSpawns.spawns.add(new EnemySpawn((i * 6f) + 5f, EnemyType.ASTEROID_A, x, y, xVel, yVel, true));
                 }
             }
 

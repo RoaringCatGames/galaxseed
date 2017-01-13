@@ -6,9 +6,11 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.galaxseed.data.EnemySpawn;
 import com.roaringcatgames.galaxseed.data.EnemySpawns;
 import com.roaringcatgames.galaxseed.data.Level;
@@ -105,23 +107,54 @@ public class EnemySpawnSystem extends IteratingSystem {
                 EnemyType eType = rnd < getChance(EnemyType.ASTEROID_A) ? EnemyType.ASTEROID_A :
                         rnd < getChance(EnemyType.ASTEROID_B) ? EnemyType.ASTEROID_B :
                                 EnemyType.ASTEROID_C;
-                generateAsteroid(eType, asteroidX, AsteroidY, xVel, AsteroidYVelocity);
+                boolean shouldGeneratePowerUp = false;
+                switch(eType){
+                    case ASTEROID_A:
+                        shouldGeneratePowerUp = r.nextFloat() <= ASTEROID_A_PU_CHANCE;
+                        break;
+                    case ASTEROID_B:
+                        shouldGeneratePowerUp = r.nextFloat() <= ASTEROID_B_PU_CHANCE;
+                        break;
+                    case ASTEROID_C:
+                        shouldGeneratePowerUp = r.nextFloat() <= ASTEROID_C_PU_CHANCE;
+                        break;
+                    default:
+                        shouldGeneratePowerUp = false;
+                }
+                generateAsteroid(eType, asteroidX, AsteroidY, xVel, AsteroidYVelocity, shouldGeneratePowerUp);
                 //Randomize left and right
                 asteroidX =  r.nextFloat() < 0.5f ? AsteroidRightX : AsteroidLeftX;
             }
         }else {
             for(EnemySpawn spawn: spawns.spawns){
                 if(!spawn.hasSpawned && spawn.spawnTime <= elapsedTime){
-                    if(spawn.enemyType == EnemyType.COMET){
-                        generateComet(spawn.startPosition.quadAdjusted(App.W, App.H),
-                                spawn.midBezierPoint.quadAdjusted(App.W, App.H),
-                                spawn.endPoint.quadAdjusted(App.W, App.H),
-                                spawn.speed.x);
-                    }else {
-                        generateAsteroid(spawn.enemyType,
-                                spawn.startPosition.quadAdjusted(App.W, App.H).x,
-                                spawn.startPosition.quadAdjusted(App.W, App.H).y,
-                                spawn.speed.x, spawn.speed.y);
+                    switch(spawn.enemyType){
+                        case COMET:
+                            generateComet(spawn.startPosition.quadAdjusted(App.W, App.H),
+                                    spawn.midBezierPoint.quadAdjusted(App.W, App.H),
+                                    spawn.endPoint.quadAdjusted(App.W, App.H),
+                                    spawn.speed.x);
+                            break;
+
+                        case ASTEROID_FRAG:
+                            generateAsteroid(spawn.enemyType,
+                                    spawn.startPosition.quadAdjusted(App.W, App.H).x,
+                                    spawn.startPosition.quadAdjusted(App.W, App.H).y,
+                                    spawn.speed.x,
+                                    spawn.speed.y,
+                                    spawn.shouldGeneratePowerUp);
+                            break;
+
+                        case ASTEROID_A:
+                        case ASTEROID_B:
+                        case ASTEROID_C:
+                            generateAsteroid(spawn.enemyType,
+                                    spawn.startPosition.quadAdjusted(App.W, App.H).x,
+                                    spawn.startPosition.quadAdjusted(App.W, App.H).y,
+                                    spawn.speed.x,
+                                    spawn.speed.y,
+                                    spawn.shouldGeneratePowerUp);
+                            break;
                     }
 
                     spawn.hasSpawned = true;
@@ -155,7 +188,7 @@ public class EnemySpawnSystem extends IteratingSystem {
     /*******************
      * Private Methods
      *******************/
-    private void generateAsteroid(EnemyType eType, float xPos, float yPos, float xVel, float yVel){
+    private void generateAsteroid(EnemyType eType, float xPos, float yPos, float xVel, float yVel, boolean shouldGeneratePowerUp){
         //Generate Bullets here
         PooledEngine engine = (PooledEngine)getEngine();
         Entity enemy = engine.createEntity();
@@ -168,8 +201,6 @@ public class EnemySpawnSystem extends IteratingSystem {
         enemy.add(RotationComponent.create(engine)
                 .setRotationSpeed(rotSpeed));
 
-
-
         SpawnerComponent spawner = SpawnerComponent.create(engine);
         float stratWeight = r.nextFloat();
         float size;
@@ -177,8 +208,6 @@ public class EnemySpawnSystem extends IteratingSystem {
         TextureRegion tr;
         //EnemyType eType;
         SpawnStrategy strat = SpawnStrategy.ALL_DIRECTIONS;
-
-        boolean shouldGeneratePowerup = false;
 
         EnemyColor eColor;
         Color assColor;
@@ -189,26 +218,26 @@ public class EnemySpawnSystem extends IteratingSystem {
                 size = 2.5f;
                 health = Health.AsteroidA;
                 assColor = Colors.BROWN_ASTEROID;
-                shouldGeneratePowerup = r.nextFloat() <= ASTEROID_A_PU_CHANCE;
                 strat = stratWeight < (homingChance/4f) ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed)
                         .setParticleTextures(Assets.getFrags())
                         .setStrategy(strat)
                         .setSpawnRate(1f);
                 break;
+
             case ASTEROID_B:
                 tr = Assets.getAsteroidB();
                 eColor = EnemyColor.BLUE;
                 size = 3.75f;
                 health = Health.AsteroidB;
                 assColor = Colors.BLUE_ASTEROID;
-                shouldGeneratePowerup = r.nextFloat() <= ASTEROID_B_PU_CHANCE;
                 strat = stratWeight < (homingChance/2f) ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 3f)
                     .setParticleTextures(Assets.getFrags())
                     .setStrategy(strat)
                     .setSpawnRate(2.5f);
                 break;
+
             case ASTEROID_C:
                 tr = Assets.getAsteroidC();
                 eColor = EnemyColor.PURPLE;
@@ -216,7 +245,6 @@ public class EnemySpawnSystem extends IteratingSystem {
                 health = Health.AsteroidC;
                 assColor = Colors.PURPLE_ASTEROID;
 
-                shouldGeneratePowerup = r.nextFloat() <= ASTEROID_C_PU_CHANCE;
                 strat = stratWeight < homingChance ? SpawnStrategy.HOMING_TO_PLAYER : SpawnStrategy.ALL_DIRECTIONS;
                 float spawnRate = r.nextFloat() < 0.1f ? 10f: 4f;
                 spawner.setParticleSpeed(AsteroidFragSpeed + 5f)
@@ -224,6 +252,16 @@ public class EnemySpawnSystem extends IteratingSystem {
                     .setStrategy(strat)
                     .setSpawnRate(spawnRate);
                 break;
+
+            case ASTEROID_FRAG:
+                Array<TextureAtlas.AtlasRegion> frags = Assets.getFrags();
+                tr = frags.get(r.nextInt(frags.size));
+                eColor = EnemyColor.MAROON;
+                size = 1f;
+                health = Health.AsteroidFrag;
+                assColor = Colors.MAROON_ASTEROID;
+                break;
+
             default:
                 tr = Assets.getAsteroidA();
                 eColor = EnemyColor.BROWN;
@@ -243,7 +281,10 @@ public class EnemySpawnSystem extends IteratingSystem {
                 .setPosition(xPos, yPos, Z.enemy)
                 .setScale(1f, 1f)
                 .setTint(assColor));
-        enemy.add(spawner);
+        if(eType != EnemyType.ASTEROID_FRAG) {
+            enemy.add(spawner);
+        }
+
         enemy.add(HealthComponent.create(engine)
             .setHealth(health)
             .setMaxHealth(health));
@@ -254,7 +295,7 @@ public class EnemySpawnSystem extends IteratingSystem {
         enemy.add(EnemyComponent.create(engine)
             .setEnemyType(eType)
             .setEnemyColor(eColor)
-            .setShouldGeneratePowerup(shouldGeneratePowerup));
+            .setShouldGeneratePowerup(shouldGeneratePowerUp));
         enemy.add(VelocityComponent.create(engine)
                 .setSpeed(xVel, yVel));
 
