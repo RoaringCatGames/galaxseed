@@ -1,6 +1,46 @@
 {
   "spawns": [
     {
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "startPosition": {
+        "x": 0,
+        "y": 0,
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -1.25
+      },
+      "shouldGeneratePowerUp":true
+    },
+    {
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "startPosition": {
+        "x": 2,
+        "y": 0,
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -1.25
+      }
+    },
+    {
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "startPosition": {
+        "x": -2,
+        "y": 0,
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -1.25
+      }
+    },
+    {
       "spawnTime": 1,
       "enemyType": "ASTEROID_A",
       "startPosition": {

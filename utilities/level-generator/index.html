@@ -1,0 +1,54 @@
+<html>
+<head>
+    <title>GalaxSeed Level Creator</title>
+    <script src="./level-generator.js"></script>
+</head>
+<body>
+    <h1>Add Spawn</h1>
+    <form id="spawn-form" onsubmit="addSpawn()">
+        <label for="spawnTime">Spawn Time (seconds)</label>
+        <input id="spawnTime" name="spawnTime" type="number"
+               size="3"
+               min="0" max="2.5" step="0.05" />
+
+        <label for="enemyType">Enemy Type</label>
+        <select id="enemyType" name="enemyType">
+            <option value="ASTEROID_A">ASTEROID_A</option>
+            <option value="ASTEROID_B">ASTEROID_B</option>
+            <option value="ASTEROID_C">ASTEROID_C</option>
+            <option value="ASTEROID_FRAG">ASTEROID_FRAG</option>
+            <option value="COMET">COMET</option>
+        </select>
+
+        <label for="offsetQuadrant">Offset Type</label>
+        <select id="offsetQuadrant" name="offsetQuadrant">
+            <option value="QUAD_1">QUAD_1</option>
+            <option value="QUAD_2">QUAD_2</option>
+            <option value="QUAD_3">QUAD_3</option>
+            <option value="QUAD_4">QUAD_4</option>
+            <option value="CENTER">CENTER</option>
+        </select>
+
+        <label for="startX">Start X Offset</label>
+        <input id="startX" name="startX" type="number"
+               size="3" step="0.05" />
+        <label for="startY">Start Y Offset</label>
+        <input id="startY" name="startY" type="number"
+               size="3" step="0.05" />
+
+        <label for="speedX">Speed X</label>
+        <input id="speedX" name="speedX" type="number"
+               size="3" step="0.05" />
+        <label for="speedY">Speed Y</label>
+        <input id="speedY" name="speedY" type="number"
+               size="3" step="0.05" />
+
+        <button type="submit">Add</button>
+    </form>
+
+    <h1>Add Entity</h1>
+    <form id="entity-form">
+
+    </form>
+</body>
+</html>

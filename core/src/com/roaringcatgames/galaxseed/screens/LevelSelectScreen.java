@@ -15,6 +15,7 @@ import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.components.AdjustablePositionComponent;
 import com.roaringcatgames.galaxseed.components.Mappers;
 import com.roaringcatgames.galaxseed.data.EntityBuilder;
+import com.roaringcatgames.galaxseed.data.entitydefs.Transform;
 import com.roaringcatgames.galaxseed.systems.AdjustPositionSystem;
 import com.roaringcatgames.galaxseed.systems.BackgroundSystem;
 import com.roaringcatgames.galaxseed.systems.BackgroundSystemConfig;
@@ -119,6 +120,13 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
             Gdx.app.log("LevelSelectSystem", "Adding Entity!!");
             engine.addEntity(e);
         }
+
+        Entity e = engine.createEntity();
+        e.add(TransformComponent.create(engine)
+            .setPosition(App.W/2f, 90.46875f/2f, Z.player + 5f));
+        e.add(TextureComponent.create(engine)
+            .setRegion(Assets.getLevelLayoutRef()));
+        engine.addEntity(e);
 
         game.playBgMusic(Songs.LEVEL_SELECT);
     }

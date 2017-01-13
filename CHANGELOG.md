@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Indicate when the player needs to switch weapons.
+- Loads levels from file
 
 ### Changed
 - Force Player to select a weapon before game begins.
