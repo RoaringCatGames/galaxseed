@@ -6,6 +6,7 @@ package com.roaringcatgames.galaxseed.data.entitydefs;
  */
 public class EntityDefinition {
 
+    public String name;
     public Transform transform;
     public String spriteName;
     public AnimationSetDefinition animationSet;

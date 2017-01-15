@@ -84,7 +84,7 @@
             GameOverSystem gameOverSystem = new GameOverSystem(game);
             gameOverSystem.setProcessing(false);
             PathFollowSystem pathFollowSystem = new PathFollowSystem();
-            bgSystem = new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(false, true, true, true));
+            bgSystem = new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(true, false, true, true, true));
 
             //Custom Systems
 

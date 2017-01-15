@@ -4,9 +4,11 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.components.CameraComponent;
@@ -158,7 +160,7 @@ public class CameraPanningSystem extends IteratingSystem implements GestureDetec
     }
 
     private void log(String msg){
-        //Gdx.app.log("CameraPanningSystem", msg);
+        Gdx.app.log("CameraPanningSystem", msg);
     }
 
     /*
@@ -166,7 +168,11 @@ public class CameraPanningSystem extends IteratingSystem implements GestureDetec
      */
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
-        log("Touchdown Fired");
+       // log("Touchdown Fired");
+        Vector3 touch = new Vector3(x, y, 0);
+        this.game.getViewport().unproject(touch);
+        log("X: " + touch.x + " Y: " + touch.y);
+
         velocityX = 0f;
         velocityY = 0f;
         return false;
@@ -174,19 +180,19 @@ public class CameraPanningSystem extends IteratingSystem implements GestureDetec
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
-        log("Tap");
+        //log("Tap");
         return false;
     }
 
     @Override
     public boolean longPress(float x, float y) {
-        log("LongPress Fired");
+        //log("LongPress Fired");
         return false;
     }
 
     @Override
     public boolean fling(float velocityX, float velocityY, int button) {
-        log("Fling");
+        //log("Fling");
         if(!isPanning) {
             this.velocityX = velocityX / ppm;
             this.velocityY = velocityY / ppm;
@@ -197,7 +203,7 @@ public class CameraPanningSystem extends IteratingSystem implements GestureDetec
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
-        log("Pan");
+        //log("Pan");
         currentPositionChange.set(deltaX/ppm, deltaY/ppm);
 
         panFiredThisFrame = true;
@@ -207,7 +213,7 @@ public class CameraPanningSystem extends IteratingSystem implements GestureDetec
 
     @Override
     public boolean panStop(float x, float y, int pointer, int button) {
-        log("PanStop");
+        //log("PanStop");
         currentPositionChange.set(0f, 0f);
         velocityX = 0f;
         velocityY = 0f;
@@ -216,18 +222,18 @@ public class CameraPanningSystem extends IteratingSystem implements GestureDetec
 
     @Override
     public boolean zoom(float initialDistance, float distance) {
-        log("Zoom");
+        //log("Zoom");
         return false;
     }
 
     @Override
     public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-        log("Pinch");
+        //log("Pinch");
         return false;
     }
 
     @Override
     public void pinchStop() {
-        log("PinchStop");
+        //log("PinchStop");
     }
 }

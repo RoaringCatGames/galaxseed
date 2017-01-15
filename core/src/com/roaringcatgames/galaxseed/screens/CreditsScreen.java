@@ -54,7 +54,7 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
 
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(game.getCamera().viewportWidth, game.getCamera().viewportHeight);
-        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(false, true, true, true)));
+        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(true, false, true, true, true)));
 
         //Kitten2D Systems
         engine.addSystem(new ShakeSystem());

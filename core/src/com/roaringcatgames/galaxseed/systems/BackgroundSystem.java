@@ -154,21 +154,17 @@ public class BackgroundSystem extends IteratingSystem {
                                                              Assets.getBgClearTileC();
                 Array<TextureRegion> galaxies = null;
                 float galaxyFloat = rnd.nextFloat();
-                if(galaxyFloat < 0.3f){
+                if(config.isShouldProduceGalaxies() && galaxyFloat < 0.3f){
                     galaxies = new Array<>();
-//                    if(galaxyFloat < 0.f){
                         galaxies.add(Assets.getGalaxyA());
                         galaxies.add(Assets.getGalaxyB());
                         galaxies.add(Assets.getGalaxyC());
-
-//                    }else{
                         galaxies.add(Assets.getGasCluster());
                         galaxies.add(Assets.getGasClusterA());
                         galaxies.add(Assets.getGasClusterB());
                         galaxies.add(Assets.getGasClusterC());
                         galaxies.add(Assets.getGasClusterD());
                         galaxies.add(Assets.getGasClusterE());
-//                    }
                 }
 
                 tiles.add(new BackgroundTile(x, y, rotation, texture, clearTile, galaxies));
@@ -197,8 +193,6 @@ public class BackgroundSystem extends IteratingSystem {
                         .setPosition(bg.x + xOff, bg.y + yOff, Z.bg_galaxy)
                         .setRotation(bg.rotation)
                         .setScale(1f, 1f));
-//                galaxy.add(BoundsComponent.create(engine)
-//                        .setBounds(bg.x - 4.6875f, bg.y - 4.6875f, 9.375f, 9.375f));
                 galaxy.add(ScreenWrapComponent.create(engine)
                         .setMode(ScreenWrapMode.VERTICAL)
                         .setReversed(true)
