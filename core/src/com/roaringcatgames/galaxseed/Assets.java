@@ -26,6 +26,7 @@ public class Assets {
         am.setLoader(Level.class, new LevelLoader(new InternalFileHandleResolver()));
         //am.setLoader(EntityList.class, new EntityListLoader(new InternalFileHandleResolver()));
 
+        am.load("levels/level-select.json", Level.class);
         am.load("levels/1-level.json", Level.class);
         //am.load("levels/level-select-layout.json", EntityList.class);
 
@@ -213,7 +214,9 @@ public class Assets {
         return region;
     }
 
-
+    public static Level getLevelSelect(){
+        return am.get("levels/level-select.json", Level.class);
+    }
     public static Level getLevel1(){
         return am.get("levels/1-level.json", Level.class);
     }

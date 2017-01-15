@@ -1,0 +1,631 @@
+{
+  "spawns": [
+    {
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "startPosition": {
+        "x": 0,
+        "y": 0,
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -1.25
+      },
+      "shouldGeneratePowerUp":true
+    },
+    {
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "startPosition": {
+        "x": 2,
+        "y": 0,
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -1.25
+      }
+    },
+    {
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "startPosition": {
+        "x": -2,
+        "y": 0,
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -1.25
+      }
+    },
+    {
+      "spawnTime": 1,
+      "enemyType": "ASTEROID_A",
+      "startPosition": {
+        "x": 5,
+        "y": -5,
+        "offsetQuadrant": "QUAD_1"
+      },
+      "speed": {
+        "x": -2,
+        "y": -3
+      }
+    },
+    {
+      "spawnTime": 3,
+      "enemyType": "COMET",
+      "startPosition": {
+        "x": 1,
+        "y": 10,
+        "offsetQuadrant": "QUAD_2"
+      },
+      "midBezierPoint": {
+        "x": -5,
+        "y": 2,
+        "offsetQuadrant": "QUAD_3"
+      },
+      "endPoint":{
+        "x": 20,
+        "y": -25,
+        "offsetQuadrant": "QUAD_4"
+      },
+      "speed": {
+        "x": 0.125,
+        "y": 0
+      }
+    },
+    {
+      "spawnTime": 5,
+      "enemyType": "COMET",
+      "startPosition": {
+        "x": -1,
+        "y": 5,
+        "offsetQuadrant": "QUAD_1"
+      },
+      "midBezierPoint": {
+        "x": -28,
+        "y": -2,
+        "offsetQuadrant": "QUAD_3"
+      },
+      "endPoint":{
+        "x": -10,
+        "y": -25,
+        "offsetQuadrant": "QUAD_3"
+      },
+      "speed": {
+        "x": 0.125,
+        "y": 0
+      }
+    }
+  ],
+  "entities": [
+    {
+      "name":"level-select_1",
+      "transform": {
+        "position":{
+          "x": -0.343751,
+          "y": 4.737499,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 1,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet": {
+        "isPaused": true,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": true,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/1",
+            "frameDuration": 0.16,
+            "playMode": "LOOP"
+          }
+        ]
+      }
+    },
+    {
+      "name":"level-select_2",
+      "transform": {
+        "position":{
+          "x": -3.0937505,
+          "y": 15.625209,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 1,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet": {
+        "isPaused": true,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": true,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/2",
+            "frameDuration": 0.16,
+            "playMode": "LOOP"
+          }
+        ]
+      }
+    },
+    {
+      "name":"level-select_3",
+      "transform": {
+        "position":{
+          "x": -0.562501,
+          "y": 26.812709,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 1,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet": {
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": true,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/3",
+            "frameDuration": 0.0526,
+            "playMode": "LOOP"
+          }
+        ]
+      }
+    },
+    {
+      "name":"level-select_4",
+      "transform": {
+        "position":{
+          "x": 7.499998,
+          "y": 34.81271,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 1,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet": {
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": true,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/4",
+            "frameDuration": 0.0526,
+            "playMode": "LOOP"
+          }
+        ]
+      }
+    },
+    {
+      "name":"level-select_5",
+      "transform": {
+        "position":{
+          "x": 0.749999,
+          "y": 43.723603,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 1,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet": {
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": true,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/5",
+            "frameDuration": 0.0526,
+            "playMode": "LOOP"
+          }
+        ]
+      }
+    },
+    {
+      "name":"level-select_6",
+      "transform": {
+        "position":{
+          "x": 3.187498,
+          "y": 55.08266,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 1,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet": {
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": true,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/6",
+            "frameDuration": 0.0526,
+            "playMode": "LOOP"
+          }
+        ]
+      }
+    },
+    {
+      "name":"level-select_7",
+      "transform": {
+        "position":{
+          "x": 4.874998,
+          "y": 66.45581,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 1,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet": {
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": true,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/7",
+            "frameDuration": 0.0526,
+            "playMode": "LOOP"
+          }
+        ]
+      }
+    },
+    {
+      "name":"level-select_8",
+      "transform": {
+        "position":{
+          "x": 0.093749,
+          "y": 76.61565,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 1,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet": {
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": true,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/8",
+            "frameDuration": 0.0526,
+            "playMode": "LOOP"
+          }
+        ]
+      }
+    },
+    {
+      "name":"level-select_9",
+      "transform": {
+        "position":{
+          "x": -0.125001,
+          "y": 88.11249,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 1,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet": {
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": true,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/9",
+            "frameDuration": 0.0526,
+            "playMode": "LOOP_PINGPONG"
+          }
+        ]
+      }
+    },
+    {
+      "name":"galaxy-a",
+      "transform": {
+        "position":{
+          "x": 6.53125,
+          "y": 2.90625,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 98,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"galaxy-a"
+    },
+    {
+      "name":"GalaxyCluster",
+      "transform": {
+        "position":{
+          "x": -3.3750005,
+          "y": 9.093749,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 98,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"GasCluster"
+    },
+    {
+      "name":"GasCluster-c",
+      "transform": {
+        "position":{
+          "x": -1.093751,
+          "y": 21.343748,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 98,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"GasCluster-c"
+    },
+    {
+      "name":"galaxy-c",
+      "transform": {
+        "position":{
+          "x": 9.96875,
+          "y": 31.973976,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 98,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"galaxy-c"
+    },
+    {
+      "name":"galaxy-b",
+      "transform": {
+        "position":{
+          "x": -2.531251,
+          "y": 38.192726,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 98,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"galaxy-b"
+    },
+    {
+      "name":"GasCluster-a",
+      "transform": {
+        "position":{
+          "x": -0.2500001,
+          "y": 59.39104,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 98,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"GasCluster-a"
+    },
+    {
+      "name":"GasCluster-b",
+      "transform": {
+        "position":{
+          "x": 9.96875,
+          "y": 68.65698,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 98,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"GasCluster-b"
+    },
+    {
+      "name":"GasCluster-e",
+      "transform": {
+        "position":{
+          "x": -5.5625,
+          "y": 74.06323,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 98,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"GasCluster-e"
+    },
+    {
+      "name":"GasCluster-d",
+      "transform": {
+        "position":{
+          "x": 8.687498,
+          "y": 83.84374,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 98,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"GasCluster-d"
+    },
+    {
+      "name":"level-1-area",
+      "transform": {
+        "position":{
+          "x": 0,
+          "y": 5,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 95,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"level-screen/level-1"
+    }
+  ]
+}
