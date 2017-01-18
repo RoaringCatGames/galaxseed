@@ -610,10 +610,10 @@
       "transform": {
         "position":{
           "x": 0,
-          "y": 5,
+          "y": 8.98437475,
           "offsetQuadrant": "CENTER_X"
         },
-        "z": 95,
+        "z": 96,
         "scaleX": 1,
         "scaleY": 1,
         "opacity": 1,
@@ -626,6 +626,73 @@
         }
       },
       "spriteName":"level-screen/level-1"
-    }
+    },
+    {
+      "name":"level-2-area",
+      "transform": {
+        "position":{
+          "x": -3.5,
+          "y": 16.88029475,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 96,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"level-screen/level-2"
+    },
+    {
+      "name":"level-3-area",
+      "transform": {
+        "position":{
+          "x": 4.906249,
+          "y": 26.564789,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 96,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"level-screen/level-3"
+    },
+    {
+      "name":"level-4-area",
+      "transform": {
+        "position":{
+          "x": -1.406251,
+          "y": 33.81479,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 96,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"level-screen/level-4"
+    },
+
   ]
 }

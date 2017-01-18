@@ -152,8 +152,6 @@ public class CameraPanningSystem extends IteratingSystem implements GestureDetec
         cameraEntity.add(TransformComponent.create(getEngine())
                 .setPosition(App.W / 2f, App.H / 2f, Z.player)
                 .setRotation(30f));
-        cameraEntity.add(TextureComponent.create(getEngine())
-                .setRegion(Assets.getArtCat()));
         cameraEntity.add(CameraComponent.create(getEngine())
                 .setCamera(game.getCamera()));
         getEngine().addEntity(cameraEntity);

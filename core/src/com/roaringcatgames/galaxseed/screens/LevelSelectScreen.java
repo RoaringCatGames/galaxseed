@@ -146,15 +146,6 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         engine.update(deltaChange);
     }
 
-    private void addStickerEntity(float x, float y, TextureRegion region){
-        Entity e = engine.createEntity();
-        e.add(TransformComponent.create(engine)
-                .setPosition(x, y, Z.flames)
-                .setRotation(30f));
-        e.add(TextureComponent.create(engine)
-                .setRegion(region));
-        engine.addEntity(e);
-    }
 
     /****
      * EntityListener
