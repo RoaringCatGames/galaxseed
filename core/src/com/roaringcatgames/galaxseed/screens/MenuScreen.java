@@ -76,7 +76,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(App.W, App.H);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
-        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(false, true, true, true)));
+        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(true, false, true, true, true)));
         engine.addSystem(new CleanUpSystem(minBounds, maxBounds));
         engine.addSystem(new PlayerSystem(playerPosition, 0.5f, game, WeaponType.GUN_SEEDS));
         engine.addSystem(new FiringSystem());

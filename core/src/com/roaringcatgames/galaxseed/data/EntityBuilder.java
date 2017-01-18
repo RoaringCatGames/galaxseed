@@ -4,8 +4,10 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.data.entitydefs.*;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
@@ -75,8 +77,8 @@ public class EntityBuilder {
                 eDef.transform.scaleX = tc.scale.x;
                 eDef.transform.scaleY = tc.scale.y;
                 eDef.transform.tint = tc.tint;
-                eDef.transform.x = tc.position.x;
-                eDef.transform.y = tc.position.y;
+//                eDef.transform.x = tc.position.x;
+//                eDef.transform.y = tc.position.y;
                 eDef.transform.z = tc.position.z;
                 eDef.transform.rotation = tc.rotation;
             }
@@ -154,8 +156,9 @@ public class EntityBuilder {
     }
 
     private static TransformComponent buildTransformComponent(Engine engine, Transform transform){
+        Vector2 quadPosition = transform.position.quadAdjusted(App.W, App.H);
         return TransformComponent.create(engine)
-                .setPosition(transform.x, transform.y, transform.z)
+                .setPosition(quadPosition.x, quadPosition.y, transform.z)
                 .setScale(transform.scaleX, transform.scaleY)
                 .setRotation(transform.rotation)
                 .setTint(transform.tint)

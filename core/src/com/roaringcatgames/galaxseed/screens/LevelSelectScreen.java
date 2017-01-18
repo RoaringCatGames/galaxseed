@@ -63,7 +63,7 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         CameraPanningSystem cameraPanningSystem = new CameraPanningSystem(minCamBounds, maxCamBounds, game, App.PPM,  5f);
 
         BackgroundSystem bgSystem = new BackgroundSystem(minBounds, maxBounds,
-                new BackgroundSystemConfig(false, false, false, false));
+                new BackgroundSystemConfig(false, false, false, false, false));
 
         AdjustPositionSystem adjustPositionSystem = new AdjustPositionSystem(game.getCamera(), game.getViewport(), game);
 
@@ -114,19 +114,19 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         //            addStickerEntity(x, y, Assets.getLevelPlanet(item++));
         //        }
 
-        Array<Entity> entities = EntityBuilder.buildEntities(engine, Assets.getLevel1().entities);
+        Array<Entity> entities = EntityBuilder.buildEntities(engine, Assets.getLevelSelect().entities);
         Gdx.app.log("LevelSelectSystem", "Entities " + entities.size);
         for(Entity e:entities) {
             Gdx.app.log("LevelSelectSystem", "Adding Entity!!");
             engine.addEntity(e);
         }
 
-        Entity e = engine.createEntity();
-        e.add(TransformComponent.create(engine)
-            .setPosition(App.W/2f, 90.46875f/2f, Z.player + 5f));
-        e.add(TextureComponent.create(engine)
-            .setRegion(Assets.getLevelLayoutRef()));
-        engine.addEntity(e);
+//        Entity e = engine.createEntity();
+//        e.add(TransformComponent.create(engine)
+//            .setPosition(App.W/2f, 90.46875f/2f, Z.player + 5f));
+//        e.add(TextureComponent.create(engine)
+//            .setRegion(Assets.getLevelLayoutRef()));
+//        engine.addEntity(e);
 
         game.playBgMusic(Songs.LEVEL_SELECT);
     }

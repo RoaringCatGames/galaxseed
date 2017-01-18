@@ -1,6 +1,5 @@
 package com.roaringcatgames.galaxseed.data;
 
-import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.galaxseed.components.EnemyType;
 
 /**
@@ -12,10 +11,10 @@ public class EnemySpawn {
     public float spawnTime;
     public boolean shouldGeneratePowerUp = false;
     public EnemyType enemyType;
-    public SpawnPosition startPosition = new SpawnPosition();
-    public SpawnPosition speed = new SpawnPosition();
-    public SpawnPosition endPoint = new SpawnPosition();
-    public SpawnPosition midBezierPoint = new SpawnPosition();
+    public QuadPositionedVector2 startPosition = new QuadPositionedVector2();
+    public QuadPositionedVector2 speed = new QuadPositionedVector2();
+    public QuadPositionedVector2 endPoint = new QuadPositionedVector2();
+    public QuadPositionedVector2 midBezierPoint = new QuadPositionedVector2();
 
     public EnemySpawn(){
     }
