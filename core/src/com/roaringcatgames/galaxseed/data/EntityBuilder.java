@@ -2,7 +2,10 @@ package com.roaringcatgames.galaxseed.data;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.State;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -12,6 +15,8 @@ import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.data.entitydefs.*;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+
+import java.awt.*;
 
 /**
  * Utility to convert EntityDefinitions to Ashley Entities with Kitten2d/LitterBox Components
@@ -157,6 +162,7 @@ public class EntityBuilder {
 
     private static TransformComponent buildTransformComponent(Engine engine, Transform transform){
         Vector2 quadPosition = transform.position.quadAdjusted(App.W, App.H);
+        Gdx.app.log("TINT", transform.tint.r + " " + transform.tint.g + " " + transform.tint.b);
         return TransformComponent.create(engine)
                 .setPosition(quadPosition.x, quadPosition.y, transform.z)
                 .setScale(transform.scaleX, transform.scaleY)
