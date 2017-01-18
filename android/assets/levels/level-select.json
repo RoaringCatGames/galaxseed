@@ -106,7 +106,7 @@
       "transform": {
         "position":{
           "x": -0.343751,
-          "y": 4.737499,
+          "y": 4.237499,
           "offsetQuadrant": "CENTER_X"
         },
         "z": 1,
@@ -122,7 +122,7 @@
         }
       },
       "animationSet": {
-        "isPaused": true,
+        "isPaused": false,
         "shouldClearOnBlankState": false,
         "shouldLoop": true,
         "animations": [
@@ -140,7 +140,7 @@
       "transform": {
         "position":{
           "x": -3.0937505,
-          "y": 15.625209,
+          "y": 15.425209,
           "offsetQuadrant": "CENTER_X"
         },
         "z": 1,
@@ -156,7 +156,7 @@
         }
       },
       "animationSet": {
-        "isPaused": true,
+        "isPaused": false,
         "shouldClearOnBlankState": false,
         "shouldLoop": true,
         "animations": [
@@ -174,7 +174,7 @@
       "transform": {
         "position":{
           "x": -0.562501,
-          "y": 26.812709,
+          "y": 26.312709,
           "offsetQuadrant": "CENTER_X"
         },
         "z": 1,
@@ -242,7 +242,7 @@
       "transform": {
         "position":{
           "x": 0.749999,
-          "y": 43.723603,
+          "y": 44.003603,
           "offsetQuadrant": "CENTER_X"
         },
         "z": 1,
@@ -276,7 +276,7 @@
       "transform": {
         "position":{
           "x": 3.187498,
-          "y": 55.08266,
+          "y": 55.13266,
           "offsetQuadrant": "CENTER_X"
         },
         "z": 1,
@@ -378,7 +378,7 @@
       "transform": {
         "position":{
           "x": -0.125001,
-          "y": 88.11249,
+          "y": 87.41249,
           "offsetQuadrant": "CENTER_X"
         },
         "z": 1,
@@ -609,8 +609,8 @@
       "name":"level-1-area",
       "transform": {
         "position":{
-          "x": 0,
-          "y": 8.98437475,
+          "x": -0.3,
+          "y": 7.48437475,
           "offsetQuadrant": "CENTER_X"
         },
         "z": 96,
@@ -631,7 +631,7 @@
       "name":"level-2-area",
       "transform": {
         "position":{
-          "x": -3.5,
+          "x": -3.1,
           "y": 16.88029475,
           "offsetQuadrant": "CENTER_X"
         },
@@ -693,6 +693,395 @@
       },
       "spriteName":"level-screen/level-4"
     },
-
+    {
+      "name":"level-5-area",
+      "transform": {
+        "position":{
+          "x": 4.343749,
+          "y": 47.329,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 96,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"level-screen/level-5"
+    },
+    {
+      "name":"level-6-area",
+      "transform": {
+        "position":{
+          "x": -3.750001,
+          "y": 58.687496,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 96,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"level-screen/level-6"
+    },
+    {
+      "name":"level-7-area",
+      "transform": {
+        "position":{
+          "x": 0,
+          "y": 70.24999,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 96,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"level-screen/level-7"
+    },
+    {
+      "name":"level-8-area",
+      "transform": {
+        "position":{
+          "x": 6.062498,
+          "y": 77.00999,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 96,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"level-screen/level-8"
+    },
+    {
+      "name":"level-9-area",
+      "transform": {
+        "position":{
+          "x": 0,
+          "y": 85.56249,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 96,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "spriteName":"level-screen/level-9"
+    },
+    {
+      "name":"paws-1",
+      "transform": {
+        "position":{
+          "x": -2.063,
+          "y": 9.8125,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 95,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "rotation": 15,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet":{
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": false,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/paw",
+            "frameDuration": 0.16,
+            "playMode": "NORMAL"
+          }
+        ]
+      }
+    },
+    {
+      "name":"paws-2",
+      "transform": {
+        "position":{
+          "x": -2.063,
+          "y": 20.9125,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 95,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "rotation": -14,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet":{
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": false,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/paw",
+            "frameDuration": 0.16,
+            "playMode": "NORMAL"
+          }
+        ]
+      }
+    },
+    {
+      "name":"paws-3",
+      "transform": {
+        "position":{
+          "x": 3.563,
+          "y": 30.5125,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 95,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "rotation": -45,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet":{
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": false,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/paw",
+            "frameDuration": 0.16,
+            "playMode": "NORMAL"
+          }
+        ]
+      }
+    },
+    {
+      "name":"paws-4",
+      "transform": {
+        "position":{
+          "x": 4.031249,
+          "y": 39.38075,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 95,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "rotation": 40,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet":{
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": false,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/paw",
+            "frameDuration": 0.16,
+            "playMode": "NORMAL"
+          }
+        ]
+      }
+    },
+    {
+      "name":"paws-5",
+      "transform": {
+        "position":{
+          "x": 1.812499,
+          "y": 49.396774,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 95,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "rotation": -13,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet":{
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": false,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/paw",
+            "frameDuration": 0.16,
+            "playMode": "NORMAL"
+          }
+        ]
+      }
+    },
+    {
+      "name":"paws-6",
+      "transform": {
+        "position":{
+          "x": 4.112499,
+          "y": 60.946774,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 95,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "rotation": -10,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet":{
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": false,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/paw",
+            "frameDuration": 0.16,
+            "playMode": "NORMAL"
+          }
+        ]
+      }
+    },
+    {
+      "name":"paws-7",
+      "transform": {
+        "position":{
+          "x": 2.387498,
+          "y": 71.546774,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 95,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "rotation": 30,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet":{
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": false,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/paw",
+            "frameDuration": 0.16,
+            "playMode": "NORMAL"
+          }
+        ]
+      }
+    },
+    {
+      "name":"paws-8",
+      "transform": {
+        "position":{
+          "x": 0,
+          "y": 82.046774,
+          "offsetQuadrant": "CENTER_X"
+        },
+        "z": 95,
+        "scaleX": 1,
+        "scaleY": 1,
+        "opacity": 1,
+        "rotation": 2,
+        "isHidden": false,
+        "tint":{
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "animationSet":{
+        "isPaused": false,
+        "shouldClearOnBlankState": false,
+        "shouldLoop": false,
+        "animations": [
+          {
+            "stateName": "DEFAULT",
+            "animationName": "level-screen/paw",
+            "frameDuration": 0.16,
+            "playMode": "NORMAL"
+          }
+        ]
+      }
+    }
   ]
 }
