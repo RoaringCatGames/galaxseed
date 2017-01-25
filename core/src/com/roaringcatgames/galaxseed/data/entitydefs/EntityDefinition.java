@@ -11,4 +11,5 @@ public class EntityDefinition {
     public String spriteName;
     public AnimationSetDefinition animationSet;
     public Bounds bounds;
+    public Clickable clickable;
 }

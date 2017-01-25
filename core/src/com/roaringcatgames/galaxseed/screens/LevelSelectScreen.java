@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
+import com.roaringcatgames.galaxseed.LevelSelectActionResolver;
 import com.roaringcatgames.galaxseed.components.AdjustablePositionComponent;
 import com.roaringcatgames.galaxseed.components.Mappers;
 import com.roaringcatgames.galaxseed.data.EntityBuilder;
@@ -72,6 +73,7 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), game.getCamera(), App.PPM);
         TextRenderingSystem textRenderingSystem = new TextRenderingSystem(game.getBatch(), game.getGUICamera(), game.getCamera());
 
+        ClickableSystem clickableSystem = new ClickableSystem(game, new LevelSelectActionResolver(game));
 
         engine.addEntityListener(this);
 
@@ -90,11 +92,13 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
 //        }
 
         //Add Systems
+
         engine.addSystem(rotationSystem);
         engine.addSystem(movementSystem);
         engine.addSystem(boundsSystem);
         engine.addSystem(screenWrapSystem);
         engine.addSystem(cameraPanningSystem);
+        engine.addSystem(clickableSystem);
 
         engine.addSystem(bgSystem);
 
@@ -104,6 +108,7 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         engine.addSystem(textRenderingSystem);
 
         engine.addSystem(adjustPositionSystem);
+        engine.addSystem(new DebugSystem(game.getCamera()));
 
         //Initial Entities
         //        int item = 1;

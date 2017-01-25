@@ -60,6 +60,12 @@ public class EntityBuilder {
                 }
             }
 
+            if(def.clickable != null){
+                e.add(ClickableComponent.create(engine)
+                    .setEventName(def.clickable.eventName)
+                    .setPointer(def.clickable.pointer));
+            }
+
             entities.add(e);
         }
 
