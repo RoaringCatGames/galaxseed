@@ -697,7 +697,7 @@
       "name":"level-5-area",
       "transform": {
         "position":{
-          "x": 4.343749,
+          "x": 9.343749,
           "y": 47.329,
           "offsetQuadrant": "CENTER_X"
         },
@@ -719,7 +719,7 @@
       "name":"level-6-area",
       "transform": {
         "position":{
-          "x": -3.750001,
+          "x": -8.250001,
           "y": 58.687496,
           "offsetQuadrant": "CENTER_X"
         },
