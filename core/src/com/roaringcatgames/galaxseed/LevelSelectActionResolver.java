@@ -27,6 +27,7 @@ public class LevelSelectActionResolver implements IActionResolver {
                 AnimationComponent ac = K2ComponentMappers.animation.get(firingEntity);
                 ac.setPaused(false);
                 Gdx.app.log("LevelSelectActionResolver", "Action Fired");
+                game.switchScreens("GAME");
                 break;
             case "LEVEL_2":
 

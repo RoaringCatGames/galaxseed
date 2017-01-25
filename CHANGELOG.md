@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Indicate when the player needs to switch weapons.
 - Loads levels from file
+- Load layout entities from file
+- Allow selecting of level from level select screen
 
 ### Changed
 - Force Player to select a weapon before game begins.
