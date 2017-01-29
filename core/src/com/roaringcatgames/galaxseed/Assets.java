@@ -19,6 +19,10 @@ import com.roaringcatgames.galaxseed.data.*;
  */
 public class Assets {
 
+    public enum BubbleColor{
+        BLUE, RED, GREEN
+    }
+
     public static AssetManager am;
 
     public static AssetManager load(){
@@ -223,6 +227,25 @@ public class Assets {
 //    public static EntityList getLevelSelectLayout(){
 //        return am.get("levels/level-select-layout.json", EntityList.class);
 //    }
+
+    public static TextureAtlas.AtlasRegion getInfoBubbleBackground(BubbleColor bc){
+        TextureAtlas.AtlasRegion region = null;
+        switch(bc){
+            case BLUE:
+                region = getCachedRegion(SPRITE_ATLAS, "level-screen/bg-blue");
+                break;
+            case RED:
+                region = getCachedRegion(SPRITE_ATLAS, "level-screen/bg-red");
+                break;
+            case GREEN:
+                region = getCachedRegion(SPRITE_ATLAS, "level-screen/bg-green");
+                break;
+            default:
+                break;
+        }
+
+        return region;
+    }
 
     /////////////
     //PLAY

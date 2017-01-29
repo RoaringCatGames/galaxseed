@@ -56,5 +56,9 @@ public class Z {
     public static final float message = 0f;
 
 
-
+    //Level Select
+    public static final float info_bubble = 20f;
+    public static final float info_score = 19f;
+    public static final float info_name = 19f;
+    public static final float info_play = 19f;
 }
