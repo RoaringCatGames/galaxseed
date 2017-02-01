@@ -251,8 +251,12 @@ public class Assets {
         return getCachedRegion(SPRITE_ATLAS, "level-screen/lvl-" + levelPos);
     }
 
-    public static TextureAtlas.AtlasRegion getInfoBubbleTree(){
-        return getCachedRegion(SPRITE_ATLAS, "level-screen/tree");
+    public static TextureAtlas.AtlasRegion getInfoBubbleTreeBG(){
+        return getCachedRegion(SPRITE_ATLAS, "level-screen/tree-bg");
+    }
+
+    public static TextureAtlas.AtlasRegion getInfoBubbleTreeFilled(){
+        return getCachedRegion(SPRITE_ATLAS, "level-screen/tree-filled");
     }
 
     /////////////

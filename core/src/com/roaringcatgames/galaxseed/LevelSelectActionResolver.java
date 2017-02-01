@@ -41,7 +41,7 @@ public class LevelSelectActionResolver implements IActionResolver {
                                             .getStoredString(LevelUtil.LEVEL_SCORE_PREFIX + LevelUtil.LEVEL_NAMES[0]);
                 LevelStats stats = LevelUtil.parseLevelStats(1, levelJson);
                 int treeCount = LevelUtil.calculateTreeCount(stats);
-                addLevelInfoBubble(LevelUtil.LEVEL_NAMES[0], Assets.BubbleColor.GREEN, treeCount, firingEntity, containerEngine);
+                addLevelInfoBubble(LevelUtil.LEVEL_NAMES[0], Assets.BubbleColor.GREEN, 2, firingEntity, containerEngine);
                 break;
             case "LEVEL_2":
 
@@ -55,7 +55,7 @@ public class LevelSelectActionResolver implements IActionResolver {
                                     Entity selectAnchor,
                                     Engine engine){
         float infoTitleYOff = 2f;
-        float infoTitleXOff = -2f;
+        float infoTitleXOff = -1.85f;
         float tweenTime = 0.5f;
         //Create the bg bubble intro
         TransformComponent tc = K2ComponentMappers.transform.get(selectAnchor);
@@ -63,7 +63,6 @@ public class LevelSelectActionResolver implements IActionResolver {
         bgBubble.add(TransformComponent.create(engine)
             .setPosition(tc.position.x, tc.position.y, Z.info_bubble)
             .setScale(0.1f, 0.1f));
-
         bgBubble.add(TextureComponent.create(engine)
             .setRegion(Assets.getInfoBubbleBackground(bubbleColor)));
 
@@ -74,7 +73,6 @@ public class LevelSelectActionResolver implements IActionResolver {
                 .push(Tween.to(bgBubble, K2EntityTweenAccessor.POSITION_Y, tweenTime)
                         .target(tc.position.y + 5f)
                         .ease(TweenEquations.easeOutBack));
-
         bgBubble.add(TweenComponent.create(engine)
             .setTimeline(parallel));
 
@@ -94,36 +92,33 @@ public class LevelSelectActionResolver implements IActionResolver {
 
         Entity leftTree = engine.createEntity();
         leftTree.add(TransformComponent.create(engine)
-            .setPosition(tc.position.x + leftTreeXOffset, tc.position.y + treeYOffset, Z.info_score)
-            .setTint(treeCount >= 1 ? Colors.PLAIN_WHITE : Colors.DULLED_GRAY));
+            .setPosition(tc.position.x + leftTreeXOffset, tc.position.y + treeYOffset, Z.info_score));
         leftTree.add(FollowerComponent.create(engine)
                 .setMode(FollowMode.STICKY)
                 .setTarget(bgBubble)
                 .setOffset(leftTreeXOffset, treeYOffset));
         leftTree.add(TextureComponent.create(engine)
-                .setRegion(Assets.getInfoBubbleTree()));
+                .setRegion(treeCount >= 1 ? Assets.getInfoBubbleTreeFilled() : Assets.getInfoBubbleTreeBG()));
 
         Entity middleTree = engine.createEntity();
         middleTree.add(TransformComponent.create(engine)
-                .setPosition(tc.position.x, tc.position.y + treeYOffset, Z.info_score)
-                .setTint(treeCount >= 2 ? Colors.PLAIN_WHITE : Colors.DULLED_GRAY));
+                .setPosition(tc.position.x, tc.position.y + treeYOffset, Z.info_score));
         middleTree.add(FollowerComponent.create(engine)
                 .setMode(FollowMode.STICKY)
                 .setTarget(bgBubble)
                 .setOffset(0f, treeYOffset));
         middleTree.add(TextureComponent.create(engine)
-                .setRegion(Assets.getInfoBubbleTree()));
+                .setRegion(treeCount >= 2 ? Assets.getInfoBubbleTreeFilled() : Assets.getInfoBubbleTreeBG()));
 
         Entity rightTree = engine.createEntity();
         rightTree.add(TransformComponent.create(engine)
-                .setPosition(tc.position.x + rightTreeXOffset, tc.position.y + treeYOffset, Z.info_score)
-                .setTint(treeCount == 3 ? Colors.PLAIN_WHITE : Colors.DULLED_GRAY));
+                .setPosition(tc.position.x + rightTreeXOffset, tc.position.y + treeYOffset, Z.info_score));
         rightTree.add(FollowerComponent.create(engine)
                 .setMode(FollowMode.STICKY)
                 .setTarget(bgBubble)
                 .setOffset(rightTreeXOffset, treeYOffset));
         rightTree.add(TextureComponent.create(engine)
-                .setRegion(Assets.getInfoBubbleTree()));
+                .setRegion(treeCount >= 3 ? Assets.getInfoBubbleTreeFilled() : Assets.getInfoBubbleTreeBG()));
 
         engine.addEntity(bgBubble);
         engine.addEntity(levelNameEntity);
