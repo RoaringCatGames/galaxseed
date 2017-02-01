@@ -247,6 +247,14 @@ public class Assets {
         return region;
     }
 
+    public static TextureAtlas.AtlasRegion getInfoBubbleLevelName(int levelPos){
+        return getCachedRegion(SPRITE_ATLAS, "level-screen/lvl-" + levelPos);
+    }
+
+    public static TextureAtlas.AtlasRegion getInfoBubbleTree(){
+        return getCachedRegion(SPRITE_ATLAS, "level-screen/tree");
+    }
+
     /////////////
     //PLAY
     /////////////

@@ -8,7 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.roaringcatgames.galaxseed.data.entitydefs.Transform;
 import com.roaringcatgames.galaxseed.data.scores.LevelStats;
-import com.roaringcatgames.galaxseed.data.scores.ScoreUtil;
+import com.roaringcatgames.galaxseed.data.LevelUtil;
 import com.roaringcatgames.galaxseed.values.Colors;
 import com.roaringcatgames.galaxseed.values.Z;
 import com.roaringcatgames.kitten2d.ashley.IActionResolver;
@@ -38,10 +38,10 @@ public class LevelSelectActionResolver implements IActionResolver {
                 Gdx.app.log("LevelSelectActionResolver", "Action Fired");
                 //game.switchScreens("GAME");
                 String levelJson = this.game.getPreferenceManager()
-                                            .getStoredString(ScoreUtil.LEVEL_SCORE_PREFIX + ScoreUtil.LEVEL_NAMES[0]);
-                LevelStats stats = ScoreUtil.parseLevelStats(1, levelJson);
-                int treeCount = ScoreUtil.calculateTreeCount(stats);
-                addLevelInfoBubble("Level 1", Assets.BubbleColor.BLUE, treeCount, firingEntity, containerEngine);
+                                            .getStoredString(LevelUtil.LEVEL_SCORE_PREFIX + LevelUtil.LEVEL_NAMES[0]);
+                LevelStats stats = LevelUtil.parseLevelStats(1, levelJson);
+                int treeCount = LevelUtil.calculateTreeCount(stats);
+                addLevelInfoBubble(LevelUtil.LEVEL_NAMES[0], Assets.BubbleColor.GREEN, treeCount, firingEntity, containerEngine);
                 break;
             case "LEVEL_2":
 
@@ -54,7 +54,8 @@ public class LevelSelectActionResolver implements IActionResolver {
                                     int treeCount,
                                     Entity selectAnchor,
                                     Engine engine){
-        float infoTitleYOff = 2.5f;
+        float infoTitleYOff = 2f;
+        float infoTitleXOff = -2f;
         float tweenTime = 0.5f;
         //Create the bg bubble intro
         TransformComponent tc = K2ComponentMappers.transform.get(selectAnchor);
@@ -79,17 +80,55 @@ public class LevelSelectActionResolver implements IActionResolver {
 
         Entity levelNameEntity = engine.createEntity();
         levelNameEntity.add(TransformComponent.create(engine)
-            .setPosition(tc.position.x, tc.position.y + infoTitleYOff, Z.info_name)
-            .setTint(Colors.GLOW_YELLOW));
+            .setPosition(tc.position.x + infoTitleXOff, tc.position.y + infoTitleYOff, Z.info_name));
         levelNameEntity.add(FollowerComponent.create(engine)
             .setMode(FollowMode.STICKY)
             .setTarget(bgBubble)
-            .setOffset(0f, infoTitleYOff));
-        levelNameEntity.add(TextComponent.create(engine)
-            .setText(levelName)
-            .setFont(Assets.get32Font()));
+            .setOffset(infoTitleXOff, infoTitleYOff));
+        levelNameEntity.add(TextureComponent.create(engine)
+            .setRegion(Assets.getInfoBubbleLevelName(LevelUtil.getLevelNumberByName(levelName))));
+
+        float leftTreeXOffset = (5f/2f)/2f * -1f;
+        float rightTreeXOffset = (5f/2f)/2f;
+        float treeYOffset = 0f;
+
+        Entity leftTree = engine.createEntity();
+        leftTree.add(TransformComponent.create(engine)
+            .setPosition(tc.position.x + leftTreeXOffset, tc.position.y + treeYOffset, Z.info_score)
+            .setTint(treeCount >= 1 ? Colors.PLAIN_WHITE : Colors.DULLED_GRAY));
+        leftTree.add(FollowerComponent.create(engine)
+                .setMode(FollowMode.STICKY)
+                .setTarget(bgBubble)
+                .setOffset(leftTreeXOffset, treeYOffset));
+        leftTree.add(TextureComponent.create(engine)
+                .setRegion(Assets.getInfoBubbleTree()));
+
+        Entity middleTree = engine.createEntity();
+        middleTree.add(TransformComponent.create(engine)
+                .setPosition(tc.position.x, tc.position.y + treeYOffset, Z.info_score)
+                .setTint(treeCount >= 2 ? Colors.PLAIN_WHITE : Colors.DULLED_GRAY));
+        middleTree.add(FollowerComponent.create(engine)
+                .setMode(FollowMode.STICKY)
+                .setTarget(bgBubble)
+                .setOffset(0f, treeYOffset));
+        middleTree.add(TextureComponent.create(engine)
+                .setRegion(Assets.getInfoBubbleTree()));
+
+        Entity rightTree = engine.createEntity();
+        rightTree.add(TransformComponent.create(engine)
+                .setPosition(tc.position.x + rightTreeXOffset, tc.position.y + treeYOffset, Z.info_score)
+                .setTint(treeCount == 3 ? Colors.PLAIN_WHITE : Colors.DULLED_GRAY));
+        rightTree.add(FollowerComponent.create(engine)
+                .setMode(FollowMode.STICKY)
+                .setTarget(bgBubble)
+                .setOffset(rightTreeXOffset, treeYOffset));
+        rightTree.add(TextureComponent.create(engine)
+                .setRegion(Assets.getInfoBubbleTree()));
 
         engine.addEntity(bgBubble);
         engine.addEntity(levelNameEntity);
+        engine.addEntity(leftTree);
+        engine.addEntity(middleTree);
+        engine.addEntity(rightTree);
     }
 }

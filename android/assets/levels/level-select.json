@@ -1,105 +1,5 @@
 {
-  "spawns": [
-    {
-      "spawnTime": 0,
-      "enemyType": "ASTEROID_FRAG",
-      "startPosition": {
-        "x": 0,
-        "y": 0,
-        "offsetQuadrant": "CENTER"
-      },
-      "speed": {
-        "x": 0,
-        "y": -1.25
-      },
-      "shouldGeneratePowerUp":true
-    },
-    {
-      "spawnTime": 0,
-      "enemyType": "ASTEROID_FRAG",
-      "startPosition": {
-        "x": 2,
-        "y": 0,
-        "offsetQuadrant": "CENTER"
-      },
-      "speed": {
-        "x": 0,
-        "y": -1.25
-      }
-    },
-    {
-      "spawnTime": 0,
-      "enemyType": "ASTEROID_FRAG",
-      "startPosition": {
-        "x": -2,
-        "y": 0,
-        "offsetQuadrant": "CENTER"
-      },
-      "speed": {
-        "x": 0,
-        "y": -1.25
-      }
-    },
-    {
-      "spawnTime": 1,
-      "enemyType": "ASTEROID_A",
-      "startPosition": {
-        "x": 5,
-        "y": -5,
-        "offsetQuadrant": "QUAD_1"
-      },
-      "speed": {
-        "x": -2,
-        "y": -3
-      }
-    },
-    {
-      "spawnTime": 3,
-      "enemyType": "COMET",
-      "startPosition": {
-        "x": 1,
-        "y": 10,
-        "offsetQuadrant": "QUAD_2"
-      },
-      "midBezierPoint": {
-        "x": -5,
-        "y": 2,
-        "offsetQuadrant": "QUAD_3"
-      },
-      "endPoint":{
-        "x": 20,
-        "y": -25,
-        "offsetQuadrant": "QUAD_4"
-      },
-      "speed": {
-        "x": 0.125,
-        "y": 0
-      }
-    },
-    {
-      "spawnTime": 5,
-      "enemyType": "COMET",
-      "startPosition": {
-        "x": -1,
-        "y": 5,
-        "offsetQuadrant": "QUAD_1"
-      },
-      "midBezierPoint": {
-        "x": -28,
-        "y": -2,
-        "offsetQuadrant": "QUAD_3"
-      },
-      "endPoint":{
-        "x": -10,
-        "y": -25,
-        "offsetQuadrant": "QUAD_3"
-      },
-      "speed": {
-        "x": 0.125,
-        "y": 0
-      }
-    }
-  ],
+  "spawns": [],
   "entities": [
     {
       "name":"level-select_1",
@@ -117,7 +17,7 @@
           "y": 4.237499,
           "offsetQuadrant": "CENTER_X"
         },
-        "z": 1,
+        "z": 30,
         "scaleX": 1,
         "scaleY": 1,
         "opacity": 1,
@@ -151,7 +51,7 @@
           "y": 15.425209,
           "offsetQuadrant": "CENTER_X"
         },
-        "z": 1,
+        "z": 30,
         "scaleX": 1,
         "scaleY": 1,
         "opacity": 1,

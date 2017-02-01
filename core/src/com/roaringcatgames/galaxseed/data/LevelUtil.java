@@ -1,11 +1,12 @@
-package com.roaringcatgames.galaxseed.data.scores;
+package com.roaringcatgames.galaxseed.data;
 
 import com.badlogic.gdx.utils.Json;
+import com.roaringcatgames.galaxseed.data.scores.LevelStats;
 
 /**
  * Utility for parsing Level Scores
  */
-public class ScoreUtil {
+public class LevelUtil {
 
     private static final String LEVEL_1 = "level-1";
     private static final String LEVEL_2 = "level-2";
@@ -22,6 +23,18 @@ public class ScoreUtil {
         LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5,
         LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9
     };
+
+    public static int getLevelNumberByName(String lvlName){
+        int pos = 0;
+
+        for(int i=0;i<LEVEL_NAMES.length;i++){
+            if(LEVEL_NAMES[0].equals(lvlName)){
+                pos = i + 1;
+                break;
+            }
+        }
+        return pos;
+    }
 
     public static LevelStats parseLevelStats(int level, String levelJson){
         Json json = new Json();
