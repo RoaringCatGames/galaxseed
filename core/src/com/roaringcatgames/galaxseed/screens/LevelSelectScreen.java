@@ -1,9 +1,6 @@
 package com.roaringcatgames.galaxseed.screens;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
-import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -60,6 +57,9 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         RotationSystem rotationSystem = new RotationSystem();
         MovementSystem movementSystem = new MovementSystem();
         BoundsSystem boundsSystem = new BoundsSystem();
+        FollowerSystem followerSystem = new FollowerSystem(Family.one(
+                TransformComponent.class
+        ).get());
         ScreenWrapSystem screenWrapSystem = new ScreenWrapSystem(minBounds, maxBounds, App.PPM);
         CameraPanningSystem cameraPanningSystem = new CameraPanningSystem(minCamBounds, maxCamBounds, game, App.PPM,  5f);
 
@@ -96,6 +96,7 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         engine.addSystem(rotationSystem);
         engine.addSystem(movementSystem);
         engine.addSystem(boundsSystem);
+        engine.addSystem(followerSystem);
         engine.addSystem(screenWrapSystem);
         engine.addSystem(cameraPanningSystem);
         engine.addSystem(clickableSystem);
