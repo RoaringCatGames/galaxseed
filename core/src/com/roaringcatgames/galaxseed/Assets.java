@@ -228,23 +228,8 @@ public class Assets {
 //        return am.get("levels/level-select-layout.json", EntityList.class);
 //    }
 
-    public static TextureAtlas.AtlasRegion getInfoBubbleBackground(BubbleColor bc){
-        TextureAtlas.AtlasRegion region = null;
-        switch(bc){
-            case BLUE:
-                region = getCachedRegion(SPRITE_ATLAS, "level-screen/bg-blue");
-                break;
-            case RED:
-                region = getCachedRegion(SPRITE_ATLAS, "level-screen/bg-red");
-                break;
-            case GREEN:
-                region = getCachedRegion(SPRITE_ATLAS, "level-screen/bg-green");
-                break;
-            default:
-                break;
-        }
-
-        return region;
+    public static TextureAtlas.AtlasRegion getInfoBubbleBackground(){
+       return getCachedRegion(SPRITE_ATLAS, "level-screen/bg");
     }
 
     public static TextureAtlas.AtlasRegion getInfoBubbleLevelName(int levelPos){
@@ -257,6 +242,10 @@ public class Assets {
 
     public static TextureAtlas.AtlasRegion getInfoBubbleTreeFilled(){
         return getCachedRegion(SPRITE_ATLAS, "level-screen/tree-filled");
+    }
+
+    public static Array<TextureAtlas.AtlasRegion> getInfoPlayButtonFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "level-screen/play");
     }
 
     /////////////

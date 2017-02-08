@@ -36,12 +36,14 @@ public class LevelSelectActionResolver implements IActionResolver {
                 AnimationComponent ac = K2ComponentMappers.animation.get(firingEntity);
                 ac.setPaused(false);
                 Gdx.app.log("LevelSelectActionResolver", "Action Fired");
-                //game.switchScreens("GAME");
                 String levelJson = this.game.getPreferenceManager()
                                             .getStoredString(LevelUtil.LEVEL_SCORE_PREFIX + LevelUtil.LEVEL_NAMES[0]);
                 LevelStats stats = LevelUtil.parseLevelStats(1, levelJson);
                 int treeCount = LevelUtil.calculateTreeCount(stats);
-                addLevelInfoBubble(LevelUtil.LEVEL_NAMES[0], Assets.BubbleColor.GREEN, 2, firingEntity, containerEngine);
+                addLevelInfoBubble(LevelUtil.LEVEL_NAMES[0], treeCount, firingEntity, containerEngine);
+                break;
+            case "START_LEVEL_1":
+                this.game.switchScreens("GAME");
                 break;
             case "LEVEL_2":
 
@@ -50,12 +52,12 @@ public class LevelSelectActionResolver implements IActionResolver {
     }
 
     private void addLevelInfoBubble(String levelName,
-                                    Assets.BubbleColor bubbleColor,
                                     int treeCount,
                                     Entity selectAnchor,
                                     Engine engine){
         float infoTitleYOff = 2f;
         float infoTitleXOff = -1.85f;
+        float infoPlayButtonYOff = -1.5f;
         float tweenTime = 0.5f;
         //Create the bg bubble intro
         TransformComponent tc = K2ComponentMappers.transform.get(selectAnchor);
@@ -64,7 +66,7 @@ public class LevelSelectActionResolver implements IActionResolver {
             .setPosition(tc.position.x, tc.position.y, Z.info_bubble)
             .setScale(0.1f, 0.1f));
         bgBubble.add(TextureComponent.create(engine)
-            .setRegion(Assets.getInfoBubbleBackground(bubbleColor)));
+            .setRegion(Assets.getInfoBubbleBackground()));
 
         Timeline parallel = Timeline.createParallel()
                 .push(Tween.to(bgBubble, K2EntityTweenAccessor.SCALE, tweenTime)
@@ -86,8 +88,23 @@ public class LevelSelectActionResolver implements IActionResolver {
         levelNameEntity.add(TextureComponent.create(engine)
             .setRegion(Assets.getInfoBubbleLevelName(LevelUtil.getLevelNumberByName(levelName))));
 
-        float leftTreeXOffset = (5f/2f)/2f * -1f;
-        float rightTreeXOffset = (5f/2f)/2f;
+        Entity playButtonEntity = engine.createEntity();
+        playButtonEntity.add(TransformComponent.create(engine)
+            .setPosition(tc.position.x, tc.position.y + infoPlayButtonYOff, Z.info_play));
+        playButtonEntity.add(FollowerComponent.create(engine)
+            .setMode(FollowMode.STICKY)
+            .setTarget(bgBubble)
+            .setOffset(0f, infoPlayButtonYOff));
+        playButtonEntity.add(TextureComponent.create(engine));
+        playButtonEntity.add(AnimationComponent.create(engine)
+            .addAnimation("DEFAULT", Animations.getPlayButton())
+            .setPaused(true));
+        playButtonEntity.add(StateComponent.create(engine)
+            .set("DEFAULT")
+            .setLooping(false));
+
+        float leftTreeXOffset = (6f/2f)/2f * -1f;
+        float rightTreeXOffset = (6f/2f)/2f;
         float treeYOffset = 0f;
 
         Entity leftTree = engine.createEntity();
@@ -122,6 +139,7 @@ public class LevelSelectActionResolver implements IActionResolver {
 
         engine.addEntity(bgBubble);
         engine.addEntity(levelNameEntity);
+        engine.addEntity(playButtonEntity);
         engine.addEntity(leftTree);
         engine.addEntity(middleTree);
         engine.addEntity(rightTree);
