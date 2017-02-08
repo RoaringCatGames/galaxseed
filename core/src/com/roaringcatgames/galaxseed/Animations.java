@@ -16,6 +16,9 @@ public class Animations {
     private static Animation titleTreeLeaf;
     private static Animation swipeTutorial;
 
+    //Level Select
+    private static Animation playButton;
+
     //Game
     private static Animation starA;
     private static Animation starB;
@@ -89,6 +92,7 @@ public class Animations {
         titleTreeLeaf = new Animation(1f/12f, Assets.getTitleTreeLeafFrames(), Animation.PlayMode.LOOP);
         swipeTutorial = new Animation(1f/15f, Assets.getSwipeFrames());
 
+        playButton = new Animation(1f/6f, Assets.getInfoPlayButtonFrames(), Animation.PlayMode.NORMAL);
 
         starA = new Animation(1f/3f, Assets.getStarAFrames());
         starB = new Animation(1f/3f, Assets.getStarBFrames());
@@ -180,6 +184,10 @@ public class Animations {
 
     public static Animation getSwipeTutorial() {
         return swipeTutorial;
+    }
+
+    public static Animation getPlayButton(){
+        return playButton;
     }
 
     public static Animation getStarA() {
