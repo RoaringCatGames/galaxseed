@@ -24,7 +24,7 @@ allprojects {
         ashleyVersion = '1.7.3'
         aiVersion = '1.7.0'
         tweenEngineVersion = '6.3.4'
-        ashleyExtensionsVersion = '0.4.5-SNAPSHOT'
+        ashleyExtensionsVersion = '0.4.6-SNAPSHOT'
         outputName = 'galaxseed'
         googlePlayServicesVersion = '9.4.0'
     }
