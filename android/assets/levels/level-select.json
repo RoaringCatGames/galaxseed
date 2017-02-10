@@ -9,7 +9,7 @@
       "bounds":{
         "x": 0,
         "y": 0,
-        "radius": 2
+        "radius": 1.5
       },
       "transform": {
         "position":{
@@ -45,6 +45,14 @@
     },
     {
       "name":"level-select_2",
+      "clickable":{
+        "eventName":"LEVEL_2"
+      },
+      "bounds":{
+        "x": 0,
+        "y": 0,
+        "radius": 1.5
+      },
       "transform": {
         "position":{
           "x": -3.0937505,
@@ -79,13 +87,21 @@
     },
     {
       "name":"level-select_3",
+      "clickable":{
+        "eventName":"LEVEL_3"
+      },
+      "bounds":{
+        "x": 0,
+        "y": 0,
+        "radius": 1.5
+      },
       "transform": {
         "position":{
           "x": -0.562501,
           "y": 26.312709,
           "offsetQuadrant": "CENTER_X"
         },
-        "z": 1,
+        "z": 30,
         "scaleX": 1,
         "scaleY": 1,
         "opacity": 1,
@@ -113,13 +129,21 @@
     },
     {
       "name":"level-select_4",
+      "clickable":{
+        "eventName":"LEVEL_4"
+      },
+      "bounds":{
+        "x": 0,
+        "y": 0,
+        "radius": 1.5
+      },
       "transform": {
         "position":{
           "x": 7.499998,
           "y": 34.81271,
           "offsetQuadrant": "CENTER_X"
         },
-        "z": 1,
+        "z": 30,
         "scaleX": 1,
         "scaleY": 1,
         "opacity": 1,
@@ -147,13 +171,21 @@
     },
     {
       "name":"level-select_5",
+      "clickable":{
+        "eventName":"LEVEL_5"
+      },
+      "bounds":{
+        "x": 0,
+        "y": 0,
+        "radius": 1.5
+      },
       "transform": {
         "position":{
           "x": 0.749999,
           "y": 44.003603,
           "offsetQuadrant": "CENTER_X"
         },
-        "z": 1,
+        "z": 30,
         "scaleX": 1,
         "scaleY": 1,
         "opacity": 1,
@@ -181,13 +213,21 @@
     },
     {
       "name":"level-select_6",
+      "clickable":{
+        "eventName":"LEVEL_6"
+      },
+      "bounds":{
+        "x": 0,
+        "y": 0,
+        "radius": 1.5
+      },
       "transform": {
         "position":{
           "x": 3.187498,
           "y": 55.13266,
           "offsetQuadrant": "CENTER_X"
         },
-        "z": 1,
+        "z": 30,
         "scaleX": 1,
         "scaleY": 1,
         "opacity": 1,
@@ -215,13 +255,21 @@
     },
     {
       "name":"level-select_7",
+      "clickable":{
+        "eventName":"LEVEL_7"
+      },
+      "bounds":{
+        "x": 0,
+        "y": 0,
+        "radius": 1.5
+      },
       "transform": {
         "position":{
           "x": 4.874998,
           "y": 66.45581,
           "offsetQuadrant": "CENTER_X"
         },
-        "z": 1,
+        "z": 30,
         "scaleX": 1,
         "scaleY": 1,
         "opacity": 1,
@@ -249,13 +297,21 @@
     },
     {
       "name":"level-select_8",
+      "clickable":{
+        "eventName":"LEVEL_8"
+      },
+      "bounds":{
+        "x": 0,
+        "y": 0,
+        "radius": 1.5
+      },
       "transform": {
         "position":{
           "x": 0.093749,
           "y": 76.61565,
           "offsetQuadrant": "CENTER_X"
         },
-        "z": 1,
+        "z": 30,
         "scaleX": 1,
         "scaleY": 1,
         "opacity": 1,
@@ -283,13 +339,21 @@
     },
     {
       "name":"level-select_9",
+      "clickable":{
+        "eventName":"LEVEL_9"
+      },
+      "bounds":{
+        "x": 0,
+        "y": 0,
+        "radius": 1.5
+      },
       "transform": {
         "position":{
           "x": -0.125001,
           "y": 87.41249,
           "offsetQuadrant": "CENTER_X"
         },
-        "z": 1,
+        "z": 30,
         "scaleX": 1,
         "scaleY": 1,
         "opacity": 1,
