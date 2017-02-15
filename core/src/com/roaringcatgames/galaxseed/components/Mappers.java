@@ -27,4 +27,5 @@ public class Mappers {
     public static ComponentMapper<ShieldComponent> shield = ComponentMapper.getFor(ShieldComponent.class);
     public static ComponentMapper<CameraComponent> camera = ComponentMapper.getFor(CameraComponent.class);
     public static ComponentMapper<AdjustablePositionComponent> adjust = ComponentMapper.getFor(AdjustablePositionComponent.class);
+    public static ComponentMapper<NameComponent> name = ComponentMapper.getFor(NameComponent.class);
 }

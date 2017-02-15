@@ -14,10 +14,12 @@ import com.roaringcatgames.galaxseed.components.AdjustablePositionComponent;
 import com.roaringcatgames.galaxseed.components.Mappers;
 import com.roaringcatgames.galaxseed.data.EntityBuilder;
 import com.roaringcatgames.galaxseed.data.entitydefs.Transform;
+import com.roaringcatgames.galaxseed.data.scores.LevelProgression;
 import com.roaringcatgames.galaxseed.systems.AdjustPositionSystem;
 import com.roaringcatgames.galaxseed.systems.BackgroundSystem;
 import com.roaringcatgames.galaxseed.systems.BackgroundSystemConfig;
 import com.roaringcatgames.galaxseed.systems.CameraPanningSystem;
+import com.roaringcatgames.galaxseed.values.Colors;
 import com.roaringcatgames.galaxseed.values.Songs;
 import com.roaringcatgames.galaxseed.values.Z;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
@@ -38,6 +40,7 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
 
     private IGameProcessor game;
     private Engine engine;
+    private LevelProgression levelProgression = new LevelProgression();
 
     public LevelSelectScreen(IGameProcessor game){
         this.game = game;
@@ -46,6 +49,11 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
     @Override
     protected void init() {
         engine = new PooledEngine();
+
+        this.game.getPreferenceManager().updateBoolean("level-3-passed", true);
+        for(int i=2;i<10;i++){
+            levelProgression.levelUnlocks.put(String.valueOf(i), this.game.getPreferenceManager().getStoredBoolean("level-" + i + "-passed"));
+        }
 
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(App.W, App.H*3f);
@@ -79,7 +87,6 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         engine.addEntityListener(this);
 
         //Add Systems
-
         engine.addSystem(rotationSystem);
         engine.addSystem(movementSystem);
         engine.addSystem(boundsSystem);
@@ -102,6 +109,18 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         Gdx.app.log("LevelSelectSystem", "Entities " + entities.size);
         for(Entity e:entities) {
             Gdx.app.log("LevelSelectSystem", "Adding Entity!!");
+            if(Mappers.name.has(e)){
+                String name = Mappers.name.get(e).name;
+                if(name.startsWith("level-")){
+
+                    String levelValue = name.substring(6, 7);
+                    Gdx.app.log("VALUE", "Level Value: " + levelValue);
+                    if(!"1".equals(levelValue) && levelProgression.levelUnlocks.get(levelValue)){
+                        TransformComponent tc = K2ComponentMappers.transform.get(e);
+                        tc.setTint(Colors.PLAIN_WHITE);
+                    }
+                }
+            }
             engine.addEntity(e);
         }
 

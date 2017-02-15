@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
+import com.roaringcatgames.galaxseed.components.NameComponent;
 import com.roaringcatgames.galaxseed.data.entitydefs.*;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.components.*;
@@ -64,6 +65,11 @@ public class EntityBuilder {
                 e.add(ClickableComponent.create(engine)
                     .setEventName(def.clickable.eventName)
                     .setPointer(def.clickable.pointer));
+            }
+
+            if(def.name != null && !"".equals(def.name.trim())){
+                e.add(NameComponent.create(engine)
+                    .setName(def.name));
             }
 
             entities.add(e);

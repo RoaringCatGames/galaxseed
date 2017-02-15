@@ -2,7 +2,7 @@
   "spawns": [],
   "entities": [
     {
-      "name":"level-select_1",
+      "name":"level-1-select",
       "clickable":{
         "eventName":"LEVEL_1"
       },
@@ -44,7 +44,7 @@
       }
     },
     {
-      "name":"level-select_2",
+      "name":"level-2-select",
       "clickable":{
         "eventName":"LEVEL_2"
       },
@@ -86,7 +86,7 @@
       }
     },
     {
-      "name":"level-select_3",
+      "name":"level-3-select",
       "clickable":{
         "eventName":"LEVEL_3"
       },
@@ -128,7 +128,7 @@
       }
     },
     {
-      "name":"level-select_4",
+      "name":"level-4-select",
       "clickable":{
         "eventName":"LEVEL_4"
       },
@@ -170,7 +170,7 @@
       }
     },
     {
-      "name":"level-select_5",
+      "name":"level-5-select",
       "clickable":{
         "eventName":"LEVEL_5"
       },
@@ -212,7 +212,7 @@
       }
     },
     {
-      "name":"level-select_6",
+      "name":"level-6-select",
       "clickable":{
         "eventName":"LEVEL_6"
       },
@@ -254,7 +254,7 @@
       }
     },
     {
-      "name":"level-select_7",
+      "name":"level-7-select",
       "clickable":{
         "eventName":"LEVEL_7"
       },
@@ -296,7 +296,7 @@
       }
     },
     {
-      "name":"level-select_8",
+      "name":"level-8-select",
       "clickable":{
         "eventName":"LEVEL_8"
       },
@@ -338,7 +338,7 @@
       }
     },
     {
-      "name":"level-select_9",
+      "name":"level-9-select",
       "clickable":{
         "eventName":"LEVEL_9"
       },
@@ -776,7 +776,7 @@
       "spriteName":"level-screen/level-9"
     },
     {
-      "name":"paws-1",
+      "name":"level-2-paws",
       "transform": {
         "position":{
           "x": -2.063,
@@ -811,7 +811,7 @@
       }
     },
     {
-      "name":"paws-2",
+      "name":"level-3-paws",
       "transform": {
         "position":{
           "x": -2.063,
@@ -846,7 +846,7 @@
       }
     },
     {
-      "name":"paws-3",
+      "name":"level-4-paws",
       "transform": {
         "position":{
           "x": 3.563,
@@ -881,7 +881,7 @@
       }
     },
     {
-      "name":"paws-4",
+      "name":"level-5-paws",
       "transform": {
         "position":{
           "x": 4.031249,
@@ -916,7 +916,7 @@
       }
     },
     {
-      "name":"paws-5",
+      "name":"level-6-paws",
       "transform": {
         "position":{
           "x": 1.812499,
@@ -951,7 +951,7 @@
       }
     },
     {
-      "name":"paws-6",
+      "name":"level-7-paws",
       "transform": {
         "position":{
           "x": 4.112499,
@@ -986,7 +986,7 @@
       }
     },
     {
-      "name":"paws-7",
+      "name":"level-8-paws",
       "transform": {
         "position":{
           "x": 2.387498,
@@ -1021,7 +1021,7 @@
       }
     },
     {
-      "name":"paws-8",
+      "name":"level-9-paws",
       "transform": {
         "position":{
           "x": 0,
