@@ -28,11 +28,12 @@ public class LevelUtil {
         int pos = 0;
 
         for(int i=0;i<LEVEL_NAMES.length;i++){
-            if(LEVEL_NAMES[0].equals(lvlName)){
+            if(LEVEL_NAMES[i].equals(lvlName)){
                 pos = i + 1;
                 break;
             }
         }
+
         return pos;
     }
 

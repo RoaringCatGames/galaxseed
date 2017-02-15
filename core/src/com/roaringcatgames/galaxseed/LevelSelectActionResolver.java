@@ -77,7 +77,7 @@ public class LevelSelectActionResolver implements IActionResolver {
         AnimationComponent ac = K2ComponentMappers.animation.get(firingEntity);
         ac.setPaused(false);
 
-        Gdx.app.log("LevelSelectActionResolver", "Action Fired");
+        Gdx.app.log("LevelSelectActionResolver", "Action Fired: " + levelName);
         String levelJson = this.game.getPreferenceManager()
                 .getStoredString(LevelUtil.LEVEL_SCORE_PREFIX + levelName);
         LevelStats stats = LevelUtil.parseLevelStats(level, levelJson);
@@ -91,8 +91,8 @@ public class LevelSelectActionResolver implements IActionResolver {
                                     int treeCount,
                                     Entity selectAnchor,
                                     Engine engine){
-        float infoTitleYOff = 2f;
-        float infoTitleXOff = -1.85f;
+        float infoTitleYOff = 3f;
+        float infoTitleXOff = -3.35f;
         float infoPlayButtonYOff = -3f;
         float tweenTime = 0.5f;
         float targetX = this.game.getCamera().position.x;
