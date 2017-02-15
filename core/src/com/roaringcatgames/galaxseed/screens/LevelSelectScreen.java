@@ -51,7 +51,8 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         Vector2 maxBounds = new Vector2(App.W, App.H*3f);
 
         Vector2 minCamBounds = new Vector2(App.W/2f, App.H/2f);
-        Vector2 maxCamBounds = new Vector2(App.W/2f, (App.H/2f)*5f);
+        float halfSplits = (90f/(App.H/2f)) - 1f;
+        Vector2 maxCamBounds = new Vector2(App.W/2f, (App.H/2f)*halfSplits);
 
         //Build Systems
         RotationSystem rotationSystem = new RotationSystem();
@@ -77,20 +78,6 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
 
         engine.addEntityListener(this);
 
-//        TextureAtlas animationAtlas = Assets.am.get("animations/animations.atlas", Assets.TEXTURE_ATLAS);
-//        TextureAtlas spritesAtlas = Assets.am.get("sprites/sprites.atlas", Assets.TEXTURE_ATLAS);
-//
-//        Array<TextureAtlas.AtlasRegion> regions = animationAtlas.getRegions();
-//        regions.sort(new Comparator<TextureAtlas.AtlasRegion>() {
-//            @Override
-//            public int compare(TextureAtlas.AtlasRegion o1, TextureAtlas.AtlasRegion o2) {
-//                return o1.name.compareTo(o2.name);
-//            }
-//        });
-//        for(TextureAtlas.AtlasRegion region:regions){
-//           Gdx.app.log("LEVEL SELECT SCREEN", region.name);
-//        }
-
         //Add Systems
 
         engine.addSystem(rotationSystem);
@@ -111,28 +98,12 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         engine.addSystem(adjustPositionSystem);
         engine.addSystem(new DebugSystem(game.getCamera()));
 
-        //Initial Entities
-        //        int item = 1;
-        //        float y = 2f, x = 2f;
-        //        while(y < (App.H*3f)) {
-        //            y += ((App.H/2f)*5f)/7f;
-        //            x = (x+5f)%30f;
-        //            addStickerEntity(x, y, Assets.getLevelPlanet(item++));
-        //        }
-
         Array<Entity> entities = EntityBuilder.buildEntities(engine, Assets.getLevelSelect().entities);
         Gdx.app.log("LevelSelectSystem", "Entities " + entities.size);
         for(Entity e:entities) {
             Gdx.app.log("LevelSelectSystem", "Adding Entity!!");
             engine.addEntity(e);
         }
-
-//        Entity e = engine.createEntity();
-//        e.add(TransformComponent.create(engine)
-//            .setPosition(App.W/2f, 90.46875f/2f, Z.player + 5f));
-//        e.add(TextureComponent.create(engine)
-//            .setRegion(Assets.getLevelLayoutRef()));
-//        engine.addEntity(e);
 
         game.playBgMusic(Songs.LEVEL_SELECT);
     }
