@@ -76,7 +76,7 @@
 
             //Systems to control from screen
             FiringSystem firingSystem = new FiringSystem();
-            enemySpawnSystem = new EnemySpawnSystem(Assets.getLevel1());
+            enemySpawnSystem = new EnemySpawnSystem(Assets.getTestLevel());
             enemySpawnSystem.setProcessing(false);
             EnemyFiringSystem enemyFiringSystem = new EnemyFiringSystem();
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
