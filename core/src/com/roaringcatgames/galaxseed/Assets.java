@@ -32,6 +32,7 @@ public class Assets {
 
         am.load("levels/level-select.json", Level.class);
         am.load("levels/1-level.json", Level.class);
+        am.load("levels/test-level.json", Level.class);
         //am.load("levels/level-select-layout.json", EntityList.class);
 
         am.load(LOADING_ATLAS, TEXTURE_ATLAS);
@@ -224,6 +225,7 @@ public class Assets {
     public static Level getLevel1(){
         return am.get("levels/1-level.json", Level.class);
     }
+    public static Level getTestLevel() { return am.get("levels/test-level.json", Level.class); }
 //    public static EntityList getLevelSelectLayout(){
 //        return am.get("levels/level-select-layout.json", EntityList.class);
 //    }
