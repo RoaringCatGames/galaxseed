@@ -144,7 +144,25 @@ public class GalaxSeedGame extends Game implements IGameProcessor, InputProcesso
                 if(this.adController != null){
                     this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
                 }
-                this.setScreen(new SpaceScreen(this, gameServicesController));
+                this.setScreen(new SpaceScreen(this, gameServicesController, Assets.getTestLevel()));
+                break;
+            case "GAME_1":
+                if(this.adController != null){
+                    this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
+                }
+                this.setScreen(new SpaceScreen(this, gameServicesController, Assets.getLevel1()));
+                break;
+            case "GAME_2":
+                if(this.adController != null){
+                    this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
+                }
+                this.setScreen(new SpaceScreen(this, gameServicesController, Assets.getLevel2()));
+                break;
+            case "GAME_3":
+                if(this.adController != null){
+                    this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
+                }
+                this.setScreen(new SpaceScreen(this, gameServicesController, Assets.getLevel3()));
                 break;
         }
 
@@ -172,30 +190,58 @@ public class GalaxSeedGame extends Game implements IGameProcessor, InputProcesso
         if(PrefsUtil.isMusicOn()) {
             pauseBgMusic();
 
-            if (bgMusic != null) {
+            if (bgMusic != null && bgMusic.isPlaying() && !Songs.MENU.equals(musicName)) {
                 bgMusic.stop();
             }
 
             switch (musicName) {
                 case Songs.MENU:
                     bgMusic = Assets.getMenuMusic();
-                    bgMusic.setLooping(true);
                     bgMusic.setVolume(Volume.MENU_MUSIC);
                     break;
-                case Songs.GAME:
-                    bgMusic = Assets.getBackgroundMusic();
-                    bgMusic.setLooping(true);
-                    bgMusic.setVolume(Volume.BG_MUSIC);
+                case Songs.JUPITER_BG:
+                    bgMusic = Assets.getJupiterBGMusic();
+                    break;
+                case Songs.JUPITER_END:
+                    bgMusic = Assets.getJupiterEndMusic();
+                    break;
+                case Songs.KUPIER_BG:
+                    bgMusic = Assets.getKupierBGMusic();
+                    break;
+                case Songs.KUPIER_END:
+                    bgMusic = Assets.getKupierEndMusic();
+                    break;
+                case Songs.NEPTUNE_BG:
+                    bgMusic = Assets.getNeptuneBGMusic();
+                    break;
+                case Songs.NEPTUNE_END:
+                    bgMusic = Assets.getNeptuneEndMusic();
+                    break;
+                case Songs.URANUS_BG:
+                    bgMusic = Assets.getUranusBGMusic();
+                    break;
+                case Songs.URANUS_END:
+                    bgMusic = Assets.getUranusEndMusic();
+                    break;
+                case Songs.TUTORIAL_BG:
+                    bgMusic = Assets.getTutorialBGMusic();
+                    break;
+                case Songs.LEVEL_1_OVER:
+                    bgMusic = Assets.getJupiterEndMusic();
                     break;
                 case Songs.GAME_OVER:
                     bgMusic = Assets.getGameOverMusic();
-                    bgMusic.setLooping(true);
                     break;
                 case Songs.LEVEL_SELECT:
                     bgMusic = Assets.getLevelSelectMusic();
-                    bgMusic.setLooping(true);
                     break;
             }
+
+            if(!Songs.MENU.equals(musicName)){
+                bgMusic.setVolume(Volume.BG_MUSIC);
+            }
+
+            bgMusic.setLooping(true);
 
             Gdx.app.log("GalaxSeedGame", "Playing Music: " + musicName);
             bgMusic.play();

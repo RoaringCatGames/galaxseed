@@ -32,18 +32,25 @@ public class Assets {
 
         am.load("levels/level-select.json", Level.class);
         am.load("levels/1-level.json", Level.class);
+        am.load("levels/2-level.json", Level.class);
+        am.load("levels/3-level.json", Level.class);
         am.load("levels/test-level.json", Level.class);
-        //am.load("levels/level-select-layout.json", EntityList.class);
 
         am.load(LOADING_ATLAS, TEXTURE_ATLAS);
         am.load(SPRITE_ATLAS, TEXTURE_ATLAS);
         am.finishLoading();
         am.load(ANI_ATLAS, TEXTURE_ATLAS);
-        am.load(BG_MUSIC, MUSIC);
         am.load(GAME_OVER_MUSIC, MUSIC);
         am.load(MENU_MUISC, MUSIC);
-        am.load(LEVEL_SELECT_MUSIC, MUSIC);
-        am.load(ASTEROID_RACE_LEVEL_MUSIC, MUSIC);
+        am.load(JUPITER_BG_MUSIC, MUSIC);
+        am.load(JUPITER_END_MUSIC, MUSIC);
+        am.load(KUPIER_BG_MUSIC, MUSIC);
+        am.load(KUPIER_END_MUSIC, MUSIC);
+        am.load(URANUS_BG_MUSIC, MUSIC);
+        am.load(URANUS_END_MUSIC, MUSIC);
+        am.load(NEPTUNE_BG_MUSIC, MUSIC);
+        am.load(NEPTUNE_END_MUSIC, MUSIC);
+        am.load(TUTORIAL_BG_MUSIC, MUSIC);
         am.load(FONT_16, BITMAP_FONT);
         am.load(FONT_24, BITMAP_FONT);
         am.load(FONT_32, BITMAP_FONT);
@@ -224,6 +231,11 @@ public class Assets {
     }
     public static Level getLevel1(){
         return am.get("levels/1-level.json", Level.class);
+    }
+    public static Level getLevel2(){
+        return am.get("levels/2-level.json", Level.class);
+    }public static Level getLevel3(){
+        return am.get("levels/3-level.json", Level.class);
     }
     public static Level getTestLevel() { return am.get("levels/test-level.json", Level.class); }
 //    public static EntityList getLevelSelectLayout(){
@@ -691,14 +703,19 @@ public class Assets {
     public static Music getMenuMusic(){
         return am.get(MENU_MUISC, MUSIC);
     }
-    public static Music getBackgroundMusic(){
-        return am.get(BG_MUSIC, MUSIC);
-    }
     public static Music getGameOverMusic(){
         return am.get(GAME_OVER_MUSIC, MUSIC);
     }
-    public static Music getLevelSelectMusic() { return am.get(LEVEL_SELECT_MUSIC, MUSIC); }
-    public static Music getAsteroidRaceLevelMusic() { return am.get(ASTEROID_RACE_LEVEL_MUSIC, MUSIC); }
+    public static Music getLevelSelectMusic() { return am.get(GAME_OVER_MUSIC, MUSIC); }
+    public static Music getJupiterBGMusic() { return am.get(JUPITER_BG_MUSIC, MUSIC); }
+    public static Music getJupiterEndMusic() { return am.get(JUPITER_END_MUSIC, MUSIC); }
+    public static Music getKupierBGMusic() { return am.get(KUPIER_BG_MUSIC, MUSIC); }
+    public static Music getKupierEndMusic() { return am.get(KUPIER_END_MUSIC, MUSIC); }
+    public static Music getNeptuneBGMusic() { return am.get(NEPTUNE_BG_MUSIC, MUSIC); }
+    public static Music getNeptuneEndMusic() { return am.get(NEPTUNE_END_MUSIC, MUSIC); }
+    public static Music getUranusBGMusic() { return am.get(URANUS_BG_MUSIC, MUSIC); }
+    public static Music getUranusEndMusic() { return am.get(URANUS_END_MUSIC, MUSIC); }
+    public static Music getTutorialBGMusic() { return am.get(TUTORIAL_BG_MUSIC, MUSIC); }
 
     /////////////
     //SFX
@@ -837,11 +854,17 @@ public class Assets {
     private static final String ANI_ATLAS = "animations/animations.atlas";
     private static final String SPRITE_ATLAS = "sprites/sprites.atlas";
 
-    private static final String BG_MUSIC = "music/galaxseed-bg.mp3";
     private static final String MENU_MUISC = "music/title.mp3";
     private static final String GAME_OVER_MUSIC = "music/game-over.mp3";
-    private static final String LEVEL_SELECT_MUSIC = "music/new-song2.mp3";
-    private static final String ASTEROID_RACE_LEVEL_MUSIC = "music/new-song1.mp3";
+    private static final String JUPITER_BG_MUSIC = "music/jupiter-bgm.mp3";
+    private static final String JUPITER_END_MUSIC = "music/jupiter-results.mp3";
+    private static final String KUPIER_BG_MUSIC = "music/kupier-bgm.mp3";
+    private static final String KUPIER_END_MUSIC = "music/kupier-results.mp3";
+    private static final String NEPTUNE_BG_MUSIC = "music/neptune-bgm.mp3";
+    private static final String NEPTUNE_END_MUSIC = "music/neptune-results.mp3";
+    private static final String URANUS_BG_MUSIC = "music/uranus-bgm.mp3";
+    private static final String URANUS_END_MUSIC = "music/uranus-results.mp3";
+    private static final String TUTORIAL_BG_MUSIC = "music/tutorial-bgm.mp3";
 
     private static final String FIRING_SFX = "sfx/seed-fire.mp3";
     private static final String SWISH_SFX = "sfx/swish.mp3";
@@ -865,9 +888,5 @@ public class Assets {
 
     public static TextureRegion getDemoBrick() {
         return getCachedRegion(SPRITE_ATLAS, "options/demo");
-    }
-
-    public static TextureRegion getLevelLayoutRef(){
-        return new TextureRegion(new Texture(Gdx.files.internal("level-layout.jpg")));
     }
 }

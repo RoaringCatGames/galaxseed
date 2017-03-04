@@ -65,7 +65,13 @@ public class LevelSelectActionResolver implements IActionResolver {
                 processLevelClicked(firingEntity, containerEngine, 9, LevelUtil.LEVEL_NAMES[8], "START_LEVEL_9");
                 break;
             case "START_LEVEL_1":
-                this.game.switchScreens("GAME");
+                this.game.switchScreens("GAME_1");
+                break;
+            case "START_LEVEL_2":
+                this.game.switchScreens("GAME_2");
+                break;
+            case "START_LEVEL_3":
+                this.game.switchScreens("GAME_3");
                 break;
             default:
                 Gdx.app.log("LevelSelectActionResolver", "Fired Event: " + eventName);

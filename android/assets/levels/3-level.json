@@ -1,0 +1,126 @@
+{
+  "length": 90,
+  "name": "Level 3",
+  "spawns": [
+    {
+      "spawnTime": 1,
+      "enemyType": "ASTEROID_FRAG",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": -2,
+        "y": 0,
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -0.25
+      }
+    },
+    {
+      "spawnTime": "2",
+      "enemyType": "COMET",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": 1,
+        "y": 3,
+        "offsetQuadrant": "QUAD_1"
+      },
+      "midBezierPoint": {
+        "x": 5,
+        "y": -5,
+        "offsetQuadrant": "QUAD_4"
+      },
+      "endPoint": {
+        "x": -10,
+        "y": -10,
+        "offsetQuadrant": "QUAD_3"
+      },
+      "speed": {
+        "x": 5,
+        "y": 5
+      }
+    },
+    {
+      "spawnTime": "4",
+      "enemyType": "COMET",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": -1,
+        "y": 3,
+        "offsetQuadrant": "QUAD_2"
+      },
+      "midBezierPoint": {
+        "x": -5,
+        "y": -5,
+        "offsetQuadrant": "QUAD_3"
+      },
+      "endPoint": {
+        "x": 10,
+        "y": -10,
+        "offsetQuadrant": "QUAD_3"
+      },
+      "speed": {
+        "x": 5,
+        "y": 5
+      }
+    },
+    {
+      "spawnTime": 1,
+      "enemyType": "ASTEROID_FRAG",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": -2,
+        "y": "-2",
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -0.25
+      }
+    },
+    {
+      "spawnTime": 1,
+      "enemyType": "ASTEROID_FRAG",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": "2",
+        "y": 0,
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -0.25
+      }
+    },
+    {
+      "spawnTime": 1,
+      "enemyType": "ASTEROID_FRAG",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": "2",
+        "y": "-2",
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -0.25
+      }
+    },
+    {
+      "spawnTime": 1,
+      "enemyType": "ASTEROID_C",
+      "shouldGeneratePowerUp": true,
+      "startPosition": {
+        "x": -4,
+        "y": -3,
+        "offsetQuadrant": "QUAD_2"
+      },
+      "speed": {
+        "x": 3,
+        "y": -0.75
+      }
+    }
+  ],
+  "id": "2017128223646"
+}    
+      

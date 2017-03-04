@@ -124,7 +124,7 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
             engine.addEntity(e);
         }
 
-        game.playBgMusic(Songs.LEVEL_SELECT);
+        //game.playBgMusic(Songs.LEVEL_SELECT);
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.galaxseed.values.Songs;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
@@ -47,14 +48,16 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
     private ComponentMapper<AnimationComponent> am;
 
     private boolean hasInitialized = false;
+    private String endSongName;
 
-    public GameOverSystem(IGameProcessor game){
+    public GameOverSystem(IGameProcessor game, String endSongName){
         super(Family.all(PlayerComponent.class).get());
         this.game = game;
         this.am = ComponentMapper.getFor(AnimationComponent.class);
         this.sm = ComponentMapper.getFor(StateComponent.class);
         //endSong = Assets.getMenuMusic();
         this.cam = game.getCamera();
+        this.endSongName = endSongName;
 
         randomEdgePoints.addAll(getRandomEdgePoints(20, false));
         shipPartEndPositions.addAll(getRandomEdgePoints(10, true));
@@ -165,11 +168,11 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
 
                 Timeline tl = Timeline.createParallel()
                         .push(Tween.to(rawry, K2EntityTweenAccessor.SCALE, 5f)
-                                .target(0.25f, 0.25f).ease(TweenEquations.easeOutSine))
-                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_Z, 5f)
-                                .target(Z.rawry))
+                                .target(0.25f, 0.25f).ease(TweenEquations.easeNone))
+                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_Z, 2.5f)
+                                .target(Z.rawry).ease(TweenEquations.easeNone))
                         .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_XY, 5f)
-                                .target(0f, 25f).ease(TweenEquations.easeNone));
+                                .target(0f, 25f).ease(TweenEquations.easeOutSine));
                 rawry.add(TweenComponent.create(engine).setTimeline(Timeline.createSequence().push(tl).push(secondTL)));
                 rawry.add(TextureComponent.create(engine));
                 rawry.add(RotationComponent.create(engine)
@@ -254,7 +257,8 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 }
                 gameOverText.getComponent(TransformComponent.class).setHidden(false);
                 restartButton.getComponent(TransformComponent.class).setHidden(false);
-                game.playBgMusic("GAME_OVER");
+
+                game.playBgMusic(endSongName);
 
                 getEngine().removeEntity(player);
                 hasInitialized = true;
