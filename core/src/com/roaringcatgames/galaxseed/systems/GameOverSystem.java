@@ -5,6 +5,7 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -141,6 +142,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
             PooledEngine engine = (PooledEngine)getEngine();
 
             if (!"DEAD".equals(sc.get())) {
+                Gdx.app.log("GameOverSystem", "Marking Player Dead");
                 sc.set("DEAD");
                 sc.setLooping(false);
                 tc.setScale(1f, 1f);
@@ -169,7 +171,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 Timeline tl = Timeline.createParallel()
                         .push(Tween.to(rawry, K2EntityTweenAccessor.SCALE, 5f)
                                 .target(0.25f, 0.25f).ease(TweenEquations.easeNone))
-                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_Z, 2.5f)
+                        .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_Z, 5f)
                                 .target(Z.rawry).ease(TweenEquations.easeNone))
                         .push(Tween.to(rawry, K2EntityTweenAccessor.POSITION_XY, 5f)
                                 .target(0f, 25f).ease(TweenEquations.easeOutSine));
@@ -225,7 +227,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
                 }
 
             } else if (!hasInitialized && ac.animations.get("DEAD").isAnimationFinished(sc.time)) {
-
+                Gdx.app.log("GameOverSystem", "Presenting Game Over Text");
                 if(gameOverText == null) {
                     gameOverText = engine.createEntity();
                     gameOverText.add(TransformComponent.create(engine)
@@ -260,7 +262,7 @@ public class GameOverSystem extends IteratingSystem implements InputProcessor {
 
                 game.playBgMusic(endSongName);
 
-                getEngine().removeEntity(player);
+                //getEngine().removeEntity(player);
                 hasInitialized = true;
             }
 
