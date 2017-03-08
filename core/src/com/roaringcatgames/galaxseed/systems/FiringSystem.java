@@ -75,7 +75,8 @@ public class FiringSystem extends IteratingSystem {
                             generateHelicopterSeed(follower.offset.x, follower.offset.y, 0f, gc.bulletSpeed, follower.offset.x < 0f);
                             isFiringHelicopter = true;
                         }
-                        gc.lastFireTime = gc.timeElapsed;
+                        float overflow = (gc.timeElapsed - gc.lastFireTime) - gc.timeBetweenShots;
+                        gc.lastFireTime = gc.timeElapsed - overflow;
 
 
                     }else if(mState != null &&
