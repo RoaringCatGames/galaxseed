@@ -369,8 +369,7 @@ public class EnemySpawnSystem extends IteratingSystem {
         cometMid.set(p1x, 0f);
         float p2x = isGoingRight ? 42.25f : -22.25f;
         cometEnd.set(p2x, -32f);
-        Vector2 p2 = new Vector2(p2x, -32f);
 
-        generateComet(cometStart, cometMid, cometEnd, 1f/8f);
+        generateComet(cometStart.cpy(), cometMid.cpy(), cometEnd.cpy(), 1f/8f);
     }
 }

@@ -7,7 +7,7 @@ buildscript {
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
         classpath 'com.android.tools.build:gradle:1.5.0'
-        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.2.0'
+        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.0'
     }
 }
 
@@ -19,12 +19,12 @@ allprojects {
     ext {
         appName = "GalaxSeed"
         gdxVersion = '1.9.4'
-        roboVMVersion = '2.2.0'
+        roboVMVersion = '2.3.0'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.3'
         aiVersion = '1.7.0'
         tweenEngineVersion = '6.3.4'
-        ashleyExtensionsVersion = '0.5.6'
+        ashleyExtensionsVersion = '0.5.7-SNAPSHOT'
         outputName = 'galaxseed'
         googlePlayServicesVersion = '9.4.0'
     }

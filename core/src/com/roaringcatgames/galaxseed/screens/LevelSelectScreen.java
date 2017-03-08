@@ -50,7 +50,7 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
     protected void init() {
         engine = new PooledEngine();
 
-        this.game.getPreferenceManager().updateBoolean("level-3-passed", true);
+        //this.game.getPreferenceManager().updateBoolean("level-3-passed", false);
         for(int i=2;i<10;i++){
             levelProgression.levelUnlocks.put(String.valueOf(i), this.game.getPreferenceManager().getStoredBoolean("level-" + i + "-passed"));
         }
@@ -124,7 +124,7 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
             engine.addEntity(e);
         }
 
-        game.playBgMusic(Songs.LEVEL_SELECT);
+        //game.playBgMusic(Songs.LEVEL_SELECT);
     }
 
     @Override

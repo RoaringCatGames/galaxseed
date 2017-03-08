@@ -7,11 +7,14 @@
     import com.badlogic.gdx.Input;
     import com.badlogic.gdx.InputProcessor;
     import com.badlogic.gdx.graphics.Color;
+    import com.badlogic.gdx.math.MathUtils;
     import com.badlogic.gdx.math.Vector2;
     import com.badlogic.gdx.math.Vector3;
     import com.badlogic.gdx.utils.Array;
     import com.roaringcatgames.galaxseed.Assets;
     import com.roaringcatgames.galaxseed.IGameServiceController;
+    import com.roaringcatgames.galaxseed.data.Level;
+    import com.roaringcatgames.galaxseed.values.Songs;
     import com.roaringcatgames.kitten2d.ashley.systems.*;
     import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
     import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
@@ -30,18 +33,21 @@
         private IGameProcessor game;
         private IGameServiceController gameServiceController;
         private PooledEngine engine;
+        private Level level;
 
         private Array<EntitySystem> playingOnlySystems;
 
         private boolean hasStarted = false;
         private EntitySystem enemySpawnSystem;
         private BackgroundSystem bgSystem;
+        private String bgSongName;
 
-        public SpaceScreen(IGameProcessor game, IGameServiceController gameServices) {
+        public SpaceScreen(IGameProcessor game, IGameServiceController gameServices, Level level) {
             super();
             this.game = game;
             this.gameServiceController = gameServices;
             this.playingOnlySystems = new Array<>();
+            this.level = level;
         }
 
 
@@ -64,6 +70,31 @@
             Gdx.app.log("Menu Screen", "Cam Pos: " + game.getCamera().position.x + " | " +
                     game.getCamera().position.y + " Cam W/H: " + game.getCamera().viewportWidth + "/" + game.getCamera().viewportHeight);
 
+            int songChoice = MathUtils.random(4);
+
+            String endSongName;
+            switch(songChoice){
+                case 0:
+                    bgSongName = Songs.JUPITER_BG;
+                    endSongName = Songs.JUPITER_END;
+                    break;
+                case 1:
+                    bgSongName = Songs.KUPIER_BG;
+                    endSongName = Songs.KUPIER_END;
+                    break;
+                case 2:
+                    bgSongName = Songs.NEPTUNE_BG;
+                    endSongName = Songs.NEPTUNE_END;
+                    break;
+                case 3:
+                    bgSongName = Songs.URANUS_BG;
+                    endSongName = Songs.URANUS_END;
+                    break;
+                default:
+                    bgSongName = Songs.JUPITER_BG;
+                    endSongName = Songs.JUPITER_END;
+                    break;
+            }
 
             //AshleyExtensions Systems
             MovementSystem movementSystem = new MovementSystem();
@@ -76,12 +107,12 @@
 
             //Systems to control from screen
             FiringSystem firingSystem = new FiringSystem();
-            enemySpawnSystem = new EnemySpawnSystem(Assets.getTestLevel());
+            enemySpawnSystem = new EnemySpawnSystem(); //level);
             enemySpawnSystem.setProcessing(false);
             EnemyFiringSystem enemyFiringSystem = new EnemyFiringSystem();
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
             PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();
-            GameOverSystem gameOverSystem = new GameOverSystem(game);
+            GameOverSystem gameOverSystem = new GameOverSystem(game, endSongName);
             gameOverSystem.setProcessing(false);
             PathFollowSystem pathFollowSystem = new PathFollowSystem();
             bgSystem = new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(true, false, true, true, true));
@@ -231,7 +262,7 @@
             if(!hasStarted){
                 bgSystem.placePlanets();
                 enemySpawnSystem.setProcessing(true);
-                game.playBgMusic("GAME");
+                game.playBgMusic(bgSongName);
                 hasStarted = true;
             }
 
