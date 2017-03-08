@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.galaxseed.data.entitydefs.Transform;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.components.*;
@@ -101,6 +102,15 @@ public class PlayerDamageSystem extends IteratingSystem {
             if(App.hasAvailableWeapons()){
                 //Add Shield
                 generateShield(pt, shieldTime);
+                player.add(TweenComponent.create(getEngine())
+                    .setTimeline(Timeline.createSequence()
+                        .push(Tween.to(player, K2EntityTweenAccessor.OPACITY, 0.2f)
+                            .target(0.05f))
+                        .push(Tween.to(player, K2EntityTweenAccessor.OPACITY, 0.2f)
+                                .target(1f))
+                        .repeat(5, 0f)
+                        .push(Tween.to(player, K2EntityTweenAccessor.OPACITY, 0.1f)
+                            .target(1f))));
                 //Trigger Weapon Select
                 App.setState(GameState.WEAPON_SELECT);
                 ph.health = Health.Player;
@@ -114,7 +124,7 @@ public class PlayerDamageSystem extends IteratingSystem {
     }
 
     private void generateShield(TransformComponent pt, float shieldTime) {
-        Gdx.app.log("Player Damage System", "Adding shield");
+        //Gdx.app.log("Player Damage System", "Adding shield");
         //Add Shield
         PooledEngine engine = ((PooledEngine) getEngine());
         Entity e = engine.createEntity();
@@ -134,7 +144,7 @@ public class PlayerDamageSystem extends IteratingSystem {
                         .ease(TweenEquations.easeOutElastic))
                 .push(
                     Tween.to(e, K2EntityTweenAccessor.BOUNDS_RADIUS, 0.1f)
-                        .target(3f, 3f)
+                        .target(1f, 1f)
                         .ease(TweenEquations.easeOutElastic));
 
         Timeline decay = Timeline.createParallel()
@@ -152,8 +162,8 @@ public class PlayerDamageSystem extends IteratingSystem {
             .setTimeline(timeline));
 
         e.add(TextureComponent.create(engine));
-        e.add(AnimationComponent.create(engine)
-            .addAnimation("DEFAULT", Animations.getShield()));
+//        e.add(AnimationComponent.create(engine)
+//            .addAnimation("DEFAULT", Animations.getShield()));
         e.add(StateComponent.create(engine)
             .setLooping(true)
             .set("DEFAULT"));
