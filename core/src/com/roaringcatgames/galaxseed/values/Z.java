@@ -11,6 +11,7 @@ public class Z {
     public static final float bg_clear = 97f;
     public static final float bgSticker = 95f;
     public static final float speedLine = 94f;
+    public static final float bg_cloud = 93f;
 
     public static final float powerUp = 70f;
     public static final float helicopterSeed = 61f;

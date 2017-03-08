@@ -118,14 +118,23 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getBgBTile(){
         return getCachedRegion(SPRITE_ATLAS, "SpaceBG-b");
     }
-    public static TextureAtlas.AtlasRegion getBgClearTileA(){
+    public static TextureAtlas.AtlasRegion getBgStarsTileA(){
         return getCachedRegion(SPRITE_ATLAS, "stars-a");
     }
-    public static TextureAtlas.AtlasRegion getBgClearTileB(){
+    public static TextureAtlas.AtlasRegion getBgStarsTileB(){
         return getCachedRegion(SPRITE_ATLAS, "stars-b");
     }
-    public static TextureAtlas.AtlasRegion getBgClearTileC(){
+    public static TextureAtlas.AtlasRegion getBgStarsTileC(){
         return getCachedRegion(SPRITE_ATLAS, "stars-c");
+    }
+    public static TextureAtlas.AtlasRegion getBgCloudTileA(){
+        return getCachedRegion(SPRITE_ATLAS, "clouds-a");
+    }
+    public static TextureAtlas.AtlasRegion getBgCloudTileB(){
+        return getCachedRegion(SPRITE_ATLAS, "clouds-b");
+    }
+    public static TextureAtlas.AtlasRegion getBgCloudTileC(){
+        return getCachedRegion(SPRITE_ATLAS, "clouds-c");
     }
     public static TextureAtlas.AtlasRegion getGalaxyA(){
         return getCachedRegion(SPRITE_ATLAS, "galaxy-a");

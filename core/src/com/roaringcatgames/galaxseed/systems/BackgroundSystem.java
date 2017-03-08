@@ -24,13 +24,14 @@ public class BackgroundSystem extends IteratingSystem {
 
     public float bgSpeed = -1f;
     public float stickerSpeed = -1.5f;
-    public float bgClearSpeed = -2.5f;
+    public float bgStarSpeed = -2.5f;
     private float speedLineSpeedMin = -25f;
     private float speedLineSpeedMax = -40f;
     private float speedLineOpacity = 0.1f;
     private int speedLineCount = 4;
     private int numberOfStars = 20;
     private float starSpeed = -1f;
+    private float cloudSpeed = -9f;
 
     private float left;
     private float bottom;
@@ -45,15 +46,20 @@ public class BackgroundSystem extends IteratingSystem {
 
     protected class BackgroundTile extends BackgroundSticker{
         protected Array<TextureRegion> galaxies;
-        protected TextureRegion clearImage;
-        protected  BackgroundTile(float x, float y, float rot, TextureRegion tile, TextureRegion clearTile, Array<TextureRegion> possibleGalaxies){
+        protected TextureRegion starsImage;
+        protected Array<TextureRegion> clouds;
+        protected  BackgroundTile(float x, float y, float rot,
+                                  TextureRegion tile, TextureRegion starsTile,
+                                  Array<TextureRegion> possibleGalaxies,
+                                  Array<TextureRegion> possibleClouds){
             super(x, y, rot, tile);
             this.x = x;
             this.y = y;
             this.rotation = rot;
             this.image = tile;
-            this.clearImage = clearTile;
+            this.starsImage = starsTile;
             this.galaxies = possibleGalaxies;
+            this.clouds = possibleClouds;
         }
     }
 
@@ -82,9 +88,10 @@ public class BackgroundSystem extends IteratingSystem {
 
         if(!config.isShouldMove()){
             bgSpeed = 0f;
-            bgClearSpeed = 0f;
+            bgStarSpeed = 0f;
             stickerSpeed = 0f;
             starSpeed = 0f;
+            cloudSpeed = 0f;
         }
     }
 
@@ -149,9 +156,9 @@ public class BackgroundSystem extends IteratingSystem {
                 float textVal = rnd.nextFloat();
                 TextureRegion texture = textVal < 0.5f ? Assets.getBgATile() : Assets.getBgBTile();
                 float clearVal = rnd.nextFloat();
-                TextureRegion clearTile = clearVal < 0.33f ? Assets.getBgClearTileA() :
-                                          clearVal < 0.66f ? Assets.getBgClearTileB() :
-                                                             Assets.getBgClearTileC();
+                TextureRegion clearTile = clearVal < 0.33f ? Assets.getBgStarsTileA() :
+                                          clearVal < 0.66f ? Assets.getBgStarsTileB() :
+                                                             Assets.getBgStarsTileC();
                 Array<TextureRegion> galaxies = null;
                 float galaxyFloat = rnd.nextFloat();
                 if(config.isShouldProduceGalaxies() && galaxyFloat < 0.3f){
@@ -167,7 +174,16 @@ public class BackgroundSystem extends IteratingSystem {
                         galaxies.add(Assets.getGasClusterE());
                 }
 
-                tiles.add(new BackgroundTile(x, y, rotation, texture, clearTile, galaxies));
+                float cloudFloat = rnd.nextFloat();
+                Array<TextureRegion> clouds = null;
+                if(config.isShouldProduceGalaxies() && cloudFloat <= 0.25f){
+                    clouds = new Array();
+                    clouds.add(Assets.getBgCloudTileA());
+                    clouds.add(Assets.getBgCloudTileB());
+                    clouds.add(Assets.getBgCloudTileC());
+                }
+
+                tiles.add(new BackgroundTile(x, y, rotation, texture, clearTile, galaxies, clouds));
                 topY = y;
             }
         }
@@ -224,23 +240,50 @@ public class BackgroundSystem extends IteratingSystem {
                     .setSpeed(0f, bgSpeed));
             engine.addEntity(e);
 
-            Entity clearTile = engine.createEntity();
-            clearTile.add(TextureComponent.create(engine)
-                    .setRegion(bg.clearImage));
-            clearTile.add(TransformComponent.create(engine)
+            Entity starsTile = engine.createEntity();
+            starsTile.add(TextureComponent.create(engine)
+                    .setRegion(bg.starsImage));
+            starsTile.add(TransformComponent.create(engine)
                     .setPosition(bg.x, bg.y, Z.bg_clear)
                     .setRotation(bg.rotation)
                     .setOpacity(0.5f)
                     .setScale(1f, 1f));
-            clearTile.add(BoundsComponent.create(engine)
+            starsTile.add(BoundsComponent.create(engine)
                     .setBounds(bg.x - tileHalfPoint, bg.y - tileHalfPoint, tileSize, tileSize));
-            clearTile.add(ScreenWrapComponent.create(getEngine())
+            starsTile.add(ScreenWrapComponent.create(getEngine())
                     .setMode(ScreenWrapMode.VERTICAL)
                     .setReversed(true)
                     .setWrapOffset(offset));
-            clearTile.add(VelocityComponent.create(engine)
-                    .setSpeed(0f, bgClearSpeed));
-            engine.addEntity(clearTile);
+            starsTile.add(VelocityComponent.create(engine)
+                    .setSpeed(0f, bgStarSpeed));
+            engine.addEntity(starsTile);
+
+            if(bg.clouds != null){
+                Entity cloudTile = engine.createEntity();
+                int cloudPos = rnd.nextInt(bg.clouds.size);
+                float additionalOffest = K2MathUtil.getRandomInRange(0f, 3.5f);
+                float xOff = K2MathUtil.getRandomInRange(-2.5f, 2.5f);
+                float yOff = K2MathUtil.getRandomInRange(-2.5f, 2.5f);
+                cloudTile.add(TextureComponent.create(engine)
+                        .setRegion(bg.clouds.get(cloudPos)));
+
+                cloudTile.add(TransformComponent.create(engine)
+                        .setPosition(bg.x + xOff, bg.y + yOff, Z.bg_cloud)
+                        .setRotation(bg.rotation)
+                        .setScale(1f, 1f));
+                cloudTile.add(ScreenWrapComponent.create(engine)
+                        .setMode(ScreenWrapMode.VERTICAL)
+                        .setReversed(true)
+                        .setWrapOffset(offset + additionalOffest)
+                        .shouldRandomPerpendicularPosition(true)
+                        .setMinMaxPos(0f, right)
+                        .setRandomizeTexture(true)
+                        .setPossibleRegions(bg.clouds));
+
+                cloudTile.add(VelocityComponent.create(engine)
+                        .setSpeed(0f, cloudSpeed));
+                engine.addEntity(cloudTile);
+            }
         }
 
 
