@@ -1,14 +1,14 @@
-{
-  "length": 20,
+        {
+  "length": "45",
   "name": "Level 1",
   "spawns": [
     {
-      "spawnTime": 1,
+      "spawnTime": 0,
       "enemyType": "ASTEROID_FRAG",
       "shouldGeneratePowerUp": false,
       "startPosition": {
-        "x": -2,
-        "y": 0,
+        "x": "-5",
+        "y": "5",
         "offsetQuadrant": "CENTER"
       },
       "speed": {
@@ -17,110 +17,154 @@
       }
     },
     {
-      "spawnTime": "2",
-      "enemyType": "COMET",
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
       "shouldGeneratePowerUp": false,
       "startPosition": {
-        "x": 1,
-        "y": 3,
-        "offsetQuadrant": "QUAD_1"
-      },
-      "midBezierPoint": {
-        "x": 5,
-        "y": -5,
-        "offsetQuadrant": "QUAD_4"
-      },
-      "endPoint": {
-        "x": -10,
-        "y": -10,
-        "offsetQuadrant": "QUAD_3"
+        "x": "-7",
+        "y": "6",
+        "offsetQuadrant": "CENTER"
       },
       "speed": {
-        "x": 5,
-        "y": 5
+        "x": 0,
+        "y": -0.25
+      }
+    },
+        {
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": "1",
+        "y": "7",
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -0.25
       }
     },
     {
-      "spawnTime": "4",
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "shouldGeneratePowerUp": true,
+      "startPosition": {
+        "x": "0",
+        "y": "5.5",
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -0.25
+      }
+    }
+ 
+{
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": "2",
+        "y": "6",
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -0.25
+      }
+    }
+
+{
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": "5",
+        "y": "8",
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -0.25
+      }
+    }
+ {
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": "-2",
+        "y": "6.5",
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -0.25
+      }
+    },
+
+ {
+      "spawnTime": 0,
+      "enemyType": "ASTEROID_FRAG",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": "7",
+        "y": "9",
+        "offsetQuadrant": "CENTER"
+      },
+      "speed": {
+        "x": 0,
+        "y": -0.25
+      }
+    },
+ {
+      "spawnTime": 1,
       "enemyType": "COMET",
       "shouldGeneratePowerUp": false,
       "startPosition": {
         "x": -1,
-        "y": 3,
+        "y": 25,
         "offsetQuadrant": "QUAD_2"
       },
       "midBezierPoint": {
         "x": -5,
-        "y": -5,
+        "y": 15,
         "offsetQuadrant": "QUAD_3"
       },
       "endPoint": {
-        "x": 10,
-        "y": -10,
+        "x": 5,
+        "y": 0,
+        "offsetQuadrant": "QUAD_4"
+      },
+      "speed": {
+        "x": ".07",
+        "y": ".07"
+      }
+    }       
+ {
+      "spawnTime": 1,
+      "enemyType": "COMET",
+      "shouldGeneratePowerUp": false,
+      "startPosition": {
+        "x": 1,
+        "y": "50",
+        "offsetQuadrant": "QUAD_1"
+      },
+      "midBezierPoint": {
+        "x": -4,
+        "y": "40",
+        "offsetQuadrant": "QUAD_4"
+      },
+      "endPoint": {
+        "x": -1,
+        "y": "30",
         "offsetQuadrant": "QUAD_3"
       },
       "speed": {
-        "x": 5,
-        "y": 5
-      }
-    },
-    {
-      "spawnTime": 1,
-      "enemyType": "ASTEROID_FRAG",
-      "shouldGeneratePowerUp": false,
-      "startPosition": {
-        "x": -2,
-        "y": "-2",
-        "offsetQuadrant": "CENTER"
-      },
-      "speed": {
-        "x": 0,
-        "y": -0.25
-      }
-    },
-    {
-      "spawnTime": 1,
-      "enemyType": "ASTEROID_FRAG",
-      "shouldGeneratePowerUp": false,
-      "startPosition": {
-        "x": "2",
-        "y": 0,
-        "offsetQuadrant": "CENTER"
-      },
-      "speed": {
-        "x": 0,
-        "y": -0.25
-      }
-    },
-    {
-      "spawnTime": 1,
-      "enemyType": "ASTEROID_FRAG",
-      "shouldGeneratePowerUp": false,
-      "startPosition": {
-        "x": "2",
-        "y": "-2",
-        "offsetQuadrant": "CENTER"
-      },
-      "speed": {
-        "x": 0,
-        "y": -0.25
-      }
-    },
-    {
-      "spawnTime": 1,
-      "enemyType": "ASTEROID_C",
-      "shouldGeneratePowerUp": true,
-      "startPosition": {
-        "x": -4,
-        "y": -3,
-        "offsetQuadrant": "QUAD_2"
-      },
-      "speed": {
-        "x": 3,
-        "y": -0.75
+        "x": ".1",
+        "y": ".1"
       }
     }
   ],
-  "id": "2017128223646"
+  "id": "20171282232898"
 }    
-      
