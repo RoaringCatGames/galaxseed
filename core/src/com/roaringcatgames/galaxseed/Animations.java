@@ -1,6 +1,7 @@
 package com.roaringcatgames.galaxseed;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.roaringcatgames.kitten2d.ashley.components.AnimationComponent;
 
 /**
  * One place to initialize and build up all of our animations
@@ -67,6 +68,8 @@ public class Animations {
     private static Animation shipDeath;
 
     private static Animation upgrade;
+    private static Animation pwrUp;
+    private static Animation pwrMax;
 
     private static Animation seedPod;
     private static Animation helicopterPod;
@@ -142,6 +145,8 @@ public class Animations {
         shipDeath = new Animation(1f/6f, Assets.getShipDeathFrames());
 
         upgrade = new Animation(1f/6f, Assets.getUpgradeFrames());
+        pwrUp = new Animation(1f/6f, Assets.getPwrUpIndicatorFrames());
+        pwrMax = new Animation(1f/6f, Assets.getPwrMaxIndicatorFrames());
 
         seedPod = new Animation(1f/80f, Assets.getSeedPodFrames());
         helicopterPod = new Animation(1f/80f, Assets.getHelicopterPodFrames());
@@ -340,6 +345,14 @@ public class Animations {
 
     public static Animation getUpgrade(){
         return upgrade;
+    }
+
+    public static Animation getPwrUp(){
+        return pwrUp;
+    }
+
+    public static Animation getPwrMax(){
+        return pwrMax;
     }
 
     public static Animation getSeedPod() {

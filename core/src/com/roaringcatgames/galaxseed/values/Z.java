@@ -45,6 +45,8 @@ public class Z {
     public static final float titlePlantLeaves = 33f;
     public static final float titlePlant = 32f;
 
+    public static final float powerUpIndicator = 6f;
+
     public static final float health = 5f;
     public static final float score = 5f;
     public static final float debug = 5f;

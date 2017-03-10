@@ -212,7 +212,7 @@ public class EnemyDamageUtil {
         powerUp.add(PowerUpComponent.create(engine)
                 .setPowerUpType(PowerUpComponent.PowerUpType.UPGRADE));
         powerUp.add(BoundsComponent.create(engine)
-                .setBounds(0f, 0f, 1f, 1f));
+                .setBounds(0f, 0f, 2.5f, 2.5f));
         engine.addEntity(powerUp);
     }
 

@@ -1,5 +1,6 @@
 package com.roaringcatgames.galaxseed.systems;
 
+import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.ashley.core.Engine;
@@ -10,8 +11,12 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.math.Bezier;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.galaxseed.data.entitydefs.Transform;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.components.*;
@@ -69,7 +74,11 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
                     PowerUpComponent pc = Mappers.powerUp.get(pu);
                     switch(pc.powerUpType){
                         case UPGRADE:
-                            upgradeWeapon();
+                            TransformComponent powerUpTfm = K2ComponentMappers.transform.get(pu);
+                            PlayerComponent playerComponent = Mappers.player.get(player);
+
+                            indicatePowerUp(powerUpTfm, playerComponent, getEngine());
+                            upgradeWeapon(playerComponent);
                             break;
 
                     }
@@ -80,9 +89,46 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
         this.powerUps.clear();
     }
 
+    private void indicatePowerUp(TransformComponent powerUpTfm, PlayerComponent playerComponent, Engine engine){
+        Entity indicator = engine.createEntity();
+        indicator.add(TransformComponent.create(engine)
+            .setPosition(powerUpTfm.position.x, powerUpTfm.position.y, Z.powerUpIndicator)
+            .setScale(0.2f, 0.2f));
+        indicator.add(TextureComponent.create(engine));
+        indicator.add(StateComponent.create(engine)
+            .set("DEFAULT")
+            .setLooping(true));
 
-    private void upgradeWeapon() {
-        PlayerComponent playerComponent = Mappers.player.get(player);
+        boolean isMax = playerComponent.weaponLevel == WeaponLevel.LEVEL_3 || playerComponent.weaponLevel == WeaponLevel.LEVEL_4;
+        indicator.add(AnimationComponent.create(engine)
+            .addAnimation("DEFAULT", isMax ? Animations.getPwrMax() : Animations.getPwrUp()));
+
+        indicator.add(TweenComponent.create(engine)
+            .setTimeline(Timeline.createSequence()
+                .push(Tween.to(indicator, K2EntityTweenAccessor.SCALE, .5f)
+                    .ease(TweenEquations.easeOutElastic)
+                    .target(1f, 1f))
+                .push(Tween.to(indicator, K2EntityTweenAccessor.SCALE, 1f)
+                    .target(0.2f, 0.2f))));
+        float halfWidth = App.W/2f;
+        float targetX = playerComponent.weaponType == WeaponType.GUN_SEEDS ? (halfWidth) - 5f :
+                        playerComponent.weaponType == WeaponType.HELICOPTER_SEEDS ? (halfWidth) : (halfWidth) + 5f;
+        float midX = powerUpTfm.position.x <= halfWidth ? App.W + 5f : -5f;
+        indicator.add(PathFollowComponent.create(engine)
+            .setShouldRemoveWhenComplete(true)
+            .setPaused(false)
+            .setPathPosition(0f)
+            .setPath(new Bezier<>(
+                new Vector2(powerUpTfm.position.x, powerUpTfm.position.y),
+                new Vector2(midX, MathUtils.clamp(powerUpTfm.position.y + 15f, 0f, App.H)),
+                new Vector2(targetX, -5f)))
+            .setSpeed(0.5f));
+        indicator.add(WhenOffScreenComponent.create(engine)
+            .setHasBeenOnScreen(true));
+        engine.addEntity(indicator);
+    }
+
+    private void upgradeWeapon(PlayerComponent playerComponent) {
         if(playerComponent == null){
             return;
         }
@@ -218,11 +264,11 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.SPACE){
-            if(player != null) {
-                upgradeWeapon();
-            }
-        }
+//        if(keycode == Input.Keys.SPACE){
+//            if(player != null) {
+//                upgradeWeapon();
+//            }
+//        }
         return false;
     }
 

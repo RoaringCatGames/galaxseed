@@ -316,6 +316,13 @@ public class Assets {
         return getCachedAnimationFrames(ANI_ATLAS, "pickups/upgrade");
     }
 
+    public static Array<TextureAtlas.AtlasRegion> getPwrUpIndicatorFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "pickups/pwr-up");
+    }
+    public static Array<TextureAtlas.AtlasRegion> getPwrMaxIndicatorFrames(){
+        return getCachedAnimationFrames(ANI_ATLAS, "pickups/pwr-max");
+    }
+
     //////////////
     //Google Play
     //////////////
