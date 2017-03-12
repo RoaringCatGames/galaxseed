@@ -52,11 +52,13 @@ public class Z {
     public static final float debug = 5f;
     public static final float weaponSelectOverlay = 4f;
     public static final float weaponSelectInterface = 3f;
+
     public static final float weaponSelect = 2f;
     public static final float arrow = 1f;
     public static final float gameOver = 0f;
     public static final float tutorial = 0f;
     public static final float message = 0f;
+    public static final float weaponInfo = 0f;
 
 
     //Level Select
