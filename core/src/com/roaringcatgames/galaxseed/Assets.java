@@ -588,6 +588,16 @@ public class Assets {
         return getCachedAnimationFrames(ANI_ATLAS, "guns/dandy-particle");
     }
 
+    public static TextureAtlas.AtlasRegion getBerryBlasterInfo(){
+        return getCachedRegion(SPRITE_ATLAS, "weapon-select/vbb-info");
+    }
+    public static TextureAtlas.AtlasRegion getCopterCannonInfo(){
+        return getCachedRegion(SPRITE_ATLAS, "weapon-select/cc-info");
+    }
+    public static TextureAtlas.AtlasRegion getProtectAndPollenInfo(){
+        return getCachedRegion(SPRITE_ATLAS, "weapon-select/pp-info");
+    }
+
     public static Array<? extends TextureRegion> getAuraPodFrames(){
         return getCachedAnimationFrames(ANI_ATLAS, "weapon-select/aura");
     }

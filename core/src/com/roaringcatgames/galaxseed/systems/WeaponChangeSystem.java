@@ -1,6 +1,7 @@
 package com.roaringcatgames.galaxseed.systems;
 
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -16,6 +17,8 @@ import com.roaringcatgames.galaxseed.Animations;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.components.*;
+import com.roaringcatgames.galaxseed.data.entitydefs.Transform;
+import com.roaringcatgames.galaxseed.screens.SpaceScreenActionResolver;
 import com.roaringcatgames.galaxseed.values.GameState;
 import com.roaringcatgames.galaxseed.values.Z;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
@@ -33,6 +36,10 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     private Entity auraSelect;
     private Entity overlay;
     private Entity dashboard;
+
+    private Entity seedInfo;
+    private Entity helicopterInfo;
+    private Entity auraInfo;
 
     private Array<Entity> arrows = new Array<>();
 
@@ -166,6 +173,18 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .addAnimation("OFF", Animations.getSeedPodOff()));
             pEngine.addEntity(seedSelect);
 
+            seedInfo = engine.createEntity();
+            seedInfo.add(ClickableComponent.create(engine)
+                .setEventName(SpaceScreenActionResolver.BLASTER_INFO));
+            seedInfo.add(TransformComponent.create(engine)
+                .setPosition(xPos + 3f, selectY + 1f));
+            seedInfo.add(BoundsComponent.create(engine)
+                .setBounds(0f, 0f, 0.75f, 0.75f));
+            seedInfo.add(FollowerComponent.create(engine)
+                .setTarget(dashboard)
+                .setOffset(-2.6f, 1.25f));
+            engine.addEntity(seedInfo);
+
             Entity seedLevel = pEngine.createEntity();
             seedLevel.add(WeaponSelectComponent.create(pEngine)
                     .setWeaponType(WeaponType.GUN_SEEDS)
@@ -175,7 +194,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             seedLevel.add(FollowerComponent.create(pEngine)
                 .setTarget(dashboard)
                 .setMode(FollowMode.STICKY)
-                .setOffset(-4.64899f, -2.249f));
+                .setOffset(-4.60899f, -2.249f));
             seedLevel.add(TextureComponent.create(pEngine)
                 .setRegion(Assets.getSeedLevel(1)));
             pEngine.addEntity(seedLevel);
@@ -221,6 +240,18 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setRegion(Assets.getHelicopterLevel(1)));
             pEngine.addEntity(helicopterLevel);
 
+            helicopterInfo = engine.createEntity();
+            helicopterInfo.add(ClickableComponent.create(engine)
+                    .setEventName(SpaceScreenActionResolver.COPTER_INFO));
+            helicopterInfo.add(TransformComponent.create(engine)
+                    .setPosition(xPos + 3f, selectY + 1f));
+            helicopterInfo.add(BoundsComponent.create(engine)
+                    .setBounds(0f, 0f, 0.75f, 0.75f));
+            helicopterInfo.add(FollowerComponent.create(engine)
+                    .setTarget(dashboard)
+                    .setOffset(3.05f, 1.25f));
+            engine.addEntity(helicopterInfo);
+
             addArrowIndicator(pEngine, xPos, 0f);
         }
 
@@ -260,6 +291,18 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             auraLevel.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getAuraLevel(1)));
             pEngine.addEntity(auraLevel);
+
+            auraInfo = engine.createEntity();
+            auraInfo.add(ClickableComponent.create(engine)
+                    .setEventName(SpaceScreenActionResolver.POLLEN_INFO));
+            auraInfo.add(TransformComponent.create(engine)
+                    .setPosition(xPos + 3f, selectY + 1f));
+            auraInfo.add(BoundsComponent.create(engine)
+                    .setBounds(0f, 0f, 0.75f, 0.75f));
+            auraInfo.add(FollowerComponent.create(engine)
+                    .setTarget(dashboard)
+                    .setOffset(8.599f, 0.7f));
+            engine.addEntity(auraInfo);
 
             addArrowIndicator(pEngine, xPos + 1f, -20f);
         }
@@ -320,6 +363,8 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         }
     }
 
+
+
     public void showWeaponSelect() {
         PlayerComponent pc = getPlayerComponent();
         if(pc != null) {
@@ -374,52 +419,6 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
 
     @Override
     public boolean keyDown(int keycode) {
-
-//        if(keycode == Input.Keys.LEFT ||
-//                keycode == Input.Keys.RIGHT ||
-//                keycode == Input.Keys.UP ||
-//                keycode == Input.Keys.DOWN) {
-//            Entity mover = target == 0 ? seedSelect :
-//                    target == 1 ? seedLevel :
-//                    target == 2 ? helicopterSelect :
-//                    target == 3 ? helicopterLevel :
-//                    target == 4 ? auraSelect : auraLevel;
-//
-//            FollowerComponent fc = K2ComponentMappers.follower.get(mover);
-//            if (keycode == Input.Keys.LEFT) {
-//                fc.offset.add(-adjust, 0);
-//            } else if (keycode == Input.Keys.RIGHT) {
-//                fc.offset.add(adjust, 0);
-//            } else if (keycode == Input.Keys.UP) {
-//                fc.offset.add(0, adjust);
-//            } else if (keycode == Input.Keys.DOWN) {
-//                fc.offset.add(0, -adjust);
-//            }
-//        }else if(keycode == Input.Keys.NUM_0){
-//            target = 0;
-//        }else if(keycode == Input.Keys.NUM_1){
-//            target = 1;
-//        }else if(keycode == Input.Keys.NUM_2){
-//            target = 2;
-//        }else if(keycode == Input.Keys.NUM_3){
-//            target = 3;
-//        }else if(keycode == Input.Keys.NUM_4){
-//            target = 4;
-//        }else if(keycode == Input.Keys.NUM_5){
-//            target = 5;
-//        }
-//
-//        String seedXY = K2ComponentMappers.follower.get(seedSelect).offset.toString();
-//        String seedLxy = K2ComponentMappers.follower.get(seedLevel).offset.toString();
-//        String heliXY = K2ComponentMappers.follower.get(helicopterSelect).offset.toString();
-//        String heliLxy = K2ComponentMappers.follower.get(helicopterLevel).offset.toString();
-//        String auraXY = K2ComponentMappers.follower.get(auraSelect).offset.toString();
-//        String auraLXY = K2ComponentMappers.follower.get(auraLevel).offset.toString();
-//        Gdx.app.log("SELECT", "SEED: " + seedXY + "\nSEEDLVL: " + seedLxy +
-//                              "\nHELI: " + heliXY + "\nHELILVL: " + heliLxy +
-//                              "\nAURA: " + auraXY + "\nAURALVL: " + auraLXY);
-
-
         return false;
     }
 

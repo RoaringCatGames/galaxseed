@@ -2,35 +2,24 @@ package com.roaringcatgames.galaxseed.screens;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
-import com.roaringcatgames.galaxseed.LevelSelectActionResolver;
 import com.roaringcatgames.galaxseed.components.AdjustablePositionComponent;
 import com.roaringcatgames.galaxseed.components.Mappers;
 import com.roaringcatgames.galaxseed.data.EntityBuilder;
-import com.roaringcatgames.galaxseed.data.entitydefs.Transform;
 import com.roaringcatgames.galaxseed.data.scores.LevelProgression;
 import com.roaringcatgames.galaxseed.systems.AdjustPositionSystem;
 import com.roaringcatgames.galaxseed.systems.BackgroundSystem;
 import com.roaringcatgames.galaxseed.systems.BackgroundSystemConfig;
 import com.roaringcatgames.galaxseed.systems.CameraPanningSystem;
 import com.roaringcatgames.galaxseed.values.Colors;
-import com.roaringcatgames.galaxseed.values.Songs;
-import com.roaringcatgames.galaxseed.values.Z;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
-import com.roaringcatgames.kitten2d.ashley.components.TextureComponent;
 import com.roaringcatgames.kitten2d.ashley.components.TransformComponent;
 import com.roaringcatgames.kitten2d.ashley.systems.*;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
-import com.roaringcatgames.kitten2d.gdx.helpers.K2PreferenceManager;
 import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
-
-import java.util.Comparator;
 
 /**
  * Screen to house the selection of a level. Will be a menu screen without a player, and

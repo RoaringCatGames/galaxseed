@@ -1,4 +1,4 @@
-package com.roaringcatgames.galaxseed;
+package com.roaringcatgames.galaxseed.screens;
 
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
@@ -7,6 +7,9 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
+import com.roaringcatgames.galaxseed.Animations;
+import com.roaringcatgames.galaxseed.App;
+import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.components.InfoBubbleComponent;
 import com.roaringcatgames.galaxseed.data.LevelUtil;
 import com.roaringcatgames.galaxseed.data.scores.LevelStats;
