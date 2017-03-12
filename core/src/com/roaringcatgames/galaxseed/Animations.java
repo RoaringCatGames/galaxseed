@@ -144,9 +144,9 @@ public class Animations {
         gameOver = new Animation(1f/4f, Assets.getGameOverFrames());
         shipDeath = new Animation(1f/6f, Assets.getShipDeathFrames());
 
-        upgrade = new Animation(1f/6f, Assets.getUpgradeFrames());
-        pwrUp = new Animation(1f/6f, Assets.getPwrUpIndicatorFrames());
-        pwrMax = new Animation(1f/6f, Assets.getPwrMaxIndicatorFrames());
+        upgrade = new Animation(1f/8f, Assets.getUpgradeFrames());
+        pwrUp = new Animation(1f/8f, Assets.getPwrUpIndicatorFrames());
+        pwrMax = new Animation(1f/8f, Assets.getPwrMaxIndicatorFrames());
 
         seedPod = new Animation(1f/80f, Assets.getSeedPodFrames());
         helicopterPod = new Animation(1f/80f, Assets.getHelicopterPodFrames());

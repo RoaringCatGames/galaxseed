@@ -93,7 +93,7 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
         Entity indicator = engine.createEntity();
         indicator.add(TransformComponent.create(engine)
             .setPosition(powerUpTfm.position.x, powerUpTfm.position.y, Z.powerUpIndicator)
-            .setScale(0.2f, 0.2f));
+            .setScale(0f, 0f));
         indicator.add(TextureComponent.create(engine));
         indicator.add(StateComponent.create(engine)
             .set("DEFAULT")
@@ -103,26 +103,19 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
         indicator.add(AnimationComponent.create(engine)
             .addAnimation("DEFAULT", isMax ? Animations.getPwrMax() : Animations.getPwrUp()));
 
-        indicator.add(TweenComponent.create(engine)
-            .setTimeline(Timeline.createSequence()
+        Timeline tl = Timeline.createParallel()
+                .push(Tween.to(indicator, K2EntityTweenAccessor.OPACITY, 2f)
+                    .target(0f))
+                .push(Timeline.createSequence()
                 .push(Tween.to(indicator, K2EntityTweenAccessor.SCALE, .5f)
-                    .ease(TweenEquations.easeOutElastic)
-                    .target(1f, 1f))
+                        .target(1f, 1f))
                 .push(Tween.to(indicator, K2EntityTweenAccessor.SCALE, 1f)
-                    .target(0.2f, 0.2f))));
-        float halfWidth = App.W/2f;
-        float targetX = playerComponent.weaponType == WeaponType.GUN_SEEDS ? (halfWidth) - 5f :
-                        playerComponent.weaponType == WeaponType.HELICOPTER_SEEDS ? (halfWidth) : (halfWidth) + 5f;
-        float midX = powerUpTfm.position.x <= halfWidth ? App.W + 5f : -5f;
-        indicator.add(PathFollowComponent.create(engine)
-            .setShouldRemoveWhenComplete(true)
-            .setPaused(false)
-            .setPathPosition(0f)
-            .setPath(new Bezier<>(
-                new Vector2(powerUpTfm.position.x, powerUpTfm.position.y),
-                new Vector2(midX, MathUtils.clamp(powerUpTfm.position.y + 15f, 0f, App.H)),
-                new Vector2(targetX, -5f)))
-            .setSpeed(0.5f));
+                        .target(0f, 0f))
+                .push(Tween.to(indicator, K2EntityTweenAccessor.POSITION_XY, 0.5f)
+                        .target(-30f, -30f)));
+
+        indicator.add(TweenComponent.create(engine)
+            .setTimeline(tl));
         indicator.add(WhenOffScreenComponent.create(engine)
             .setHasBeenOnScreen(true));
         engine.addEntity(indicator);
