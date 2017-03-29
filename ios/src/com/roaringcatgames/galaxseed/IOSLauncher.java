@@ -9,6 +9,7 @@ import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import org.robovm.apple.uikit.UIViewController;
 import org.robovm.pods.google.GGLContext;
 import org.robovm.pods.google.GGLContextMobileAds;
+import org.robovm.pods.google.mobileads.GADAdSize;
 import org.robovm.pods.google.mobileads.GADBannerView;
 import org.robovm.pods.google.mobileads.GADRequest;
 
@@ -62,8 +63,9 @@ public class IOSLauncher extends IOSApplication.Delegate implements IAdControlle
             //Set and Load BannerAd
             UIViewController viewController = UIApplication.getSharedApplication().getKeyWindow().getRootViewController();
             gadBannerView.setRootViewController(viewController);
-            viewController.getView().addSubview(gadBannerView);
             gadBannerView.loadRequest(request);
+            gadBannerView.setAdSize(GADAdSize.SmartBannerPortrait());
+            viewController.getView().addSubview(gadBannerView);
         } else {
             gadBannerView.setHidden(false);
         }
