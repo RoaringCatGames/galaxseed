@@ -101,7 +101,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
         float titleSpeed = 6f;
         float galaxX = App.W/2f - 4.6f;
-        float galaxY = App.H - 5.2f;
+        float galaxY = App.H - 6.2f;
         Entity galaxTitle = engine.createEntity();
         galaxTitle.add(TextureComponent.create(engine)
                 .setRegion(Assets.getGalaxTitleImage()));
@@ -113,7 +113,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         engine.addEntity(galaxTitle);
 
         float seedX = App.W/2f + 4.4f;
-        float seedY = App.H - 6.2f;
+        float seedY = App.H - 7.2f;
         Entity seedTitle = engine.createEntity();
         seedTitle.add(TextureComponent.create(engine)
                 .setRegion(Assets.getSeedTitleImage()));
@@ -125,7 +125,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         engine.addEntity(seedTitle);
 
         float plantX = App.W/2f + 0.4f;
-        float plantY = App.H - 5f;
+        float plantY = App.H - 6f;
         plant = engine.createEntity();
         plant.add(StateComponent.create(engine)
                 .setLooping(false).set("DEFAULT"));
@@ -141,7 +141,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
 
         float xPos = App.W/2f - 5f;
-        float yPos = App.H - 14f;
+        float yPos = App.H - 15f;
         playTarget = createPlayAsteroid(xPos, yPos, Assets.getPlayAsteroid());
         engine.addEntity(playTarget);
         xPos += 10f;
