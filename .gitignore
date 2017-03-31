@@ -76,3 +76,8 @@ android/google-services.json
 #General
 *.secret
 android/**/*ids.xml
+
+#ios-ads-config
+ios/data/GoogleService-Info.plist
+ios/data/google-services.json
+ios/libs/*

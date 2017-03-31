@@ -20,6 +20,7 @@ allprojects {
         appName = "GalaxSeed"
         gdxVersion = '1.9.4'
         roboVMVersion = '2.3.0'
+        robopodsVersion = '2.2.1'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.3'
         aiVersion = '1.7.0'
@@ -86,6 +87,7 @@ project(":ios") {
         compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
+        compile "com.mobidevelop.robovm:robopods-google-mobile-ads-ios:$robopodsVersion"
     }
 }
 
