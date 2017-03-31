@@ -47,6 +47,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     private float arrowY = selectY + 4.5f;
     private float arrowRotateY = selectY + 4f;
     private float dashboardY = 2.5f;
+    private float infoBoundSize = 1.25f;
 
     private IGameProcessor game;
 
@@ -179,7 +180,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             seedInfo.add(TransformComponent.create(engine)
                 .setPosition(xPos + 3f, selectY + 1f));
             seedInfo.add(BoundsComponent.create(engine)
-                .setBounds(0f, 0f, 0.75f, 0.75f));
+                .setBounds(0f, 0f, infoBoundSize, infoBoundSize));
             seedInfo.add(FollowerComponent.create(engine)
                 .setTarget(dashboard)
                 .setOffset(-2.6f, 1.25f));
@@ -246,7 +247,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             helicopterInfo.add(TransformComponent.create(engine)
                     .setPosition(xPos + 3f, selectY + 1f));
             helicopterInfo.add(BoundsComponent.create(engine)
-                    .setBounds(0f, 0f, 0.75f, 0.75f));
+                    .setBounds(0f, 0f, infoBoundSize, infoBoundSize));
             helicopterInfo.add(FollowerComponent.create(engine)
                     .setTarget(dashboard)
                     .setOffset(3.05f, 1.25f));
@@ -298,7 +299,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             auraInfo.add(TransformComponent.create(engine)
                     .setPosition(xPos + 3f, selectY + 1f));
             auraInfo.add(BoundsComponent.create(engine)
-                    .setBounds(0f, 0f, 0.75f, 0.75f));
+                    .setBounds(0f, 0f, infoBoundSize, infoBoundSize));
             auraInfo.add(FollowerComponent.create(engine)
                     .setTarget(dashboard)
                     .setOffset(8.599f, 0.7f));
