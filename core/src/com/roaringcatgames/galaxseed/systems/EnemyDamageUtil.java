@@ -143,6 +143,10 @@ public class EnemyDamageUtil {
         powerUp.add(VelocityComponent.create(engine)
                 .setSpeed(0f, healthPackSpeed));
         powerUp.add(TextureComponent.create(engine));
+        powerUp.add(TweenComponent.create(engine)
+            .addTween(Tween.to(powerUp, K2EntityTweenAccessor.SCALE, 1f)
+                .target(0.8f, 0.8f)
+                .repeatYoyo(Tween.INFINITY, 0f)));
 
         powerUp.add(AnimationComponent.create(engine)
                 .addAnimation("DEFAULT", Animations.getUpgrade()));
