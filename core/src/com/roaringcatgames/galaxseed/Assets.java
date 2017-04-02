@@ -76,6 +76,8 @@ public class Assets {
         am.load(SELECT_SFX, SOUND);
         am.load(CLICK_SFX, SOUND);
         am.load(UPGRADE_SFX, SOUND);
+        am.load(SPEED_UP_SFX, SOUND);
+        am.load(SLOW_DOWN_SFX, SOUND);
 
         return am;
     }
@@ -698,6 +700,7 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getSfxOff(){
         return getCachedRegion(SPRITE_ATLAS, "options/sfx-off");
     }
+
     public static TextureAtlas.AtlasRegion getVibrationOn(){
         return getCachedRegion(SPRITE_ATLAS, "options/vibration-on");
     }
@@ -770,6 +773,12 @@ public class Assets {
         return am.get(SWISH_SFX, SOUND);
     }
 
+    public static Sound getSpeedUpSfx() {
+        return am.get(SPEED_UP_SFX, SOUND);
+    }
+    public static Sound getSlowDownSfx() {
+        return am.get(SLOW_DOWN_SFX, SOUND);
+    }
     public static Sound getPlanetBornSfx(int index){
         Sound s;
         switch(index){
@@ -911,6 +920,8 @@ public class Assets {
     private static final String SELECT_SFX = "sfx/select.mp3";
     private static final String UPGRADE_SFX = "sfx/upgrade.mp3";
     private static final String CLICK_SFX = "sfx/click.mp3";
+    private static final String SPEED_UP_SFX = "sfx/speed-up.mp3";
+    private static final String SLOW_DOWN_SFX = "sfx/slow-down.mp3";
 
     public static TextureRegion getDemoBrick() {
         return getCachedRegion(SPRITE_ATLAS, "options/demo");

@@ -29,4 +29,16 @@ public class Sfx {
             Assets.getPlanetBornSfx(position%3).play(Volume.PLANET_BORN_SFX);
         }
     }
+
+    public static void playSpeedUp(){
+        if(PrefsUtil.areSfxEnabled()){
+            Assets.getSpeedUpSfx().play(Volume.SPEED_UP_SFX);
+        }
+    }
+
+    public static void playSlowDown(){
+        if(PrefsUtil.areSfxEnabled()){
+            Assets.getSlowDownSfx().play(Volume.SLOW_DOWN_SFX);
+        }
+    }
 }
