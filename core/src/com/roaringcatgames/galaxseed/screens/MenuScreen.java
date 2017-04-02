@@ -291,7 +291,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         }
 
         if(isReady(playTarget, "play")){
-            //game.pauseBgMusic();
+            game.pauseBgMusic();
             //game.switchScreens("LEVEL_SELECT");
             game.switchScreens("GAME");
         }
