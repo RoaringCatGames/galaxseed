@@ -1,7 +1,6 @@
 package com.roaringcatgames.galaxseed.systems;
 
 import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.galaxseed.*;
 import com.roaringcatgames.galaxseed.components.*;
-import com.roaringcatgames.galaxseed.data.entitydefs.Transform;
 import com.roaringcatgames.galaxseed.screens.SpaceScreenActionResolver;
 import com.roaringcatgames.galaxseed.values.GameState;
 import com.roaringcatgames.galaxseed.values.Z;
@@ -50,6 +48,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     private IGameProcessor game;
 
     private WeaponType currentWeapon;
+    private boolean hasMadeInitialSelection = false;
 
     public WeaponChangeSystem(IGameProcessor game){
         super(Family.all(WeaponSelectComponent.class).get());
@@ -404,12 +403,14 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 .target(target));
         dashboard.add(tc);
 
-        if(!isShowing){
-            ((GalaxSeedGame)this.game).resumeBgMusic();
-            Sfx.playSpeedUp();
-        } else {
-            this.game.pauseBgMusic();
-            Sfx.playSlowDown();
+        if(hasMadeInitialSelection) {
+            if (!isShowing) {
+                ((GalaxSeedGame) this.game).resumeBgMusic();
+                Sfx.playSpeedUp();
+            } else {
+                this.game.pauseBgMusic();
+                Sfx.playSlowDown();
+            }
         }
         K2ComponentMappers.transform.get(overlay).setHidden(!isShowing);
     }
@@ -471,6 +472,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                        !auraInfoBounds.bounds.contains(touchPoint.x, touchPoint.y)) &&
                       pc != null && pc.weaponType != WeaponType.UNSELECTED){
                 App.setState(GameState.PLAYING);
+                hasMadeInitialSelection = true;
                 toggleWeaponSelect(false);
             }
         }

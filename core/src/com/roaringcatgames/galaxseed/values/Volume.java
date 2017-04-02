@@ -20,7 +20,7 @@ public class Volume {
     public static final float SELECT_SFX = 1f;
     public static final float UPGRADE_SFX = 1f;
     public static final float SPEED_UP_SFX = 0.2f;
-    public static final float SLOW_DOWN_SFX = 0.2f;
+    public static final float SLOW_DOWN_SFX = 0.1f;
 
     public static final float PLANET_BORN_SFX = 1f;
 }
