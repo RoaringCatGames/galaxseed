@@ -185,6 +185,12 @@ public class GalaxSeedGame extends Game implements IGameProcessor, InputProcesso
         }
     }
 
+    public void resumeBgMusic() {
+        if(bgMusic != null) {
+            bgMusic.play();
+        }
+    }
+
     @Override
     public void playBgMusic(String musicName) {
         if(PrefsUtil.isMusicOn()) {
