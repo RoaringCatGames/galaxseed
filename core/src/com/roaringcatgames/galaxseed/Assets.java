@@ -78,6 +78,7 @@ public class Assets {
         am.load(SELECT_SFX, SOUND);
         am.load(CLICK_SFX, SOUND);
         am.load(UPGRADE_SFX, SOUND);
+        am.load(MAX_UPGRADE_SFX, SOUND);
         am.load(SPEED_UP_SFX, SOUND);
         am.load(SLOW_DOWN_SFX, SOUND);
 
@@ -839,6 +840,9 @@ public class Assets {
     public static Sound getUpgradeSfx(){
         return am.get(UPGRADE_SFX, SOUND);
     }
+    public static Sound getMaxUpgradeSfx(){
+        return am.get(MAX_UPGRADE_SFX, SOUND);
+    }
     public static Sound getClickSfx(){
         return am.get(CLICK_SFX, SOUND);
     }
@@ -929,6 +933,7 @@ public class Assets {
     private static final String PLANET_BORN_3 = "sfx/plant-born-3.mp3";
     private static final String SELECT_SFX = "sfx/select.mp3";
     private static final String UPGRADE_SFX = "sfx/upgrade.mp3";
+    private static final String MAX_UPGRADE_SFX = "sfx/max-upgrade.mp3";
     private static final String CLICK_SFX = "sfx/click.mp3";
     private static final String SPEED_UP_SFX = "sfx/speed-up.mp3";
     private static final String SLOW_DOWN_SFX = "sfx/slow-down.mp3";

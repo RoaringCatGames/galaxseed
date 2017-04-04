@@ -148,8 +148,12 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
                     WeaponGeneratorUtil.generateHelicopterGuns(player, engine);
                     break;
             }
+        }
 
+        if(playerComponent.weaponLevel != WeaponLevel.LEVEL_4) {
             Sfx.playUpgradeSound();
+        }else{
+            Sfx.playMaxUpgradeSound();
         }
     }
 

@@ -24,6 +24,12 @@ public class Sfx {
         }
     }
 
+    public static void playMaxUpgradeSound(){
+        if(PrefsUtil.areSfxEnabled()){
+            Assets.getMaxUpgradeSfx().play(Volume.UPGRADE_SFX);
+        }
+    }
+
     public static void playPlanetBorn(int position){
         if(PrefsUtil.areSfxEnabled()){
             Assets.getPlanetBornSfx(position%3).play(Volume.PLANET_BORN_SFX);
