@@ -20,6 +20,8 @@ import com.roaringcatgames.galaxseed.values.Z;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.kitten2d.ashley.systems.MovementSystem;
+import com.roaringcatgames.kitten2d.ashley.systems.PathFollowSystem;
 import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 
 /**
@@ -407,10 +409,18 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             if (!isShowing) {
                 ((GalaxSeedGame) this.game).resumeBgMusic();
                 Sfx.playSpeedUp();
+                getEngine().getSystem(MovementSystem.class).setProcessing(true);
+                getEngine().getSystem(PathFollowSystem.class).setProcessing(true);
+                getEngine().getSystem(FiringSystem.class).setProcessing(true);
             } else {
                 this.game.pauseBgMusic();
                 Sfx.playSlowDown();
+                getEngine().getSystem(MovementSystem.class).setProcessing(false);
+                getEngine().getSystem(PathFollowSystem.class).setProcessing(false);
+                getEngine().getSystem(FiringSystem.class).setProcessing(false);
             }
+
+
         }
         K2ComponentMappers.transform.get(overlay).setHidden(!isShowing);
     }
