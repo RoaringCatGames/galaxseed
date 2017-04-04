@@ -151,7 +151,7 @@
                     WeaponDecorationComponent.class).get()));
 
 
-            engine.addSystem(new DemoSystem());
+            //engine.addSystem(new DemoSystem());
             engine.addSystem(gameOverSystem);
             engine.addSystem(new FadingSystem());
             engine.addSystem(new HealthPackSystem());
