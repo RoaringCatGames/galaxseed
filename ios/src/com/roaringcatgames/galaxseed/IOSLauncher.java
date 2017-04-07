@@ -53,7 +53,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IAdControlle
             keywords.add("Plants");
             keywords.add("Space");
 
-            request.setTestDevices(Arrays.asList(GADRequest.getSimulatorID()));
+            //request.setTestDevices(Arrays.asList(GADRequest.getSimulatorID()));
             request.setKeywords(keywords);
 
             String bannerId = GGLContextMobileAds.getSharedInstance().getConfiguration().getBannerAdUnitID();
