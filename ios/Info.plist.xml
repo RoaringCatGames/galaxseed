@@ -28,6 +28,10 @@
     <false/>
     <key>UIStatusBarHidden</key>
     <true/>
+    <key>UIRequiresFullScreen</key>
+    <true/>
+    <key>MinimumOSVersion</key>
+    <string>8.0</string>
     <key>UIDeviceFamily</key>
     <array>
         <integer>1</integer>
@@ -41,8 +45,6 @@
     <key>UISupportedInterfaceOrientations</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>
-        <string>UIInterfaceOrientationLandscapeLeft</string>
-        <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
     <key>CFBundleIcons</key>
     <dict>
@@ -52,6 +54,10 @@
             <array>
                 <string>Icon</string>
                 <string>Icon-72</string>
+                <string>Icon-76</string>
+                <string>Icon-60@2x</string>
+                <string>Icon-72@2x</string>
+                <string>Icon-76@2x</string>
             </array>
         </dict>
     </dict>
