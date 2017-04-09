@@ -62,7 +62,7 @@ public class LevelSelectScreen extends LazyInitScreen implements EntityListener{
         CameraPanningSystem cameraPanningSystem = new CameraPanningSystem(minCamBounds, maxCamBounds, game, App.PPM,  5f);
 
         BackgroundSystem bgSystem = new BackgroundSystem(minBounds, maxBounds,
-                new BackgroundSystemConfig(false, false, false, false, false));
+                new BackgroundSystemConfig(false, false, false, false, false, false));
 
         AdjustPositionSystem adjustPositionSystem = new AdjustPositionSystem(game.getCamera(), game.getViewport(), game);
 

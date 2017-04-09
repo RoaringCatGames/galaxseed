@@ -4,9 +4,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.roaringcatgames.galaxseed.Animations;
@@ -21,6 +23,8 @@ import com.roaringcatgames.kitten2d.ashley.components.*;
 import java.util.Random;
 
 public class BackgroundSystem extends IteratingSystem {
+
+    private final float NUMBER_OF_RANDOM_PLANETS = 30f;
 
     public float bgSpeed = -1f;
     public float stickerSpeed = -1.5f;
@@ -109,23 +113,41 @@ public class BackgroundSystem extends IteratingSystem {
 
         planets = new Array<>();
 
-        planets.add(new BackgroundSticker(screenCenter, 40f, 0f, Assets.getPluto()));
-        planets.add(new BackgroundSticker(leftCenter, 72f, 0f, Assets.getNeptune()));
-        planets.add(new BackgroundSticker(screenCenter, 120f, 0f, Assets.getUranus()));
+        if(config.isShouldRandomizePlanets()){
+            int lastTarget = 0;
+            float baseY = 0f;
+            for(int i=0;i<NUMBER_OF_RANDOM_PLANETS;i++) {
+                float x = MathUtils.random(0f, App.W);
+                float y = baseY + MathUtils.random(App.H*2f, App.H*3.5f);
+                baseY = y;
+                int targetPlanet = 0;
+                while(targetPlanet == 0 || targetPlanet == lastTarget){
+                    targetPlanet = MathUtils.random(1, 14);
+                }
+                lastTarget = targetPlanet;
 
-        planets.add(new BackgroundSticker(saturnLeft, 175f, 0f, Assets.getSaturnOne()));
-        planets.add(new BackgroundSticker(saturnRight, 175f, 0f, Assets.getSaturnTwo()));
+                Array<TextureAtlas.AtlasRegion> regions = Assets.getRandomPlanetRegions(targetPlanet);
+                planets.add(new BackgroundSticker(x, y, 0f, regions.get(0)));
 
-        planets.add(new BackgroundSticker(jupiterLeft, 250f, 0f, Assets.getJupiterBottomLeft()));
-        planets.add(new BackgroundSticker(jupiterLeft, 301.53125f, 0f, Assets.getJupiterTopLeft()));
-        planets.add(new BackgroundSticker(jupiterRight, 301.53125f, 0f, Assets.getJupiterTopRight()));
-        planets.add(new BackgroundSticker(jupiterRight, 250f, 0f, Assets.getJupiterBottomrRight()));
+            }
+        }else {
+            planets.add(new BackgroundSticker(screenCenter, 40f, 0f, Assets.getPluto()));
+            planets.add(new BackgroundSticker(leftCenter, 72f, 0f, Assets.getNeptune()));
+            planets.add(new BackgroundSticker(screenCenter, 120f, 0f, Assets.getUranus()));
 
-        planets.add(new BackgroundSticker(marsX, 415f, 0f, Assets.getMars()));
-        planets.add(new BackgroundSticker(leftCenter, 440f, 0f, Assets.getMoon()));
-        planets.add(new BackgroundSticker(screenCenter, 460f, 0f, Assets.getEarth()));
-        planets.add(new BackgroundSticker(screenCenter, 920f, 0f, Assets.getDonut()));
+            planets.add(new BackgroundSticker(saturnLeft, 175f, 0f, Assets.getSaturnOne()));
+            planets.add(new BackgroundSticker(saturnRight, 175f, 0f, Assets.getSaturnTwo()));
 
+            planets.add(new BackgroundSticker(jupiterLeft, 250f, 0f, Assets.getJupiterBottomLeft()));
+            planets.add(new BackgroundSticker(jupiterLeft, 301.53125f, 0f, Assets.getJupiterTopLeft()));
+            planets.add(new BackgroundSticker(jupiterRight, 301.53125f, 0f, Assets.getJupiterTopRight()));
+            planets.add(new BackgroundSticker(jupiterRight, 250f, 0f, Assets.getJupiterBottomrRight()));
+
+            planets.add(new BackgroundSticker(marsX, 415f, 0f, Assets.getMars()));
+            planets.add(new BackgroundSticker(leftCenter, 440f, 0f, Assets.getMoon()));
+            planets.add(new BackgroundSticker(screenCenter, 460f, 0f, Assets.getEarth()));
+            planets.add(new BackgroundSticker(screenCenter, 920f, 0f, Assets.getDonut()));
+        }
         Entity vp = engine.createEntity();
         vp.add(BoundsComponent.create(engine)
             .setBounds(left, bottom, (right-left), (top-bottom)));

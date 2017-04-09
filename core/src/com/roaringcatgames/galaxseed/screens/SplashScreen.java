@@ -45,7 +45,7 @@ public class SplashScreen extends LazyInitScreen {
         Vector2 minBounds = new Vector2(0f, 0f);
         Vector2 maxBounds = new Vector2(App.W, App.H);
         engine.addSystem(new ScreenWrapSystem(minBounds, maxBounds, App.PPM));
-        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(true, false, false, true, true)));
+        engine.addSystem(new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(true, false, false, true, true, false)));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RotationSystem());
         engine.addSystem(new FollowerSystem(Family.all(AnimationComponent.class).get()));

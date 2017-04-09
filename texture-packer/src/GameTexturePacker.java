@@ -25,7 +25,7 @@ public class GameTexturePacker {
 
         // adjust the padding settings
         settings.scale = HUNDRED_PERCENT;//FIFTY_PERCENT;
-        settings.paddingX = 2;
+        settings.paddingX = 0;
         settings.paddingY = 2;
         settings.edgePadding = false;
         settings.maxWidth = 2048;//4096;

@@ -115,7 +115,7 @@
             GameOverSystem gameOverSystem = new GameOverSystem(game, endSongName);
             gameOverSystem.setProcessing(false);
             PathFollowSystem pathFollowSystem = new PathFollowSystem();
-            bgSystem = new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(true, false, true, true, true));
+            bgSystem = new BackgroundSystem(minBounds, maxBounds, new BackgroundSystemConfig(true, false, true, true, true, true));
 
             //Custom Systems
 
@@ -287,7 +287,7 @@
 
         @Override
         public boolean scrolled(int amount) {
-            //game.getCamera().zoom += amount;
+            game.getCamera().zoom += amount;
             return false;
         }
     }

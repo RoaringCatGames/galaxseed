@@ -208,6 +208,12 @@ public class Assets {
         return getCachedRegion(SPRITE_ATLAS, "planets/Donut");
     }
 
+    public static Array<TextureAtlas.AtlasRegion> getRandomPlanetRegions(int target){
+        Array<TextureAtlas.AtlasRegion> regions = new Array<>();
+        regions.add(getCachedRegion(SPRITE_ATLAS, "planets/Alt/" + target));
+        return regions;
+    }
+
     public static TextureAtlas.AtlasRegion getLevelPlanet(int index){
         TextureAtlas.AtlasRegion region = null;
         switch(index){
