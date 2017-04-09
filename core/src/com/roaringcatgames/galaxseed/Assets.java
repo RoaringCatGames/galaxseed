@@ -288,6 +288,9 @@ public class Assets {
     public static TextureAtlas.AtlasRegion getPlayAsteroid(){
         return getCachedRegion(SPRITE_ATLAS, "options/play");
     }
+    public static TextureAtlas.AtlasRegion getCampaignModeButton(){
+        return getCachedRegion(SPRITE_ATLAS, "options/campaign-off");
+    }
     public static TextureAtlas.AtlasRegion getOptionsAsteroid(){
         return getCachedRegion(SPRITE_ATLAS, "options/options");
     }

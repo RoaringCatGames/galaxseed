@@ -38,7 +38,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
     private IGameServiceController gameServicesController;
     private PooledEngine engine;
 
-    private Entity plant, playTarget, optionsTarget, swipeTutorial, exitButton,
+    private Entity plant, playTarget, campaignTarget, optionsTarget, swipeTutorial, exitButton,
                    signInButton, achievementsButton, leaderboardButton;
     private ObjectMap<String, Boolean> readyMap = new ObjectMap<>();
 
@@ -140,17 +140,23 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
 
 
-        float xPos = App.W/2f - 5f;
-        float yPos = App.H - 15f;
-        playTarget = createPlayAsteroid(xPos, yPos, Assets.getPlayAsteroid());
+        float xPos = App.W/2f - 3f;
+        float yPos = App.H - 17f;
+        playTarget = createPlayAsteroid(xPos, yPos, Assets.getPlayAsteroid(), true);
         engine.addEntity(playTarget);
-        xPos += 10f;
+        xPos = App.W/2f + 5f;
+        yPos = App.H - 15f;
         optionsTarget = createPlayAsteroid(xPos, yPos, Assets.getOptionsAsteroid());
         engine.addEntity(optionsTarget);
 
-        yPos -= 4f;
-        if(gameServicesController != null){
+        xPos = App.W/2f - 6f;
+        yPos = App.H - 13.5f;
+        campaignTarget = createPlayAsteroid(xPos, yPos, Assets.getCampaignModeButton(), true);
+        engine.addEntity(campaignTarget);
 
+        yPos = App.H - 19f;
+        if(gameServicesController != null){
+            xPos = App.W/2f + 5f;
             //Automatically Connect
             if(game.getPreferenceManager().getStoredInt(PrefsUtil.GAME_SERVICES) == 1){
                 gameServicesController.connectToGameServices();
@@ -199,7 +205,12 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         engine.addEntity(plant);
     }
 
-    private Entity createPlayAsteroid(float xPos, float yPos, TextureRegion region) {
+    private Entity createPlayAsteroid(float xPos, float yPos, TextureRegion region, boolean...isScaled) {
+        boolean isScaledDown = isScaled != null && isScaled.length > 0 && isScaled[0];
+
+        float scale = isScaledDown ? 2f/3f : 1f;
+        float boundsRadius = isScaledDown ? 2f : 3f;
+
         Entity playAsteroid = engine.createEntity();
         playAsteroid.add(WhenOffScreenComponent.create(engine));
         playAsteroid.add(MenuItemComponent.create(engine));
@@ -209,10 +220,10 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         playAsteroid.add(TextureComponent.create(engine)
             .setRegion(region));
         playAsteroid.add(CircleBoundsComponent.create(engine)
-                .setCircle(xPos, yPos, 3f));
+                .setCircle(xPos, yPos, boundsRadius));
         playAsteroid.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos, Z.playAsteroids)
-                .setScale(1f, 1f));
+                .setScale(scale, scale));
         playAsteroid.add(ShakeComponent.create(engine)
                 .setSpeed(6f, 4f)
                 .setOffsets(0.4f, 0.6f)
