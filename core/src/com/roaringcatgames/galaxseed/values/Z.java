@@ -58,6 +58,7 @@ public class Z {
     public static final float gameOver = 0f;
     public static final float tutorial = 0f;
     public static final float message = 0f;
+    public static final float weaponInfoClearer = 1f;
     public static final float weaponInfo = 0f;
 
 

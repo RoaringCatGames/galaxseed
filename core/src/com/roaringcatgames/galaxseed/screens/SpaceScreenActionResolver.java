@@ -54,6 +54,7 @@ public class SpaceScreenActionResolver implements IActionResolver {
         if(lastTargetEntity != null){
             engine.removeEntity(lastTargetEntity);
         }
+
         Entity weaponInfo = engine.createEntity();
         TextureRegion region = wt == WeaponType.GUN_SEEDS ? Assets.getBerryBlasterInfo() :
                 wt == WeaponType.HELICOPTER_SEEDS ? Assets.getCopterCannonInfo() :
@@ -70,10 +71,9 @@ public class SpaceScreenActionResolver implements IActionResolver {
                 .setRegion(region));
 
         weaponInfo.add(ClickableComponent.create(engine)
-                .setEventName("CLOSE_INFO"));
+                .setEventName(CLOSE_INFO));
         weaponInfo.add(BoundsComponent.create(engine)
-                .setBounds(0f, 0f, 1.5f, 1.5f)
-                .setOffset(8.5f, 5.5f));
+                .setBounds(0f, 0f, App.W, App.H));
 
         engine.addEntity(weaponInfo);
         lastTargetEntity = weaponInfo;

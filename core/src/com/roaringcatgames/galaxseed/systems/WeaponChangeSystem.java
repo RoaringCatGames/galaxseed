@@ -153,6 +153,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         float xPos = App.W/2f - offset;
         float buttonBoundSize = 3f;
         if(seedSelect == null){
+
             seedSelect = pEngine.createEntity();
             seedSelect.add(WeaponSelectComponent.create(pEngine)
                 .setWeaponType(WeaponType.GUN_SEEDS));
