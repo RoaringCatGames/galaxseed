@@ -283,7 +283,7 @@ public class BackgroundSystem extends IteratingSystem {
             if(bg.clouds != null){
                 Entity cloudTile = engine.createEntity();
                 int cloudPos = rnd.nextInt(bg.clouds.size);
-                float additionalOffest = K2MathUtil.getRandomInRange(0f, 3.5f);
+                float additionalOffest = K2MathUtil.getRandomInRange(App.H*2f, App.H*5f);
                 float xOff = K2MathUtil.getRandomInRange(-2.5f, 2.5f);
                 float yOff = K2MathUtil.getRandomInRange(-2.5f, 2.5f);
                 cloudTile.add(TextureComponent.create(engine)
