@@ -474,12 +474,15 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
 
             if (App.isWeaponEnabled(WeaponType.GUN_SEEDS) && seedBounds.bounds.contains(touchPoint.x, touchPoint.y)) {
                 switchWeapon(WeaponType.GUN_SEEDS);
+                Sfx.playSelectNoise();
                 hideCursor = false;
             } else if (App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS) && helicopterBounds.bounds.contains(touchPoint.x, touchPoint.y)) {
                 switchWeapon(WeaponType.HELICOPTER_SEEDS);
+                Sfx.playSelectNoise();
                 hideCursor = false;
             } else if (App.isWeaponEnabled(WeaponType.POLLEN_AURA) && auraBounds.bounds.contains(touchPoint.x, touchPoint.y)) {
                 switchWeapon(WeaponType.POLLEN_AURA);
+                Sfx.playSelectNoise();
                 hideCursor = false;
             } else if((!seedInfoBounds.bounds.contains(touchPoint.x, touchPoint.y) &&
                        !heliInfoBounds.bounds.contains(touchPoint.x, touchPoint.y) &&

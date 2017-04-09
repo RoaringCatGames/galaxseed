@@ -47,4 +47,10 @@ public class Sfx {
             Assets.getSlowDownSfx().play(Volume.SLOW_DOWN_SFX);
         }
     }
+
+    public static void playWeaponSelect(){
+        if(PrefsUtil.areSfxEnabled()){
+            Assets.getBloomSfx(1).play(Volume.WEAPON_SELECT);
+        }
+    }
 }

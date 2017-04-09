@@ -14,6 +14,7 @@ public class Volume {
     public static final float PLAYER_HIT_H = 1f;
     public static final float EXPLOSION_SFX = 0.5f;
     public static final float BLOOM_TREE_SFX = 0.1f;
+    public static final float WEAPON_SELECT = 1f;
     public static final float SWISH_SFX = 1f;
 
     public static final float CLICK_SFX = 1f;
