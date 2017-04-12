@@ -37,6 +37,8 @@ public class AndroidLauncher extends AndroidApplication implements
     private boolean mAutoStartSignInFlow = true;
     private boolean mSignInClicked = false;
 
+    private int lastAction = -1;
+
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -175,6 +177,11 @@ public class AndroidLauncher extends AndroidApplication implements
     @Override
     public void onConnected(Bundle bundle) {
         Gdx.app.log("ANDROID LAUNCHER", "CONNECTED!!");
+        if(lastAction == REQUEST_LEADERBOARD){
+            showLeaderBoard();
+        }else if(lastAction == REQUEST_ACHIEVEMENTS){
+            showAchievements();
+        }
         //this.connectionEstablished();
     }
 
@@ -288,12 +295,6 @@ public class AndroidLauncher extends AndroidApplication implements
     }
 
     @Override
-    public void showAchievements() {
-        startActivityForResult(Games.Achievements.getAchievementsIntent(googleApiClient),
-                REQUEST_ACHIEVEMENTS);
-    }
-
-    @Override
     public void submitScore(int score) {
         Gdx.app.log("ANDROID LAUNCHER", "Submitting Score: " + score);
         if(googleApiClient.isConnected()) {
@@ -304,8 +305,27 @@ public class AndroidLauncher extends AndroidApplication implements
     }
 
     @Override
+    public void showAchievements() {
+        Gdx.app.log("ANDROID LAUNCHER", "Requesting Achievements");
+        if(googleApiClient.isConnected()) {
+            lastAction = -1;
+            startActivityForResult(Games.Achievements.getAchievementsIntent(googleApiClient),
+                    REQUEST_ACHIEVEMENTS);
+        }else{
+            this.lastAction = REQUEST_ACHIEVEMENTS;
+            connectToGameServices();
+        }
+    }
+
+    @Override
     public void showLeaderBoard() {
-        startActivityForResult(Games.Leaderboards.getLeaderboardIntent(googleApiClient,
-                getString(R.string.leaderboard_id)), REQUEST_LEADERBOARD);
+        Gdx.app.log("ANDROID LAUNCHER", "Requesting Leaderboards");
+        if (isConnected()) {
+            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(googleApiClient,
+                    getString(R.string.leaderboard_id)), REQUEST_LEADERBOARD);
+        }else{
+            this.lastAction = REQUEST_LEADERBOARD;
+            connectToGameServices();
+        }
     }
 }
