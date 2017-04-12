@@ -7,6 +7,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -227,6 +228,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         playAsteroid.add(ShakeComponent.create(engine)
                 .setSpeed(6f, 4f)
                 .setOffsets(0.4f, 0.6f)
+                .setCurrentTime(MathUtils.random(10f))
                 .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
 
         return playAsteroid;
