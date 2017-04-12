@@ -117,7 +117,7 @@ public class AndroidLauncher extends AndroidApplication implements
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Gdx.app.log("ANDROID LAUNCHER", "### STARTING ADVERTISEMENT");
+                //Gdx.app.log("ANDROID LAUNCHER", "### STARTING ADVERTISEMENT");
                 AdRequest adRequest = new AdRequest.Builder().build();
                 aView.loadAd(adRequest);
                 aView.setVisibility(View.VISIBLE);
@@ -176,7 +176,7 @@ public class AndroidLauncher extends AndroidApplication implements
 
     @Override
     public void onConnected(Bundle bundle) {
-        Gdx.app.log("ANDROID LAUNCHER", "CONNECTED!!");
+        //Gdx.app.log("ANDROID LAUNCHER", "CONNECTED!!");
         if(lastAction == REQUEST_LEADERBOARD){
             showLeaderBoard();
         }else if(lastAction == REQUEST_ACHIEVEMENTS){
@@ -187,14 +187,14 @@ public class AndroidLauncher extends AndroidApplication implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Gdx.app.log("ANDROID LAUNCHER", "Connection Suspended: " + i);
+        //Gdx.app.log("ANDROID LAUNCHER", "Connection Suspended: " + i);
         googleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Gdx.app.log("ANDROID LAUNCHER", "Connection Failed!!" + connectionResult.getErrorCode() + "-" + connectionResult.hasResolution() + "-" + connectionResult.getResolution().toString());
-        Gdx.app.log("ANDROID LAUNCHER", " Resolving Connection?: " + mResolvingConnectionFailure);
+        //Gdx.app.log("ANDROID LAUNCHER", "Connection Failed!!" + connectionResult.getErrorCode() + "-" + connectionResult.hasResolution() + "-" + connectionResult.getResolution().toString());
+        //Gdx.app.log("ANDROID LAUNCHER", " Resolving Connection?: " + mResolvingConnectionFailure);
         if (mResolvingConnectionFailure) {
             // Already resolving
             return;
@@ -207,7 +207,7 @@ public class AndroidLauncher extends AndroidApplication implements
             mSignInClicked = false;
             mResolvingConnectionFailure = true;
 
-            Gdx.app.log("ANDROID LAUNCHER", "ATtempting to Resolve COnnection Failure");
+            //Gdx.app.log("ANDROID LAUNCHER", "ATtempting to Resolve COnnection Failure");
             // Attempt to resolve the connection failure using BaseGameUtils.
             // The R.string.signin_other_error value should reference a generic
             // error string in your strings.xml file, such as "There was
@@ -215,7 +215,7 @@ public class AndroidLauncher extends AndroidApplication implements
             if (!BaseGameUtils.resolveConnectionFailure(this,
                     googleApiClient, connectionResult,
                     RC_SIGN_IN, getString(R.string.signin_other_error))) {
-                Gdx.app.log("ANDROID LAUNCHER", "Failed to Resolve ConnectionFailer via BaseGameUtils");
+                //Gdx.app.log("ANDROID LAUNCHER", "Failed to Resolve ConnectionFailer via BaseGameUtils");
                 try {
                     connectionResult.startResolutionForResult(this, RC_SIGN_IN);
                 }catch(Exception e){
@@ -224,14 +224,14 @@ public class AndroidLauncher extends AndroidApplication implements
                 mResolvingConnectionFailure = false;
             }else{
                 mResolvingConnectionFailure = false;
-                Gdx.app.log("ANDROID LAUNCHER", "Resolved I guess");
+                //Gdx.app.log("ANDROID LAUNCHER", "Resolved I guess");
                 try {
                     ConnectionResult connResult = googleApiClient.getConnectionResult(Games.API);
                     if (connResult != null) {
                         onConnectionFailed(connResult);
                     }
                 }catch(Exception e){
-                    Gdx.app.log("ANDROID LAUNCHER", "Failed to get ConnectionResult: " + e.getMessage());
+                    //Gdx.app.log("ANDROID LAUNCHER", "Failed to get ConnectionResult: " + e.getMessage());
                 }
             }
         }
@@ -239,12 +239,12 @@ public class AndroidLauncher extends AndroidApplication implements
 
 
     protected void onActivityResult(final int requestCode, final int resultCode,final Intent data) {
-        Gdx.app.log("ANDROID LAUNCHER", "Activity Result Occurred Request Code: " + requestCode +  " Result Code: " + resultCode);
+        //Gdx.app.log("ANDROID LAUNCHER", "Activity Result Occurred Request Code: " + requestCode +  " Result Code: " + resultCode);
         if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK) {
-            Gdx.app.log("ANDROID LAUNCHER", "The User was Chosen!");
+            //Gdx.app.log("ANDROID LAUNCHER", "The User was Chosen!");
             googleApiClient.connect();
         } else if ( resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED)  {
-            Gdx.app.log("ANDROID LAUNCHER", "Google Play Services Sign Out occurred!");
+            //Gdx.app.log("ANDROID LAUNCHER", "Google Play Services Sign Out occurred!");
             googleApiClient.disconnect();
         }
     }
@@ -272,23 +272,27 @@ public class AndroidLauncher extends AndroidApplication implements
 
         if(googleApiClient.isConnected()) {
             switch (name) {
+                case AchievementItems.KITTEN:
+                    Games.Achievements.unlock(googleApiClient, getString(R.string.kitten_achievement_id));
+                    break;
+                case AchievementItems.TREE_HIGH:
+                    Games.Achievements.unlock(googleApiClient, getString(R.string.tree_high_club_achievement_id));
+                    break;
+                case AchievementItems.WEAPON:
+                    Games.Achievements.unlock(googleApiClient, getString(R.string.weapon_achievement_id));
+                    break;
+                case AchievementItems.GALACTIC_GARDENER:
+                    Games.Achievements.unlock(googleApiClient, getString(R.string.galactic_gardener_achievement_id));
+                    break;
+                case AchievementItems.DONUT:
+                    Games.Achievements.unlock(googleApiClient, getString(R.string.donut_achievement_id));
+                    break;
+
                 case AchievementItems.URANUS:
                     Games.Achievements.unlock(googleApiClient, getString(R.string.uranus_achievement_id));
                     break;
                 case AchievementItems.HOME:
                     Games.Achievements.unlock(googleApiClient, getString(R.string.home_achievement_id));
-                    break;
-                case AchievementItems.KITTEN:
-                    Games.Achievements.unlock(googleApiClient, getString(R.string.kitten_achievement_id));
-                    break;
-                case AchievementItems.WEAPON:
-                    Games.Achievements.unlock(googleApiClient, getString(R.string.weapon_achievement_id));
-                    break;
-                case AchievementItems.DONUT:
-                    Games.Achievements.unlock(googleApiClient, getString(R.string.donut_achievement_id));
-                    break;
-                case AchievementItems.TREE_HIGH:
-                    Games.Achievements.unlock(googleApiClient, getString(R.string.tree_high_achievement_id));
                     break;
             }
         }
@@ -296,17 +300,17 @@ public class AndroidLauncher extends AndroidApplication implements
 
     @Override
     public void submitScore(int score) {
-        Gdx.app.log("ANDROID LAUNCHER", "Submitting Score: " + score);
+        //Gdx.app.log("ANDROID LAUNCHER", "Submitting Score: " + score);
         if(googleApiClient.isConnected()) {
 
-            Gdx.app.log("ANDROID LAUNCHER", "Connected and Sending Score!!" + score);
+            //Gdx.app.log("ANDROID LAUNCHER", "Connected and Sending Score!!" + score);
             Games.Leaderboards.submitScore(googleApiClient, getString(R.string.leaderboard_id), score);
         }
     }
 
     @Override
     public void showAchievements() {
-        Gdx.app.log("ANDROID LAUNCHER", "Requesting Achievements");
+        //Gdx.app.log("ANDROID LAUNCHER", "Requesting Achievements");
         if(googleApiClient.isConnected()) {
             lastAction = -1;
             startActivityForResult(Games.Achievements.getAchievementsIntent(googleApiClient),
@@ -319,7 +323,7 @@ public class AndroidLauncher extends AndroidApplication implements
 
     @Override
     public void showLeaderBoard() {
-        Gdx.app.log("ANDROID LAUNCHER", "Requesting Leaderboards");
+        //Gdx.app.log("ANDROID LAUNCHER", "Requesting Leaderboards");
         if (isConnected()) {
             startActivityForResult(Games.Leaderboards.getLeaderboardIntent(googleApiClient,
                     getString(R.string.leaderboard_id)), REQUEST_LEADERBOARD);

@@ -16,14 +16,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.galaxseed.*;
 import com.roaringcatgames.galaxseed.data.entitydefs.Transform;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.components.*;
-import com.roaringcatgames.galaxseed.Animations;
-import com.roaringcatgames.galaxseed.App;
-import com.roaringcatgames.galaxseed.Assets;
-import com.roaringcatgames.galaxseed.Sfx;
 import com.roaringcatgames.galaxseed.components.*;
 import com.roaringcatgames.galaxseed.values.GameState;
 import com.roaringcatgames.galaxseed.values.Rates;
@@ -36,12 +33,15 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
 
     private Entity player;
     private Array<Entity> powerUps = new Array<>();
+    private IGameServiceController gameServiceController;
 
     Array<Vector2> muzzlePositions = new Array<>();
 
-    public PowerUpSystem(){
+    public PowerUpSystem(IGameServiceController gameServiceController){
         super(Family.all(BoundsComponent.class)
                 .one(PlayerComponent.class, PowerUpComponent.class).get());
+        this.gameServiceController = gameServiceController;
+
         this.muzzlePositions.add(new Vector2(-0.906f, 0.881f));
         this.muzzlePositions.add(new Vector2(0.906f, 0.881f));
         this.muzzlePositions.add(new Vector2(-1.312f, 0.3f));
@@ -135,6 +135,16 @@ public class PowerUpSystem extends IteratingSystem implements InputProcessor {
                                           playerComponent.weaponLevel == WeaponLevel.LEVEL_2 ? WeaponLevel.LEVEL_3 :
                                                                                                WeaponLevel.LEVEL_4;
             App.setCurrentWeaponLevel(playerComponent.weaponType, playerComponent.weaponLevel);
+
+            if(gameServiceController != null){
+
+                if(App.isWeaponEnabled(WeaponType.GUN_SEEDS) && App.getCurrentWeaponLevel(WeaponType.GUN_SEEDS) == WeaponLevel.LEVEL_4 &&
+                    App.isWeaponEnabled(WeaponType.HELICOPTER_SEEDS) && App.getCurrentWeaponLevel(WeaponType.HELICOPTER_SEEDS) == WeaponLevel.LEVEL_4 &&
+                    App.isWeaponEnabled(WeaponType.POLLEN_AURA) && App.getCurrentWeaponLevel(WeaponType.POLLEN_AURA) == WeaponLevel.LEVEL_4) {
+
+                    gameServiceController.unlockAchievement(AchievementItems.WEAPON);
+                }
+            }
 
             WeaponGeneratorUtil.clearWeapon(engine);
             switch(playerComponent.weaponType){

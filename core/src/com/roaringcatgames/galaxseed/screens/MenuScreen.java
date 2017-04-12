@@ -90,7 +90,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         engine.addSystem(new PollenAuraSystem());
 
 
-        engine.addSystem(new PowerUpSystem());
+        engine.addSystem(new PowerUpSystem(gameServicesController));
         engine.addSystem(new TweenSystem());
         engine.addSystem(new WeaponDecorationSystem());
 

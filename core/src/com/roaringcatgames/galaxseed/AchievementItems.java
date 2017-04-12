@@ -11,4 +11,5 @@ public class AchievementItems {
     public static final String HOME = "HOME";
     public static final String DONUT = "DONUT";
     public static final String WEAPON = "WEAPON";
+    public static final String GALACTIC_GARDENER = "GALACTIC_GARDENER";
 }

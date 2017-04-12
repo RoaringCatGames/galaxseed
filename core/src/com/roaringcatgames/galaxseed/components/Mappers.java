@@ -21,6 +21,7 @@ public class Mappers {
     public static ComponentMapper<ScoreComponent> score = ComponentMapper.getFor(ScoreComponent.class);
     public static ComponentMapper<SpawnerComponent> spawner = ComponentMapper.getFor(SpawnerComponent.class);
     public static ComponentMapper<WhenOffScreenComponent> whenOffScreen = ComponentMapper.getFor(WhenOffScreenComponent.class);
+    public static ComponentMapper<WhenOnScreenComponent> whenOnScreen = ComponentMapper.getFor(WhenOnScreenComponent.class);
     public static ComponentMapper<HelicopterSeedComponent> helicopterSeed = ComponentMapper.getFor(HelicopterSeedComponent.class);
     public static ComponentMapper<StatusComponent> status = ComponentMapper.getFor(StatusComponent.class);
     public static ComponentMapper<WeaponSelectComponent> weaponSelect = ComponentMapper.getFor(WeaponSelectComponent.class);

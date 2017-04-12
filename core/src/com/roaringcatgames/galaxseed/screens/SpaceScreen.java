@@ -11,6 +11,7 @@
     import com.badlogic.gdx.math.Vector2;
     import com.badlogic.gdx.math.Vector3;
     import com.badlogic.gdx.utils.Array;
+    import com.roaringcatgames.galaxseed.AchievementItems;
     import com.roaringcatgames.galaxseed.Assets;
     import com.roaringcatgames.galaxseed.IGameServiceController;
     import com.roaringcatgames.galaxseed.data.Level;
@@ -133,11 +134,12 @@
             engine.addSystem(new ScoreSystem());
             engine.addSystem(new ShakeSystem());
             engine.addSystem(new OscillationSystem());
-            engine.addSystem(new PowerUpSystem());
+            engine.addSystem(new PowerUpSystem(gameServiceController));
             engine.addSystem(new WeaponChangeSystem(game));
             engine.addSystem(new ClickableSystem(game, new SpaceScreenActionResolver()));
             engine.addSystem(new HelicopterSeedSystem());
             engine.addSystem(new StatusSystem());
+            engine.addSystem(new OnScreenSystem(gameServiceController));
 
 
             engine.addSystem(enemyDmgSystem);
@@ -210,6 +212,12 @@
                         int score = engine.getSystem(ScoreSystem.class).getScore();
                         Gdx.app.log("SPACE SCREEN", "Submitting Score: " + score);
                         gameServiceController.submitScore(score);
+                        if(score >= 1000){
+                            gameServiceController.unlockAchievement(AchievementItems.TREE_HIGH);
+                        }
+                        if(score >= 5000){
+                            gameServiceController.unlockAchievement(AchievementItems.GALACTIC_GARDENER);
+                        }
                     }
 
                     game.pauseBgMusic();

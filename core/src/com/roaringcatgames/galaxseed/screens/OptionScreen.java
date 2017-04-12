@@ -284,10 +284,10 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
         }else if(K2ComponentMappers.circleBounds.get(backButton).circle.contains(touchPoint)){
             Sfx.playSelectNoise();
-            if(this.gameServicesController != null){
-                this.gameServicesController.unlockAchievement(AchievementItems.TREE_HIGH);
-                this.gameServicesController.submitScore(1);
-            }
+//            if(this.gameServicesController != null){
+//                this.gameServicesController.unlockAchievement(AchievementItems.TREE_HIGH);
+//                this.gameServicesController.submitScore(1);
+//            }
             game.switchScreens("MENU");
         }else if(K2ComponentMappers.circleBounds.get(creditsButton).circle.contains(touchPoint)){
             Sfx.playSelectNoise();

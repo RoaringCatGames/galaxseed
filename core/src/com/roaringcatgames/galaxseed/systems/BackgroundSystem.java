@@ -11,11 +11,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.roaringcatgames.galaxseed.AchievementItems;
 import com.roaringcatgames.galaxseed.Animations;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.components.PlayerComponent;
 import com.roaringcatgames.galaxseed.components.WhenOffScreenComponent;
+import com.roaringcatgames.galaxseed.components.WhenOnScreenComponent;
 import com.roaringcatgames.galaxseed.values.Z;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
 import com.roaringcatgames.kitten2d.ashley.components.*;
@@ -120,14 +122,19 @@ public class BackgroundSystem extends IteratingSystem {
                 float x = MathUtils.random(0f, App.W);
                 float y = baseY + MathUtils.random(App.H*2f, App.H*3.5f);
                 baseY = y;
-                int targetPlanet = 0;
-                while(targetPlanet == 0 || targetPlanet == lastTarget){
-                    targetPlanet = MathUtils.random(1, 14);
-                }
-                lastTarget = targetPlanet;
 
-                Array<TextureAtlas.AtlasRegion> regions = Assets.getRandomPlanetRegions(targetPlanet);
-                planets.add(new BackgroundSticker(x, y, 0f, regions.get(0)));
+                if(i == 14) {
+                    planets.add(new BackgroundSticker(App.W/2f, y, 0f, Assets.getDonut()));
+                }else {
+                    int targetPlanet = 0;
+                    while (targetPlanet == 0 || targetPlanet == lastTarget) {
+                        targetPlanet = MathUtils.random(1, 14);
+                    }
+                    lastTarget = targetPlanet;
+
+                    Array<TextureAtlas.AtlasRegion> regions = Assets.getRandomPlanetRegions(targetPlanet);
+                    planets.add(new BackgroundSticker(x, y, 0f, regions.get(0)));
+                }
 
             }
         }else {
@@ -398,6 +405,13 @@ public class BackgroundSystem extends IteratingSystem {
             sticker.add(BoundsComponent.create(engine)
                 .setBounds(bgSticker.x - (width / 2f), (bgSticker.y) - (height / 2f), width, height));
             sticker.add(WhenOffScreenComponent.create(getEngine()));
+
+
+            //THIS SHIT IS GROSSSS
+            if(bgSticker.image == Assets.getDonut()){
+                sticker.add(WhenOnScreenComponent.create(getEngine())
+                    .setAchievementName(AchievementItems.DONUT));
+            }
             engine.addEntity(sticker);
         }
     }
