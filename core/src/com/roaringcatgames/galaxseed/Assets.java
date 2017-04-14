@@ -43,9 +43,11 @@ public class Assets {
         am.load(GAME_OVER_MUSIC, MUSIC);
         am.load(MENU_MUISC, MUSIC);
         am.load(MARS_BG_MUSIC, MUSIC);
+        am.load(MARS_END_MUSIC, MUSIC);
         am.load(JUPITER_BG_MUSIC, MUSIC);
         am.load(JUPITER_END_MUSIC, MUSIC);
         am.load(SATURN_BG_MUSIC, MUSIC);
+        am.load(SATURN_END_MUSIC, MUSIC);
         am.load(KUPIER_BG_MUSIC, MUSIC);
         am.load(KUPIER_END_MUSIC, MUSIC);
         am.load(URANUS_BG_MUSIC, MUSIC);
@@ -751,10 +753,14 @@ public class Assets {
     public static Music getMarsBGMusic() {
         return am.get(MARS_BG_MUSIC, MUSIC);
     }
+    public static Music getMarsEndMusic() { return am.get(MARS_END_MUSIC, MUSIC); }
     public static Music getJupiterBGMusic() { return am.get(JUPITER_BG_MUSIC, MUSIC); }
     public static Music getJupiterEndMusic() { return am.get(JUPITER_END_MUSIC, MUSIC); }
     public static Music getSaturnBGMusic() {
         return am.get(SATURN_BG_MUSIC, MUSIC);
+    }
+    public static Music getSaturnEndMusic() {
+        return am.get(SATURN_END_MUSIC, MUSIC);
     }
     public static Music getKupierBGMusic() { return am.get(KUPIER_BG_MUSIC, MUSIC); }
     public static Music getKupierEndMusic() { return am.get(KUPIER_END_MUSIC, MUSIC); }
@@ -913,9 +919,11 @@ public class Assets {
     private static final String MENU_MUISC = "music/title.mp3";
     private static final String GAME_OVER_MUSIC = "music/game-over.mp3";
     private static final String MARS_BG_MUSIC = "music/mars-bgm.mp3";
+    private static final String MARS_END_MUSIC = "music/mars-results.mp3";
     private static final String JUPITER_BG_MUSIC = "music/jupiter-bgm.mp3";
     private static final String JUPITER_END_MUSIC = "music/jupiter-results.mp3";
     private static final String SATURN_BG_MUSIC = "music/saturn-bgm.mp3";
+    private static final String SATURN_END_MUSIC = "music/saturn-results.mp3";
     private static final String KUPIER_BG_MUSIC = "music/kupier-bgm.mp3";
     private static final String KUPIER_END_MUSIC = "music/kupier-results.mp3";
     private static final String NEPTUNE_BG_MUSIC = "music/neptune-bgm.mp3";

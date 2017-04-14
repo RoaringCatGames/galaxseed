@@ -15,6 +15,10 @@ public class Songs {
     public static final String NEPTUNE_END = "NEPTUNE_END";
     public static final String URANUS_BG = "URANUS_BG";
     public static final String URANUS_END = "URANUS_END";
+    public static final String MARS_BG = "MARS_BG";
+    public static final String MARS_END = "MARS_END";
+    public static final String SATURN_BG = "SATURN_BG";
+    public static final String SATURN_END = "SATURN_END";
     public static final String TUTORIAL_BG = "TUTORIAL_BG";
 
     public static final String LEVEL_1_OVER = "L1_OVER";

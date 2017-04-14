@@ -71,14 +71,14 @@
             Gdx.app.log("Menu Screen", "Cam Pos: " + game.getCamera().position.x + " | " +
                     game.getCamera().position.y + " Cam W/H: " + game.getCamera().viewportWidth + "/" + game.getCamera().viewportHeight);
 
-            int songChoice = MathUtils.random(4);
+            int songChoice = MathUtils.random(6);
 
             String endSongName;
             switch(songChoice){
-                case 0:
-                    bgSongName = Songs.JUPITER_BG;
-                    endSongName = Songs.JUPITER_END;
-                    break;
+//                case 0:
+//                    bgSongName = Songs.JUPITER_BG;
+//                    endSongName = Songs.JUPITER_END;
+//                    break;
                 case 1:
                     bgSongName = Songs.KUPIER_BG;
                     endSongName = Songs.KUPIER_END;
@@ -91,9 +91,17 @@
                     bgSongName = Songs.URANUS_BG;
                     endSongName = Songs.URANUS_END;
                     break;
+                case 4:
+                    bgSongName = Songs.MARS_BG;
+                    endSongName = Songs.MARS_END;
+                    break;
+                case 5:
+                    bgSongName = Songs.SATURN_BG;
+                    endSongName = Songs.SATURN_END;
+                    break;
                 default:
-                    bgSongName = Songs.JUPITER_BG;
-                    endSongName = Songs.JUPITER_END;
+                    bgSongName = Songs.KUPIER_BG;
+                    endSongName = Songs.KUPIER_END;
                     break;
             }
 
@@ -166,7 +174,7 @@
 
 
             engine.addSystem(pathFollowSystem);
-            engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
+            //engine.addSystem(new DebugSystem(renderingSystem.getCamera(), Color.CYAN, Color.PINK, Input.Keys.TAB));
             //engine.addSystem(new FPSSystem(Assets.get48Font(), new Vector2(App.W - 3f, App.H - 3f), 10));
 
             App.game.multiplexer.addProcessor(this);
@@ -295,7 +303,7 @@
 
         @Override
         public boolean scrolled(int amount) {
-            game.getCamera().zoom += amount;
+            //game.getCamera().zoom += amount;
             return false;
         }
     }

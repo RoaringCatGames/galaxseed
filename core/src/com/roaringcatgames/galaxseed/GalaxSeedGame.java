@@ -229,6 +229,18 @@ public class GalaxSeedGame extends Game implements IGameProcessor, InputProcesso
                 case Songs.URANUS_END:
                     bgMusic = Assets.getUranusEndMusic();
                     break;
+                case Songs.MARS_BG:
+                    bgMusic = Assets.getMarsBGMusic();
+                    break;
+                case Songs.MARS_END:
+                    bgMusic = Assets.getMarsEndMusic();
+                    break;
+                case Songs.SATURN_BG:
+                    bgMusic = Assets.getSaturnBGMusic();
+                    break;
+                case Songs.SATURN_END:
+                    bgMusic = Assets.getSaturnEndMusic();
+                    break;
                 case Songs.TUTORIAL_BG:
                     bgMusic = Assets.getTutorialBGMusic();
                     break;
