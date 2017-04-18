@@ -75,10 +75,10 @@
 
             String endSongName;
             switch(songChoice){
-//                case 0:
-//                    bgSongName = Songs.JUPITER_BG;
-//                    endSongName = Songs.JUPITER_END;
-//                    break;
+                case 0:
+                    bgSongName = Songs.JUPITER_BG;
+                    endSongName = Songs.JUPITER_END;
+                    break;
                 case 1:
                     bgSongName = Songs.KUPIER_BG;
                     endSongName = Songs.KUPIER_END;
