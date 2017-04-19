@@ -18,7 +18,7 @@ public class DesktopLauncher {
 		config.width = 640;
 		config.samples = 4;
 		config.resizable = false;
-        config.fullscreen = false;
+        config.fullscreen = true;
 
 		new LwjglApplication(App.Initialize(), config);
 	}

@@ -3,7 +3,7 @@
   "jdk": "/Users/barry/DevTools/openjdks/openjdk-1.7.0-u80-unofficial-macosx-x86_64-image.zip",
   "executable": "GalaxSeed",
   "classpath": [
-    "/Users/barry/git-repos/galaxseed/desktop/build/libs/galaxseed-1.2.0-kfp.jar"
+    "/Users/barry/git-repos/galaxseed/desktop/build/libs/galaxseed-1.0.0.jar"
   ],
   "mainclass": "com.roaringcatgames.galaxseed.desktop.DesktopLauncher",
   "vmargs": [
@@ -13,5 +13,5 @@
   ],
   "minimizejre": "soft",
   "outdir": "GALAXSEED.app",
-  "icon": "/Users/barry/git-repos/libgdx-jam/ios/512x512.png.icns"
+  "icon": "/Users/barry/git-repos/galaxseed/ios/512x512.png.icns"
 }
