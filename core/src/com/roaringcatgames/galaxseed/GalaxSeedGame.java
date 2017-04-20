@@ -128,11 +128,17 @@ public class GalaxSeedGame extends Game implements IGameProcessor, InputProcesso
             case "CREDITS":
                 this.setScreen(new CreditsScreen(this, gameServicesController));
                 break;
+            case "MENU_RESUME":
+                if(this.adController != null){
+                    this.adController.showBannerAd(IAdController.AdPlacement.TOP);
+                }
+                this.setScreen(new MenuScreen(this, gameServicesController, true));
+                break;
             case "MENU":
                 if(this.adController != null){
                     this.adController.showBannerAd(IAdController.AdPlacement.TOP);
                 }
-                this.setScreen(new MenuScreen(this, gameServicesController));
+                this.setScreen(new MenuScreen(this, gameServicesController, false));
                 break;
             case "LEVEL_SELECT":
                 if(this.adController != null){
@@ -186,8 +192,10 @@ public class GalaxSeedGame extends Game implements IGameProcessor, InputProcesso
     }
 
     public void resumeBgMusic() {
-        if(bgMusic != null) {
-            bgMusic.play();
+        if(PrefsUtil.isMusicOn()) {
+            if (bgMusic != null) {
+                bgMusic.play();
+            }
         }
     }
 
@@ -196,12 +204,13 @@ public class GalaxSeedGame extends Game implements IGameProcessor, InputProcesso
         if(PrefsUtil.isMusicOn()) {
             pauseBgMusic();
 
-            if (bgMusic != null && bgMusic.isPlaying() && !Songs.MENU.equals(musicName)) {
+            if (bgMusic != null && bgMusic.isPlaying() && !Songs.MENU_RESUME.equals(musicName)) {
                 bgMusic.stop();
             }
 
             switch (musicName) {
                 case Songs.MENU:
+                case Songs.MENU_RESUME:
                     bgMusic = Assets.getMenuMusic();
                     bgMusic.setVolume(Volume.MENU_MUSIC);
                     break;
@@ -255,8 +264,12 @@ public class GalaxSeedGame extends Game implements IGameProcessor, InputProcesso
                     break;
             }
 
-            if(!Songs.MENU.equals(musicName)){
+            if(!Songs.MENU.equals(musicName) && !Songs.MENU_RESUME.equals(musicName)){
                 bgMusic.setVolume(Volume.BG_MUSIC);
+            }
+
+            if(!Songs.MENU_RESUME.equals(musicName)) {
+                bgMusic.setPosition(0f);
             }
 
             bgMusic.setLooping(true);

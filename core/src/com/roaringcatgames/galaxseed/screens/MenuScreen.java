@@ -17,6 +17,7 @@ import com.roaringcatgames.galaxseed.components.WeaponType;
 import com.roaringcatgames.galaxseed.components.WhenOffScreenComponent;
 import com.roaringcatgames.galaxseed.systems.*;
 import com.roaringcatgames.galaxseed.values.Health;
+import com.roaringcatgames.galaxseed.values.Songs;
 import com.roaringcatgames.galaxseed.values.Z;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
@@ -42,11 +43,14 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
                    signInButton, achievementsButton, leaderboardButton;
     private ObjectMap<String, Boolean> readyMap = new ObjectMap<>();
 
-    public MenuScreen(IGameProcessor game, IGameServiceController gameServicesController) {
+    private boolean shouldResume = false;
+
+    public MenuScreen(IGameProcessor game, IGameServiceController gameServicesController, boolean shouldResume) {
         super();
         this.game = game;
         //If our game implements IAdController do the thing
         this.gameServicesController = gameServicesController;
+        this.shouldResume = shouldResume;
 
         readyMap.put("options", false);
         readyMap.put("play", false);
@@ -255,7 +259,11 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         super.show();
 
         game.addInputProcessor(this);
-        game.playBgMusic("MENU");
+        if(shouldResume) {
+            game.playBgMusic(Songs.MENU_RESUME);
+        }else{
+            game.playBgMusic(Songs.MENU);
+        }
     }
 
     @Override

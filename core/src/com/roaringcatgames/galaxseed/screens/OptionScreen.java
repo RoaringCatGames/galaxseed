@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.roaringcatgames.galaxseed.*;
 import com.roaringcatgames.galaxseed.systems.BackgroundSystemConfig;
+import com.roaringcatgames.galaxseed.values.Songs;
 import com.roaringcatgames.kitten2d.ashley.K2ComponentMappers;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.K2MathUtil;
@@ -235,7 +236,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
             game.getPreferenceManager().updateString(PrefsUtil.MUSIC_KEY, newValue);
             if(newValue.equals("On")){
-                game.playBgMusic("MENU");
+                game.playBgMusic(Songs.MENU_RESUME);
             }
             K2ComponentMappers.texture.get(musicButton).setRegion(getButtonRegion(PrefsUtil.MUSIC_KEY, newValue));
             K2ComponentMappers.text.get(musicText).setText(musicWords + newValue);
@@ -288,7 +289,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 //                this.gameServicesController.unlockAchievement(AchievementItems.TREE_HIGH);
 //                this.gameServicesController.submitScore(1);
 //            }
-            game.switchScreens("MENU");
+            game.switchScreens("MENU_RESUME");
         }else if(K2ComponentMappers.circleBounds.get(creditsButton).circle.contains(touchPoint)){
             Sfx.playSelectNoise();
             game.switchScreens("CREDITS");

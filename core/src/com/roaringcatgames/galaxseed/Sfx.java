@@ -37,13 +37,13 @@ public class Sfx {
     }
 
     public static void playSpeedUp(){
-        if(PrefsUtil.areSfxEnabled()){
+        if(PrefsUtil.isMusicOn() && PrefsUtil.areSfxEnabled()){
             Assets.getSpeedUpSfx().play(Volume.SPEED_UP_SFX);
         }
     }
 
     public static void playSlowDown(){
-        if(PrefsUtil.areSfxEnabled()){
+        if(PrefsUtil.isMusicOn() && PrefsUtil.areSfxEnabled()){
             Assets.getSlowDownSfx().play(Volume.SLOW_DOWN_SFX);
         }
     }

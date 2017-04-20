@@ -6,6 +6,7 @@ package com.roaringcatgames.galaxseed.values;
 public class Songs {
 
     public static final String MENU = "MENU";
+    public static final String MENU_RESUME = "MENU_RESUME";
     public static final String GAME = "GAME";
     public static final String JUPITER_BG = "JUPITER_BG";
     public static final String JUPITER_END = "JUPITER_END";
