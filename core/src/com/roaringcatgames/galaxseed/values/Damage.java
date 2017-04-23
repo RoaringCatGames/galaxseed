@@ -5,6 +5,8 @@ package com.roaringcatgames.galaxseed.values;
  */
 public class Damage {
 
+    public static final float shieldLifeSpan = 3f; //Seconds
+
     public static final int comet = 200;//15;
     public static final int asteroidRock = 200;//10;
     public static final int asteroid = 200;//30;

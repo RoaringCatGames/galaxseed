@@ -97,7 +97,7 @@ public class PlayerDamageSystem extends IteratingSystem {
             PlayerComponent pc = Mappers.player.get(player);
             App.toggleWeapon(pc.weaponType, false);
             pc.weaponType = WeaponType.UNSELECTED;
-            float shieldTime = 3f;
+            float shieldTime = Damage.shieldLifeSpan;
             WeaponGeneratorUtil.clearWeapon(getEngine());
             if(App.hasAvailableWeapons()){
                 //Add Shield
@@ -128,7 +128,9 @@ public class PlayerDamageSystem extends IteratingSystem {
         //Add Shield
         PooledEngine engine = ((PooledEngine) getEngine());
         Entity e = engine.createEntity();
-        e.add(ShieldComponent.create(engine));
+        e.add(ShieldComponent.create(engine)
+            .addShieldTime(0f)
+            .setMaxLife(shieldTime));
         e.add(TransformComponent.create(engine)
             .setPosition(pt.position.x, pt.position.y, Z.shield)
             .setScale(0.1f, 0.1f));

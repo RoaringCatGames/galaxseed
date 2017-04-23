@@ -120,6 +120,7 @@
             enemySpawnSystem.setProcessing(false);
             EnemyFiringSystem enemyFiringSystem = new EnemyFiringSystem();
             EnemyDamageSystem enemyDmgSystem = new EnemyDamageSystem();
+            ShieldSystem shieldSystem = new ShieldSystem();
             PlayerDamageSystem playerDmgSystem = new PlayerDamageSystem();
             GameOverSystem gameOverSystem = new GameOverSystem(game, endSongName);
             gameOverSystem.setProcessing(false);
@@ -151,6 +152,7 @@
 
 
             engine.addSystem(enemyDmgSystem);
+            engine.addSystem(shieldSystem);
             engine.addSystem(new PollenAuraSystem());
             engine.addSystem(playerDmgSystem);
             engine.addSystem(new ExplosionSystem());
@@ -185,6 +187,7 @@
             playingOnlySystems.add(enemySpawnSystem);
             playingOnlySystems.add(enemyDmgSystem);
             playingOnlySystems.add(playerDmgSystem);
+            playingOnlySystems.add(shieldSystem);
             playingOnlySystems.add(pathFollowSystem);
         }
 

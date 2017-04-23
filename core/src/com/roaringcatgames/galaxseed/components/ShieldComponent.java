@@ -10,7 +10,10 @@ import com.badlogic.gdx.utils.Pool;
  */
 public class ShieldComponent implements Component, Pool.Poolable {
 
-    public static ShieldComponent create(Engine engine){
+    public float shieldTime = 0f;
+    public float shieldMaxLife = 3f;
+
+    public static ShieldComponent create(Engine engine) {
         if(engine instanceof PooledEngine){
             return ((PooledEngine)engine).createComponent(ShieldComponent.class);
         }else{
@@ -18,8 +21,24 @@ public class ShieldComponent implements Component, Pool.Poolable {
         }
     }
 
+    public ShieldComponent setShieldTime(float time) {
+        this.shieldTime = time;
+        return this;
+    }
+
+    public ShieldComponent addShieldTime(float delta) {
+        this.shieldTime += delta;
+        return this;
+    }
+
+    public ShieldComponent setMaxLife(float max) {
+        this.shieldMaxLife = max;
+        return this;
+    }
+
     @Override
     public void reset() {
-
+        shieldTime = 0f;
+        shieldMaxLife = 0f;
     }
 }

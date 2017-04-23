@@ -415,6 +415,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 getEngine().getSystem(FiringSystem.class).setProcessing(true);
                 getEngine().getSystem(EnemyFiringSystem.class).setProcessing(true);
                 getEngine().getSystem(EnemySpawnSystem.class).setProcessing(true);
+                getEngine().getSystem(ShieldSystem.class).setProcessing(true);
             } else {
                 this.game.pauseBgMusic();
                 Sfx.playSlowDown();
@@ -423,6 +424,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 getEngine().getSystem(FiringSystem.class).setProcessing(false);
                 getEngine().getSystem(EnemyFiringSystem.class).setProcessing(false);
                 getEngine().getSystem(EnemySpawnSystem.class).setProcessing(false);
+                getEngine().getSystem(ShieldSystem.class).setProcessing(false);
             }
 
 
