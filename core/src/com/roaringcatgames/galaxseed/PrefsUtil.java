@@ -11,6 +11,9 @@ public class PrefsUtil {
     public static final String CTRL_KEY = "controls";
     public static final String GAME_SERVICES = "gameservices";
 
+    public static boolean hasSignedOn() {
+        return App.getPrefs().getStoredInt(PrefsUtil.GAME_SERVICES) == 1;
+    }
 
     public static boolean areSfxEnabled(){
         return App.getPrefs().getStoredString("sfx", "On").equals("On");

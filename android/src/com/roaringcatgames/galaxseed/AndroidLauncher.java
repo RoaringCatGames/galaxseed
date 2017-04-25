@@ -39,6 +39,8 @@ public class AndroidLauncher extends AndroidApplication implements
 
     private int lastAction = -1;
 
+    private IConnectionResponder connectionResponder;
+
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -182,6 +184,10 @@ public class AndroidLauncher extends AndroidApplication implements
         }else if(lastAction == REQUEST_ACHIEVEMENTS){
             showAchievements();
         }
+
+        if(connectionResponder != null) {
+            connectionResponder.onConnected();
+        }
         //this.connectionEstablished();
     }
 
@@ -189,6 +195,10 @@ public class AndroidLauncher extends AndroidApplication implements
     public void onConnectionSuspended(int i) {
         //Gdx.app.log("ANDROID LAUNCHER", "Connection Suspended: " + i);
         googleApiClient.connect();
+
+        if(connectionResponder != null) {
+            connectionResponder.onDisconnected();
+        }
     }
 
     @Override
@@ -246,6 +256,9 @@ public class AndroidLauncher extends AndroidApplication implements
         } else if ( resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED)  {
             //Gdx.app.log("ANDROID LAUNCHER", "Google Play Services Sign Out occurred!");
             googleApiClient.disconnect();
+            if(connectionResponder != null){
+                connectionResponder.onDisconnected();
+            }
         }
     }
 
@@ -256,6 +269,11 @@ public class AndroidLauncher extends AndroidApplication implements
     @Override
     public boolean isConnected() {
         return googleApiClient != null ? googleApiClient.isConnected() : false;
+    }
+
+    @Override
+    public void setConnectionResponder(IConnectionResponder responder){
+        this.connectionResponder = responder;
     }
 
     @Override

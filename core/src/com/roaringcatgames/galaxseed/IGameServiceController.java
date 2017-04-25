@@ -7,6 +7,7 @@ public interface IGameServiceController {
 
     boolean isConnected();
     void connectToGameServices();
+    void setConnectionResponder(IConnectionResponder responder);
 
     void unlockAchievement(String name);
     void showAchievements();

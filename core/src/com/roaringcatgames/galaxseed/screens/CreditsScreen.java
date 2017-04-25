@@ -107,7 +107,7 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
         kfpCat = addIcon(-5f, App.H/2f, Assets.getColonelCat());
 
         float kfpY = 1.75f;
-        kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.0.0", secondaryFont, 10f, 1.75f, 0f, -0.1f);
+        kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.1.1", secondaryFont, 10f, 1.75f, 0f, -0.1f);
     }
 
     @Override

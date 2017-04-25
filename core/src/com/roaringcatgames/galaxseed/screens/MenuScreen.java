@@ -44,6 +44,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
     private ObjectMap<String, Boolean> readyMap = new ObjectMap<>();
 
     private boolean shouldResume = false;
+    private boolean hasSignedIn = false;
 
     public MenuScreen(IGameProcessor game, IGameServiceController gameServicesController, boolean shouldResume) {
         super();
@@ -146,11 +147,12 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
         float xPos = App.W/2f - 3f;
         float yPos = App.H - 17f;
-        playTarget = createPlayAsteroid(xPos, yPos, Assets.getPlayAsteroid(), true);
+        playTarget = createPlayAsteroid(xPos, yPos, Assets.getPlayAsteroid(), false);
         engine.addEntity(playTarget);
         xPos = App.W/2f + 5f;
-        yPos = App.H - 15f;
-        optionsTarget = createPlayAsteroid(xPos, yPos, Assets.getOptionsAsteroid());
+        //yPos = App.H - 15f;
+        yPos = App.H - 14.5f;
+        optionsTarget = createPlayAsteroid(xPos, yPos, Assets.getOptionsAsteroid(), true);
         engine.addEntity(optionsTarget);
 
         xPos = App.W/2f - 6f;
@@ -158,20 +160,42 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         campaignTarget = createPlayAsteroid(xPos, yPos, Assets.getCampaignModeButton(), true);
         engine.addEntity(campaignTarget);
 
-        yPos = App.H - 19f;
+
         if(gameServicesController != null){
-            xPos = App.W/2f + 5f;
-            //Automatically Connect
-            if(game.getPreferenceManager().getStoredInt(PrefsUtil.GAME_SERVICES) == 1){
-                gameServicesController.connectToGameServices();
+
+
+            gameServicesController.setConnectionResponder(new IConnectionResponder() {
+                @Override
+                public void onConnected() {
+                      toggleGooglePlayIcons(true);
+//                    hasSignedIn = true;
+//                    K2ComponentMappers.transform.get(signInButton).setHidden(true);
+//                    K2ComponentMappers.transform.get(achievementsButton).setHidden(false);
+//                    K2ComponentMappers.transform.get(leaderboardButton).setHidden(false);
+                }
+
+                @Override
+                public void onDisconnected() {
+
+                    toggleGooglePlayIcons(false);
+                }
+            });
+
+
+            if(gameServicesController.isConnected()){
+                hasSignedIn = true;
             }
-            achievementsButton = createGameServiceIcon(xPos - 1.75f, yPos, Assets.getGPSAchievementIcon(), 2f);
+
+
+            yPos = App.H - 19f;
+            xPos = App.W/2f + 5f;
+            achievementsButton = createGameServiceIcon(xPos - 1.75f, yPos, Assets.getGPSAchievementIcon(), 1.75f, true, !hasSignedIn);
             engine.addEntity(achievementsButton);
-            leaderboardButton = createGameServiceIcon(xPos + 1.75f, yPos, Assets.getGPSLeaderIcon(), 2.5f);
+            leaderboardButton = createGameServiceIcon(xPos + 1.75f, yPos, Assets.getGPSLeaderIcon(), 1.75f, true, !hasSignedIn);
             engine.addEntity(leaderboardButton);
             //Show Sign In Button
-//            signInButton = createGameServiceIcon(App.W - 3f, 4f, Assets.getGPSConnectedIcon(), 2f);
-//            engine.addEntity(signInButton);
+            signInButton = createGameServiceIcon(xPos, yPos + 0.5f, Assets.getGPSConnectedIcon(), 1.75f, false, hasSignedIn);
+            engine.addEntity(signInButton);
         }
 
         if(App.isDesktop()) {
@@ -209,11 +233,18 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         engine.addEntity(plant);
     }
 
+    private void toggleGooglePlayIcons(boolean isSignedIn){
+        hasSignedIn = isSignedIn;
+        K2ComponentMappers.transform.get(signInButton).setHidden(isSignedIn);
+        K2ComponentMappers.transform.get(achievementsButton).setHidden(!isSignedIn);
+        K2ComponentMappers.transform.get(leaderboardButton).setHidden(!isSignedIn);
+    }
+
     private Entity createPlayAsteroid(float xPos, float yPos, TextureRegion region, boolean...isScaled) {
         boolean isScaledDown = isScaled != null && isScaled.length > 0 && isScaled[0];
 
-        float scale = isScaledDown ? 2f/3f : 1f;
-        float boundsRadius = isScaledDown ? 2f : 3f;
+        float scale = isScaledDown ? 2f/3f : 5f/6f;
+        float boundsRadius = isScaledDown ? 2.4f : 3f;
 
         Entity playAsteroid = engine.createEntity();
         playAsteroid.add(WhenOffScreenComponent.create(engine));
@@ -237,21 +268,27 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         return playAsteroid;
     }
 
-    private Entity createGameServiceIcon(float xPos, float yPos, TextureRegion region, float radius){
-        Entity playAsteroid = engine.createEntity();
-        playAsteroid.add(TextureComponent.create(engine)
+    private Entity createGameServiceIcon(float xPos, float yPos, TextureRegion region, float radius, boolean shouldScaleUp, boolean shouldBeHidden){
+        float scale = shouldScaleUp ? 1.5f : 1f;
+        Entity playServicesIcon = engine.createEntity();
+        playServicesIcon.add(TextureComponent.create(engine)
                 .setRegion(region));
-        playAsteroid.add(CircleBoundsComponent.create(engine)
+//        playServicesIcon.add(MenuItemComponent.create(engine));
+//        playServicesIcon.add(HealthComponent.create(engine)
+//                .setMaxHealth(Health.PlayAsteroid)
+//                .setHealth(Health.PlayAsteroid));
+        playServicesIcon.add(CircleBoundsComponent.create(engine)
                 .setCircle(xPos, yPos, radius));
-        playAsteroid.add(TransformComponent.create(engine)
+        playServicesIcon.add(TransformComponent.create(engine)
                 .setPosition(xPos, yPos, Z.playAsteroids)
-                .setScale(1f, 1f));
-        playAsteroid.add(ShakeComponent.create(engine)
+                .setHidden(shouldBeHidden)
+                .setScale(scale, scale));
+        playServicesIcon.add(ShakeComponent.create(engine)
                 .setSpeed(6f, 4f)
                 .setOffsets(0.2f, 0.4f)
                 .setCurrentTime(K2MathUtil.getRandomInRange(0f, 4f)));
 
-        return playAsteroid;
+        return playServicesIcon;
     }
 
     @Override
@@ -263,6 +300,15 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
             game.playBgMusic(Songs.MENU_RESUME);
         }else{
             game.playBgMusic(Songs.MENU);
+            //Automatically Connect
+            if(gameServicesController != null && PrefsUtil.hasSignedOn()) {
+
+                if(!gameServicesController.isConnected()){
+                    gameServicesController.connectToGameServices();
+                }else{
+                    hasSignedIn = true;
+                }
+            }
         }
     }
 
@@ -345,15 +391,15 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         CircleBoundsComponent playBounds = K2ComponentMappers.circleBounds.get(playTarget);
         CircleBoundsComponent optionsBounds = K2ComponentMappers.circleBounds.get(optionsTarget);
 
-        //CircleBoundsComponent googleConnectBounds = K2ComponentMappers.circleBounds.get(signInButton);
+        CircleBoundsComponent googleConnectBounds = null;
         CircleBoundsComponent achievementBounds = null;
         CircleBoundsComponent leaderBounds = null;
+
         if(gameServicesController != null) {
             achievementBounds = K2ComponentMappers.circleBounds.get(achievementsButton);
             leaderBounds = K2ComponentMappers.circleBounds.get(leaderboardButton);
+            googleConnectBounds = K2ComponentMappers.circleBounds.get(signInButton);
         }
-
-
 
         if (playBounds != null && playBounds.circle.contains(touchPoint)) {
             if (Mappers.menuItem.has(playTarget)) {
@@ -365,13 +411,18 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
                 Mappers.menuItem.get(optionsTarget).isFilled = true;
                 Sfx.playSelectNoise();
             }
-        } else if (achievementBounds != null && achievementBounds.circle.contains(touchPoint)) {
+        } else if (hasSignedIn && achievementBounds != null && achievementBounds.circle.contains(touchPoint)) {
             if(gameServicesController != null){
                 gameServicesController.showAchievements();
             }
-        } else if (leaderBounds != null && leaderBounds.circle.contains(touchPoint)) {
+        } else if (hasSignedIn && leaderBounds != null && leaderBounds.circle.contains(touchPoint)) {
             if(gameServicesController != null){
                 gameServicesController.showLeaderBoard();
+            }
+        } else if (googleConnectBounds != null && googleConnectBounds.circle.contains(touchPoint)) {
+            if(gameServicesController != null) {
+                gameServicesController.connectToGameServices();
+                game.getPreferenceManager().updateInt(PrefsUtil.GAME_SERVICES, 1);
             }
         }
 
