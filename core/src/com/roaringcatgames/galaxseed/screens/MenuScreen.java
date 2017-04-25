@@ -145,8 +145,13 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
 
 
-        float xPos = App.W/2f - 3f;
-        float yPos = App.H - 17f;
+        float xPos = App.W/2f - 6f;
+        float yPos = App.H - 13.5f;
+        campaignTarget = createPlayAsteroid(xPos, yPos, Assets.getCampaignModeButton(), true);
+        engine.addEntity(campaignTarget);
+
+        xPos = App.W/2f - 3f;
+        yPos = App.H - 17f;
         playTarget = createPlayAsteroid(xPos, yPos, Assets.getPlayAsteroid(), false);
         engine.addEntity(playTarget);
         xPos = App.W/2f + 5f;
@@ -155,10 +160,7 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
         optionsTarget = createPlayAsteroid(xPos, yPos, Assets.getOptionsAsteroid(), true);
         engine.addEntity(optionsTarget);
 
-        xPos = App.W/2f - 6f;
-        yPos = App.H - 13.5f;
-        campaignTarget = createPlayAsteroid(xPos, yPos, Assets.getCampaignModeButton(), true);
-        engine.addEntity(campaignTarget);
+
 
 
         if(gameServicesController != null){
