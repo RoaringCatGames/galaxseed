@@ -145,7 +145,7 @@
             engine.addSystem(new OscillationSystem());
             engine.addSystem(new PowerUpSystem(gameServiceController));
             engine.addSystem(new WeaponChangeSystem(game));
-            engine.addSystem(new ClickableSystem(game, new SpaceScreenActionResolver()));
+            engine.addSystem(new ClickableSystem(game, new SpaceScreenActionResolver(game)));
             engine.addSystem(new HelicopterSeedSystem());
             engine.addSystem(new StatusSystem());
             engine.addSystem(new OnScreenSystem(gameServiceController));

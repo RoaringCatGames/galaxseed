@@ -52,6 +52,7 @@ public class Z {
     public static final float debug = 5f;
     public static final float weaponSelectOverlay = 4f;
     public static final float weaponSelectInterface = 3f;
+    public static final float retryButton = 3f;
 
     public static final float weaponSelect = 2f;
     public static final float arrow = 1f;

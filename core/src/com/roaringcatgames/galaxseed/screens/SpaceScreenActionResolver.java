@@ -7,11 +7,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
+import com.roaringcatgames.galaxseed.Sfx;
 import com.roaringcatgames.galaxseed.components.WeaponType;
+import com.roaringcatgames.galaxseed.values.GameState;
 import com.roaringcatgames.galaxseed.values.Z;
 import com.roaringcatgames.kitten2d.ashley.IActionResolver;
 import com.roaringcatgames.kitten2d.ashley.K2EntityTweenAccessor;
 import com.roaringcatgames.kitten2d.ashley.components.*;
+import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
 
 /**
  * Handles Actions fired from the Space Screen
@@ -21,8 +24,15 @@ public class SpaceScreenActionResolver implements IActionResolver {
     public static final String BLASTER_INFO = "BLASTER_INFO";
     public static final String COPTER_INFO = "COPTER_INFO";
     public static final String POLLEN_INFO = "POLLEN_INFO";
+    public static final String RESTART = "RESTART";
+    public static final String MENU = "MENU";
 
     private Entity lastTargetEntity;
+    private IGameProcessor game;
+
+    public SpaceScreenActionResolver(IGameProcessor game){
+        this.game = game;
+    }
 
     @Override
     public void resolveAction(String eventName, Entity firingEntity, Engine containerEngine) {
@@ -43,7 +53,16 @@ public class SpaceScreenActionResolver implements IActionResolver {
                 containerEngine.removeEntity(firingEntity);
                 lastTargetEntity = null;
                 break;
-
+            case MENU:
+                Sfx.playSlowDown();
+                this.game.switchScreens("MENU");
+                App.setState(GameState.MENU);
+                break;
+            case RESTART:
+                Sfx.playSpeedUp();
+                this.game.switchScreens("GAME");
+                App.setState(GameState.PLAYING);
+                break;
             default:
                 break;
 

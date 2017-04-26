@@ -35,6 +35,9 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     private Entity overlay;
     private Entity dashboard;
 
+    private Entity menuButton;
+    private Entity retryButton;
+
     private Entity seedInfo;
     private Entity helicopterInfo;
     private Entity auraInfo;
@@ -46,6 +49,8 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     private float arrowRotateY = selectY + 4f;
     private float dashboardY = 2.5f;
     private float infoBoundSize = 1.25f;
+    private float RETRY_OFFSET = 2.5f;
+    private float MENU_OFFSET = 2.5f;
 
     private IGameProcessor game;
 
@@ -146,6 +151,34 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             dashboard.add(TextureComponent.create(pEngine)
                 .setRegion(Assets.getSelectInterface()));
             engine.addEntity(dashboard);
+        }
+
+        if(retryButton == null){
+            retryButton = pEngine.createEntity();
+            retryButton.add(TransformComponent.create(pEngine)
+                .setPosition(App.W - RETRY_OFFSET, App.H + RETRY_OFFSET, Z.retryButton)
+                .setScale(0.5f, 0.5f));
+            retryButton.add(TextureComponent.create(pEngine)
+                .setRegion(Assets.getRelaunchButton()));
+            retryButton.add(CircleBoundsComponent.create(pEngine)
+                .setCircle(App.W - RETRY_OFFSET, App.H + RETRY_OFFSET, 1.5f));
+            retryButton.add(ClickableComponent.create(pEngine)
+                .setEventName(SpaceScreenActionResolver.RESTART));
+            pEngine.addEntity(retryButton);
+        }
+
+        if(menuButton == null){
+            menuButton = pEngine.createEntity();
+            menuButton.add(TransformComponent.create(pEngine)
+                    .setPosition(MENU_OFFSET, App.H + MENU_OFFSET, Z.retryButton)
+                    .setScale(0.5f, 0.5f));
+            menuButton.add(TextureComponent.create(pEngine)
+                    .setRegion(Assets.getRelaunchButton()));
+            menuButton.add(CircleBoundsComponent.create(pEngine)
+                    .setCircle(MENU_OFFSET, App.H + MENU_OFFSET, 1.5f));
+            menuButton.add(ClickableComponent.create(pEngine)
+                    .setEventName(SpaceScreenActionResolver.MENU));
+            pEngine.addEntity(menuButton);
         }
 
         float scale = 0.8f;
@@ -370,6 +403,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         PlayerComponent pc = getPlayerComponent();
         if(pc != null) {
             toggleWeaponSelect(true);
+            toggleTopMenu(true);
         }
     }
 
@@ -387,13 +421,18 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 level == WeaponLevel.LEVEL_3 ? 3 : 4;
     }
 
-    private void toggleWeaponSelect(boolean isShowing) {
-        float target = isShowing ? dashboardY : -dashboardY;
+    private void toggleTopMenu(boolean isShowing) {
+        float target = isShowing ? App.H - RETRY_OFFSET : App.H + RETRY_OFFSET;
         float time = isShowing ? 0.05f : 0.5f;
-        TweenComponent tc = K2ComponentMappers.tween.get(dashboard);
+
+        tweenItemToTargetY(retryButton, target, time);
+        tweenItemToTargetY(menuButton, target, time);
+    }
+
+    private void tweenItemToTargetY(Entity e, float targetY, float time) {
+        TweenComponent tc = K2ComponentMappers.tween.get(e);
         if(tc != null) {
             for(Tween t:tc.tweens) {
-
                 if(!t.isFinished()){
                     t.pause();
                     t.kill();
@@ -402,9 +441,16 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         }else{
             tc = TweenComponent.create(getEngine());
         }
-        tc.addTween(Tween.to(dashboard, K2EntityTweenAccessor.POSITION_Y, time)
-                .target(target));
-        dashboard.add(tc);
+        tc.addTween(Tween.to(e, K2EntityTweenAccessor.POSITION_Y, time)
+                .target(targetY));
+        e.add(tc);
+    }
+
+    private void toggleWeaponSelect(boolean isShowing) {
+        float target = isShowing ? dashboardY : -dashboardY;
+        float time = isShowing ? 0.05f : 0.5f;
+
+        tweenItemToTargetY(dashboard, target, time);
 
         if(hasMadeInitialSelection) {
             if (!isShowing) {
@@ -474,7 +520,6 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             BoundsComponent heliInfoBounds = K2ComponentMappers.bounds.get(helicopterInfo);
             BoundsComponent auraInfoBounds = K2ComponentMappers.bounds.get(auraInfo);
 
-
             if (App.isWeaponEnabled(WeaponType.GUN_SEEDS) && seedBounds.bounds.contains(touchPoint.x, touchPoint.y)) {
                 switchWeapon(WeaponType.GUN_SEEDS);
                 Sfx.playSelectNoise();
@@ -494,6 +539,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 App.setState(GameState.PLAYING);
                 hasMadeInitialSelection = true;
                 toggleWeaponSelect(false);
+                toggleTopMenu(false);
             }
         }
 
