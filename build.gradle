@@ -15,7 +15,7 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '1.0.0'
+    version = '1.0.1'
     ext {
         appName = "GalaxSeed"
         gdxVersion = '1.9.4'
@@ -25,7 +25,7 @@ allprojects {
         ashleyVersion = '1.7.3'
         aiVersion = '1.7.0'
         tweenEngineVersion = '6.3.4'
-        ashleyExtensionsVersion = '0.5.7'
+        ashleyExtensionsVersion = '0.5.8-SNAPSHOT'
         outputName = 'galaxseed'
         googlePlayServicesVersion = '9.4.0'
     }
@@ -78,6 +78,7 @@ project(":android") {
 project(":ios") {
     apply plugin: "java"
     apply plugin: "robovm"
+
 
 
     dependencies {

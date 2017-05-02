@@ -9,6 +9,7 @@ import com.roaringcatgames.galaxseed.App;
 import com.roaringcatgames.galaxseed.Assets;
 import com.roaringcatgames.galaxseed.Sfx;
 import com.roaringcatgames.galaxseed.components.WeaponType;
+import com.roaringcatgames.galaxseed.systems.WeaponChangeSystem;
 import com.roaringcatgames.galaxseed.values.GameState;
 import com.roaringcatgames.galaxseed.values.Z;
 import com.roaringcatgames.kitten2d.ashley.IActionResolver;

@@ -163,6 +163,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             retryButton.add(CircleBoundsComponent.create(pEngine)
                 .setCircle(App.W - RETRY_OFFSET, App.H + RETRY_OFFSET, 1.5f));
             retryButton.add(ClickableComponent.create(pEngine)
+                .setTriggeredOnUp(true)
                 .setEventName(SpaceScreenActionResolver.RESTART));
             pEngine.addEntity(retryButton);
         }
@@ -216,7 +217,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 .setBounds(0f, 0f, infoBoundSize, infoBoundSize));
             seedInfo.add(FollowerComponent.create(engine)
                 .setTarget(dashboard)
-                .setOffset(-2.6f, 1.25f));
+                .setOffset(-2.6f, 1.15f));
             engine.addEntity(seedInfo);
 
             Entity seedLevel = pEngine.createEntity();
@@ -228,7 +229,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             seedLevel.add(FollowerComponent.create(pEngine)
                 .setTarget(dashboard)
                 .setMode(FollowMode.STICKY)
-                .setOffset(-4.60899f, -2.249f));
+                .setOffset(-4.60899f, -2.49f));
             seedLevel.add(TextureComponent.create(pEngine)
                 .setRegion(Assets.getSeedLevel(1)));
             pEngine.addEntity(seedLevel);
@@ -283,7 +284,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setBounds(0f, 0f, infoBoundSize, infoBoundSize));
             helicopterInfo.add(FollowerComponent.create(engine)
                     .setTarget(dashboard)
-                    .setOffset(3.05f, 1.25f));
+                    .setOffset(3.05f, 1.15f));
             engine.addEntity(helicopterInfo);
 
             addArrowIndicator(pEngine, xPos, 0f);
@@ -335,7 +336,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setBounds(0f, 0f, infoBoundSize, infoBoundSize));
             auraInfo.add(FollowerComponent.create(engine)
                     .setTarget(dashboard)
-                    .setOffset(8.599f, 0.7f));
+                    .setOffset(8.599f, 0.55f));
             engine.addEntity(auraInfo);
 
             addArrowIndicator(pEngine, xPos + 1f, -20f);
@@ -519,6 +520,8 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
             BoundsComponent seedInfoBounds = K2ComponentMappers.bounds.get(seedInfo);
             BoundsComponent heliInfoBounds = K2ComponentMappers.bounds.get(helicopterInfo);
             BoundsComponent auraInfoBounds = K2ComponentMappers.bounds.get(auraInfo);
+            CircleBoundsComponent homeBounds = K2ComponentMappers.circleBounds.get(menuButton);
+            CircleBoundsComponent retryBounds = K2ComponentMappers.circleBounds.get(retryButton);
 
             if (App.isWeaponEnabled(WeaponType.GUN_SEEDS) && seedBounds.bounds.contains(touchPoint.x, touchPoint.y)) {
                 switchWeapon(WeaponType.GUN_SEEDS);
@@ -532,7 +535,9 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 switchWeapon(WeaponType.POLLEN_AURA);
                 Sfx.playSelectNoise();
                 hideCursor = false;
-            } else if((!seedInfoBounds.bounds.contains(touchPoint.x, touchPoint.y) &&
+            } else if((!retryBounds.circle.contains(touchPoint.x, touchPoint.y) &&
+                       !homeBounds.circle.contains(touchPoint.x, touchPoint.y) &&
+                       !seedInfoBounds.bounds.contains(touchPoint.x, touchPoint.y) &&
                        !heliInfoBounds.bounds.contains(touchPoint.x, touchPoint.y) &&
                        !auraInfoBounds.bounds.contains(touchPoint.x, touchPoint.y)) &&
                       pc != null && pc.weaponType != WeaponType.UNSELECTED){
