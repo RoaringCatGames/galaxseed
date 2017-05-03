@@ -150,25 +150,25 @@ public class GalaxSeedGame extends Game implements IGameProcessor, InputProcesso
                 if(this.adController != null){
                     this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
                 }
-                this.setScreen(new SpaceScreen(this, gameServicesController, Assets.getTestLevel()));
+                this.setScreen(new SpaceScreen(this, gameServicesController, adController, Assets.getTestLevel()));
                 break;
             case "GAME_1":
                 if(this.adController != null){
                     this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
                 }
-                this.setScreen(new SpaceScreen(this, gameServicesController, Assets.getLevel1()));
+                this.setScreen(new SpaceScreen(this, gameServicesController, adController, Assets.getLevel1()));
                 break;
             case "GAME_2":
                 if(this.adController != null){
                     this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
                 }
-                this.setScreen(new SpaceScreen(this, gameServicesController, Assets.getLevel2()));
+                this.setScreen(new SpaceScreen(this, gameServicesController, adController, Assets.getLevel2()));
                 break;
             case "GAME_3":
                 if(this.adController != null){
                     this.adController.hideBannerAd(IAdController.AdPlacement.TOP);
                 }
-                this.setScreen(new SpaceScreen(this, gameServicesController, Assets.getLevel3()));
+                this.setScreen(new SpaceScreen(this, gameServicesController, adController, Assets.getLevel3()));
                 break;
         }
 

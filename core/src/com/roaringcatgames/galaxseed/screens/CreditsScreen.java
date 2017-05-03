@@ -72,42 +72,42 @@ public class CreditsScreen extends LazyInitScreen implements InputProcessor {
 
         backButton = addButton(App.W / 2f, 5f, "BACK", null, Assets.getBackAsteroid());
 
-        float rcgY = App.H - 3f;
+        float rcgY = App.H - 3.5f;
         float loiX = App.W/2f - 3f;
         float barryX = App.W/2f + 3f;
         float nathanX = App.W/2f;
         float backX = App.W/2f;
 
         //float x = App.W/6f;
-        float y = rcgY - 4f;
+        float y = rcgY - 3.5f;
         float offY = y-1f;
         float iconY = y-4.25f;
 
-        loi = addTextEntity(loiX, rcgY, "Loi L.", baseFont, 6f, 1.25f, 0f, -0.25f);
+        loi = addTextEntity(loiX, rcgY, "Loi", baseFont, 6f, 1.25f, 0f, -0.25f);
         addTextEntity(loiX, rcgY-1f, "Art Cat", secondaryFont);
         addIcon(loiX, rcgY - 4.25f, Assets.getArtCat(), 0.75f);
 
-        barry = addTextEntity(barryX, rcgY, "Barry R.", baseFont, 6f, 1.25f, 0f, -0.25f);
+        barry = addTextEntity(barryX, rcgY, "Barry", baseFont, 6f, 1.25f, 0f, -0.25f);
         addTextEntity(barryX, rcgY-1f, "Code Cat", secondaryFont);
         addIcon(barryX, rcgY - 4.25f, Assets.getCodeCat(), 0.75f);
 
         y = y - 4f;
         offY = y-1f;
         iconY = y-4.25f;
-        nathan = addTextEntity(nathanX, y, "Nathan H.", baseFont, 8f, 1.25f, 0f, -0.25f);
+        nathan = addTextEntity(nathanX, y, "Nathan", baseFont, 8f, 1.25f, 0f, -0.25f);
         addTextEntity(nathanX, offY, "Music & SFX", secondaryFont);
         addIcon(nathanX, iconY, Assets.getGvgIcon(), 0.75f);
 
 
-        addIcon(loiX, 9f, Assets.getLibGdxIcon(), 0.5f);
-        addIcon(App.W/2f, 11f, Assets.getLMGIcon(), 0.5f);
-        addIcon(barryX, 9f, Assets.getAshleyIcon(), 0.5f);
+        addIcon(loiX, 8.75f, Assets.getLibGdxIcon(), 0.5f);
+        addIcon(App.W/2f, 10.75f, Assets.getLMGIcon(), 0.5f);
+        addIcon(barryX, 8.75f, Assets.getAshleyIcon(), 0.5f);
 
 
         kfpCat = addIcon(-5f, App.H/2f, Assets.getColonelCat());
 
         float kfpY = 1.75f;
-        kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.1.1", secondaryFont, 10f, 1.75f, 0f, -0.1f);
+        kfp = addTextEntity(App.W / 2f, kfpY, "Version: 1.2", secondaryFont, 10f, 1.75f, 0f, -0.1f);
     }
 
     @Override

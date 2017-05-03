@@ -36,8 +36,8 @@ public class ScoreSystem extends IteratingSystem {
 
         float opacity = 0.5f;
         float densityCutOff = 2.5f;
-        float targetUnitOffset = (1f/5f);
-        float highDensityMultiplier = 4f;
+        float targetUnitOffset = (1f/6f);
+        float highDensityMultiplier = 1f;
         scoreCard = pe.createEntity();
         float density = Gdx.graphics.getDensity();
         float textOffset = targetUnitOffset * density;

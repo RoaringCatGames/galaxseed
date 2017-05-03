@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -49,17 +50,26 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
     private float arrowRotateY = selectY + 4f;
     private float dashboardY = 2.5f;
     private float infoBoundSize = 1.25f;
-    private float RETRY_OFFSET = 2.5f;
-    private float MENU_OFFSET = 2.5f;
+    private float TOP_OPTIONS_OFFSET = 2.5f;
+    private float SIDE_OPTIONS_OFFSET = 2.5f;
+//    private float RETRY_OFFSET = 2.5f;
+//    private float MENU_OFFSET = 2.5f;
 
     private IGameProcessor game;
+    private IAdController adController;
 
     private WeaponType currentWeapon;
     private boolean hasMadeInitialSelection = false;
 
-    public WeaponChangeSystem(IGameProcessor game){
+    public WeaponChangeSystem(IGameProcessor game, IAdController adController){
         super(Family.all(WeaponSelectComponent.class).get());
         this.game = game;
+        this.adController = adController;
+
+        if(Gdx.app.getType() == Application.ApplicationType.Android ||
+            Gdx.app.getType() == Application.ApplicationType.iOS) {
+            TOP_OPTIONS_OFFSET = 4.5f;
+        }
     }
 
     @Override
@@ -156,12 +166,12 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         if(retryButton == null){
             retryButton = pEngine.createEntity();
             retryButton.add(TransformComponent.create(pEngine)
-                .setPosition(App.W - RETRY_OFFSET, App.H + RETRY_OFFSET, Z.retryButton)
+                .setPosition(App.W - SIDE_OPTIONS_OFFSET, App.H + TOP_OPTIONS_OFFSET, Z.retryButton)
                 .setScale(0.5f, 0.5f));
             retryButton.add(TextureComponent.create(pEngine)
                 .setRegion(Assets.getRelaunchButton()));
             retryButton.add(CircleBoundsComponent.create(pEngine)
-                .setCircle(App.W - RETRY_OFFSET, App.H + RETRY_OFFSET, 1.5f));
+                .setCircle(App.W - SIDE_OPTIONS_OFFSET, App.H + TOP_OPTIONS_OFFSET, 1.5f));
             retryButton.add(ClickableComponent.create(pEngine)
                 .setTriggeredOnUp(true)
                 .setEventName(SpaceScreenActionResolver.RESTART));
@@ -171,12 +181,12 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         if(menuButton == null){
             menuButton = pEngine.createEntity();
             menuButton.add(TransformComponent.create(pEngine)
-                    .setPosition(MENU_OFFSET, App.H + MENU_OFFSET, Z.retryButton)
+                    .setPosition(SIDE_OPTIONS_OFFSET, App.H + TOP_OPTIONS_OFFSET, Z.retryButton)
                     .setScale(0.5f, 0.5f));
             menuButton.add(TextureComponent.create(pEngine)
                     .setRegion(Assets.getHomeButton()));
             menuButton.add(CircleBoundsComponent.create(pEngine)
-                    .setCircle(MENU_OFFSET, App.H + MENU_OFFSET, 1.5f));
+                    .setCircle(SIDE_OPTIONS_OFFSET, App.H + TOP_OPTIONS_OFFSET, 1.5f));
             menuButton.add(ClickableComponent.create(pEngine)
                     .setEventName(SpaceScreenActionResolver.MENU));
             pEngine.addEntity(menuButton);
@@ -405,6 +415,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
         if(pc != null) {
             toggleWeaponSelect(true);
             toggleTopMenu(true);
+            toggleAds(true);
         }
     }
 
@@ -422,8 +433,18 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 level == WeaponLevel.LEVEL_3 ? 3 : 4;
     }
 
+    private void toggleAds(boolean isShowing){
+        if(adController != null){
+            if(isShowing){
+                adController.showBannerAd(IAdController.AdPlacement.TOP);
+            }else{
+                adController.hideBannerAd(IAdController.AdPlacement.TOP);
+            }
+        }
+    }
+
     private void toggleTopMenu(boolean isShowing) {
-        float target = isShowing ? App.H - RETRY_OFFSET : App.H + RETRY_OFFSET;
+        float target = isShowing ? App.H - TOP_OPTIONS_OFFSET : App.H + TOP_OPTIONS_OFFSET;
         float time = isShowing ? 0.05f : 0.5f;
 
         tweenItemToTargetY(retryButton, target, time);
@@ -545,6 +566,8 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                 hasMadeInitialSelection = true;
                 toggleWeaponSelect(false);
                 toggleTopMenu(false);
+                toggleAds(false);
+
             }
         }
 

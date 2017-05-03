@@ -68,7 +68,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         this.game = game;
         this.gameServicesController = gameServices;
 
-        float totalH = App.getTotalHeight();
+        float totalH = App.getTotalHeight() - 2f;
         textX = App.W/2f - 5f;
         buttonX = App.W/2f + 5f;
         musicY = totalH - 4f;

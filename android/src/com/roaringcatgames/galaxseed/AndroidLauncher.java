@@ -60,11 +60,10 @@ public class AndroidLauncher extends AndroidApplication implements
         layout.setLayoutParams(params);
         //layout.setLayoutTransition(new LayoutTransition());
 
-
-        AdView admobView = createAdView();
-        layout.addView(admobView);
         View gameView = createGameView(cfg);
         layout.addView(gameView);
+        AdView admobView = createAdView();
+        layout.addView(admobView);
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -109,7 +108,7 @@ public class AndroidLauncher extends AndroidApplication implements
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, adView.getId());
+        //params.addRule(RelativeLayout.BELOW, adView.getId());
         gameView.setLayoutParams(params);
         return gameView;
     }
@@ -120,7 +119,14 @@ public class AndroidLauncher extends AndroidApplication implements
             @Override
             public void run() {
                 //Gdx.app.log("ANDROID LAUNCHER", "### STARTING ADVERTISEMENT");
-                AdRequest adRequest = new AdRequest.Builder().build();
+                AdRequest adRequest = new AdRequest.Builder()
+                        .addKeyword("Game")
+                        .addKeyword("Space")
+                        .addKeyword("Arcade")
+                        .addKeyword("Plants")
+                        .addKeyword("Space")
+                        .build();
+
                 aView.loadAd(adRequest);
                 aView.setVisibility(View.VISIBLE);
             }
