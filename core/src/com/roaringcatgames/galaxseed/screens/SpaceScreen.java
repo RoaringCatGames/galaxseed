@@ -11,15 +11,12 @@
     import com.badlogic.gdx.math.Vector2;
     import com.badlogic.gdx.math.Vector3;
     import com.badlogic.gdx.utils.Array;
-    import com.roaringcatgames.galaxseed.AchievementItems;
-    import com.roaringcatgames.galaxseed.Assets;
-    import com.roaringcatgames.galaxseed.IGameServiceController;
+    import com.roaringcatgames.galaxseed.*;
     import com.roaringcatgames.galaxseed.data.Level;
     import com.roaringcatgames.galaxseed.values.Songs;
     import com.roaringcatgames.kitten2d.ashley.systems.*;
     import com.roaringcatgames.kitten2d.gdx.helpers.IGameProcessor;
     import com.roaringcatgames.kitten2d.gdx.screens.LazyInitScreen;
-    import com.roaringcatgames.galaxseed.App;
     import com.roaringcatgames.galaxseed.components.*;
     import com.roaringcatgames.galaxseed.data.EnemySpawns;
     import com.roaringcatgames.galaxseed.systems.*;
@@ -33,6 +30,7 @@
 
         private IGameProcessor game;
         private IGameServiceController gameServiceController;
+        private IAdController adController;
         private PooledEngine engine;
         private Level level;
 
@@ -43,12 +41,13 @@
         private BackgroundSystem bgSystem;
         private String bgSongName;
 
-        public SpaceScreen(IGameProcessor game, IGameServiceController gameServices, Level level) {
+        public SpaceScreen(IGameProcessor game, IGameServiceController gameServices, IAdController adController, Level level) {
             super();
             this.game = game;
             this.gameServiceController = gameServices;
             this.playingOnlySystems = new Array<>();
             this.level = level;
+            this.adController = adController;
         }
 
 
@@ -144,7 +143,7 @@
             engine.addSystem(new ShakeSystem());
             engine.addSystem(new OscillationSystem());
             engine.addSystem(new PowerUpSystem(gameServiceController));
-            engine.addSystem(new WeaponChangeSystem(game));
+            engine.addSystem(new WeaponChangeSystem(game, adController));
             engine.addSystem(new ClickableSystem(game, new SpaceScreenActionResolver(game)));
             engine.addSystem(new HelicopterSeedSystem());
             engine.addSystem(new StatusSystem());
