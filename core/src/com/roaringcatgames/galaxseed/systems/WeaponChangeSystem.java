@@ -174,7 +174,7 @@ public class WeaponChangeSystem extends IteratingSystem implements InputProcesso
                     .setPosition(MENU_OFFSET, App.H + MENU_OFFSET, Z.retryButton)
                     .setScale(0.5f, 0.5f));
             menuButton.add(TextureComponent.create(pEngine)
-                    .setRegion(Assets.getRelaunchButton()));
+                    .setRegion(Assets.getHomeButton()));
             menuButton.add(CircleBoundsComponent.create(pEngine)
                     .setCircle(MENU_OFFSET, App.H + MENU_OFFSET, 1.5f));
             menuButton.add(ClickableComponent.create(pEngine)

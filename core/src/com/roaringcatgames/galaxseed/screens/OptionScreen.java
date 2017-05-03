@@ -58,7 +58,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
 
     private String musicWords = "Music ";
     private String sfxWords = "SFX ";
-    private String ctrlWords = "Control Boost ";
+    private String ctrlWords = "Sensitivity ";
     private String vibraWords = "Vibration ";
 
 
@@ -121,7 +121,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
         sfxText = addTextEntity(textX, sfxY + 0.5f, sfxWords + sfxState, baseFont);
         String vibraState = game.getPreferenceManager().getStoredString(PrefsUtil.VIBRA_KEY, "Off");
         vibrationText = addTextEntity(textX, vibraY + 0.5f, vibraWords + vibraState, baseFont);
-        String ctrlState = game.getPreferenceManager().getStoredString(PrefsUtil.CTRL_KEY, "Off");
+        String ctrlState = game.getPreferenceManager().getStoredString(PrefsUtil.CTRL_KEY, "Low");
         controlText = addTextEntity(textX, ctrlY + 0.5f, ctrlWords + ctrlState, baseFont);
 
         sfxButton = addButton(buttonX, sfxY, PrefsUtil.SFX_KEY, sfxState);
@@ -188,7 +188,7 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
                 region = value.equals("On") ? Assets.getVibrationOn() : Assets.getVibrationOff();
                 break;
             case PrefsUtil.CTRL_KEY:
-                region = value.equals("Off") ? Assets.getControlsSteady() : Assets.getControlsAmplified();
+                region = value.equals("Low") ? Assets.getControlsSteady() : Assets.getControlsAmplified();
                 break;
             case "BACK":
                 region = Assets.getBackAsteroid();
@@ -272,10 +272,10 @@ public class OptionScreen extends LazyInitScreen implements InputProcessor {
             Sfx.playClickNoise();
         }else if(K2ComponentMappers.circleBounds.get(controlButton).circle.contains(touchPoint)) {
             //toggle Sfx
-            String newValue = "Off";
-            String state = game.getPreferenceManager().getStoredString(PrefsUtil.CTRL_KEY, "Off");
-            if(state.equals("Off")) {
-                newValue = "On";
+            String newValue = "Low";
+            String state = game.getPreferenceManager().getStoredString(PrefsUtil.CTRL_KEY, "Low");
+            if(state.equals("Low")) {
+                newValue = "High";
             }
 
             game.getPreferenceManager().updateString(PrefsUtil.CTRL_KEY, newValue);

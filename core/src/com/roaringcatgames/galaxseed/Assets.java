@@ -516,6 +516,10 @@ public class Assets {
         return getCachedRegion(SPRITE_ATLAS, "options/relaunch");
     }
 
+    public static TextureAtlas.AtlasRegion getHomeButton(){
+        return getCachedRegion(SPRITE_ATLAS, "options/home");
+    }
+
     public static TextureAtlas.AtlasRegion getExitButton(){
         return getCachedRegion(SPRITE_ATLAS, "options/exit");
     }

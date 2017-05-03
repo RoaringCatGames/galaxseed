@@ -28,6 +28,6 @@ public class PrefsUtil {
     }
 
     public static boolean isControlBoostOn(){
-        return App.getPrefs().getStoredString("controls", "On").equals("On");
+        return App.getPrefs().getStoredString("controls", "Low").equals("High");
     }
 }

@@ -191,9 +191,9 @@ public class MenuScreen extends LazyInitScreen implements InputProcessor{
 
             yPos = App.H - 19f;
             xPos = App.W/2f + 5f;
-            achievementsButton = createGameServiceIcon(xPos - 1.75f, yPos, Assets.getGPSAchievementIcon(), 1.75f, true, !hasSignedIn);
+            achievementsButton = createGameServiceIcon(xPos - 1.75f, yPos, Assets.getGPSAchievementIcon(), 1.75f, false, !hasSignedIn);
             engine.addEntity(achievementsButton);
-            leaderboardButton = createGameServiceIcon(xPos + 1.75f, yPos, Assets.getGPSLeaderIcon(), 1.75f, true, !hasSignedIn);
+            leaderboardButton = createGameServiceIcon(xPos + 1.75f, yPos, Assets.getGPSLeaderIcon(), 1.75f, false, !hasSignedIn);
             engine.addEntity(leaderboardButton);
             //Show Sign In Button
             signInButton = createGameServiceIcon(xPos, yPos + 0.5f, Assets.getGPSConnectedIcon(), 1.75f, false, hasSignedIn);
