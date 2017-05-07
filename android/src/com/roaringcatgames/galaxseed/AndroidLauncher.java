@@ -159,7 +159,14 @@ public class AndroidLauncher extends AndroidApplication implements
     @Override
     public void showBannerAd(AdPlacement placement) {
         if(this.adView != null && this.adView.getVisibility() != View.VISIBLE){
-            this.startAdvertising(adView);
+            final AdView targetAd = this.adView;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    targetAd.setVisibility(View.VISIBLE);
+                }
+            });
+            //this.startAdvertising(adView);
         }
     }
 

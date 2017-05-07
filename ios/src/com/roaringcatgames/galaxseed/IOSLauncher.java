@@ -48,6 +48,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements IAdControlle
             GADRequest request = new GADRequest();
             // Display test ads on the simulator.
             List<String> keywords = new ArrayList<>();
+            keywords.add("Game");
             keywords.add("Arcade");
             keywords.add("Gardening");
             keywords.add("Plants");
@@ -67,18 +68,18 @@ public class IOSLauncher extends IOSApplication.Delegate implements IAdControlle
             gadBannerView.setAdSize(GADAdSize.SmartBannerPortrait());
             viewController.getView().addSubview(gadBannerView);
         } else {
-            GADRequest request = new GADRequest();
-            // Display test ads on the simulator.
-            List<String> keywords = new ArrayList<>();
-            keywords.add("Game");
-            keywords.add("Arcade");
-            keywords.add("Gardening");
-            keywords.add("Plants");
-            keywords.add("Space");
-
-            //request.setTestDevices(Arrays.asList(GADRequest.getSimulatorID()));
-            request.setKeywords(keywords);
-            gadBannerView.loadRequest(request);
+//            GADRequest request = new GADRequest();
+//            // Display test ads on the simulator.
+//            List<String> keywords = new ArrayList<>();
+//            keywords.add("Game");
+//            keywords.add("Arcade");
+//            keywords.add("Gardening");
+//            keywords.add("Plants");
+//            keywords.add("Space");
+//
+//            //request.setTestDevices(Arrays.asList(GADRequest.getSimulatorID()));
+//            request.setKeywords(keywords);
+//            gadBannerView.loadRequest(request);
             gadBannerView.setHidden(false);
 
         }
